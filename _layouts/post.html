@@ -7,9 +7,11 @@ layout: default
     {{ page.title }}
     {% if page.lesson_type %}
       {% if page.lesson_type == 'required' %}
-        <span class="lesson-badge required large">{% t required %}</span>
+        {% assign lang = page.lang | default: site.default_lang %}
+        <span class="lesson-badge required large">{{ site.t[lang].required }}</span>
       {% elsif page.lesson_type == 'optional' %}
-        <span class="lesson-badge optional large">{% t optional %}</span>
+        {% assign lang = page.lang | default: site.default_lang %}
+        <span class="lesson-badge optional large">{{ site.t[lang].optional }}</span>
       {% endif %}
     {% endif %}
   </h1>

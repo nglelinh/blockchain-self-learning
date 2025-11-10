@@ -9,14 +9,14 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a class="sidebar-nav-item{% if page.title == 'Home' %} active{% endif %}" href="{{ '/' | absolute_url }}">{% t home %}</a>
+    {% assign current_lang = page.lang | default: site.default_lang %}
+    <a class="sidebar-nav-item{% if page.title == 'Home' %} active{% endif %}" href="{{ '/' | absolute_url }}">{{ site.t[current_lang].home }}</a>
 
     {% comment %}
       The code below dynamically generates a sidebar nav of pages with
       `layout: page` in the front-matter. See readme for usage.
     {% endcomment %}
 
-    {% assign current_lang = page.lang | default: site.default_lang %}
     {% assign pages_list = site.pages | where: "lang", current_lang | sort: "chapter" %}
     
     <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
@@ -29,9 +29,9 @@
               {{node.chapter}}. {{ node.title }}
               {% if node.lesson_type %}
                 {% if node.lesson_type == 'required' %}
-                  <span class="lesson-badge required">{% t required %}</span>
+                  <span class="lesson-badge required">{{ site.t[current_lang].required }}</span>
                 {% elsif node.lesson_type == 'optional' %}
-                  <span class="lesson-badge optional">{% t optional %}</span>
+                  <span class="lesson-badge optional">{{ site.t[current_lang].optional }}</span>
                 {% endif %}
               {% endif %}
             </a>
