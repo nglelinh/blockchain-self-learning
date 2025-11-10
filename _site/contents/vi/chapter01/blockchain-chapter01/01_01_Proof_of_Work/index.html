@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Lecture 01.01: Proof-of-Work Deep Dive - Mining, Security, và Economics &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/contents/en/chapter00/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">
+    Lecture 01.01: Proof-of-Work Deep Dive - Mining, Security, và Economics
+    
+  </h1>
+  <h1 id="lecture-proof-of-work-deep-dive---mining-security-và-economics">Lecture: Proof-of-Work Deep Dive - Mining, Security, và Economics</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p><strong>Proof-of-Work (PoW)</strong> là trái tim của Bitcoin - cơ chế đồng thuận cho phép hàng nghìn nodes độc lập đồng ý về transaction order mà không cần trust lẫn nhau. Đây là một trong những innovations quan trọng nhất của Satoshi Nakamoto, mặc dù ý tưởng cơ bản đã tồn tại trước đó.</p>
+
+<p><strong>Historical Context</strong>:</p>
+
+<p>Khái niệm “proof-of-work” lần đầu được đề xuất bởi <strong>Cynthia Dwork và Moni Naor</strong> năm 1992 như một cách chống spam email. Năm 1997, <strong>Adam Back</strong> đã phát triển <strong>Hashcash</strong> - một proof-of-work system được dùng để combat email spam và denial-of-service attacks. Hashcash yêu cầu sender thực hiện một computational work nhỏ trước khi gửi email - không đáng kể với người dùng bình thường nhưng expensive cho spammers muốn gửi millions of emails.</p>
+
+<p>Satoshi Nakamoto đã brilliant adapt ý tưởng này cho distributed consensus. Thay vì dùng PoW để chống spam, Bitcoin dùng nó để:</p>
+<ol>
+  <li><strong>Select block proposer</strong>: Random lottery dựa trên computational power</li>
+  <li><strong>Prevent Sybil attacks</strong>: Attacker không thể tạo nhiều fake identities để gain control</li>
+  <li><strong>Rate-limit block creation</strong>: Maintain ~10 minute block time</li>
+  <li><strong>Create economic cost for attacks</strong>: Attacker phải spend real resources (hardware + electricity)</li>
+</ol>
+
+<p><strong>Core Idea - Simple but Profound</strong>:</p>
+
+<p>Miners compete để tìm một số gọi là <strong>nonce</strong> sao cho khi hash block header với nonce đó, resulting hash nhỏ hơn một target value nhất định:</p>
+
+<p>[
+\text{SHA256}(\text{SHA256}(\text{Block Header with Nonce})) &lt; \text{Target}
+]</p>
+
+<p>Điều này đơn giản nhưng brilliant vì:</p>
+<ul>
+  <li><strong>Hard to find</strong>: Average ( 2^{difficulty} ) attempts needed</li>
+  <li><strong>Easy to verify</strong>: Single hash computation verifies</li>
+  <li><strong>Adjustable difficulty</strong>: Target can be adjusted to maintain block time</li>
+  <li><strong>No shortcuts</strong>: No algorithm better than brute force (assuming SHA-256 security)</li>
+</ul>
+
+<p><strong>Why “Work”?</strong></p>
+
+<p>PoW gọi là “work” vì requires <strong>expenditure of real-world resources</strong>:</p>
+<ul>
+  <li><strong>Hardware</strong>: ASICs cost thousands to millions of dollars</li>
+  <li><strong>Electricity</strong>: Bitcoin network consumes ~150 TWh/year</li>
+  <li><strong>Cooling</strong>: Datacenters need cooling infrastructure</li>
+  <li><strong>Maintenance</strong>: Human labor to maintain operations</li>
+</ul>
+
+<p>Đây là key security feature: attacker phải spend same resources as honest miners to attack network.</p>
+
+<p><strong>Economic Innovation</strong>:</p>
+
+<p>PoW kết hợp với <strong>block rewards</strong> và <strong>transaction fees</strong> tạo ra một elegant economic system:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Mining Cost = Hardware + Electricity + Operational Costs
+Mining Revenue = Block Reward + Transaction Fees
+
+If Revenue &gt; Cost → More miners join → Difficulty increases
+If Revenue &lt; Cost → Miners leave → Difficulty decreases
+
+Result: Self-regulating equilibrium!
+</code></pre></div></div>
+
+<p>Đây là first time trong lịch sử có một digital system tự regulate security level dựa trên economic incentives, without central authority.</p>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-mining-như-lottery-with-work">2.1. Mining như “Lottery with Work”</h3>
+
+<p>Hãy tưởng tượng mining như một <strong>lottery có vé rất đặc biệt</strong>:</p>
+
+<p><strong>Traditional Lottery</strong>:</p>
+<ul>
+  <li>Mua vé với số in sẵn</li>
+  <li>Ai trúng số → thắng</li>
+  <li>Hoàn toàn random, không cần “work”</li>
+</ul>
+
+<p><strong>Bitcoin Mining Lottery</strong>:</p>
+<ul>
+  <li>Không có vé in sẵn</li>
+  <li>Phải “create your own ticket” bằng cách:
+    <ol>
+      <li>Take block data</li>
+      <li>Add a random number (nonce)</li>
+      <li>Hash it</li>
+      <li>Check if hash &lt; target</li>
+      <li>If no → try different nonce</li>
+    </ol>
+  </li>
+  <li>Mỗi attempt = mua một vé lottery</li>
+  <li>Winning ticket = hash nhỏ hơn target</li>
+</ul>
+
+<p><strong>Fairness</strong>:</p>
+<ul>
+  <li>More computational power = more lottery tickets per second</li>
+  <li>But each ticket has equal chance</li>
+  <li>Cannot predict which ticket will win</li>
+  <li>Giống như lottery: mua nhiều vé → more chance, nhưng không guarantee</li>
+</ul>
+
+<h3 id="22-difficulty-như-adjustable-lock">2.2. Difficulty như “Adjustable Lock”</h3>
+
+<p>Target/Difficulty giống như một <strong>combination lock tự động adjust</strong>:</p>
+
+<p><strong>Easy Lock</strong> (Low Difficulty):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Target: 0000FFFF... (many leading zeros not required)
+Hash:   0003A5B2... ✓ Valid! (starts with few zeros)
+
+Probability: High (1 in thousands)
+Time: Seconds to find
+</code></pre></div></div>
+
+<p><strong>Hard Lock</strong> (High Difficulty):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Target: 00000000000019... (many leading zeros required)
+Hash:   000000000000A2... ✓ Valid! (many leading zeros)
+
+Probability: Low (1 in trillions)
+Time: ~10 minutes for entire network
+</code></pre></div></div>
+
+<p><strong>Auto-Adjustment</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Many miners → Blocks found too fast → Lock becomes harder
+Few miners → Blocks found too slow → Lock becomes easier
+
+Goal: Always ~10 minutes per block
+</code></pre></div></div>
+
+<h3 id="23-mining-hardware-evolution---arms-race">2.3. Mining Hardware Evolution - Arms Race</h3>
+
+<p><strong>2009-2010: CPU Era</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your laptop: ~1 MH/s (million hashes/second)
+Cost: $500
+Power: 65W
+Profitability: High (BTC = $0.001)
+</code></pre></div></div>
+
+<p><strong>2010-2013: GPU Era</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Gaming GPU: ~100-500 MH/s
+Cost: $200-500
+Power: 150-250W
+Profitability: Very high (BTC = $1-100)
+Why better: Parallel processing (hundreds of cores)
+</code></pre></div></div>
+
+<p><strong>2013-2016: ASIC Era Begins</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>First ASICs: ~5 GH/s (billion hashes/second)
+Cost: $1,000-5,000
+Power: 600W
+Profitability: Initially very high
+Why better: Specialized hardware for SHA-256 only
+</code></pre></div></div>
+
+<p><strong>2016-2024: Modern ASIC Era</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Antminer S19 Pro: ~110 TH/s (trillion hashes/second)
+Cost: $2,000-8,000
+Power: 3,250W
+Profitability: Moderate (competitive market)
+Efficiency: 29.5 J/TH (joules per terahash)
+</code></pre></div></div>
+
+<p><strong>Performance Growth</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CPU → GPU:     100x improvement
+GPU → ASIC:    1,000x improvement
+Early ASIC → Modern ASIC: 20,000x improvement
+
+Total: ~2,000,000x since 2009!
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-block-header-structure-80-bytes">3.1. Block Header Structure (80 bytes)</h3>
+
+<p>Mining works with <strong>only block header</strong>, không phải entire block:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bytes 0-3:    Version (4 bytes)
+Bytes 4-35:   Previous Block Hash (32 bytes)
+Bytes 36-67:  Merkle Root (32 bytes)
+Bytes 68-71:  Timestamp (4 bytes)
+Bytes 72-75:  Bits/Target (4 bytes)
+Bytes 76-79:  Nonce (4 bytes)
+</code></pre></div></div>
+
+<p><strong>Example Block Header (Block 125552)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01000000    // Version 1
+81cd02ab    // Previous block hash
+7e867800    // (truncated for display)
+...
+e320b6c2    // Merkle root
+...
+047c2954    // Timestamp
+1d00ffff    // Bits (difficulty)
+bc192a6a    // Nonce (found by miner!)
+</code></pre></div></div>
+
+<p><strong>Hashing Process</strong>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Pseudocode
+</span><span class="n">block_header</span> <span class="o">=</span> <span class="n">version</span> <span class="o">+</span> <span class="n">prev_hash</span> <span class="o">+</span> <span class="n">merkle_root</span> <span class="o">+</span> <span class="n">timestamp</span> <span class="o">+</span> <span class="n">bits</span> <span class="o">+</span> <span class="n">nonce</span>
+<span class="nb">hash</span> <span class="o">=</span> <span class="nc">SHA256</span><span class="p">(</span><span class="nc">SHA256</span><span class="p">(</span><span class="n">block_header</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="nb">hash</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Valid block found!</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">broadcast_to_network</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">nonce</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Try again
+</span></code></pre></div></div>
+
+<h3 id="32-target-và-difficulty">3.2. Target và Difficulty</h3>
+
+<p><strong>Target</strong>: Một 256-bit number. Valid hash phải &lt; target.</p>
+
+<p><strong>Compact Representation (Bits field)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bits = 0x1d00ffff
+
+Decoding:
+  Exponent = 0x1d (29 decimal)
+  Coefficient = 0x00ffff
+
+Target = Coefficient × 2^(8 × (Exponent - 3))
+       = 0x00ffff × 2^(8 × (29 - 3))
+       = 0x00ffff × 2^208
+       = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
+</code></pre></div></div>
+
+<p><strong>Difficulty</strong> (alternative representation):
+[
+\text{Difficulty} = \frac{\text{Max Target}}{\text{Current Target}}
+]</p>
+
+<p>Where Max Target = target when difficulty = 1 (genesis block):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Max Target = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
+</code></pre></div></div>
+
+<p><strong>Current Difficulty</strong> (2024): ~60 trillion</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Current Target = Max Target / 60,000,000,000,000
+               ≈ 0x0000000000000000000429...
+</code></pre></div></div>
+
+<p><strong>Meaning</strong>: Finding valid block is ~60 trillion times harder than at genesis!</p>
+
+<h3 id="33-difficulty-adjustment-algorithm">3.3. Difficulty Adjustment Algorithm</h3>
+
+<p><strong>Adjustment Frequency</strong>: Every 2016 blocks (~2 weeks at 10 min/block)</p>
+
+<p><strong>Formula</strong>:
+[
+\text{New Difficulty} = \text{Old Difficulty} \times \frac{\text{Expected Time}}{\text{Actual Time}}
+]</p>
+
+<p>More precisely:
+[
+\text{New Target} = \text{Old Target} \times \frac{\text{Actual Time (last 2016 blocks)}}{\text{20160 minutes}}
+]</p>
+
+<p><strong>Constraints</strong>:</p>
+<ul>
+  <li>Maximum increase: 4x per period</li>
+  <li>Maximum decrease: 4x per period (1/4 of previous)</li>
+  <li>Prevents rapid difficulty swings</li>
+</ul>
+
+<p><strong>Implementation</strong> (Bitcoin Core):</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int64_t</span> <span class="nf">GetNextWorkRequired</span><span class="p">(</span><span class="k">const</span> <span class="n">CBlockIndex</span><span class="o">*</span> <span class="n">pindexLast</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Find the first block in the adjustment period</span>
+    <span class="k">const</span> <span class="n">CBlockIndex</span><span class="o">*</span> <span class="n">pindexFirst</span> <span class="o">=</span> <span class="n">pindexLast</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pindexFirst</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2015</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">pindexFirst</span> <span class="o">=</span> <span class="n">pindexFirst</span><span class="o">-&gt;</span><span class="n">pprev</span><span class="p">;</span>
+    
+    <span class="c1">// Compute actual timespan</span>
+    <span class="kt">int64_t</span> <span class="n">nActualTimespan</span> <span class="o">=</span> <span class="n">pindexLast</span><span class="o">-&gt;</span><span class="n">GetBlockTime</span><span class="p">()</span> <span class="o">-</span> 
+                               <span class="n">pindexFirst</span><span class="o">-&gt;</span><span class="n">GetBlockTime</span><span class="p">();</span>
+    
+    <span class="c1">// Constrain to [0.25x, 4x] range</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nActualTimespan</span> <span class="o">&lt;</span> <span class="n">nTargetTimespan</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">nActualTimespan</span> <span class="o">=</span> <span class="n">nTargetTimespan</span><span class="o">/</span><span class="mi">4</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nActualTimespan</span> <span class="o">&gt;</span> <span class="n">nTargetTimespan</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">nActualTimespan</span> <span class="o">=</span> <span class="n">nTargetTimespan</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+    
+    <span class="c1">// Calculate new target</span>
+    <span class="n">CBigNum</span> <span class="n">bnNew</span><span class="p">;</span>
+    <span class="n">bnNew</span><span class="p">.</span><span class="n">SetCompact</span><span class="p">(</span><span class="n">pindexLast</span><span class="o">-&gt;</span><span class="n">nBits</span><span class="p">);</span>
+    <span class="n">bnNew</span> <span class="o">*=</span> <span class="n">nActualTimespan</span><span class="p">;</span>
+    <span class="n">bnNew</span> <span class="o">/=</span> <span class="n">nTargetTimespan</span><span class="p">;</span>
+    
+    <span class="c1">// Ensure doesn't exceed max</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">bnNew</span> <span class="o">&gt;</span> <span class="n">bnProofOfWorkLimit</span><span class="p">)</span>
+        <span class="n">bnNew</span> <span class="o">=</span> <span class="n">bnProofOfWorkLimit</span><span class="p">;</span>
+    
+    <span class="k">return</span> <span class="n">bnNew</span><span class="p">.</span><span class="n">GetCompact</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Example Adjustment</strong> (Block 630000 → 632016):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Old Difficulty: 15,138,043,247,082
+Blocks took:    13.5 days (instead of 14)
+Faster than expected!
+
+New Difficulty = 15,138,043,247,082 × (20160 / 19440)
+               = 15,138,043,247,082 × 1.037
+               ≈ 15,700,000,000,000
+
+Result: ~3.7% harder (within 4x constraint)
+</code></pre></div></div>
+
+<h3 id="34-hash-rate-và-network-security">3.4. Hash Rate và Network Security</h3>
+
+<p><strong>Hash Rate</strong>: Total computational power của network</p>
+
+<p><strong>Units</strong>:</p>
+<ul>
+  <li>H/s = Hashes per second</li>
+  <li>KH/s = Thousand (10³)</li>
+  <li>MH/s = Million (10⁶)</li>
+  <li>GH/s = Billion (10⁹)</li>
+  <li>TH/s = Trillion (10¹²)</li>
+  <li>PH/s = Quadrillion (10¹⁵)</li>
+  <li>EH/s = Quintillion (10¹⁸)</li>
+</ul>
+
+<p><strong>Bitcoin Network</strong> (2024):</p>
+<ul>
+  <li>Total hash rate: ~600 EH/s</li>
+  <li>= 600,000,000,000,000,000,000 hashes/second</li>
+  <li>= 600 quintillion hashes per second!</li>
+</ul>
+
+<p><strong>Relationship with Difficulty</strong>:
+[
+\text{Hash Rate} = \frac{\text{Difficulty} \times 2^{32}}{600 \text{ seconds}}
+]</p>
+
+<p><strong>Security Implication</strong>:
+Higher hash rate = more expensive to attack</p>
+
+<p><strong>Attack Cost</strong> (51% attack):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Required hash rate: 51% of 600 EH/s = 306 EH/s
+
+Hardware cost:
+- Modern ASIC: 110 TH/s, costs ~$3,000
+- Need: 306 EH/s / 110 TH/s = 2.78 million ASICs
+- Total: 2,780,000 × $3,000 = $8.3 billion
+
+Electricity cost (ongoing):
+- Power: 2,780,000 × 3,250W = 9 GW
+- Cost: $0.05/kWh × 9,000,000 kW = $450,000/hour
+- Per day: $10.8 million
+
+Total to attack for 1 day: ~$8.3B + $0.26B = $8.56 billion
+And you'd likely crash BTC price, making your investment worthless!
+</code></pre></div></div>
+
+<h3 id="35-mining-process---step-by-step">3.5. Mining Process - Step by Step</h3>
+
+<p><strong>Step 1: Construct Block Template</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block_template</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">version</span><span class="sh">'</span><span class="p">:</span> <span class="mh">0x20000000</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">previousblockhash</span><span class="sh">'</span><span class="p">:</span> <span class="nf">get_best_block_hash</span><span class="p">(),</span>
+    <span class="sh">'</span><span class="s">merkleroot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>  <span class="c1"># To be computed
+</span>    <span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">:</span> <span class="nf">current_timestamp</span><span class="p">(),</span>
+    <span class="sh">'</span><span class="s">bits</span><span class="sh">'</span><span class="p">:</span> <span class="nf">get_current_difficulty_bits</span><span class="p">(),</span>
+    <span class="sh">'</span><span class="s">nonce</span><span class="sh">'</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Step 2: Select Transactions</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Select from mempool (ordered by fee/byte)
+</span><span class="n">transactions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">total_fees</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">mempool</span><span class="p">.</span><span class="nf">sort_by_fee_rate</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">total_size</span> <span class="o">+</span> <span class="n">tx</span><span class="p">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">MAX_BLOCK_SIZE</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">transactions</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+    <span class="n">total_size</span> <span class="o">+=</span> <span class="n">tx</span><span class="p">.</span><span class="n">size</span>
+    <span class="n">total_fees</span> <span class="o">+=</span> <span class="n">tx</span><span class="p">.</span><span class="n">fee</span>
+</code></pre></div></div>
+
+<p><strong>Step 3: Add Coinbase Transaction</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">coinbase</span> <span class="o">=</span> <span class="nc">Transaction</span><span class="p">()</span>
+<span class="n">coinbase</span><span class="p">.</span><span class="nf">add_input</span><span class="p">(</span>
+    <span class="n">txid</span><span class="o">=</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span>  <span class="c1"># Null input
+</span>    <span class="n">vout</span><span class="o">=</span><span class="mh">0xFFFFFFFF</span><span class="p">,</span>
+    <span class="n">scriptSig</span><span class="o">=</span><span class="nf">encode_block_height</span><span class="p">()</span> <span class="o">+</span> <span class="n">arbitrary_data</span>
+<span class="p">)</span>
+<span class="n">coinbase</span><span class="p">.</span><span class="nf">add_output</span><span class="p">(</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">BLOCK_REWARD</span> <span class="o">+</span> <span class="n">total_fees</span><span class="p">,</span>  <span class="c1"># 6.25 BTC + fees
+</span>    <span class="n">scriptPubKey</span><span class="o">=</span><span class="n">miner_address</span>
+<span class="p">)</span>
+
+<span class="n">transactions</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">coinbase</span><span class="p">)</span>  <span class="c1"># Coinbase is first tx
+</span></code></pre></div></div>
+
+<p><strong>Step 4: Compute Merkle Root</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">merkle_root</span><span class="p">(</span><span class="n">transactions</span><span class="p">):</span>
+    <span class="n">hashes</span> <span class="o">=</span> <span class="p">[</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">sha256</span><span class="p">(</span><span class="n">tx</span><span class="p">))</span> <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">]</span>
+    
+    <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hashes</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Duplicate last
+</span>        
+        <span class="n">hashes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nf">sha256</span><span class="p">(</span><span class="nf">sha256</span><span class="p">(</span><span class="n">hashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">hashes</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">hashes</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">hashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">block_template</span><span class="p">[</span><span class="sh">'</span><span class="s">merkleroot</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="nf">merkle_root</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Step 5: Mining Loop</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mine_block</span><span class="p">(</span><span class="n">block_template</span><span class="p">):</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="nf">bits_to_target</span><span class="p">(</span><span class="n">block_template</span><span class="p">[</span><span class="sh">'</span><span class="s">bits</span><span class="sh">'</span><span class="p">])</span>
+    <span class="n">nonce</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_nonce</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span>  <span class="c1"># 4 billion
+</span>    
+    <span class="k">while</span> <span class="n">nonce</span> <span class="o">&lt;</span> <span class="n">max_nonce</span><span class="p">:</span>
+        <span class="n">block_template</span><span class="p">[</span><span class="sh">'</span><span class="s">nonce</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">nonce</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="nf">serialize_header</span><span class="p">(</span><span class="n">block_template</span><span class="p">)</span>
+        <span class="n">hash_result</span> <span class="o">=</span> <span class="nf">sha256</span><span class="p">(</span><span class="nf">sha256</span><span class="p">(</span><span class="n">header</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">hash_result</span><span class="p">,</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nonce</span><span class="p">,</span> <span class="n">hash_result</span>  <span class="c1"># Found!
+</span>        
+        <span class="n">nonce</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># Update timestamp every second
+</span>        <span class="k">if</span> <span class="n">nonce</span> <span class="o">%</span> <span class="mi">1000000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">block_template</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="nf">current_timestamp</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="bp">None</span>  <span class="c1"># Nonce space exhausted, need new block
+</span></code></pre></div></div>
+
+<p><strong>Step 6: Broadcast Block</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">nonce</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">complete_block</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">header</span><span class="sh">'</span><span class="p">:</span> <span class="n">block_template</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">:</span> <span class="n">transactions</span>
+    <span class="p">}</span>
+    <span class="nf">broadcast_to_peers</span><span class="p">(</span><span class="n">complete_block</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-mật-mã-học">4. Công thức toán học và mật mã học</h2>
+
+<h3 id="41-probability-of-finding-block">4.1. Probability of Finding Block</h3>
+
+<p><strong>Single Hash Attempt</strong>:
+[
+P(\text{success}) = \frac{\text{Target}}{2^{256}}
+]</p>
+
+<p><strong>Current Difficulty</strong> (~60 trillion):
+[
+P(\text{success}) = \frac{1}{60 \times 10^{12} \times 2^{32}} \approx \frac{1}{2.58 \times 10^{23}}
+]</p>
+
+<p><strong>Expected Number of Attempts</strong>:
+[
+E[\text{attempts}] = \frac{1}{P(\text{success})} = \text{Difficulty} \times 2^{32}
+]</p>
+
+<p><strong>For entire network</strong> (600 EH/s):
+[
+\begin{align}
+\text{Attempts per second} &amp;= 600 \times 10^{18} <br />
+\text{Expected time} &amp;= \frac{\text{Difficulty} \times 2^{32}}{600 \times 10^{18}} <br />
+&amp;= \frac{60 \times 10^{12} \times 4.3 \times 10^9}{600 \times 10^{18}} <br />
+&amp;\approx 600 \text{ seconds} = 10 \text{ minutes} ✓
+\end{align}
+]</p>
+
+<h3 id="42-mining-as-poisson-process">4.2. Mining as Poisson Process</h3>
+
+<p>Block discovery follows <strong>Poisson distribution</strong> với rate parameter λ = 1/600 (1 block per 10 minutes):</p>
+
+<p><strong>Probability of k blocks in time t</strong>:
+[
+P(X = k) = \frac{(\lambda t)^k e^{-\lambda t}}{k!}
+]</p>
+
+<p><strong>Examples</strong>:</p>
+
+<p><strong>Probability of NO blocks in 10 minutes</strong>:
+[
+P(X = 0) = e^{-1} \approx 0.368 = 36.8\%
+]</p>
+
+<p><strong>Probability of 2+ blocks in 10 minutes</strong> (orphan risk):
+[
+P(X \geq 2) = 1 - P(X=0) - P(X=1) = 1 - e^{-1} - e^{-1} \approx 0.264 = 26.4\%
+]</p>
+
+<p><strong>Expected time until first block</strong>:
+[
+E[T] = \frac{1}{\lambda} = 600 \text{ seconds}
+]</p>
+
+<p><strong>Variance</strong>:
+[
+\text{Var}(T) = \frac{1}{\lambda^2} = 360,000 \text{ seconds}^2
+]</p>
+
+<p><strong>Standard deviation</strong>:
+[
+\sigma = 600 \text{ seconds} = 10 \text{ minutes}
+]</p>
+
+<p>Meaning: Block times vary widely! Sometimes 1 minute, sometimes 30 minutes.</p>
+
+<h3 id="43-selfish-mining-attack-analysis">4.3. Selfish Mining Attack Analysis</h3>
+
+<p><strong>Honest Mining</strong> (all broadcast immediately):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Revenue per hash = Block Reward × (Your Hash Rate / Total Hash Rate)
+</code></pre></div></div>
+
+<p><strong>Selfish Mining</strong> (withhold blocks strategically):</p>
+
+<p><strong>Attacker với fraction q of hash power, honest miners có p = 1-q</strong></p>
+
+<p><strong>Relative Revenue</strong>:
+[
+\text{Relative Revenue} = \frac{q(1 - p)}{1 - q}
+]</p>
+
+<p><strong>Profit threshold</strong> (when selfish mining &gt; honest):
+[
+\frac{q(1-p)}{1-q} &gt; q \implies q &gt; \frac{1 - \gamma}{3 - 2\gamma}
+]</p>
+
+<p>Where γ = fraction of honest miners following attacker during ties.</p>
+
+<p><strong>Worst case</strong> (γ = 0, all honest miners mine on honest chain):
+[
+q &gt; \frac{1}{3} = 33.3\%
+]</p>
+
+<p><strong>Best case for attacker</strong> (γ = 1, all follow attacker):
+[
+q &gt; \frac{0}{2} = 0\% \text{ (always profitable!)}
+]</p>
+
+<p><strong>Realistic</strong> (γ ≈ 0.5):
+[
+q &gt; \frac{0.5}{2} = 25\%
+]</p>
+
+<p><strong>Implication</strong>: Selfish mining profitable với ~25-33% hash power, lower than 51% threshold!</p>
+
+<h3 id="44-51-attack---double-spend-probability">4.4. 51% Attack - Double Spend Probability</h3>
+
+<p><strong>Scenario</strong>: Attacker controls fraction q of hash power, wants to double-spend.</p>
+
+<p><strong>Attack Process</strong>:</p>
+<ol>
+  <li>Send transaction to merchant (buy item)</li>
+  <li>Merchant waits for z confirmations</li>
+  <li>Attacker secretly mines alternative chain without that transaction</li>
+  <li>If attacker catches up, broadcasts longer chain → double spend!</li>
+</ol>
+
+<p><strong>Success Probability</strong> (Satoshi’s analysis):</p>
+
+<p>[
+P_{\text{catch-up}} = \begin{cases}
+1 &amp; \text{if } q \geq 0.5 <br />
+\left(\frac{q}{1-q}\right)^z &amp; \text{if } q &lt; 0.5
+\end{cases}
+]</p>
+
+<p><strong>Derivation</strong> (Gambler’s Ruin):</p>
+
+<p>Let z = confirmation depth (honest chain’s lead)</p>
+
+<p>Each new block:</p>
+<ul>
+  <li>Prob q: attacker closes gap by 1</li>
+  <li>Prob 1-q: gap increases by 1</li>
+</ul>
+
+<p>Probability attacker catches up from z behind:
+[
+P(z) = \begin{cases}
+\left(\frac{q}{1-q}\right)^z &amp; \text{if } q &lt; 0.5 <br />
+1 &amp; \text{if } q \geq 0.5
+\end{cases}
+]</p>
+
+<p><strong>Numerical Examples</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>q (attacker %)</th>
+      <th>z=1</th>
+      <th>z=2</th>
+      <th>z=3</th>
+      <th>z=6</th>
+      <th>z=10</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10%</td>
+      <td>11.1%</td>
+      <td>1.2%</td>
+      <td>0.14%</td>
+      <td>0.000%</td>
+      <td>~0%</td>
+    </tr>
+    <tr>
+      <td>20%</td>
+      <td>25%</td>
+      <td>6.25%</td>
+      <td>1.56%</td>
+      <td>0.024%</td>
+      <td>~0%</td>
+    </tr>
+    <tr>
+      <td>30%</td>
+      <td>42.9%</td>
+      <td>18.4%</td>
+      <td>7.8%</td>
+      <td>1.4%</td>
+      <td>0.18%</td>
+    </tr>
+    <tr>
+      <td>40%</td>
+      <td>66.7%</td>
+      <td>44.4%</td>
+      <td>29.6%</td>
+      <td>13.1%</td>
+      <td>3.8%</td>
+    </tr>
+    <tr>
+      <td>45%</td>
+      <td>81.8%</td>
+      <td>66.9%</td>
+      <td>54.8%</td>
+      <td>33.2%</td>
+      <td>16.7%</td>
+    </tr>
+    <tr>
+      <td>49%</td>
+      <td>96.1%</td>
+      <td>92.3%</td>
+      <td>88.7%</td>
+      <td>77.8%</td>
+      <td>64.9%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Observation</strong>:</p>
+<ul>
+  <li>With 10% hash power, 6 confirmations → ~0% success</li>
+  <li>With 40% hash power, 6 confirmations → 13% success (risky!)</li>
+  <li>Need &gt;50% for guaranteed success</li>
+</ul>
+
+<h3 id="45-variance-và-mining-pool-economics">4.5. Variance và Mining Pool Economics</h3>
+
+<p><strong>Solo Mining Variance</strong>:</p>
+
+<p>Với hash rate h, network hash rate H, block time T = 600s:</p>
+
+<p><strong>Expected blocks per day</strong>:
+[
+E[\text{blocks}] = \frac{h}{H} \times \frac{86400}{600} = \frac{144h}{H}
+]</p>
+
+<p><strong>Example</strong>: 100 TH/s miner, network 600 EH/s:
+[
+E[\text{blocks/day}] = \frac{144 \times 100 \times 10^{12}}{600 \times 10^{18}} = 0.024 \text{ blocks/day}
+]</p>
+
+<p><strong>Mean time to find block</strong>:
+[
+\frac{1}{0.024 \text{ days}} \approx 42 \text{ days}
+]</p>
+
+<p><strong>Standard deviation</strong> (Poisson):
+[
+\sigma = \sqrt{E[\text{blocks}]} = \sqrt{0.024} \approx 0.155
+]</p>
+
+<p><strong>Coefficient of Variation</strong>:
+[
+CV = \frac{\sigma}{E} = \frac{1}{\sqrt{E}} = \frac{1}{\sqrt{0.024}} \approx 6.5
+]</p>
+
+<p>Extremely high variance! Income very unpredictable.</p>
+
+<p><strong>Mining Pools</strong> (reduce variance):</p>
+<ul>
+  <li>N miners pool together</li>
+  <li>Variance reduces by factor √N</li>
+  <li>Trade-off: Pool fee (1-3%)</li>
+</ul>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-complete-mining-implementation">5.1. Complete Mining Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">struct</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="k">class</span> <span class="nc">BlockHeader</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">prev_hash</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">merkle_root</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+                 <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nonce</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prev_hash</span> <span class="o">=</span> <span class="n">prev_hash</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">merkle_root</span> <span class="o">=</span> <span class="n">merkle_root</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">bits</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">nonce</span> <span class="o">=</span> <span class="n">nonce</span>
+    
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Serialize header for hashing</span><span class="sh">"""</span>
+        <span class="nf">return </span><span class="p">(</span>
+            <span class="n">struct</span><span class="p">.</span><span class="nf">pack</span><span class="p">(</span><span class="sh">'</span><span class="s">&lt;I</span><span class="sh">'</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">version</span><span class="p">)</span> <span class="o">+</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prev_hash</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span>  <span class="c1"># Little-endian
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">merkle_root</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span>
+            <span class="n">struct</span><span class="p">.</span><span class="nf">pack</span><span class="p">(</span><span class="sh">'</span><span class="s">&lt;I</span><span class="sh">'</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">+</span>
+            <span class="n">struct</span><span class="p">.</span><span class="nf">pack</span><span class="p">(</span><span class="sh">'</span><span class="s">&lt;I</span><span class="sh">'</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">bits</span><span class="p">)</span> <span class="o">+</span>
+            <span class="n">struct</span><span class="p">.</span><span class="nf">pack</span><span class="p">(</span><span class="sh">'</span><span class="s">&lt;I</span><span class="sh">'</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">nonce</span><span class="p">)</span>
+        <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Double SHA-256 hash</span><span class="sh">"""</span>
+        <span class="n">header_bin</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">serialize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">header_bin</span><span class="p">).</span><span class="nf">digest</span><span class="p">()).</span><span class="nf">digest</span><span class="p">()</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">bits_to_target</span><span class="p">(</span><span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Convert compact bits representation to full target</span><span class="sh">"""</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="n">bits</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span>
+        <span class="n">mantissa</span> <span class="o">=</span> <span class="n">bits</span> <span class="o">&amp;</span> <span class="mh">0x00FFFFFF</span>
+        
+        <span class="k">if</span> <span class="n">exponent</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">mantissa</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="n">exponent</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">mantissa</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="p">(</span><span class="n">exponent</span> <span class="o">-</span> <span class="mi">3</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">target</span>
+    
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Check if hash meets difficulty target</span><span class="sh">"""</span>
+        <span class="n">hash_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">hash</span><span class="p">(),</span> <span class="sh">'</span><span class="s">little</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">bits_to_target</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">bits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hash_int</span> <span class="o">&lt;</span> <span class="n">target</span>
+
+<span class="k">class</span> <span class="nc">Miner</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="n">BlockHeader</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">BlockHeader</span><span class="p">.</span><span class="nf">bits_to_target</span><span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">bits</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">hashes_computed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">mine</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">max_nonce</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        Mine block by finding valid nonce
+        
+        Args:
+            max_nonce: Maximum nonce to try
+            update_interval: How often to update timestamp
+        
+        Returns:
+            Valid nonce if found, None otherwise
+        </span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">initial_timestamp</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">timestamp</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Mining started...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Target: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">target</span><span class="si">:</span><span class="mi">064</span><span class="n">x</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Difficulty: ~</span><span class="si">{</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">256</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">target</span><span class="p">)</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">nonce</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">max_nonce</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">nonce</span> <span class="o">=</span> <span class="n">nonce</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">hashes_computed</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="c1"># Check if valid
+</span>            <span class="n">hash_result</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="nf">hash</span><span class="p">()</span>
+            <span class="n">hash_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">hash_result</span><span class="p">,</span> <span class="sh">'</span><span class="s">little</span><span class="sh">'</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">hash_int</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">target</span><span class="p">:</span>
+                <span class="c1"># Found valid block!
+</span>                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">start_time</span>
+                <span class="n">hashrate</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">hashes_computed</span> <span class="o">/</span> <span class="n">elapsed</span>
+                
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✓ Valid block found!</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Nonce: </span><span class="si">{</span><span class="n">nonce</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Hash: </span><span class="si">{</span><span class="n">hash_result</span><span class="p">[</span><span class="si">::</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">hex</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Hashes: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">hashes_computed</span><span class="si">:</span><span class="p">,</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Hash rate: </span><span class="si">{</span><span class="n">hashrate</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s"> MH/s</span><span class="sh">"</span><span class="p">)</span>
+                
+                <span class="k">return</span> <span class="n">nonce</span>
+            
+            <span class="c1"># Update timestamp periodically
+</span>            <span class="k">if</span> <span class="n">nonce</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nonce</span> <span class="o">%</span> <span class="n">update_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">())</span>
+                
+                <span class="c1"># Progress update
+</span>                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">start_time</span>
+                <span class="n">hashrate</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">hashes_computed</span> <span class="o">/</span> <span class="n">elapsed</span> <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="n">nonce</span> <span class="o">/</span> <span class="n">max_nonce</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+                
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Progress: </span><span class="si">{</span><span class="n">progress</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">% | </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Nonce: </span><span class="si">{</span><span class="n">nonce</span><span class="si">:</span><span class="p">,</span><span class="si">}</span><span class="s"> | </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Hash rate: </span><span class="si">{</span><span class="n">hashrate</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s"> MH/s | </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Exhausted nonce space
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">✗ Failed to find valid block in </span><span class="si">{</span><span class="n">max_nonce</span><span class="si">:</span><span class="p">,</span><span class="si">}</span><span class="s"> attempts</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Need to change block (update transactions or timestamp)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">MiningPool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Simplified mining pool that distributes work</span><span class="sh">"""</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="n">BlockHeader</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">num_workers</span> <span class="o">=</span> <span class="n">num_workers</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">BlockHeader</span><span class="p">.</span><span class="nf">bits_to_target</span><span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">bits</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">assign_work</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">worker_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Assign nonce range to worker</span><span class="sh">"""</span>
+        <span class="n">nonce_space</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span>
+        <span class="n">range_size</span> <span class="o">=</span> <span class="n">nonce_space</span> <span class="o">//</span> <span class="n">self</span><span class="p">.</span><span class="n">num_workers</span>
+        
+        <span class="n">start_nonce</span> <span class="o">=</span> <span class="n">worker_id</span> <span class="o">*</span> <span class="n">range_size</span>
+        <span class="n">end_nonce</span> <span class="o">=</span> <span class="n">start_nonce</span> <span class="o">+</span> <span class="n">range_size</span>
+        
+        <span class="k">return</span> <span class="n">start_nonce</span><span class="p">,</span> <span class="n">end_nonce</span>
+    
+    <span class="k">def</span> <span class="nf">mine_range</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">start_nonce</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_nonce</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+                   <span class="n">worker_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Mine within assigned nonce range</span><span class="sh">"""</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Worker </span><span class="si">{</span><span class="n">worker_id</span><span class="si">}</span><span class="s">: Mining nonce range </span><span class="sh">"</span>
+              <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">start_nonce</span><span class="si">:</span><span class="p">,</span><span class="si">}</span><span class="s"> to </span><span class="si">{</span><span class="n">end_nonce</span><span class="si">:</span><span class="p">,</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">nonce</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">start_nonce</span><span class="p">,</span> <span class="n">end_nonce</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">nonce</span> <span class="o">=</span> <span class="n">nonce</span>
+            <span class="n">hash_result</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="nf">hash</span><span class="p">()</span>
+            <span class="n">hash_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">hash_result</span><span class="p">,</span> <span class="sh">'</span><span class="s">little</span><span class="sh">'</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">hash_int</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">target</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✓ Worker </span><span class="si">{</span><span class="n">worker_id</span><span class="si">}</span><span class="s"> found valid block at nonce </span><span class="si">{</span><span class="n">nonce</span><span class="si">}</span><span class="s">!</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">nonce</span>
+        
+        <span class="k">return</span> <span class="bp">None</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Bitcoin Mining Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Create a very easy block for demonstration (difficulty ~1000)
+</span>    <span class="c1"># Normal Bitcoin difficulty is ~60 trillion!
+</span>    <span class="n">header</span> <span class="o">=</span> <span class="nc">BlockHeader</span><span class="p">(</span>
+        <span class="n">version</span><span class="o">=</span><span class="mh">0x20000000</span><span class="p">,</span>
+        <span class="n">prev_hash</span><span class="o">=</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="sh">"</span><span class="s">00</span><span class="sh">"</span> <span class="o">*</span> <span class="mi">32</span><span class="p">),</span>
+        <span class="n">merkle_root</span><span class="o">=</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="sh">"</span><span class="s">aa</span><span class="sh">"</span> <span class="o">*</span> <span class="mi">32</span><span class="p">),</span>
+        <span class="n">timestamp</span><span class="o">=</span><span class="nf">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()),</span>
+        <span class="n">bits</span><span class="o">=</span><span class="mh">0x1e0ffff0</span><span class="p">,</span>  <span class="c1"># Much easier than real Bitcoin
+</span>        <span class="n">nonce</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Block Header:</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Version: </span><span class="si">{</span><span class="n">header</span><span class="p">.</span><span class="n">version</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Previous Hash: </span><span class="si">{</span><span class="n">header</span><span class="p">.</span><span class="n">prev_hash</span><span class="p">.</span><span class="nf">hex</span><span class="p">()[</span><span class="si">:</span><span class="mi">32</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Merkle Root: </span><span class="si">{</span><span class="n">header</span><span class="p">.</span><span class="n">merkle_root</span><span class="p">.</span><span class="nf">hex</span><span class="p">()[</span><span class="si">:</span><span class="mi">32</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Timestamp: </span><span class="si">{</span><span class="n">header</span><span class="p">.</span><span class="n">timestamp</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Bits: 0x</span><span class="si">{</span><span class="n">header</span><span class="p">.</span><span class="n">bits</span><span class="si">:</span><span class="mi">08</span><span class="n">x</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Mine!
+</span>    <span class="n">miner</span> <span class="o">=</span> <span class="nc">Miner</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="n">valid_nonce</span> <span class="o">=</span> <span class="n">miner</span><span class="p">.</span><span class="nf">mine</span><span class="p">(</span><span class="n">max_nonce</span><span class="o">=</span><span class="mi">10_000_000</span><span class="p">)</span>  <span class="c1"># Limit for demo
+</span>    
+    <span class="k">if</span> <span class="n">valid_nonce</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">✓ Mining successful!</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block can now be broadcast to network</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="52-difficulty-adjustment-simulation">5.2. Difficulty Adjustment Simulation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="k">class</span> <span class="nc">DifficultySimulator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">target_block_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">600</span><span class="p">,</span> <span class="n">adjustment_period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2016</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">target_block_time</span> <span class="o">=</span> <span class="n">target_block_time</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span> <span class="o">=</span> <span class="n">adjustment_period</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span> <span class="o">=</span> <span class="mf">100.0</span>  <span class="c1"># Arbitrary units
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">def</span> <span class="nf">mine_block</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Simulate mining one block</span><span class="sh">"""</span>
+        <span class="c1"># Expected time based on hash rate and difficulty
+</span>        <span class="n">expected_time</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">target_block_time</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span>
+        
+        <span class="c1"># Add randomness (exponential distribution matches Poisson process)
+</span>        <span class="n">actual_time</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="nf">expovariate</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">expected_time</span><span class="p">)</span>
+        
+        <span class="n">block</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">height</span><span class="sh">'</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">:</span> <span class="n">actual_time</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">difficulty</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">hash_rate</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span>
+        <span class="p">}</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+        
+        <span class="c1"># Check if adjustment needed
+</span>        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">)</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">adjust_difficulty</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">block</span>
+    
+    <span class="k">def</span> <span class="nf">adjust_difficulty</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Adjust difficulty based on recent block times</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Get blocks from last adjustment period
+</span>        <span class="n">recent_blocks</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">[</span><span class="o">-</span><span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="p">:]</span>
+        
+        <span class="c1"># Calculate actual time taken
+</span>        <span class="n">actual_time</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">recent_blocks</span><span class="p">)</span>
+        <span class="n">expected_time</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">target_block_time</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span>
+        
+        <span class="c1"># Calculate adjustment
+</span>        <span class="n">adjustment_factor</span> <span class="o">=</span> <span class="n">expected_time</span> <span class="o">/</span> <span class="n">actual_time</span>
+        
+        <span class="c1"># Constrain to [0.25, 4] range
+</span>        <span class="n">adjustment_factor</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">adjustment_factor</span><span class="p">))</span>
+        
+        <span class="n">old_difficulty</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">*=</span> <span class="n">adjustment_factor</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== Difficulty Adjustment at Block </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">)</span><span class="si">}</span><span class="s"> ===</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Actual time: </span><span class="si">{</span><span class="n">actual_time</span><span class="o">/</span><span class="mi">60</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> minutes</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Expected time: </span><span class="si">{</span><span class="n">expected_time</span><span class="o">/</span><span class="mi">60</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> minutes</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Old difficulty: </span><span class="si">{</span><span class="n">old_difficulty</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">New difficulty: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Change: </span><span class="si">{</span><span class="p">(</span><span class="n">adjustment_factor</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="si">:</span><span class="o">+</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">%</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">num_blocks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hash_rate_changes</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">
+        Simulate mining multiple blocks
+        
+        Args:
+            num_blocks: Number of blocks to mine
+            hash_rate_changes: Dict of {block_height: new_hash_rate}
+        </span><span class="sh">"""</span>
+        <span class="n">hash_rate_changes</span> <span class="o">=</span> <span class="n">hash_rate_changes</span> <span class="ow">or</span> <span class="p">{}</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Starting simulation: </span><span class="si">{</span><span class="n">num_blocks</span><span class="si">}</span><span class="s"> blocks</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Target block time: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">target_block_time</span><span class="si">}</span><span class="s">s</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">num_blocks</span><span class="p">):</span>
+            <span class="c1"># Apply hash rate changes
+</span>            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hash_rate_changes</span><span class="p">:</span>
+                <span class="n">old_rate</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span> <span class="o">=</span> <span class="n">hash_rate_changes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">*** Hash rate changed at block </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">old_rate</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s"> → </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s"> (</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">hash_rate</span><span class="o">/</span><span class="n">old_rate</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">x) ***</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+            
+            <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">mine_block</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">avg_time</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">:])</span> <span class="o">/</span> <span class="nf">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">))</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="mi">5</span><span class="n">d</span><span class="si">}</span><span class="s"> | Time: </span><span class="si">{</span><span class="n">block</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span><span class="si">:</span><span class="mf">6.1</span><span class="n">f</span><span class="si">}</span><span class="s">s | </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Avg (last 100): </span><span class="si">{</span><span class="n">avg_time</span><span class="si">:</span><span class="mf">6.1</span><span class="n">f</span><span class="si">}</span><span class="s">s | </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Difficulty: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="si">:</span><span class="mf">8.2</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">analyze_results</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Analyze simulation results</span><span class="sh">"""</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== Simulation Results ===</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="n">block_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">]</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Total blocks: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Average block time: </span><span class="si">{</span><span class="nf">sum</span><span class="p">(</span><span class="n">block_times</span><span class="p">)</span><span class="o">/</span><span class="nf">len</span><span class="p">(</span><span class="n">block_times</span><span class="p">)</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Min block time: </span><span class="si">{</span><span class="nf">min</span><span class="p">(</span><span class="n">block_times</span><span class="p">)</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Max block time: </span><span class="si">{</span><span class="nf">max</span><span class="p">(</span><span class="n">block_times</span><span class="p">)</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Final difficulty: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Blocks per adjustment period
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="p">):</span>
+            <span class="n">period_blocks</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">period_blocks</span><span class="p">)</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="p">:</span>
+                <span class="n">avg_time</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="sh">'</span><span class="s">time</span><span class="sh">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">period_blocks</span><span class="p">)</span> <span class="o">/</span> <span class="nf">len</span><span class="p">(</span><span class="n">period_blocks</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Period </span><span class="si">{</span><span class="n">i</span><span class="o">//</span><span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s"> </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">(blocks </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="n">self</span><span class="p">.</span><span class="n">adjustment_period</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s">): </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Avg time: </span><span class="si">{</span><span class="n">avg_time</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># Run simulation
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Difficulty Adjustment Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="n">simulator</span> <span class="o">=</span> <span class="nc">DifficultySimulator</span><span class="p">(</span><span class="n">target_block_time</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">adjustment_period</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Shorter for demo
+</span>    
+    <span class="c1"># Simulate hash rate increases (mining hardware improvements)
+</span>    <span class="n">hash_rate_changes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">200</span><span class="p">:</span> <span class="mf">200.0</span><span class="p">,</span>   <span class="c1"># 2x increase at block 200
+</span>        <span class="mi">500</span><span class="p">:</span> <span class="mf">500.0</span><span class="p">,</span>   <span class="c1"># 2.5x increase at block 500
+</span>        <span class="mi">800</span><span class="p">:</span> <span class="mf">300.0</span>    <span class="c1"># Decrease (miners leave)
+</span>    <span class="p">}</span>
+    
+    <span class="n">simulator</span><span class="p">.</span><span class="nf">simulate</span><span class="p">(</span><span class="n">num_blocks</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hash_rate_changes</span><span class="o">=</span><span class="n">hash_rate_changes</span><span class="p">)</span>
+    <span class="n">simulator</span><span class="p">.</span><span class="nf">analyze_results</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><em>[Do giới hạn độ dài, tôi sẽ tiếp tục với các phần 6-10 trong một message riêng. Bài giảng này đang rất chi tiết và comprehensive!]</em></p>
+
+<h2 id="6-các-thách-thức-và-đánh-đổi-thường-gặp">6. Các thách thức và đánh đổi thường gặp</h2>
+
+<h3 id="61-mining-centralization">6.1. Mining Centralization</h3>
+
+<p><strong>Problem</strong>: Mining đã trở nên highly centralized</p>
+
+<p><strong>Geographic Concentration</strong> (2024):</p>
+<ul>
+  <li>USA: ~38% hash rate</li>
+  <li>China: ~21% (down from &gt;65% in 2021)</li>
+  <li>Kazakhstan: ~13%</li>
+  <li>Russia: ~10%</li>
+  <li>Canada: ~7%</li>
+</ul>
+
+<p><strong>Pool Concentration</strong>:</p>
+<ul>
+  <li>Top 4 pools: ~55% của total hash rate</li>
+  <li>Foundry USA: ~30%</li>
+  <li>Antpool: ~15%</li>
+  <li>F2Pool: ~12%</li>
+  <li>Binance Pool: ~10%</li>
+</ul>
+
+<p><strong>Risks</strong>:</p>
+<ol>
+  <li><strong>Government intervention</strong>: Single country could disrupt significant portion</li>
+  <li><strong>Pool collusion</strong>: Top pools could coordinate 51% attack</li>
+  <li><strong>Transaction censorship</strong>: Pools could refuse certain transactions</li>
+</ol>
+
+<p><strong>Mitigations</strong>:</p>
+<ul>
+  <li><strong>Stratum V2</strong>: Allows individual miners to choose transactions (not pool)</li>
+  <li><strong>P2Pool</strong>: Decentralized pool using sharechain</li>
+  <li><strong>Geographic diversification</strong>: Miners spreading globally</li>
+  <li><strong>Pool hopping</strong>: Miners can quickly switch pools</li>
+</ul>
+
+<h3 id="62-asic-resistance-debate">6.2. ASIC Resistance Debate</h3>
+
+<p><strong>Pro-ASIC Arguments</strong>:</p>
+<ul>
+  <li>Higher hash rate = more security</li>
+  <li>Specialized hardware harder to requisition for attacks</li>
+  <li>Investment in hardware aligns long-term interests</li>
+</ul>
+
+<p><strong>Anti-ASIC Arguments</strong>:</p>
+<ul>
+  <li>Centralization (few manufacturers)</li>
+  <li>Barriers to entry (expensive hardware)</li>
+  <li>E-waste when ASICs obsolete</li>
+</ul>
+
+<p><strong>ASIC-Resistant Alternatives</strong>:</p>
+<ul>
+  <li><strong>Memory-hard algorithms</strong>: Ethash (Ethereum pre-merge), RandomX (Monero)</li>
+  <li><strong>Frequent algorithm changes</strong>: Prevents ASIC development</li>
+  <li><strong>Mixed algorithms</strong>: Multiple algorithms combined</li>
+</ul>
+
+<p><strong>Bitcoin’s Stance</strong>: Embraced ASICs</p>
+<ul>
+  <li>Argues security benefits outweigh centralization risks</li>
+  <li>Market has matured with competition</li>
+  <li>Geographic distribution improving</li>
+</ul>
+
+<h3 id="63-selfish-mining-and-block-withholding">6.3. Selfish Mining and Block Withholding</h3>
+
+<p><strong>Selfish Mining</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Normal strategy: Found block → broadcast immediately
+Selfish strategy: Found block → keep secret → strategic release
+
+Example:
+1. Attacker finds block n+1 (keeps secret)
+2. Honest miners work on block n
+3. Attacker finds block n+2 (still secret)
+4. Honest miners find block n+1'
+5. Attacker broadcasts n+1 and n+2
+   → Longer chain → Honest block orphaned
+</code></pre></div></div>
+
+<p><strong>Profitability Threshold</strong>: ~25-33% hash rate</p>
+
+<p><strong>Defenses</strong>:</p>
+<ul>
+  <li><strong>Random block propagation</strong>: Harder to predict which chain wins ties</li>
+  <li><strong>Uncle block rewards</strong> (Ethereum): Reduce orphan cost</li>
+  <li><strong>Faster block propagation</strong>: P2P improvements (FIBRE, Compact Blocks)</li>
+</ul>
+
+<p><strong>Block Withholding Attack</strong> (on pools):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Attacker joins pool:
+- Submits partial proofs (gets rewards shares)
+- NEVER submits full solutions
+- Pool wastes work, attacker gets paid anyway
+
+Goal: Sabotage competitor pools
+</code></pre></div></div>
+
+<p><strong>Pool Defense</strong>:</p>
+<ul>
+  <li>Difficult to detect (looks like bad luck)</li>
+  <li>Some pools ban suspicious miners</li>
+  <li>Statistical analysis over time</li>
+</ul>
+
+<h3 id="64-fee-market-evolution">6.4. Fee Market Evolution</h3>
+
+<p><strong>Historical Evolution</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2009-2016: Tiny fees (~0.0001 BTC)
+2017:      Fee spike ($50+ during bull run)
+2018-2020: Moderate fees ($0.50-5)
+2021:      Another spike ($60+ peak)
+2024:      Variable ($1-20 depending on congestion)
+</code></pre></div></div>
+
+<p><strong>Replace-by-Fee (RBF)</strong>:</p>
+<ul>
+  <li>Allows replacing unconfirmed transaction with higher fee</li>
+  <li>Pro: Helps unstick transactions</li>
+  <li>Con: Enables double-spend attempts (before confirmation)</li>
+</ul>
+
+<p><strong>Child-Pays-for-Parent (CPFP)</strong>:</p>
+<ul>
+  <li>Spend unconfirmed coins với high fee</li>
+  <li>Incentivizes miners to include parent transaction</li>
+  <li>Useful when receiver wants faster confirmation</li>
+</ul>
+
+<p><strong>Future: Post-Subsidy Era</strong> (after 2140):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Block Reward → 0
+Only transaction fees remain
+
+Question: Will fees alone suffice for security?
+
+Optimistic view:
+- High BTC price → fees in BTC worth a lot
+- Layer 2 solutions reduce on-chain congestion
+- Fee market matures
+
+Pessimistic view:
+- Insufficient fees → hash rate drops
+- Security decreases
+- Need for tail emission (perpetual small subsidy)?
+</code></pre></div></div>
+
+<h3 id="65-empty-block-problem">6.5. Empty Block Problem</h3>
+
+<p><strong>Problem</strong>: Some miners mine empty blocks (no transactions except coinbase)</p>
+
+<p><strong>Why?</strong>:</p>
+<ul>
+  <li>Faster validation (no transaction verification)</li>
+  <li>Get block reward ASAP</li>
+  <li>Start mining next block immediately</li>
+</ul>
+
+<p><strong>Impact</strong>:</p>
+<ul>
+  <li>Wastes block space</li>
+  <li>Increases confirmation times</li>
+  <li>Foregoes fee revenue (usually small anyway)</li>
+</ul>
+
+<p><strong>Prevalence</strong>: ~1-3% of blocks</p>
+
+<p><strong>Not necessarily malicious</strong>:</p>
+<ul>
+  <li>SPV mining: Start mining before fully validating previous block</li>
+  <li>Optimization: Saves ~100ms validation time</li>
+</ul>
+
+<p><strong>Solution</strong>: Generally acceptable as temporary measure</p>
+
+<hr />
+
+<h2 id="7-các-khái-niệm-liên-quan">7. Các khái niệm liên quan</h2>
+
+<h3 id="71-mining-pool-reward-schemes">7.1. Mining Pool Reward Schemes</h3>
+
+<p><strong>Pay-Per-Share (PPS)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Miner gets: Fixed amount per share submitted
+Pool risk:   Bears variance (pays even if pool unlucky)
+Miner risk:  None (guaranteed payout)
+Pool fee:    Higher (3-5%) to cover variance
+</code></pre></div></div>
+
+<p><strong>Proportional (PROP)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Miner gets: Reward proportional to shares in round
+Pool risk:   None
+Miner risk:  High variance, vulnerable to pool hopping
+Pool fee:    Lower (1-2%)
+</code></pre></div></div>
+
+<p><strong>Pay-Per-Last-N-Shares (PPLNS)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Miner gets: Reward based on last N shares (not just current round)
+Pool risk:   Reduced
+Miner risk:  Medium, resistant to pool hopping
+Pool fee:    Medium (2-3%)
+</code></pre></div></div>
+
+<h3 id="72-merged-mining">7.2. Merged Mining</h3>
+
+<p><strong>Concept</strong>: Mine multiple blockchains simultaneously</p>
+
+<p><strong>How</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Create auxiliary blockchain transaction
+2. Include auxiliary header in main blockchain's coinbase
+3. If main blockchain block valid:
+   → Auxiliary blockchain also gets valid block (if hash &lt; aux target)
+</code></pre></div></div>
+
+<p><strong>Example</strong>: Namecoin merged-mined với Bitcoin</p>
+<ul>
+  <li>Bitcoin miners include Namecoin data</li>
+  <li>Free extra coins for same work</li>
+  <li>Secures smaller blockchain</li>
+</ul>
+
+<p><strong>Trade-offs</strong>:</p>
+<ul>
+  <li>Pro: Smaller chains get security</li>
+  <li>Con: Larger coinbase (more data)</li>
+  <li>Compatibility: Must be specifically designed for</li>
+</ul>
+
+<h3 id="73-stratum-protocol">7.3. Stratum Protocol</h3>
+
+<p><strong>Purpose</strong>: Communication between miners và pools</p>
+
+<p><strong>V1 (Current)</strong>:</p>
+<ul>
+  <li>Pool controls transaction selection</li>
+  <li>Pool sends: block template, difficulty target</li>
+  <li>Miner sends: shares found</li>
+  <li>Centralized transaction selection</li>
+</ul>
+
+<p><strong>V2 (New)</strong>:</p>
+<ul>
+  <li>Miners can select own transactions</li>
+  <li>Better decentralization</li>
+  <li>Improved efficiency (less data transfer)</li>
+  <li>End-to-end encryption</li>
+</ul>
+
+<p><strong>Job Assignment</strong>:</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mining.notify"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"params"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"job_id"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prev_hash"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"coinbase1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"coinbase2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"merkle_branches"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"version"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nbits"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"ntime"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"clean_jobs"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="74-asicboost-optimization">7.4. ASICBoost Optimization</h3>
+
+<p><strong>Concept</strong>: Optimization making mining ~20% more efficient</p>
+
+<p><strong>How</strong>:</p>
+<ul>
+  <li>Exploit SHA-256 internal structure</li>
+  <li>Reduce number of operations per hash</li>
+  <li>Patented (controversial)</li>
+</ul>
+
+<p><strong>Overt ASICBoost</strong>:</p>
+<ul>
+  <li>Detectable on-chain (version bits manipulation)</li>
+  <li>Compatible with protocol upgrades</li>
+</ul>
+
+<p><strong>Covert ASICBoost</strong>:</p>
+<ul>
+  <li>Hidden in transaction ordering</li>
+  <li>Incompatible with SegWit</li>
+  <li>Controversial (seen as bug exploitation)</li>
+</ul>
+
+<p><strong>Outcome</strong>:</p>
+<ul>
+  <li>SegWit adoption discouraged covert ASICBoost</li>
+  <li>Some modern ASICs include overt ASICBoost</li>
+  <li>Not universally supported</li>
+</ul>
+
+<h3 id="75-alternative-pow-algorithms">7.5. Alternative PoW Algorithms</h3>
+
+<p><strong>Ethash</strong> (Ethereum pre-merge):</p>
+<ul>
+  <li>Memory-hard (needs ~4GB RAM)</li>
+  <li>ASIC-resistant (initially)</li>
+  <li>Eventually ASICs developed anyway</li>
+</ul>
+
+<p><strong>RandomX</strong> (Monero):</p>
+<ul>
+  <li>CPU-optimized</li>
+  <li>Frequent updates</li>
+  <li>Strong ASIC resistance</li>
+</ul>
+
+<p><strong>Equihash</strong> (Zcash):</p>
+<ul>
+  <li>Memory-oriented</li>
+  <li>ASIC-resistant design</li>
+  <li>ASICs eventually created</li>
+</ul>
+
+<p><strong>Lessons</strong>:</p>
+<ul>
+  <li>True ASIC resistance is hard</li>
+  <li>Economic incentive drives ASIC development</li>
+  <li>Arms race between algorithm designers and hardware manufacturers</li>
+</ul>
+
+<hr />
+
+<h2 id="8--các-bài-báo-và-whitepaper-nền-tảng">8. ⭐ Các bài báo và whitepaper nền tảng</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paper</th>
+      <th>Year</th>
+      <th>Author(s)</th>
+      <th>Contribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>“Pricing via Processing or Combating Junk Mail”</strong></td>
+      <td>1992</td>
+      <td>Dwork, Naor</td>
+      <td>First proof-of-work concept</td>
+    </tr>
+    <tr>
+      <td><strong>“Hashcash - A Denial of Service Counter-Measure”</strong></td>
+      <td>2002</td>
+      <td>Adam Back</td>
+      <td>PoW for email spam prevention</td>
+    </tr>
+    <tr>
+      <td><strong>“Bitcoin: A Peer-to-Peer Electronic Cash System”</strong></td>
+      <td>2008</td>
+      <td>Satoshi Nakamoto</td>
+      <td>PoW for consensus</td>
+    </tr>
+    <tr>
+      <td><strong>“Majority is not Enough: Bitcoin Mining is Vulnerable”</strong></td>
+      <td>2013</td>
+      <td>Eyal, Sirer</td>
+      <td>Selfish mining attack</td>
+    </tr>
+    <tr>
+      <td><strong>“The Bitcoin Backbone Protocol: Analysis and Applications”</strong></td>
+      <td>2015</td>
+      <td>Garay, Kiayias, Leonardos</td>
+      <td>Formal security analysis of PoW</td>
+    </tr>
+    <tr>
+      <td><strong>“Analysis of Bitcoin Pooled Mining Reward Systems”</strong></td>
+      <td>2011</td>
+      <td>Rosenfeld</td>
+      <td>Mining pool mathematics</td>
+    </tr>
+    <tr>
+      <td><strong>“Be Selfish and Avoid Dilemmas”</strong></td>
+      <td>2016</td>
+      <td>Sapirshtein et al.</td>
+      <td>Optimal selfish mining strategies</td>
+    </tr>
+    <tr>
+      <td><strong>“On the Security and Performance of PoW Blockchains”</strong></td>
+      <td>2016</td>
+      <td>Gervais et al.</td>
+      <td>Security vs performance trade-offs</td>
+    </tr>
+    <tr>
+      <td><strong>“Blockchain Mining Games”</strong></td>
+      <td>2016</td>
+      <td>Biais et al.</td>
+      <td>Game-theoretic analysis</td>
+    </tr>
+    <tr>
+      <td><strong>“Consensus Redux: Distributed Ledgers in the Face of Adversarial Supremacy”</strong></td>
+      <td>2020</td>
+      <td>Garay et al.</td>
+      <td>Advanced PoW security</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Essential Reading</strong>:</p>
+<ol>
+  <li>Satoshi’s whitepaper Section 4: Proof-of-Work (must-read)</li>
+  <li>Eyal &amp; Sirer’s selfish mining paper (understand attacks)</li>
+  <li>Bitcoin Backbone Protocol (formal security proofs)</li>
+  <li>Rosenfeld’s pool analysis (understand mining economics)</li>
+</ol>
+
+<hr />
+
+<h2 id="9--minh-họa-và-tham-khảo-hình-ảnh">9. 🎨 Minh họa và tham khảo hình ảnh</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Source</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Mining process visualization</strong></td>
+      <td><a href="https://andersbrownworth.com/blockchain/blockchain">Anders Brownworth Demo</a></td>
+      <td>Interactive PoW demo</td>
+    </tr>
+    <tr>
+      <td><strong>Hash rate charts</strong></td>
+      <td><a href="https://www.blockchain.com/charts/hash-rate">Blockchain.com Charts</a></td>
+      <td>Real-time network hash rate</td>
+    </tr>
+    <tr>
+      <td><strong>Mining difficulty history</strong></td>
+      <td><a href="https://bitcoinwisdom.com/bitcoin/difficulty">BitcoinWisdom</a></td>
+      <td>Difficulty adjustments over time</td>
+    </tr>
+    <tr>
+      <td><strong>Mining pool distribution</strong></td>
+      <td><a href="https://btc.com/stats/pool">BTC.com Pool Stats</a></td>
+      <td>Current pool market share</td>
+    </tr>
+    <tr>
+      <td><strong>ASIC efficiency evolution</strong></td>
+      <td><a href="https://www.asicminervalue.com/">ASIC Miner Value</a></td>
+      <td>Hardware comparison</td>
+    </tr>
+    <tr>
+      <td><strong>Selfish mining diagram</strong></td>
+      <td><a href="https://www.cs.cornell.edu/~ie53/publications/btcProcFC.pdf">Cornell Tech</a></td>
+      <td>Attack visualization</td>
+    </tr>
+    <tr>
+      <td><strong>Fee estimation</strong></td>
+      <td><a href="https://mempool.space/">Mempool.space</a></td>
+      <td>Real-time fee market</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Interactive Tools</strong>:</p>
+<ul>
+  <li><a href="https://www.cryptocompare.com/mining/calculator/">Bitcoin Mining Calculator</a> - Profitability estimation</li>
+  <li><a href="https://diff.cryptothis.com/">Difficulty Estimator</a> - Next adjustment prediction</li>
+  <li><a href="https://blockchair.com/bitcoin">Block Explorer</a> - View actual mined blocks</li>
+</ul>
+
+<hr />
+
+<h2 id="10-tóm-tắt-và-điểm-chính">10. Tóm tắt và điểm chính</h2>
+
+<p><strong>Core Concepts</strong>:</p>
+<ol>
+  <li>PoW là lottery-based consensus: more hash rate = more tickets</li>
+  <li>SHA-256 double hashing với adjustable difficulty target</li>
+  <li>Difficulty adjusts every 2016 blocks để maintain ~10 min block time</li>
+  <li>Mining profitable when: Block Reward + Fees &gt; Hardware + Electricity costs</li>
+</ol>
+
+<p><strong>Technical Mechanisms</strong>:</p>
+<ul>
+  <li><strong>Mining</strong>: Find nonce such that hash(header) &lt; target</li>
+  <li><strong>Difficulty</strong>: Target = Max Target / Difficulty</li>
+  <li><strong>Hash Rate</strong>: Total computational power, ~600 EH/s (2024)</li>
+  <li><strong>Adjustment</strong>: New Difficulty = Old × (Expected Time / Actual Time)</li>
+</ul>
+
+<p><strong>Security Analysis</strong>:</p>
+<ul>
+  <li><strong>51% attack</strong>: Requires &gt;50% hash rate, cost ~$8B+ in hardware</li>
+  <li><strong>Selfish mining</strong>: Profitable with ~25-33% hash rate (theoretical)</li>
+  <li><strong>Double-spend</strong>: Exponentially harder with more confirmations</li>
+  <li><strong>Economic security</strong>: Attack costs exceed potential gains</li>
+</ul>
+
+<p><strong>Economics</strong>:</p>
+<ul>
+  <li><strong>Block Reward</strong>: Currently 6.25 BTC (halves every 210,000 blocks)</li>
+  <li><strong>Transaction Fees</strong>: Variable, market-driven (typically $1-20)</li>
+  <li><strong>Mining Pools</strong>: Reduce variance, dominate landscape (top 4 = 55%)</li>
+  <li><strong>Hardware Evolution</strong>: CPU → GPU → ASIC (2 million times more efficient)</li>
+</ul>
+
+<p><strong>Challenges</strong>:</p>
+<ul>
+  <li><strong>Centralization</strong>: Geographic and pool concentration</li>
+  <li><strong>Energy</strong>: ~150 TWh/year consumption</li>
+  <li><strong>ASIC dominance</strong>: Barriers to entry</li>
+  <li><strong>Post-subsidy security</strong>: Will fees suffice after 2140?</li>
+</ul>
+
+<p><strong>Future Developments</strong>:</p>
+<ul>
+  <li><strong>Stratum V2</strong>: Miner transaction selection</li>
+  <li><strong>Renewable energy</strong>: Increasing adoption (~50%+)</li>
+  <li><strong>Hardware efficiency</strong>: Continuous improvement</li>
+  <li><strong>Layer 2</strong>: Reduce on-chain load (Lightning Network)</li>
+</ul>
+
+<p><strong>Key Takeaway</strong>: PoW transforms physical resources (hardware + electricity) into digital security through cryptographic puzzles. While energy-intensive, it provides battle-tested security for a $500B+ network through elegant economic incentives and game theory.</p>
+
+<hr />
+
+<p>✅ <strong>End of Lecture 01.01</strong></p>
+
+<p><strong>Next</strong>: Lecture 01.02 - Bitcoin Economics, Game Theory, và Monetary Policy</p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>Nakamoto, S. (2008). <em>Bitcoin: A peer-to-peer electronic cash system</em>.</li>
+  <li>Back, A. (2002). <em>Hashcash - A denial of service counter-measure</em>.</li>
+  <li>Eyal, I., &amp; Sirer, E. G. (2014). <em>Majority is not enough: Bitcoin mining is vulnerable</em>. FC 2014.</li>
+  <li>Garay, J., Kiayias, A., &amp; Leonardos, N. (2015). <em>The bitcoin backbone protocol</em>. EUROCRYPT 2015.</li>
+  <li>Rosenfeld, M. (2011). <em>Analysis of bitcoin pooled mining reward systems</em>. arXiv:1112.4980.</li>
+  <li>Sapirshtein, A., Sompolinsky, Y., &amp; Zohar, A. (2016). <em>Optimal selfish mining strategies</em>. FC 2016.</li>
+  <li>Cambridge Bitcoin Electricity Consumption Index: https://cbeci.org/</li>
+</ol>
+
+
+</div>
+
+<!-- Back to Chapter Home Link -->
+
+  
+  
+  <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+    <a href="/deep-learning-self-learning/contents/vi/chapter01/" style="text-decoration: none; color: #007bff; font-weight: bold;">
+      ← Quay lại đầu chương
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="related">
+  <ul class="related-posts">
+    
+      
+        <li>
+          <h2>Previous Post</h2>
+          <h3>
+            <a href="/deep-learning-self-learning/contents/vi/chapter01/blockchain-chapter01/01_00_Bitcoin_Architecture/">
+              Lecture 01.00: Bitcoin Architecture - Hệ thống tiền điện tử phi tập trung đầu tiên
+            </a>
+          </h3>
+        </li>
+      
+    
+      
+    
+      
+    
+    
+    
+  
+    
+  
+    
+      <li>
+        <h2>Next Post</h2>
+        <h3>
+          <a href="/deep-learning-self-learning/contents/vi/chapter01/blockchain-chapter01/01_02_Bitcoin_Economics/">
+            Lecture 01.02: Bitcoin Economics, Game Theory, và Monetary Policy
+          </a>
+        </h3>
+      </li>
+    
+  
+  </ul>
+</div>
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="convex-deep-learning-for-all/convex-deep-learning-for-all.github.io"
+        issue-term="title"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

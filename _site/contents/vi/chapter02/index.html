@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Chapter 02: Advanced Consensus Mechanisms &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item active" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <h1>02. Chapter 02: Advanced Consensus Mechanisms</h1>
+
+
+
+
+
+
+
+
+<!-- Get first post and show it -->
+
+<h1 id="lecture-proof-of-stake---consensus-qua-economic-stake">Lecture: Proof-of-Stake - Consensus qua Economic Stake</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p><strong>Proof-of-Stake (PoS)</strong> là một consensus mechanism thay thế cho Proof-of-Work, trong đó validators được chọn để propose blocks dựa trên số lượng cryptocurrency họ “stake” (đặt cọc), thay vì dựa vào computational power. Đây là một trong những innovations quan trọng nhất trong blockchain technology, addressing nhiều limitations của PoW trong khi maintaining security guarantees.</p>
+
+<p><strong>The Core Idea - Stake as Security</strong>:</p>
+
+<p>Trong PoW, security đến từ <strong>physical investment</strong> (hardware + electricity). Trong PoS, security đến từ <strong>economic investment</strong> (cryptocurrency stake). Concept cơ bản:</p>
+
+<blockquote>
+  <p>“Nếu bạn sở hữu 1% của total stake, bạn có khả năng validate ~1% của blocks và nhận tương ứng ~1% của rewards. Nếu bạn attack network, bạn risk losing stake của mình.”</p>
+</blockquote>
+
+<p><strong>Historical Development</strong>:</p>
+
+<p>PoS concept lần đầu được đề xuất vào <strong>2011</strong> trên Bitcointalk forum bởi QuantumMechanic. Năm 2012, <strong>Peercoin</strong> là cryptocurrency đầu tiên implement PoS (hybrid PoW/PoS). Từ đó, nhiều variations đã evolved:</p>
+
+<ul>
+  <li><strong>2012</strong>: Peercoin (hybrid PoW/PoS)</li>
+  <li><strong>2014</strong>: NXT (pure PoS)</li>
+  <li><strong>2017</strong>: Cardano (Ouroboros protocol)</li>
+  <li><strong>2020</strong>: Ethereum 2.0 Beacon Chain launch</li>
+  <li><strong>2022</strong>: Ethereum “The Merge” - transition từ PoW sang PoS</li>
+</ul>
+
+<p><strong>Why Proof-of-Stake?</strong></p>
+
+<p>PoS addresses ba major concerns với PoW:</p>
+
+<p><strong>1. Energy Efficiency</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bitcoin PoW: ~150 TWh/year
+Ethereum PoS: ~0.01 TWh/year (~99.95% reduction!)
+
+Environmental impact dramatically reduced
+</code></pre></div></div>
+
+<p><strong>2. Accessibility</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PoW: Need expensive ASIC hardware ($thousands to millions)
+PoS: Need only cryptocurrency (can stake from regular computer)
+
+Lower barriers to entry → more decentralization potential
+</code></pre></div></div>
+
+<p><strong>3. Economic Security</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PoW: Attack cost = Hardware + Electricity (can resell hardware)
+PoS: Attack cost = Stake (gets slashed/destroyed if caught)
+
+Economic penalty directly hits attacker
+</code></pre></div></div>
+
+<p><strong>The Transition - Ethereum’s Merge</strong>:</p>
+
+<p>Ethereum’s transition từ PoW sang PoS (September 2022) là một trong những technical achievements lớn nhất trong blockchain history:</p>
+
+<ul>
+  <li>Network value: &gt;$200 billion</li>
+  <li>Transitioned without downtime</li>
+  <li>Energy consumption giảm 99.95%</li>
+  <li>Maintained security và decentralization</li>
+</ul>
+
+<p>Đây là proof-of-concept rằng PoS có thể work at massive scale.</p>
+
+<p><strong>Security Model Shift</strong>:</p>
+
+<p>PoW security model:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cost to attack = Cost to acquire 51% hash power
+Attacker can: Censor transactions, double-spend
+Attacker cannot: Steal funds, change protocol rules
+</code></pre></div></div>
+
+<p>PoS security model:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cost to attack = Cost to acquire 33-51% of total stake
+Attacker can: Censor transactions (temporarily)
+Attacker cannot: Steal funds, change rules
+Additional penalty: Stake gets slashed (destroyed)
+</code></pre></div></div>
+
+<p>Key difference: <strong>Attackers lose their investment</strong> nếu caught!</p>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-pos-như-shareholder-voting">2.1. PoS như “Shareholder Voting”</h3>
+
+<p>Hãy tưởng tượng blockchain như một <strong>công ty với shareholders</strong>:</p>
+
+<p><strong>Traditional Company</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Own 10% shares → 10% voting power
+Company profitable → Receive 10% of dividends
+Make bad decisions → Share value decreases
+</code></pre></div></div>
+
+<p><strong>PoS Blockchain</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Stake 10% of tokens → 10% chance to propose next block
+Network active → Earn ~10% of transaction fees + rewards
+Attack network → Stake destroyed (shareholders lose money!)
+</code></pre></div></div>
+
+<p><strong>Key Insight</strong>: Validators có economic interest trong network success. Attack = shooting yourself in the foot!</p>
+
+<h3 id="22-validator-selection---weighted-lottery">2.2. Validator Selection - Weighted Lottery</h3>
+
+<p><strong>PoW Mining</strong> (computational lottery):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>More hash power = More lottery tickets
+Physical resource (electricity) consumed per attempt
+Winner: Whoever solves puzzle first
+</code></pre></div></div>
+
+<p><strong>PoS Validation</strong> (economic lottery):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>More stake = Higher probability of selection
+No physical resource consumed
+Winner: Pseudo-randomly selected proportional to stake
+</code></pre></div></div>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Total staked: 1,000,000 ETH
+
+Alice stakes: 100,000 ETH (10%)
+Bob stakes: 50,000 ETH (5%)
+Charlie stakes: 10,000 ETH (1%)
+
+Probability of being selected per slot:
+Alice: ~10%
+Bob: ~5%
+Charlie: ~1%
+
+Over 100 slots:
+Alice validates: ~10 blocks
+Bob validates: ~5 blocks
+Charlie validates: ~1 block
+</code></pre></div></div>
+
+<p>Fair distribution based on economic commitment!</p>
+
+<h3 id="23-slashing---the-penalty-system">2.3. Slashing - The Penalty System</h3>
+
+<p><strong>The Problem</strong>: Trong PoS, validators không spend physical resources. Tại sao không try multiple strategies simultaneously?</p>
+
+<p><strong>The Solution: Slashing</strong> - Phá hủy stake của validators hành động maliciously</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Good Validator Behavior:
+└─ Propose valid blocks
+└─ Vote honestly
+└─ Stay online
+└─ Reward: Earn staking rewards
+
+Bad Validator Behavior:
+└─ Double-signing (propose two blocks at same height)
+└─ Voting contradictory attestations
+└─ Extended downtime
+└─ Penalty: Lose portion or all of stake!
+
+Example Penalties (Ethereum):
+Minor offense (short downtime): Lose ~0.5% stake
+Major offense (double-signing): Lose up to 100% stake
+Correlated attack (many validators): Extra penalties!
+</code></pre></div></div>
+
+<p><strong>Real-world Analogy</strong>: Giống như bail/deposit system:</p>
+<ul>
+  <li>Behave well → Get deposit back + interest</li>
+  <li>Misbehave → Lose deposit</li>
+</ul>
+
+<h3 id="24-nothing-at-stake-problem">2.4. Nothing-at-Stake Problem</h3>
+
+<p><strong>The Theoretical Problem</strong>:</p>
+
+<p>Trong PoW, miners chọn một chain để mine (physical commitment). Trong PoS initial designs, validators có thể vote for multiple chains simultaneously (no cost!):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Chain A: Block at height 100a
+         /
+Height 99
+         \
+Chain B: Block at height 100b
+
+PoW Miner: Must choose A or B (electricity cost)
+PoS Validator: Why not vote for both? (no cost!)
+</code></pre></div></div>
+
+<p><strong>The Solution - Multiple Approaches</strong>:</p>
+
+<p><strong>1. Slashing for equivocation</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Vote for multiple chains → Stake destroyed
+Makes multi-voting costly
+</code></pre></div></div>
+
+<p><strong>2. Finality mechanisms</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Once block finalized → Cannot revert
+Validators committing to different chains get slashed
+</code></pre></div></div>
+
+<p><strong>3. Weak subjectivity</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New nodes must get recent checkpoint from social consensus
+Prevents very long-range attacks
+</code></pre></div></div>
+
+<p><strong>Result</strong>: Problem solved in modern PoS designs!</p>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-ethereum-20-consensus---gasper-casper-ffg--lmd-ghost">3.1. Ethereum 2.0 Consensus - Gasper (Casper FFG + LMD GHOST)</h3>
+
+<p>Ethereum sử dụng <strong>Gasper</strong> - hybrid của hai protocols:</p>
+
+<p><strong>Casper FFG (Friendly Finality Gadget)</strong>:</p>
+<ul>
+  <li>Provides finality (absolute irreversibility)</li>
+  <li>Every 64-100 slots (~6-12 minutes), validators vote on checkpoint</li>
+  <li>2/3 supermajority → Checkpoint finalized</li>
+</ul>
+
+<p><strong>LMD GHOST (Latest Message Driven Greedy Heaviest Observed SubTree)</strong>:</p>
+<ul>
+  <li>Selects canonical chain between checkpoints</li>
+  <li>Follows “heaviest” subtree (most stake voting for it)</li>
+</ul>
+
+<p><strong>Time Structure</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Slot: 12 seconds
+Epoch: 32 slots = 6.4 minutes
+
+Timeline:
+Slot 0 → Slot 1 → ... → Slot 31 (Epoch 0)
+Slot 32 → Slot 33 → ... → Slot 63 (Epoch 1)
+...
+
+Each slot:
+1. One validator selected as proposer
+2. Committee of validators attest
+3. Block added to chain
+</code></pre></div></div>
+
+<p><strong>Validator Duties</strong>:</p>
+
+<p><strong>Block Proposal</strong> (1 validator per slot):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">propose_block</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">selected_as_proposer</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+        <span class="c1"># Collect transactions from mempool
+</span>        <span class="n">transactions</span> <span class="o">=</span> <span class="nf">select_transactions</span><span class="p">()</span>
+        
+        <span class="c1"># Create block
+</span>        <span class="n">block</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span>
+            <span class="n">slot</span><span class="o">=</span><span class="n">slot</span><span class="p">,</span>
+            <span class="n">parent_root</span><span class="o">=</span><span class="nf">get_head</span><span class="p">(),</span>  <span class="c1"># LMD GHOST
+</span>            <span class="n">transactions</span><span class="o">=</span><span class="n">transactions</span><span class="p">,</span>
+            <span class="n">attestations</span><span class="o">=</span><span class="nf">collect_attestations</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Sign and broadcast
+</span>        <span class="n">signed_block</span> <span class="o">=</span> <span class="nf">sign</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">validator_key</span><span class="p">)</span>
+        <span class="nf">broadcast</span><span class="p">(</span><span class="n">signed_block</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Attestation</strong> (all validators in committee):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">attest</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+    <span class="c1"># LMD GHOST vote
+</span>    <span class="n">head_vote</span> <span class="o">=</span> <span class="nf">get_head</span><span class="p">()</span>  <span class="c1"># Current chain head
+</span>    
+    <span class="c1"># FFG vote
+</span>    <span class="n">source_checkpoint</span> <span class="o">=</span> <span class="nf">get_justified_checkpoint</span><span class="p">()</span>
+    <span class="n">target_checkpoint</span> <span class="o">=</span> <span class="nf">current_epoch_checkpoint</span><span class="p">()</span>
+    
+    <span class="n">attestation</span> <span class="o">=</span> <span class="nc">Attestation</span><span class="p">(</span>
+        <span class="n">slot</span><span class="o">=</span><span class="n">slot</span><span class="p">,</span>
+        <span class="n">head_vote</span><span class="o">=</span><span class="n">head_vote</span><span class="p">,</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">source_checkpoint</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target_checkpoint</span>
+    <span class="p">)</span>
+    
+    <span class="n">signed</span> <span class="o">=</span> <span class="nf">sign</span><span class="p">(</span><span class="n">attestation</span><span class="p">,</span> <span class="n">validator_key</span><span class="p">)</span>
+    <span class="nf">broadcast</span><span class="p">(</span><span class="n">signed</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="32-validator-selection-algorithm">3.2. Validator Selection Algorithm</h3>
+
+<p><strong>Random Selection với VRF (Verifiable Random Function)</strong>:</p>
+
+<p>[
+\text{Selected}_{\text{proposer}}(slot, seed) = \text{validators}[\text{VRF}(slot, seed) \mod N]
+]</p>
+
+<p><strong>Ethereum’s RANDAO</strong>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">compute_randao_mix</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">Generate random seed for validator selection</span><span class="sh">"""</span>
+    <span class="n">mix</span> <span class="o">=</span> <span class="nf">get_randao_mix</span><span class="p">(</span><span class="n">epoch</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">epoch</span> <span class="o">*</span> <span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">32</span><span class="p">):</span>
+        <span class="n">proposer</span> <span class="o">=</span> <span class="nf">get_proposer</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+        <span class="n">reveal</span> <span class="o">=</span> <span class="nf">get_reveal</span><span class="p">(</span><span class="n">proposer</span><span class="p">,</span> <span class="n">slot</span><span class="p">)</span>
+        <span class="n">mix</span> <span class="o">=</span> <span class="nf">hash</span><span class="p">(</span><span class="n">mix</span> <span class="o">+</span> <span class="n">reveal</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">mix</span>
+
+<span class="k">def</span> <span class="nf">select_proposer</span><span class="p">(</span><span class="n">slot</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">Select block proposer for slot</span><span class="sh">"""</span>
+    <span class="n">active_validators</span> <span class="o">=</span> <span class="nf">get_active_validators</span><span class="p">()</span>
+    
+    <span class="c1"># Weighted by effective balance
+</span>    <span class="n">total_balance</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">balance</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">active_validators</span><span class="p">)</span>
+    
+    <span class="n">random_value</span> <span class="o">=</span> <span class="nf">hash</span><span class="p">(</span><span class="n">seed</span> <span class="o">+</span> <span class="n">slot</span><span class="p">)</span> <span class="o">%</span> <span class="n">total_balance</span>
+    <span class="n">cumulative</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">active_validators</span><span class="p">:</span>
+        <span class="n">cumulative</span> <span class="o">+=</span> <span class="n">validator</span><span class="p">.</span><span class="n">balance</span>
+        <span class="k">if</span> <span class="n">random_value</span> <span class="o">&lt;</span> <span class="n">cumulative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">validator</span>
+    
+    <span class="k">return</span> <span class="n">active_validators</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>Properties</strong>:</p>
+<ul>
+  <li><strong>Unpredictable</strong>: Future proposers unknown until RANDAO reveals</li>
+  <li><strong>Fair</strong>: Probability proportional to stake</li>
+  <li><strong>Verifiable</strong>: Anyone can verify selection was correct</li>
+</ul>
+
+<h3 id="33-finality---casper-ffg">3.3. Finality - Casper FFG</h3>
+
+<p><strong>Checkpoint System</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Epoch 0      Epoch 1      Epoch 2      Epoch 3
+   C0  ---&gt;     C1   ---&gt;    C2   ---&gt;    C3
+   
+C0 = Genesis (finalized)
+C1 = Justified (2/3 voted)
+C2 = Justified
+C3 = Not yet justified
+</code></pre></div></div>
+
+<p><strong>Justification</strong>:
+[
+\text{Justified} \iff \frac{\sum \text{Stake voting for checkpoint}}{\text{Total active stake}} \geq \frac{2}{3}
+]</p>
+
+<p><strong>Finalization</strong>:
+[
+\text{Finalized}(C_k) \iff \text{Justified}(C_k) \land \text{Justified}(C_{k+1})
+]</p>
+
+<p><strong>Slashing Conditions</strong>:</p>
+
+<p><strong>1. Double voting</strong>:
+[
+\text{Slash if: } \exists \text{ two attestations } A_1, A_2 \text{ from same validator where:}
+]
+[
+A_1.\text{target} \neq A_2.\text{target} \land A_1.\text{epoch} = A_2.\text{epoch}
+]</p>
+
+<p><strong>2. Surround voting</strong>:
+[
+\text{Slash if: } (A_1.\text{source} &lt; A_2.\text{source} &lt; A_2.\text{target} &lt; A_1.\text{target})
+]</p>
+
+<p><strong>Slashing Penalties</strong>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calculate_slashing_penalty</span><span class="p">(</span><span class="n">validator</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">Calculate penalty for slashed validator</span><span class="sh">"""</span>
+    
+    <span class="c1"># Base penalty
+</span>    <span class="n">base_penalty</span> <span class="o">=</span> <span class="n">validator</span><span class="p">.</span><span class="n">effective_balance</span> <span class="o">//</span> <span class="mi">32</span>  <span class="c1"># ~3.125%
+</span>    
+    <span class="c1"># Correlation penalty (if many slashed simultaneously)
+</span>    <span class="n">total_slashed</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">effective_balance</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">slashed_validators</span><span class="p">)</span>
+    <span class="n">total_balance</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">effective_balance</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_validators</span><span class="p">)</span>
+    
+    <span class="n">correlation_penalty</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">validator</span><span class="p">.</span><span class="n">effective_balance</span> <span class="o">*</span> 
+        <span class="n">total_slashed</span> <span class="o">//</span> <span class="n">total_balance</span>
+    <span class="p">)</span>
+    
+    <span class="n">total_penalty</span> <span class="o">=</span> <span class="n">base_penalty</span> <span class="o">+</span> <span class="n">correlation_penalty</span>
+    
+    <span class="c1"># Maximum: entire stake
+</span>    <span class="k">return</span> <span class="nf">min</span><span class="p">(</span><span class="n">total_penalty</span><span class="p">,</span> <span class="n">validator</span><span class="p">.</span><span class="n">effective_balance</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Correlated Slashing</strong>: Nếu nhiều validators bị slashed cùng lúc (coordinated attack), penalties cao hơn!</p>
+
+<h3 id="34-rewards-và-penalties">3.4. Rewards và Penalties</h3>
+
+<p><strong>Reward Structure</strong>:</p>
+
+<p>[
+\text{Base Reward} = \frac{\text{Effective Balance} \times \text{Base Reward Factor}}{\sqrt{\text{Total Active Balance}}}
+]</p>
+
+<p><strong>Validator Rewards per Epoch</strong>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calculate_rewards</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+    <span class="n">rewards</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># 1. Attestation rewards
+</span>    <span class="k">if</span> <span class="nf">made_timely_attestation</span><span class="p">():</span>
+        <span class="n">rewards</span> <span class="o">+=</span> <span class="nf">base_reward</span><span class="p">()</span> <span class="o">*</span> <span class="n">TIMELY_TARGET_WEIGHT</span>
+    
+    <span class="k">if</span> <span class="nf">voted_correct_head</span><span class="p">():</span>
+        <span class="n">rewards</span> <span class="o">+=</span> <span class="nf">base_reward</span><span class="p">()</span> <span class="o">*</span> <span class="n">TIMELY_HEAD_WEIGHT</span>
+    
+    <span class="k">if</span> <span class="nf">voted_correct_source</span><span class="p">():</span>
+        <span class="n">rewards</span> <span class="o">+=</span> <span class="nf">base_reward</span><span class="p">()</span> <span class="o">*</span> <span class="n">TIMELY_SOURCE_WEIGHT</span>
+    
+    <span class="c1"># 2. Block proposal rewards
+</span>    <span class="k">if</span> <span class="nf">proposed_block</span><span class="p">():</span>
+        <span class="n">rewards</span> <span class="o">+=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">attestation_rewards_in_block</span><span class="p">)</span>
+    
+    <span class="c1"># 3. Sync committee rewards (if selected)
+</span>    <span class="k">if</span> <span class="nf">in_sync_committee</span><span class="p">():</span>
+        <span class="n">rewards</span> <span class="o">+=</span> <span class="nf">sync_committee_reward</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">rewards</span>
+</code></pre></div></div>
+
+<p><strong>Penalties</strong>:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calculate_penalties</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+    <span class="n">penalties</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># 1. Missed attestation
+</span>    <span class="k">if</span> <span class="nf">not_attested</span><span class="p">():</span>
+        <span class="n">penalties</span> <span class="o">+=</span> <span class="nf">base_reward</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">TIMELY_TARGET_WEIGHT</span> <span class="o">+</span> 
+                                      <span class="n">TIMELY_HEAD_WEIGHT</span> <span class="o">+</span>
+                                      <span class="n">TIMELY_SOURCE_WEIGHT</span><span class="p">)</span>
+    
+    <span class="c1"># 2. Incorrect votes
+</span>    <span class="k">if</span> <span class="nf">voted_wrong_target</span><span class="p">():</span>
+        <span class="n">penalties</span> <span class="o">+=</span> <span class="nf">base_reward</span><span class="p">()</span> <span class="o">*</span> <span class="n">TIMELY_TARGET_WEIGHT</span>
+    
+    <span class="c1"># 3. Inactivity leak (if not finalizing)
+</span>    <span class="k">if</span> <span class="ow">not</span> <span class="nf">finalizing</span><span class="p">():</span>
+        <span class="n">penalties</span> <span class="o">+=</span> <span class="nf">inactivity_penalty</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">penalties</span>
+</code></pre></div></div>
+
+<p><strong>Annual Percentage Rate (APR)</strong>:</p>
+
+<p>[
+\text{APR} \approx \frac{2.6}{\sqrt{\text{Total Staked ETH (millions)}}} \times 100\%
+]</p>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Total staked: 25 million ETH
+APR ≈ 2.6 / √25 = 2.6 / 5 = 0.52 = 5.2% per year
+
+Validator with 32 ETH:
+Annual reward: 32 × 0.052 = 1.664 ETH
+</code></pre></div></div>
+
+<h3 id="35-weak-subjectivity">3.5. Weak Subjectivity</h3>
+
+<p><strong>The Problem</strong>: Long-range attacks</p>
+
+<p>Attacker với old validator keys (từ months/years ago) có thể create alternative chain từ genesis:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Actual History:
+Genesis → ... → Current (Height 1,000,000)
+
+Fake History (attacker's):
+Genesis → ... → Fake Current (Height 1,000,000)
+
+New node joining: Which is real?
+</code></pre></div></div>
+
+<p><strong>Solution: Weak Subjectivity Checkpoints</strong>:</p>
+
+<p>New nodes must obtain a <strong>recent checkpoint</strong> (thông qua social consensus):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">WeakSubjectivityCheckpoint</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">block_root</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0xabc...</span><span class="sh">"</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="mi">12345</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">finalized</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">is_valid_chain</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chain</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Verify chain includes checkpoint</span><span class="sh">"""</span>
+        <span class="n">checkpoint_block</span> <span class="o">=</span> <span class="n">chain</span><span class="p">.</span><span class="nf">get_block</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">epoch</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">checkpoint_block</span><span class="p">.</span><span class="n">root</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">block_root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">checkpoint_block</span><span class="p">.</span><span class="n">finalized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p><strong>Weak Subjectivity Period</strong>:</p>
+
+<p>[
+\text{WS Period} = \frac{\text{MIN_VALIDATOR_WITHDRAWABILITY_DELAY}}{2}
+]</p>
+
+<p>Ethereum: ~4-5 months</p>
+
+<p><strong>Implication</strong>: Nodes phải sync within WS period hoặc obtain checkpoint from trusted source.</p>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-mật-mã-học">4. Công thức toán học và mật mã học</h2>
+
+<h3 id="41-bft-security-threshold">4.1. BFT Security Threshold</h3>
+
+<p>PoS systems achieve BFT security với threshold:</p>
+
+<p>[
+f &lt; \frac{n}{3}
+]</p>
+
+<p>Where:</p>
+<ul>
+  <li>( n ) = total stake</li>
+  <li>( f ) = malicious stake</li>
+</ul>
+
+<p><strong>For Ethereum (2/3 threshold)</strong>:</p>
+
+<p>[
+\text{Attack requires: } &gt; \frac{1}{3} \text{ of total stake}
+]</p>
+
+<p><strong>Economic Cost</strong> (2024):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Total staked: ~30 million ETH
+1/3 stake: ~10 million ETH
+ETH price: ~$2,500
+
+Cost to acquire: 10M × $2,500 = $25 billion
+
+Plus: If attack detected, stake gets slashed (destroyed)
+
+Result: Attack economically irrational!
+</code></pre></div></div>
+
+<h3 id="42-finality-probability">4.2. Finality Probability</h3>
+
+<p><strong>Probability of finalization</strong> depends on participation:</p>
+
+<p>[
+P(\text{finalize}) = P\left(\sum_{i=1}^{N} X_i \geq \frac{2N}{3}\right)
+]</p>
+
+<p>Where ( X_i ) = indicator that validator ( i ) participates</p>
+
+<p><strong>Assuming independent participation</strong> với probability ( p ):</p>
+
+<p>[
+P(\text{finalize}) \approx \Phi\left(\frac{p - 2/3}{\sqrt{p(1-p)/N}}\right)
+]</p>
+
+<p>Where ( \Phi ) = CDF of standard normal distribution</p>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N = 500,000 validators
+p = 95% participation
+
+P(finalize) ≈ Φ((0.95 - 0.667) / √(0.95 × 0.05 / 500000))
+            ≈ Φ(916.5)
+            ≈ 0.999999... (essentially certain!)
+</code></pre></div></div>
+
+<p><strong>Inactivity Leak</strong>: Nếu không finalize for 4 epochs:</p>
+
+<p>[
+\text{Penalty per epoch} = k \times \text{Base Reward} \times \frac{\text{Epochs since finality}}{2^{INACTIVITY_PENALTY_QUOTIENT}}
+]</p>
+
+<p>Inactive validators gradually lose stake until active validators regain 2/3 supermajority.</p>
+
+<h3 id="43-optimal-attacking-strategy">4.3. Optimal Attacking Strategy</h3>
+
+<p><strong>Attacker’s Optimization Problem</strong>:</p>
+
+<p>[
+\max_{\text{strategy}} \quad E[\text{Profit}] = P(\text{success}) \times \text{Gain} - P(\text{caught}) \times \text{Stake Lost}
+]</p>
+
+<p><strong>For Ethereum</strong>:</p>
+
+<p>Assume attacker controls fraction ( \alpha ) of stake:</p>
+
+<p><strong>1. Censorship Attack</strong> (prevent specific transactions):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cost: Opportunity cost of not including transactions
+Benefit: Can censor ~α × 100% of blocks
+
+Example: α = 10%
+- Can censor ~10% of slots
+- Transaction delayed, not prevented (others will include)
+- Gain: Minimal
+- Cost: Reputation damage, possible slashing
+</code></pre></div></div>
+
+<p><strong>2. Reorg Attack</strong> (revert recent blocks):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Probability of success (simple model):
+P(reorg of k blocks) ≈ (α / (1-α))^k
+
+Example: α = 40%, k = 5 blocks
+P ≈ (0.4 / 0.6)^5 = 0.131 = 13.1%
+
+If caught: Lose stake
+Expected value: 0.131 × Gain - 0.869 × Stake
+
+Typically negative!
+</code></pre></div></div>
+
+<p><strong>3. Finality Attack</strong> (prevent finalization):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Requires: α &gt; 1/3 to prevent finality
+Cost: Inactivity leak reduces attacker stake over time
+Eventually: Attacker stake &lt; 1/3 → Attack fails
+</code></pre></div></div>
+
+<p><strong>Conclusion</strong>: All attacks economically irrational for rational actors!</p>
+
+<h3 id="44-staking-economics">4.4. Staking Economics</h3>
+
+<p><strong>Expected Return</strong>:</p>
+
+<p>[
+E[\text{Return}] = \text{APR} \times \text{Staked Amount} \times (1 - \text{Penalty Risk})
+]</p>
+
+<p><strong>Risk-Adjusted Return</strong>:</p>
+
+<p>[
+\text{Sharpe Ratio} = \frac{E[\text{Return}] - \text{Risk-Free Rate}}{\sigma(\text{Return})}
+]</p>
+
+<p><strong>Factors Affecting Returns</strong>:</p>
+
+<ol>
+  <li>
+    <p><strong>Total Staked</strong>: More staked → Lower APR (dilution)
+[
+\text{APR} \propto \frac{1}{\sqrt{\text{Total Staked}}}
+]</p>
+  </li>
+  <li>
+    <p><strong>Uptime</strong>: Downtime → Penalties
+[
+\text{Effective APR} = \text{Base APR} \times \text{Uptime \%}
+]</p>
+  </li>
+  <li>
+    <p><strong>Slashing Risk</strong>: Small but catastrophic
+[
+E[\text{Loss from slashing}] = P(\text{slash}) \times \text{Stake}
+]</p>
+  </li>
+</ol>
+
+<p><strong>Optimal Staking Decision</strong>:</p>
+
+<p>[
+\text{Stake if: } E[\text{Staking Return}] &gt; \text{Opportunity Cost (DeFi yield, etc.)}
+]</p>
+
+<h3 id="45-validator-set-dynamics">4.5. Validator Set Dynamics</h3>
+
+<p><strong>Entry/Exit Queues</strong>:</p>
+
+<p>Maximum validators activated per epoch:
+[
+\text{Max Activations} = \min\left(5, \frac{\text{Total Active Validators}}{65536}\right)
+]</p>
+
+<p><strong>Wait Time Calculation</strong>:
+[
+\text{Activation Wait (epochs)} = \frac{\text{Validators in Queue}}{\text{Max Activations per Epoch}}
+]</p>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Current validators: 500,000
+Max activations/epoch: max(5, 500000/65536) ≈ 7
+
+Queue: 1000 validators
+Wait time: 1000 / 7 ≈ 143 epochs ≈ 15 hours
+</code></pre></div></div>
+
+<p><strong>Steady-State Analysis</strong>:</p>
+
+<p>In equilibrium, entry rate = exit rate:</p>
+
+<p>[
+\lambda_{\text{entry}} = \lambda_{\text{exit}}
+]</p>
+
+<p>Validator population stable when:
+[
+\text{APR} \approx \text{Opportunity Cost} + \text{Operational Costs}
+]</p>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-simplified-pos-validator">5.1. Simplified PoS Validator</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Validator</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Proof-of-Stake validator</span><span class="sh">"""</span>
+    <span class="n">pubkey</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">stake</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Amount staked
+</span>    <span class="n">balance</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Current balance
+</span>    <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">slashed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">effective_balance</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Effective balance for rewards (capped at 32 ETH)</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="nf">min</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">,</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="p">)</span>  <span class="c1"># 32 ETH in Gwei
+</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Attestation</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Validator attestation (vote)</span><span class="sh">"""</span>
+    <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">validator_index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">head_vote</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Block hash
+</span>    <span class="n">source_checkpoint</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">target_checkpoint</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">signature</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Block</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Proof-of-Stake block</span><span class="sh">"""</span>
+    <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">proposer_index</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">parent_root</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">state_root</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span>
+    <span class="n">attestations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Attestation</span><span class="p">]</span>
+    <span class="n">randao_reveal</span><span class="p">:</span> <span class="nb">str</span>
+    
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">slot</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">proposer_index</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">parent_root</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">state_root</span><span class="si">}</span><span class="sh">"</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">ProofOfStakeConsensus</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Simplified Proof-of-Stake consensus implementation</span><span class="sh">"""</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">genesis_validators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Validator</span><span class="p">]):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">validators</span> <span class="o">=</span> <span class="n">genesis_validators</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Block</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_slot</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">justified_checkpoint</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">finalized_checkpoint</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Create genesis block
+</span>        <span class="n">genesis</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span>
+            <span class="n">slot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">proposer_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">parent_root</span><span class="o">=</span><span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span>
+            <span class="n">state_root</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">compute_state_root</span><span class="p">(),</span>
+            <span class="n">transactions</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">attestations</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">randao_reveal</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">generate_randao</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">genesis</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">compute_state_root</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Compute Merkle root of current state</span><span class="sh">"""</span>
+        <span class="n">state_data</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">v</span><span class="p">.</span><span class="n">pubkey</span><span class="si">}{</span><span class="n">v</span><span class="p">.</span><span class="n">balance</span><span class="si">}</span><span class="sh">"</span> 
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span> <span class="k">if</span> <span class="n">v</span><span class="p">.</span><span class="n">active</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">state_data</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">generate_randao</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Generate RANDAO reveal</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">current_slot</span><span class="si">}{</span><span class="n">random</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span>
+        <span class="p">).</span><span class="nf">hexdigest</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">get_total_active_stake</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Calculate total stake of active validators</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="nf">sum</span><span class="p">(</span>
+            <span class="n">v</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span> 
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span> 
+            <span class="k">if</span> <span class="n">v</span><span class="p">.</span><span class="n">active</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">v</span><span class="p">.</span><span class="n">slashed</span>
+        <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">select_proposer</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Select block proposer for slot using weighted random selection</span><span class="sh">"""</span>
+        <span class="n">active_validators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">.</span><span class="n">active</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">v</span><span class="p">.</span><span class="n">slashed</span>
+        <span class="p">]</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">active_validators</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        
+        <span class="c1"># Weighted random selection based on stake
+</span>        <span class="n">total_stake</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">active_validators</span><span class="p">)</span>
+        
+        <span class="c1"># Pseudo-random selection (deterministic from slot)
+</span>        <span class="n">seed</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">slot</span><span class="si">{</span><span class="n">slot</span><span class="si">}</span><span class="sh">"</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">random_value</span> <span class="o">=</span> <span class="n">seed</span> <span class="o">%</span> <span class="n">total_stake</span>
+        
+        <span class="n">cumulative</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">active_validators</span><span class="p">:</span>
+            <span class="n">cumulative</span> <span class="o">+=</span> <span class="n">validator</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">random_value</span> <span class="o">&lt;</span> <span class="n">cumulative</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">idx</span>
+        
+        <span class="k">return</span> <span class="n">active_validators</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">create_block</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Block</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Create new block for slot</span><span class="sh">"""</span>
+        <span class="n">proposer_idx</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">select_proposer</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+        <span class="n">proposer</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">[</span><span class="n">proposer_idx</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">proposer</span><span class="p">.</span><span class="n">active</span> <span class="ow">or</span> <span class="n">proposer</span><span class="p">.</span><span class="n">slashed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Collect recent attestations
+</span>        <span class="n">attestations</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">collect_attestations</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+        
+        <span class="n">block</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span>
+            <span class="n">slot</span><span class="o">=</span><span class="n">slot</span><span class="p">,</span>
+            <span class="n">proposer_index</span><span class="o">=</span><span class="n">proposer_idx</span><span class="p">,</span>
+            <span class="n">parent_root</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">hash</span><span class="p">(),</span>
+            <span class="n">state_root</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">compute_state_root</span><span class="p">(),</span>
+            <span class="n">transactions</span><span class="o">=</span><span class="n">transactions</span><span class="p">,</span>
+            <span class="n">attestations</span><span class="o">=</span><span class="n">attestations</span><span class="p">,</span>
+            <span class="n">randao_reveal</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">generate_randao</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">block</span>
+    
+    <span class="k">def</span> <span class="nf">collect_attestations</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Attestation</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Collect attestations from validators</span><span class="sh">"""</span>
+        <span class="n">attestations</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Each active validator attests
+</span>        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">validator</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">validator</span><span class="p">.</span><span class="n">active</span> <span class="ow">or</span> <span class="n">validator</span><span class="p">.</span><span class="n">slashed</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="c1"># Simulate attestation with some probability
+</span>            <span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.95</span><span class="p">:</span>  <span class="c1"># 95% participation
+</span>                <span class="n">attestation</span> <span class="o">=</span> <span class="nc">Attestation</span><span class="p">(</span>
+                    <span class="n">slot</span><span class="o">=</span><span class="n">slot</span><span class="p">,</span>
+                    <span class="n">validator_index</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span>
+                    <span class="n">head_vote</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">hash</span><span class="p">(),</span>
+                    <span class="n">source_checkpoint</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">justified_checkpoint</span><span class="p">,</span>
+                    <span class="n">target_checkpoint</span><span class="o">=</span><span class="n">slot</span> <span class="o">//</span> <span class="mi">32</span><span class="p">,</span>  <span class="c1"># Epoch
+</span>                    <span class="n">signature</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">sig_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">slot</span><span class="si">}</span><span class="sh">"</span>
+                <span class="p">)</span>
+                <span class="n">attestations</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">attestation</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">attestations</span>
+    
+    <span class="k">def</span> <span class="nf">check_finality</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Check if we can finalize checkpoint</span><span class="sh">"""</span>
+        <span class="n">current_epoch</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">current_slot</span> <span class="o">//</span> <span class="mi">32</span>
+        
+        <span class="k">if</span> <span class="n">current_epoch</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="c1"># Count attestations for current epoch
+</span>        <span class="n">epoch_attestations</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">att</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span>
+            <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="n">block</span><span class="p">.</span><span class="n">attestations</span>
+            <span class="k">if</span> <span class="n">att</span><span class="p">.</span><span class="n">target_checkpoint</span> <span class="o">==</span> <span class="n">current_epoch</span>
+        <span class="p">]</span>
+        
+        <span class="c1"># Calculate voting stake
+</span>        <span class="n">voting_stake</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">[</span><span class="n">att</span><span class="p">.</span><span class="n">validator_index</span><span class="p">].</span><span class="nf">effective_balance</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="n">epoch_attestations</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">[</span><span class="n">att</span><span class="p">.</span><span class="n">validator_index</span><span class="p">].</span><span class="n">slashed</span>
+        <span class="p">)</span>
+        
+        <span class="n">total_stake</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_total_active_stake</span><span class="p">()</span>
+        
+        <span class="c1"># Check 2/3 threshold
+</span>        <span class="k">if</span> <span class="n">voting_stake</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">total_stake</span> <span class="o">//</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="c1"># Justify current epoch
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">justified_checkpoint</span> <span class="o">=</span> <span class="n">current_epoch</span>
+            
+            <span class="c1"># Finalize previous epoch if it was justified
+</span>            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">justified_checkpoint</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">finalized_checkpoint</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">finalized_checkpoint</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">justified_checkpoint</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">return</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">advance_slot</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Advance blockchain by one slot</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_slot</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># Create and add new block
+</span>        <span class="n">transactions</span> <span class="o">=</span> <span class="n">transactions</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_slot</span><span class="p">,</span> <span class="n">transactions</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            
+            <span class="c1"># Check finality every epoch
+</span>            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">current_slot</span> <span class="o">%</span> <span class="mi">32</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">finalized</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">check_finality</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">finalized</span><span class="p">:</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✓ Checkpoint </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">finalized_checkpoint</span><span class="si">}</span><span class="s"> FINALIZED</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">block</span>
+    
+    <span class="k">def</span> <span class="nf">calculate_rewards</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">validator_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Calculate rewards for validator</span><span class="sh">"""</span>
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">[</span><span class="n">validator_idx</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">validator</span><span class="p">.</span><span class="n">active</span> <span class="ow">or</span> <span class="n">validator</span><span class="p">.</span><span class="n">slashed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        
+        <span class="c1"># Base reward (simplified)
+</span>        <span class="n">base_reward</span> <span class="o">=</span> <span class="n">validator</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span> <span class="o">//</span> <span class="mi">64</span>  <span class="c1"># ~1.56% per year
+</span>        
+        <span class="c1"># Check attestation participation
+</span>        <span class="n">recent_attestations</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">att</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">32</span><span class="p">:]</span>  <span class="c1"># Last epoch
+</span>            <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="n">block</span><span class="p">.</span><span class="n">attestations</span>
+            <span class="k">if</span> <span class="n">att</span><span class="p">.</span><span class="n">validator_index</span> <span class="o">==</span> <span class="n">validator_idx</span>
+        <span class="p">]</span>
+        
+        <span class="c1"># Reward for participation
+</span>        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">recent_attestations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">base_reward</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">base_reward</span> <span class="o">//</span> <span class="mi">4</span>  <span class="c1"># Penalty for inactivity
+</span>    
+    <span class="k">def</span> <span class="nf">slash_validator</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">validator_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Slash validator for malicious behavior</span><span class="sh">"""</span>
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span><span class="p">[</span><span class="n">validator_idx</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">validator</span><span class="p">.</span><span class="n">slashed</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">⚠️  SLASHING validator </span><span class="si">{</span><span class="n">validator_idx</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Mark as slashed
+</span>        <span class="n">validator</span><span class="p">.</span><span class="n">slashed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">validator</span><span class="p">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">False</span>
+        
+        <span class="c1"># Calculate penalty
+</span>        <span class="n">base_penalty</span> <span class="o">=</span> <span class="n">validator</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span> <span class="o">//</span> <span class="mi">32</span>  <span class="c1"># ~3%
+</span>        
+        <span class="c1"># Correlation penalty (if many slashed)
+</span>        <span class="n">total_slashed_stake</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span>
+            <span class="n">v</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">validators</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">.</span><span class="n">slashed</span>
+        <span class="p">)</span>
+        <span class="n">correlation_penalty</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">validator</span><span class="p">.</span><span class="nf">effective_balance</span><span class="p">()</span> <span class="o">*</span> 
+            <span class="n">total_slashed_stake</span> <span class="o">//</span> 
+            <span class="n">self</span><span class="p">.</span><span class="nf">get_total_active_stake</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="n">total_penalty</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span>
+            <span class="n">base_penalty</span> <span class="o">+</span> <span class="n">correlation_penalty</span><span class="p">,</span>
+            <span class="n">validator</span><span class="p">.</span><span class="n">balance</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Deduct from balance
+</span>        <span class="n">validator</span><span class="p">.</span><span class="n">balance</span> <span class="o">-=</span> <span class="n">total_penalty</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">   Penalty: </span><span class="si">{</span><span class="n">total_penalty</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s"> ETH</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">   Remaining: </span><span class="si">{</span><span class="n">validator</span><span class="p">.</span><span class="n">balance</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s"> ETH</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Proof-of-Stake Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Create validators
+</span>    <span class="n">validators</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nc">Validator</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">validator_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">stake</span><span class="o">=</span><span class="mi">32</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">32</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="p">]</span>
+    
+    <span class="c1"># Initialize PoS consensus
+</span>    <span class="n">pos</span> <span class="o">=</span> <span class="nc">ProofOfStakeConsensus</span><span class="p">(</span><span class="n">validators</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Total validators: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">validators</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Total staked: </span><span class="si">{</span><span class="n">pos</span><span class="p">.</span><span class="nf">get_total_active_stake</span><span class="p">()</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s"> ETH</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Simulate blocks
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Simulating blockchain...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>  <span class="c1"># ~3 epochs
+</span>        <span class="n">block</span> <span class="o">=</span> <span class="n">pos</span><span class="p">.</span><span class="nf">advance_slot</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">block</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Slot </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">slot</span><span class="si">:</span><span class="mi">3</span><span class="n">d</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">Proposer </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">proposer_index</span><span class="si">:</span><span class="mi">3</span><span class="n">d</span><span class="si">}</span><span class="s">, </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">Attestations: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">attestations</span><span class="p">)</span><span class="si">:</span><span class="mi">3</span><span class="n">d</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== Final State ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Chain length: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span><span class="si">}</span><span class="s"> blocks</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Finalized checkpoint: Epoch </span><span class="si">{</span><span class="n">pos</span><span class="p">.</span><span class="n">finalized_checkpoint</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Justified checkpoint: Epoch </span><span class="si">{</span><span class="n">pos</span><span class="p">.</span><span class="n">justified_checkpoint</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Show some validator rewards
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== Validator Rewards (sample) ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">pos</span><span class="p">.</span><span class="nf">calculate_rewards</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Validator </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">reward</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span><span class="si">:</span><span class="p">.</span><span class="mi">6</span><span class="n">f</span><span class="si">}</span><span class="s"> ETH</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><em>[Bài giảng tiếp tục với sections 6-10 về Comparisons, Challenges, Related Concepts, Papers, và Summary trong response tiếp theo để maintain reasonable length]</em></p>
+
+<p>Bài giảng này đã đạt ~12,000 từ với implementation đầy đủ. Tôi sẽ tiếp tục với 2 bài giảng còn lại của Chapter 02!</p>
+
+
+<!-- Remove first element from post_list which is already shown above. -->
+  
+
+<!-- List up the posts in the chapter -->
+<ul style="list-style: none;">
+
+  
+  
+  
+  
+    <li style="text-align:left; vertical-align: middle; margin-left: -2em; margin-top: 5px;" >
+      <a href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/blockchain-chapter02/02_01_BFT_Consensus/">Lecture 02.01: Byzantine Fault Tolerant Consensus - PBFT, Tendermint, HotStuff</a>
+      
+    </li>
+  
+  
+
+  
+  
+  
+  
+    <li style="text-align:left; vertical-align: middle; margin-left: -2em; margin-top: 5px;" >
+      <a href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/blockchain-chapter02/02_02_Alternative_Consensus/">Lecture 02.02: Hybrid và Alternative Consensus Mechanisms</a>
+      
+    </li>
+  
+  
+
+</ul>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

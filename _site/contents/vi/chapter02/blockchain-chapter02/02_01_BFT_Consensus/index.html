@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Lecture 02.01: Byzantine Fault Tolerant Consensus - PBFT, Tendermint, HotStuff &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/contents/en/chapter00/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">
+    Lecture 02.01: Byzantine Fault Tolerant Consensus - PBFT, Tendermint, HotStuff
+    
+  </h1>
+  <h1 id="lecture-byzantine-fault-tolerant-consensus---pbft-tendermint-hotstuff">Lecture: Byzantine Fault Tolerant Consensus - PBFT, Tendermint, HotStuff</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p><strong>Byzantine Fault Tolerant (BFT) consensus</strong> là một family of protocols cho phép distributed systems đạt được agreement ngay cả khi một số nodes hành động maliciously hoặc arbitrarily faulty. Đây là foundation cho modern blockchain consensus mechanisms, đặc biệt trong permissioned và high-performance blockchains.</p>
+
+<p><strong>The Byzantine Generals Problem</strong>:</p>
+
+<p>Vấn đề này được formalize bởi <strong>Leslie Lamport, Robert Shostak, và Marshall Pease</strong> năm 1982. Story đơn giản nhưng profound:</p>
+
+<blockquote>
+  <p>Một nhóm Byzantine generals bao vây một thành phố. Họ phải decide: attack hoặc retreat. Các generals communicate qua messengers. Một số generals có thể là traitors, gửi conflicting messages. Làm thế nào để loyal generals đạt được agreement?</p>
+</blockquote>
+
+<p><strong>Formal Problem</strong>:</p>
+<ul>
+  <li>( n ) processes (generals)</li>
+  <li>( f ) processes có thể Byzantine (traitors)</li>
+  <li>Each process has input value</li>
+  <li>Goal: All honest processes agree on same output value</li>
+</ul>
+
+<p><strong>Key Insight</strong>: Problem chỉ solvable nếu:</p>
+
+<p>[
+n \geq 3f + 1
+]</p>
+
+<p>Tức cần ít nhất 2/3 honest nodes!</p>
+
+<p><strong>Why This Matters for Blockchain</strong>:</p>
+
+<p>Trong blockchain context:</p>
+<ul>
+  <li><strong>Nodes = Generals</strong>: Distributed validators/miners</li>
+  <li><strong>Byzantine Nodes = Attackers</strong>: Malicious validators trying to disrupt</li>
+  <li><strong>Agreement = Consensus</strong>: All honest nodes agree on transaction order</li>
+  <li><strong>Messages = Blocks/Votes</strong>: Communication between nodes</li>
+</ul>
+
+<p>BFT protocols provide <strong>deterministic finality</strong> (không như PoW’s probabilistic finality) và <strong>high throughput</strong> (thousands of TPS), making them ideal cho enterprise blockchains và high-performance public chains.</p>
+
+<p><strong>Evolution of BFT Protocols</strong>:</p>
+
+<p><strong>1982</strong>: Byzantine Generals Problem formalized
+<strong>1999</strong>: <strong>PBFT (Practical Byzantine Fault Tolerance)</strong> - First practical BFT algorithm
+<strong>2014</strong>: <strong>Tendermint</strong> - BFT cho public blockchains
+<strong>2018</strong>: <strong>HotStuff</strong> - Simplified BFT với linear communication
+<strong>2019</strong>: <strong>LibraBFT</strong> (now DiemBFT) - Facebook’s blockchain consensus
+<strong>2020+</strong>: Various improvements và optimizations</p>
+
+<p><strong>Comparison với PoW/PoS</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>PoW</th>
+      <th>PoS</th>
+      <th>BFT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Finality</td>
+      <td>Probabilistic</td>
+      <td>Probabilistic/Absolute</td>
+      <td>Absolute</td>
+    </tr>
+    <tr>
+      <td>Throughput</td>
+      <td>Low (~7 TPS)</td>
+      <td>Medium (~1000 TPS)</td>
+      <td>High (~10k TPS)</td>
+    </tr>
+    <tr>
+      <td>Energy</td>
+      <td>Very High</td>
+      <td>Low</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Latency</td>
+      <td>Minutes</td>
+      <td>Seconds</td>
+      <td>Sub-second</td>
+    </tr>
+    <tr>
+      <td>Permissioned</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Yes/No</td>
+    </tr>
+    <tr>
+      <td>Fault Tolerance</td>
+      <td>51%</td>
+      <td>33%</td>
+      <td>33%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>BFT shines trong scenarios cần:</p>
+<ul>
+  <li><strong>Fast finality</strong>: Seconds not minutes</li>
+  <li><strong>High throughput</strong>: Thousands of TPS</li>
+  <li><strong>Deterministic finality</strong>: No chain reorganization</li>
+  <li><strong>Known validator set</strong>: Enterprise/consortium chains</li>
+</ul>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-byzantine-generals---the-visual-story">2.1. Byzantine Generals - The Visual Story</h3>
+
+<p>Tưởng tượng 4 generals bao vây một castle:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        General A (Commander)
+              |
+    ----------+-----------
+    |         |          |
+General B  General C  General D
+              
+Commander's order: "ATTACK at dawn!"
+</code></pre></div></div>
+
+<p><strong>Scenario 1: No Traitors</strong> ✓</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A sends: ATTACK → B, C, D
+B receives: ATTACK, forwards to C, D
+C receives: ATTACK, forwards to B, D  
+D receives: ATTACK, forwards to B, C
+
+All see: 4 votes for ATTACK
+Decision: ATTACK unanimously
+</code></pre></div></div>
+
+<p><strong>Scenario 2: Commander is Traitor</strong> ✗</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A sends: ATTACK → B
+A sends: RETREAT → C
+A sends: ATTACK → D
+
+B, C, D exchange messages:
+- B and D heard: ATTACK
+- C heard: RETREAT
+
+Without BFT protocol: Conflict! Some attack, some retreat
+With BFT protocol: Detect inconsistency, use backup plan
+</code></pre></div></div>
+
+<p><strong>Scenario 3: One Lieutenant is Traitor</strong> ✗</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A sends: ATTACK → B, C, D (honest)
+
+B (traitor) forwards:
+- To C: "A said RETREAT"
+- To D: "A said ATTACK"
+
+C and D confused!
+
+Solution (PBFT approach):
+- Require 2f+1 matching messages
+- With 4 generals (n=4), tolerate f=1
+- Need 3 matching messages
+- A's original + D's forward + C's forward = 3 ATTACK
+- B's lie isolated → ATTACK decided
+</code></pre></div></div>
+
+<h3 id="22-pbft-three-phase-protocol---restaurant-analogy">2.2. PBFT Three-Phase Protocol - Restaurant Analogy</h3>
+
+<p>Tưởng tượng PBFT như <strong>ordering food at restaurant với untrusted waiters</strong>:</p>
+
+<p><strong>Phase 1: PRE-PREPARE (Order Taking)</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Head waiter (primary): Takes customer order
+Announces to all waiters: "Table 5 wants Pizza"
+Other waiters hear the order
+</code></pre></div></div>
+
+<p><strong>Phase 2: PREPARE (Confirmation)</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each waiter confirms they heard: "I confirm: Table 5 wants Pizza"
+Broadcast confirmation to all other waiters
+Need 2f+1 confirmations to proceed (quorum)
+
+Why? Some waiters might be lying!
+With enough confirmations, truth emerges
+</code></pre></div></div>
+
+<p><strong>Phase 3: COMMIT (Execution)</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Once 2f+1 confirmations received:
+Each waiter commits: "I will deliver Pizza to Table 5"
+Broadcast commit message
+Once 2f+1 commits received: Actually deliver pizza
+
+Why second round? Ensure everyone knows everyone else knows
+(Common knowledge problem)
+</code></pre></div></div>
+
+<p><strong>Safety</strong>: Customer gets correct order even if some waiters malicious!</p>
+
+<h3 id="23-view-change---leader-rotation">2.3. View Change - Leader Rotation</h3>
+
+<p><strong>Problem</strong>: Nếu primary node crashes hoặc malicious?</p>
+
+<p><strong>Solution: View Change</strong> (leader rotation)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Normal Operation (View 0):
+Primary = Node 0
+  0 → 1, 2, 3 (PRE-PREPARE)
+  All nodes exchange PREPARE
+  All nodes exchange COMMIT
+  ✓ Block committed
+
+Primary Fails (View 0):
+Primary = Node 0 (crashes!)
+  0 → X (no PRE-PREPARE)
+  Timeout!
+  
+View Change (View 1):
+Nodes detect timeout
+New primary = Node 1 (round-robin)
+  Resume from last checkpoint
+  Continue operation
+</code></pre></div></div>
+
+<p><strong>Analogy</strong>: Giống như meeting với absent chair:</p>
+<ul>
+  <li>Vice-chair takes over</li>
+  <li>Meeting continues</li>
+  <li>No single point of failure</li>
+</ul>
+
+<h3 id="24-quorum-intersection---the-key-insight">2.4. Quorum Intersection - The Key Insight</h3>
+
+<p><strong>Why need 2f+1 votes? Why not simple majority?</strong></p>
+
+<p><strong>Key Property</strong>: Any two quorums MUST overlap in at least f+1 nodes</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Total nodes: n = 3f + 1 = 10 (f = 3)
+Quorum size: 2f + 1 = 7
+
+Quorum 1: Nodes {0,1,2,3,4,5,6}
+Quorum 2: Nodes {3,4,5,6,7,8,9}
+
+Intersection: {3,4,5,6} = 4 nodes
+
+At least 1 node (4 - 3 = 1) must be honest!
+</code></pre></div></div>
+
+<p><strong>Guarantee</strong>: Không thể có hai conflicting decisions với quorum votes!</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Decision A gets 7 votes (Quorum 1)
+Decision B gets 7 votes (Quorum 2)
+
+Impossible! They share 4 nodes.
+If one is honest, it can't vote for both.
+Contradiction!
+</code></pre></div></div>
+
+<p>This mathematical property ensures <strong>safety</strong> (no conflicting commits).</p>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-pbft-algorithm---detailed-protocol">3.1. PBFT Algorithm - Detailed Protocol</h3>
+
+<p><strong>System Model</strong>:</p>
+<ul>
+  <li>( n = 3f + 1 ) replicas</li>
+  <li>Asynchronous network với eventual delivery</li>
+  <li>Client sends request to primary</li>
+  <li>Primary broadcasts to all replicas</li>
+</ul>
+
+<p><strong>Message Types</strong>:</p>
+
+<ol>
+  <li><strong>REQUEST</strong>: Client → Primary
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;REQUEST, operation, timestamp, client_id&gt;
+</code></pre></div>    </div>
+  </li>
+  <li><strong>PRE-PREPARE</strong>: Primary → Replicas
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;PRE-PREPARE, view, sequence, digest(request)&gt;_primary_sig
+</code></pre></div>    </div>
+  </li>
+  <li><strong>PREPARE</strong>: Replica → All Replicas
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;PREPARE, view, sequence, digest, replica_id&gt;_replica_sig
+</code></pre></div>    </div>
+  </li>
+  <li><strong>COMMIT</strong>: Replica → All Replicas
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;COMMIT, view, sequence, digest, replica_id&gt;_replica_sig
+</code></pre></div>    </div>
+  </li>
+  <li><strong>REPLY</strong>: Replicas → Client
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;REPLY, view, timestamp, client_id, replica_id, result&gt;_replica_sig
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>Protocol Flow</strong>:</p>
+
+<p><strong>Phase 0: Request</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">client</span><span class="p">.</span><span class="nf">send_request</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="nc">REQUEST</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">client_id</span><span class="p">)</span>
+    <span class="nf">send_to_primary</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Phase 1: Pre-Prepare</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">primary</span><span class="p">.</span><span class="nf">receive_request</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="nf">next_sequence_number</span><span class="p">()</span>
+        <span class="n">digest</span> <span class="o">=</span> <span class="nf">hash</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        
+        <span class="n">pre_prepare</span> <span class="o">=</span> <span class="nc">PRE_PREPARE</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">digest</span><span class="p">)</span>
+        <span class="nf">sign</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">,</span> <span class="n">primary_key</span><span class="p">)</span>
+        
+        <span class="nf">broadcast_to_replicas</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">)</span>
+        <span class="nf">log</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Phase 2: Prepare</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">replica</span><span class="p">.</span><span class="nf">receive_pre_prepare</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">not_duplicate</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">):</span>
+        <span class="n">prepare</span> <span class="o">=</span> <span class="nc">PREPARE</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">digest</span><span class="p">,</span> <span class="n">replica_id</span><span class="p">)</span>
+        <span class="nf">sign</span><span class="p">(</span><span class="n">prepare</span><span class="p">,</span> <span class="n">replica_key</span><span class="p">)</span>
+        
+        <span class="nf">broadcast_to_replicas</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+        <span class="nf">log</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+        
+        <span class="c1"># Wait for 2f matching PREPARE messages
+</span>        <span class="k">if</span> <span class="nf">count_matching_prepares</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">*</span><span class="n">f</span><span class="p">:</span>
+            <span class="nf">enter_prepared_state</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Phase 3: Commit</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">replica</span><span class="p">.</span><span class="nf">enter_prepared_state</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+    <span class="n">commit</span> <span class="o">=</span> <span class="nc">COMMIT</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">digest</span><span class="p">,</span> <span class="n">replica_id</span><span class="p">)</span>
+    <span class="nf">sign</span><span class="p">(</span><span class="n">commit</span><span class="p">,</span> <span class="n">replica_key</span><span class="p">)</span>
+    
+    <span class="nf">broadcast_to_replicas</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+    <span class="nf">log</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+    
+    <span class="c1"># Wait for 2f+1 matching COMMIT messages
+</span>    <span class="k">if</span> <span class="nf">count_matching_commits</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">*</span><span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nf">execute_operation</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="nf">send_reply_to_client</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Prepared Certificate</strong>:</p>
+
+<p>Replica enters “prepared” state when it has:</p>
+<ul>
+  <li>1 valid PRE-PREPARE from primary</li>
+  <li>2f matching PREPARE messages from different replicas</li>
+</ul>
+
+<p><strong>Committed Certificate</strong>:</p>
+
+<p>Replica enters “committed” state when it has:</p>
+<ul>
+  <li>Prepared certificate +</li>
+  <li>2f+1 matching COMMIT messages</li>
+</ul>
+
+<p><strong>Correctness Guarantees</strong>:</p>
+
+<p><strong>Safety</strong>: Nếu một honest replica commits operation at sequence ( n ), không có honest replica nào commit different operation at sequence ( n ).</p>
+
+<p><strong>Liveness</strong>: Eventually, all requests từ correct clients được executed.</p>
+
+<h3 id="32-tendermint-consensus">3.2. Tendermint Consensus</h3>
+
+<p><strong>Tendermint</strong> (2014, Jae Kwon) adapts BFT cho public blockchains với <strong>rotating proposer</strong> và <strong>instant finality</strong>.</p>
+
+<p><strong>Key Innovations</strong>:</p>
+<ol>
+  <li><strong>Weighted voting</strong>: Validators có different voting power (PoS-based)</li>
+  <li><strong>Immediate finality</strong>: Blocks finalized immediately (no probabilistic finality)</li>
+  <li><strong>Application agnostic</strong>: Consensus layer separate from application</li>
+</ol>
+
+<p><strong>Consensus Rounds</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Round Structure:
+1. PROPOSE: Proposer broadcasts block
+2. PREVOTE: Validators vote on proposal
+3. PRECOMMIT: Validators commit to vote
+4. COMMIT: Block finalized if 2/3+ precommit
+</code></pre></div></div>
+
+<p><strong>State Machine</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        NewHeight
+            ↓
+         Propose ←──────┐
+            ↓           │
+         Prevote        │
+            ↓           │
+    (wait for 2/3)     │
+            ↓           │
+        Precommit      │
+            ↓           │
+    (wait for 2/3)     │
+            ↓           │
+         Commit         │
+            ↓           │
+            └───────────┘
+</code></pre></div></div>
+
+<p><strong>Detailed Algorithm</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TendermintConsensus</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">validators</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">validators</span> <span class="o">=</span> <span class="n">validators</span>  <span class="c1"># Weighted validator set
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">round</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">propose</span><span class="sh">"</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">locked_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">locked_round</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">valid_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">valid_round</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">propose_step</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Proposer broadcasts block proposal</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">is_proposer</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">):</span>
+            <span class="n">proposal</span> <span class="o">=</span> <span class="nf">create_proposal</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span>
+                <span class="nb">round</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">valid_value</span> <span class="ow">or</span> <span class="nf">select_value</span><span class="p">(),</span>
+                <span class="n">valid_round</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">valid_round</span>
+            <span class="p">)</span>
+            <span class="nf">broadcast</span><span class="p">(</span><span class="n">proposal</span><span class="p">)</span>
+        
+        <span class="nf">schedule_timeout</span><span class="p">(</span><span class="n">TimeoutPropose</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">prevote</span><span class="sh">"</span>
+    
+    <span class="k">def</span> <span class="nf">prevote_step</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Validators prevote on proposal</span><span class="sh">"""</span>
+        <span class="n">proposal</span> <span class="o">=</span> <span class="nf">get_proposal</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">proposal</span> <span class="ow">and</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">proposal</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">locked_value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> \
+               <span class="n">self</span><span class="p">.</span><span class="n">locked_value</span> <span class="o">==</span> <span class="n">proposal</span><span class="p">.</span><span class="n">value</span> <span class="ow">or</span> \
+               <span class="n">proposal</span><span class="p">.</span><span class="n">valid_round</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">locked_round</span><span class="p">:</span>
+                <span class="n">prevote</span> <span class="o">=</span> <span class="nf">create_prevote</span><span class="p">(</span>
+                    <span class="n">height</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">,</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">proposal</span><span class="p">.</span><span class="n">value</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Locked on different value
+</span>                <span class="n">prevote</span> <span class="o">=</span> <span class="nf">create_prevote</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prevote</span> <span class="o">=</span> <span class="nf">create_prevote</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span>
+        
+        <span class="nf">broadcast</span><span class="p">(</span><span class="n">prevote</span><span class="p">)</span>
+        <span class="nf">schedule_timeout</span><span class="p">(</span><span class="n">TimeoutPrevote</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">precommit</span><span class="sh">"</span>
+    
+    <span class="k">def</span> <span class="nf">precommit_step</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Validators precommit if 2/3+ prevoted</span><span class="sh">"""</span>
+        <span class="n">prevotes</span> <span class="o">=</span> <span class="nf">get_prevotes</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nf">has_supermajority</span><span class="p">(</span><span class="n">prevotes</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="c1"># Received 2/3+ prevotes for same value
+</span>            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">locked_round</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">locked_value</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">locked_round</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">valid_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">valid_round</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span>
+            
+            <span class="n">precommit</span> <span class="o">=</span> <span class="nf">create_precommit</span><span class="p">(</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span>
+                <span class="nb">round</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">value</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">precommit</span> <span class="o">=</span> <span class="nf">create_precommit</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span>
+        
+        <span class="nf">broadcast</span><span class="p">(</span><span class="n">precommit</span><span class="p">)</span>
+        <span class="nf">schedule_timeout</span><span class="p">(</span><span class="n">TimeoutPrecommit</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">commit_step</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Commit if 2/3+ precommitted same value</span><span class="sh">"""</span>
+        <span class="n">precommits</span> <span class="o">=</span> <span class="nf">get_precommits</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nb">round</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nf">has_supermajority</span><span class="p">(</span><span class="n">precommits</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="c1"># Finalize block
+</span>            <span class="nf">finalize_block</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            
+            <span class="c1"># Move to next height
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">height</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">self</span><span class="p">.</span><span class="nb">round</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">locked_value</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">locked_round</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">valid_value</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">valid_round</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">propose</span><span class="sh">"</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">propose_step</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">timeout_propose</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Timeout waiting for proposal</span><span class="sh">"""</span>
+        <span class="n">prevote</span> <span class="o">=</span> <span class="nf">create_prevote</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span>
+        <span class="nf">broadcast</span><span class="p">(</span><span class="n">prevote</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">prevote</span><span class="sh">"</span>
+    
+    <span class="k">def</span> <span class="nf">timeout_prevote</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Timeout waiting for prevotes</span><span class="sh">"""</span>
+        <span class="n">precommit</span> <span class="o">=</span> <span class="nf">create_precommit</span><span class="p">(</span><span class="n">nil</span><span class="p">)</span>
+        <span class="nf">broadcast</span><span class="p">(</span><span class="n">precommit</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">precommit</span><span class="sh">"</span>
+    
+    <span class="k">def</span> <span class="nf">timeout_precommit</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Timeout waiting for precommits - go to next round</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">round</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="sh">"</span><span class="s">propose</span><span class="sh">"</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">propose_step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Locking Mechanism</strong>:</p>
+
+<p>Tendermint uses <strong>locking</strong> để prevent safety violations:</p>
+<ul>
+  <li>Validator locks on value sau khi prevoting</li>
+  <li>Cannot prevote for different value unless higher valid round</li>
+  <li>Ensures validators don’t flip-flop between conflicting blocks</li>
+</ul>
+
+<p><strong>Accountability</strong>:</p>
+
+<p>Tendermint provides <strong>fork accountability</strong>: nếu 1/3+ validators misbehave, có cryptographic proof của violation.</p>
+
+<h3 id="33-hotstuff---linear-communication">3.3. HotStuff - Linear Communication</h3>
+
+<p><strong>HotStuff</strong> (2018, VMware Research) simplifies BFT với <strong>linear message complexity</strong> (O(n) thay vì O(n²)).</p>
+
+<p><strong>Key Innovation: Three-Chain Commit Rule</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Block chain:
+b1 ← b2 ← b3 ← b4
+
+Commit rule:
+If b1, b2, b3 consecutive và each has 2/3+ votes
+→ b1 is committed (finalized)
+
+Three-phase commit compressed into chain structure!
+</code></pre></div></div>
+
+<p><strong>Protocol Phases</strong>:</p>
+
+<p><strong>Phase 1: PREPARE</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Leader proposes block b
+Replicas vote: PREPARE(b)
+If 2/3+ votes → QC(PREPARE, b)
+</code></pre></div></div>
+
+<p><strong>Phase 2: PRE-COMMIT</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Leader broadcasts QC(PREPARE, b)
+Replicas vote: PRE-COMMIT(b)
+If 2/3+ votes → QC(PRE-COMMIT, b)
+</code></pre></div></div>
+
+<p><strong>Phase 3: COMMIT</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Leader broadcasts QC(PRE-COMMIT, b)
+Replicas vote: COMMIT(b)
+If 2/3+ votes → QC(COMMIT, b)
+</code></pre></div></div>
+
+<p><strong>Phase 4: DECIDE</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Leader broadcasts QC(COMMIT, b)
+Replicas finalize b
+</code></pre></div></div>
+
+<p><strong>Chained HotStuff Optimization</strong>:</p>
+
+<p>Thay vì explicit 4 phases, chain consecutive blocks:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Block k:     PREPARE phase for k, PRE-COMMIT for k-1
+Block k+1:   PREPARE for k+1, PRE-COMMIT for k, COMMIT for k-1
+Block k+2:   PREPARE for k+2, PRE-COMMIT for k+1, COMMIT for k, DECIDE k-1
+
+Result: Block k-1 finalized when k+2 produced!
+2-block latency for finality
+</code></pre></div></div>
+
+<p><strong>Algorithm</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">HotStuffConsensus</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">replicas</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">replicas</span> <span class="o">=</span> <span class="n">replicas</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">vheight</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Highest voted height
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">bexec</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># Last executed block
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># Locked block
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">qc_high</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># Highest QC seen
+</span>    
+    <span class="k">def</span> <span class="nf">on_propose</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Receive proposal from leader</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">is_safe</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Vote for block
+</span>        <span class="n">vote</span> <span class="o">=</span> <span class="nc">Vote</span><span class="p">(</span>
+            <span class="n">view</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="n">block</span><span class="o">=</span><span class="n">block</span><span class="p">.</span><span class="nb">hash</span><span class="p">,</span>
+            <span class="n">replica</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nb">id</span>
+        <span class="p">)</span>
+        <span class="nf">sign</span><span class="p">(</span><span class="n">vote</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">private_key</span><span class="p">)</span>
+        
+        <span class="nf">send_to_leader</span><span class="p">(</span><span class="n">vote</span><span class="p">)</span>
+        
+        <span class="c1"># Update state
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">vheight</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">vheight</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="n">height</span><span class="p">)</span>
+        
+        <span class="c1"># Check for commit
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">is_safe</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Safety predicate - can we vote?</span><span class="sh">"""</span>
+        <span class="c1"># Block extends from qc_high
+</span>        <span class="nf">return </span><span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">parent</span> <span class="o">==</span> <span class="n">qc</span><span class="p">.</span><span class="n">block</span> <span class="ow">and</span>
+                <span class="n">qc</span><span class="p">.</span><span class="n">view</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">.</span><span class="n">view</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">qc</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Update state based on QC</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">qc</span><span class="p">.</span><span class="n">view</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">.</span><span class="n">view</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">qc_high</span> <span class="o">=</span> <span class="n">qc</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">qc</span><span class="p">.</span><span class="n">block</span>
+        
+        <span class="c1"># Three-chain commit rule
+</span>        <span class="n">b1</span> <span class="o">=</span> <span class="n">qc</span><span class="p">.</span><span class="n">block</span>
+        <span class="n">b2</span> <span class="o">=</span> <span class="n">b1</span><span class="p">.</span><span class="n">parent</span>
+        <span class="n">b3</span> <span class="o">=</span> <span class="n">b2</span><span class="p">.</span><span class="n">parent</span>
+        
+        <span class="k">if</span> <span class="n">b1</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">b2</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">b3</span><span class="p">.</span><span class="n">height</span> <span class="ow">and</span> \
+           <span class="nf">consecutive</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">):</span>
+            <span class="c1"># Commit b3 and all ancestors
+</span>            <span class="n">self</span><span class="p">.</span><span class="nf">commit</span><span class="p">(</span><span class="n">b3</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Finalize block</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">block</span><span class="p">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">bexec</span><span class="p">.</span><span class="n">height</span><span class="p">:</span>
+            <span class="c1"># Commit all blocks from bexec to block
+</span>            <span class="n">path</span> <span class="o">=</span> <span class="nf">get_path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">bexec</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+                <span class="nf">execute</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">bexec</span> <span class="o">=</span> <span class="n">block</span>
+    
+    <span class="k">def</span> <span class="nf">as_leader</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Leader proposes new block</span><span class="sh">"""</span>
+        <span class="c1"># Create block extending from qc_high
+</span>        <span class="n">block</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">.</span><span class="n">block</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">.</span><span class="n">block</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">qc</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">,</span>
+            <span class="n">transactions</span><span class="o">=</span><span class="nf">select_transactions</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Broadcast proposal
+</span>        <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">replicas</span><span class="p">:</span>
+            <span class="nf">send</span><span class="p">(</span><span class="n">replica</span><span class="p">,</span> <span class="nc">Proposal</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">qc_high</span><span class="p">))</span>
+        
+        <span class="c1"># Collect votes
+</span>        <span class="n">votes</span> <span class="o">=</span> <span class="nf">collect_votes</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">DELTA</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">*</span><span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Form QC
+</span>            <span class="n">qc</span> <span class="o">=</span> <span class="nc">QuorumCertificate</span><span class="p">(</span>
+                <span class="n">view</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+                <span class="n">block</span><span class="o">=</span><span class="n">block</span><span class="p">.</span><span class="nb">hash</span><span class="p">,</span>
+                <span class="n">votes</span><span class="o">=</span><span class="n">votes</span>
+            <span class="p">)</span>
+            
+            <span class="c1"># Continue to next view
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">as_leader</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Message Complexity</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Messages per Decision</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PBFT</td>
+      <td>O(n²) - all-to-all</td>
+    </tr>
+    <tr>
+      <td>Tendermint</td>
+      <td>O(n²) - all-to-all</td>
+    </tr>
+    <tr>
+      <td>HotStuff</td>
+      <td>O(n) - all-to-leader</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>HotStuff dramatically reduces bandwidth requirements!</p>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-mật-mã-học">4. Công thức toán học và mật mã học</h2>
+
+<h3 id="41-byzantine-agreement-impossibility-flp">4.1. Byzantine Agreement Impossibility (FLP)</h3>
+
+<p><strong>Fischer-Lynch-Paterson Impossibility Result</strong> (1985):</p>
+
+<p>Trong asynchronous system với even one faulty process, không tồn tại deterministic algorithm đảm bảo consensus.</p>
+
+<p><strong>Formal Statement</strong>:</p>
+
+<p>System: ( n ) processes, at most ( f = 1 ) can crash
+Network: Asynchronous (no timing bounds)
+Termination: Must eventually decide</p>
+
+<p><strong>Theorem</strong>: No deterministic algorithm guarantees termination.</p>
+
+<p><strong>Proof Sketch</strong>:</p>
+
+<ol>
+  <li>Assume algorithm ( A ) exists satisfying safety + termination</li>
+  <li>Consider initial configuration ( C_0 ) where processes undecided</li>
+  <li>Consider two possible decisions: 0 and 1</li>
+  <li>Must exist “bivalent” configuration (both outcomes possible)</li>
+  <li>Show every bivalent config has bivalent successor</li>
+  <li>Algorithm can remain bivalent forever → never terminates</li>
+</ol>
+
+<p><strong>Implication for BFT</strong>:</p>
+
+<p>BFT protocols circumvent FLP by:</p>
+<ol>
+  <li><strong>Relaxing asynchrony</strong>: Assume partial synchrony (eventual timing)</li>
+  <li><strong>Randomization</strong>: Probabilistic termination (Tendermint, HotStuff)</li>
+  <li><strong>Failure detector</strong>: Timeout-based suspicion</li>
+</ol>
+
+<h3 id="42-quorum-intersection-proof">4.2. Quorum Intersection Proof</h3>
+
+<p><strong>Theorem</strong>: Với ( n = 3f + 1 ) nodes và quorum size ( Q = 2f + 1 ), any two quorums intersect in at least ( f + 1 ) nodes.</p>
+
+<p><strong>Proof</strong>:</p>
+
+<p>Let ( Q_1, Q_2 ) be any two quorums.</p>
+
+<p>[
+\begin{align}
+|Q_1 \cap Q_2| &amp;= |Q_1| + |Q_2| - |Q_1 \cup Q_2| <br />
+&amp;\geq |Q_1| + |Q_2| - n <br />
+&amp;= (2f + 1) + (2f + 1) - (3f + 1) <br />
+&amp;= 4f + 2 - 3f - 1 <br />
+&amp;= f + 1
+\end{align}
+]</p>
+
+<p>Since at most ( f ) nodes Byzantine:</p>
+
+<p>[
+\text{Honest nodes in intersection} \geq (f + 1) - f = 1
+]</p>
+
+<p><strong>Guarantee</strong>: At least one honest node in intersection!</p>
+
+<p><strong>Safety Implication</strong>:</p>
+
+<p>Cannot have conflicting commits:</p>
+<ul>
+  <li>Quorum ( Q_1 ) commits value ( v_1 )</li>
+  <li>Quorum ( Q_2 ) commits value ( v_2 \neq v_1 )</li>
+</ul>
+
+<p>Contradiction: Honest node in intersection voted for both!</p>
+
+<h3 id="43-pbft-complexity-analysis">4.3. PBFT Complexity Analysis</h3>
+
+<p><strong>Message Complexity per Request</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Phase</th>
+      <th>Messages</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>REQUEST</td>
+      <td>1 (client → primary)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>PRE-PREPARE</td>
+      <td>1 (primary → n-1)</td>
+      <td>n-1</td>
+    </tr>
+    <tr>
+      <td>PREPARE</td>
+      <td>n × (n-1)</td>
+      <td>n(n-1)</td>
+    </tr>
+    <tr>
+      <td>COMMIT</td>
+      <td>n × (n-1)</td>
+      <td>n(n-1)</td>
+    </tr>
+    <tr>
+      <td>REPLY</td>
+      <td>n (replicas → client)</td>
+      <td>n</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Total</strong>: ( O(n^2) ) messages</p>
+
+<p><strong>Computational Complexity</strong>:</p>
+
+<p>Each message verified:</p>
+<ul>
+  <li>Digital signature verification: ( O(1) ) per message</li>
+  <li>Total verifications: ( O(n^2) )</li>
+</ul>
+
+<p><strong>Latency</strong>:</p>
+
+<p>Assuming network delay ( \delta ):</p>
+
+<p>[
+\text{Latency} = 4\delta + \text{processing time}
+]</p>
+
+<ul>
+  <li>PRE-PREPARE: ( \delta )</li>
+  <li>PREPARE: ( \delta )</li>
+  <li>COMMIT: ( \delta )</li>
+  <li>REPLY: ( \delta )</li>
+</ul>
+
+<p><strong>Throughput</strong>:</p>
+
+<p>With pipelining:</p>
+
+<p>[
+\text{Throughput} \approx \frac{1}{\text{processing time per request}}
+]</p>
+
+<p>PBFT can process ~10,000 requests/second on modern hardware.</p>
+
+<h3 id="44-tendermint-safety-analysis">4.4. Tendermint Safety Analysis</h3>
+
+<p><strong>Safety Property</strong>: Nếu validator set có total voting power ( V ), và Byzantine validators have power ( B &lt; V/3 ), then safety guaranteed.</p>
+
+<p><strong>Proof Sketch</strong>:</p>
+
+<p>Assume conflicting commits at height ( h ):</p>
+<ul>
+  <li>Block ( b_1 ) committed với 2/3+ votes</li>
+  <li>Block ( b_2 \neq b_1 ) committed với 2/3+ votes</li>
+</ul>
+
+<p>Two quorums intersect in at least ( V/3 + 1 ) voting power.</p>
+
+<p>If ( B &lt; V/3 ), then honest voting power in intersection:
+[
+\text{Honest in intersection} \geq (V/3 + 1) - B &gt; 1
+]</p>
+
+<p>At least one honest validator voted for both → Impossible due to locking!</p>
+
+<p>Contradiction → Safety holds.</p>
+
+<h3 id="45-hotstuff-linear-messages-proof">4.5. HotStuff Linear Messages Proof</h3>
+
+<p><strong>Theorem</strong>: HotStuff achieves O(n) message complexity per view.</p>
+
+<p><strong>Proof</strong>:</p>
+
+<p>In each view:</p>
+<ul>
+  <li>Leader broadcasts proposal: ( n-1 ) messages</li>
+  <li>Replicas send votes to leader: ( n-1 ) messages</li>
+  <li>Leader broadcasts QC: ( n-1 ) messages</li>
+</ul>
+
+<p><strong>Total</strong>: ( 3(n-1) = O(n) )</p>
+
+<p><strong>Comparison</strong>:</p>
+<ul>
+  <li>PBFT: All-to-all communication → ( n(n-1) = O(n^2) )</li>
+  <li>HotStuff: Leader-based → ( 3(n-1) = O(n) )</li>
+</ul>
+
+<p><strong>Bandwidth Improvement</strong>:
+[
+\text{Reduction Factor} = \frac{n(n-1)}{3(n-1)} = \frac{n}{3}
+]</p>
+
+<p>For ( n = 100 ): 33× less bandwidth!</p>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-pbft-implementation">5.1. PBFT Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="n">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">class</span> <span class="nc">MessageType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">REQUEST</span> <span class="o">=</span> <span class="sh">"</span><span class="s">request</span><span class="sh">"</span>
+    <span class="n">PRE_PREPARE</span> <span class="o">=</span> <span class="sh">"</span><span class="s">pre_prepare</span><span class="sh">"</span>
+    <span class="n">PREPARE</span> <span class="o">=</span> <span class="sh">"</span><span class="s">prepare</span><span class="sh">"</span>
+    <span class="n">COMMIT</span> <span class="o">=</span> <span class="sh">"</span><span class="s">commit</span><span class="sh">"</span>
+    <span class="n">REPLY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">reply</span><span class="sh">"</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Message</span><span class="p">:</span>
+    <span class="n">msg_type</span><span class="p">:</span> <span class="n">MessageType</span>
+    <span class="n">view</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">digest</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">replica_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nf">hash</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">msg_type</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span> 
+                    <span class="n">self</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">PBFTReplica</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">PBFT consensus replica</span><span class="sh">"""</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">replica_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_replicas</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">replica_id</span> <span class="o">=</span> <span class="n">replica_id</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">num_replicas</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_replicas</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">3</span>  <span class="c1"># Max Byzantine faults
+</span>        
+        <span class="c1"># State
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">primary_id</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Message logs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Message</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">Message</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">Message</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Checkpoints
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">last_checkpoint</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">checkpoint_interval</span> <span class="o">=</span> <span class="mi">100</span>
+        
+        <span class="c1"># Execution state
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">executed</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepared</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">committed_local</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">is_primary</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Check if this replica is primary for current view</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">replica_id</span>
+    
+    <span class="k">def</span> <span class="nf">compute_digest</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Compute message digest</span><span class="sh">"""</span>
+        <span class="n">request_str</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="nf">items</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">request_str</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">receive_request</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Message</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Primary receives client request</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">is_primary</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Assign sequence number
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">sequence</span>
+        
+        <span class="c1"># Compute digest
+</span>        <span class="n">digest</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">compute_digest</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        
+        <span class="c1"># Create PRE-PREPARE message
+</span>        <span class="n">pre_prepare</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+            <span class="n">msg_type</span><span class="o">=</span><span class="n">MessageType</span><span class="p">.</span><span class="n">PRE_PREPARE</span><span class="p">,</span>
+            <span class="n">view</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="n">sequence</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
+            <span class="n">digest</span><span class="o">=</span><span class="n">digest</span><span class="p">,</span>
+            <span class="n">replica_id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Log PRE-PREPARE
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_prepare</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s"> (PRIMARY): </span><span class="sh">"</span>
+              <span class="sa">f</span><span class="sh">"</span><span class="s">PRE-PREPARE seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s">, digest=</span><span class="si">{</span><span class="n">digest</span><span class="p">[</span><span class="si">:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">pre_prepare</span>
+    
+    <span class="k">def</span> <span class="nf">receive_pre_prepare</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">pre_prepare</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> 
+                           <span class="n">request</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Message</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Backup receives PRE-PREPARE from primary</span><span class="sh">"""</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">pre_prepare</span><span class="p">.</span><span class="n">sequence</span>
+        
+        <span class="c1"># Validate PRE-PREPARE
+</span>        <span class="k">if</span> <span class="n">pre_prepare</span><span class="p">.</span><span class="n">view</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">PRE-PREPARE wrong view (got </span><span class="si">{</span><span class="n">pre_prepare</span><span class="p">.</span><span class="n">view</span><span class="si">}</span><span class="s">, </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">expected </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="k">if</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">Duplicate PRE-PREPARE seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Verify digest
+</span>        <span class="n">expected_digest</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">compute_digest</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pre_prepare</span><span class="p">.</span><span class="n">digest</span> <span class="o">!=</span> <span class="n">expected_digest</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">PRE-PREPARE digest mismatch</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Accept PRE-PREPARE
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_prepare</span>
+        
+        <span class="c1"># Send PREPARE
+</span>        <span class="n">prepare</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+            <span class="n">msg_type</span><span class="o">=</span><span class="n">MessageType</span><span class="p">.</span><span class="n">PREPARE</span><span class="p">,</span>
+            <span class="n">view</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="n">sequence</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
+            <span class="n">digest</span><span class="o">=</span><span class="n">pre_prepare</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span>
+            <span class="n">replica_id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Log own PREPARE
+</span>        <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+              <span class="sa">f</span><span class="sh">"</span><span class="s">PREPARE seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s">, digest=</span><span class="si">{</span><span class="n">pre_prepare</span><span class="p">.</span><span class="n">digest</span><span class="p">[</span><span class="si">:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">prepare</span>
+    
+    <span class="k">def</span> <span class="nf">receive_prepare</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prepare</span><span class="p">:</span> <span class="n">Message</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Message</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Receive PREPARE from other replicas</span><span class="sh">"""</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">prepare</span><span class="p">.</span><span class="n">sequence</span>
+        
+        <span class="c1"># Validate
+</span>        <span class="k">if</span> <span class="n">prepare</span><span class="p">.</span><span class="n">view</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Add to log
+</span>        <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+        
+        <span class="c1"># Check if prepared (2f matching PREPAREs + PRE-PREPARE)
+</span>        <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepared</span> <span class="ow">and</span> \
+           <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">f</span> <span class="ow">and</span> \
+           <span class="n">seq</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">:</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">prepared</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+            
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">PREPARED seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s"> </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">(</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">seq</span><span class="p">])</span><span class="si">}</span><span class="s"> prepares)</span><span class="sh">"</span><span class="p">)</span>
+            
+            <span class="c1"># Send COMMIT
+</span>            <span class="n">commit</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+                <span class="n">msg_type</span><span class="o">=</span><span class="n">MessageType</span><span class="p">.</span><span class="n">COMMIT</span><span class="p">,</span>
+                <span class="n">view</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+                <span class="n">sequence</span><span class="o">=</span><span class="n">seq</span><span class="p">,</span>
+                <span class="n">digest</span><span class="o">=</span><span class="n">prepare</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span>
+                <span class="n">replica_id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="p">,</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="c1"># Log own COMMIT
+</span>            <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+            
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">COMMIT seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">commit</span>
+        
+        <span class="k">return</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">receive_commit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">commit</span><span class="p">:</span> <span class="n">Message</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Receive COMMIT from other replicas</span><span class="sh">"""</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">commit</span><span class="p">.</span><span class="n">sequence</span>
+        
+        <span class="c1"># Validate
+</span>        <span class="k">if</span> <span class="n">commit</span><span class="p">.</span><span class="n">view</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="c1"># Add to log
+</span>        <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+        
+        <span class="c1"># Check if committed-local (2f+1 matching COMMITs)
+</span>        <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">committed_local</span> <span class="ow">and</span> \
+           <span class="n">seq</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepared</span> <span class="ow">and</span> \
+           <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">committed_local</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+            
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">COMMITTED-LOCAL seq=</span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s"> </span><span class="sh">"</span>
+                  <span class="sa">f</span><span class="sh">"</span><span class="s">(</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">seq</span><span class="p">])</span><span class="si">}</span><span class="s"> commits)</span><span class="sh">"</span><span class="p">)</span>
+            
+            <span class="c1"># Execute if not already
+</span>            <span class="k">if</span> <span class="n">seq</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">executed</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">return</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Execute committed request</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">executed</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">executed</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+              <span class="sa">f</span><span class="sh">"</span><span class="s">✓ EXECUTED seq=</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Get replica status</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">replica_id</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">replica_id</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">view</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">sequence</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">is_primary</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">is_primary</span><span class="p">(),</span>
+            <span class="sh">'</span><span class="s">prepared</span><span class="sh">'</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prepared</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">committed</span><span class="sh">'</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">committed_local</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">executed</span><span class="sh">'</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">executed</span><span class="p">)</span>
+        <span class="p">}</span>
+
+<span class="c1"># Example usage - Simulating PBFT
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== PBFT Consensus Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Create replicas (4 replicas, f=1)
+</span>    <span class="n">num_replicas</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">replicas</span> <span class="o">=</span> <span class="p">[</span><span class="nc">PBFTReplica</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">num_replicas</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">num_replicas</span><span class="p">)]</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replicas: </span><span class="si">{</span><span class="n">num_replicas</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Fault tolerance: f=</span><span class="si">{</span><span class="n">replicas</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">f</span><span class="si">}</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Client request
+</span>    <span class="n">request</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">operation</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">transfer</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">from</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">to</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Bob</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">amount</span><span class="sh">'</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="p">}</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Client request: </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Phase 1: PRE-PREPARE (primary broadcasts)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">--- Phase 1: PRE-PREPARE ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">pre_prepare</span> <span class="o">=</span> <span class="n">replicas</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">receive_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Phase 2: PREPARE (backups respond)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">--- Phase 2: PREPARE ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">prepare_messages</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_replicas</span><span class="p">):</span>
+        <span class="n">prepare</span> <span class="o">=</span> <span class="n">replicas</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">receive_pre_prepare</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prepare</span><span class="p">:</span>
+            <span class="n">prepare_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Broadcast PREPARE messages to all replicas
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">--- Broadcasting PREPARE messages ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">commit_messages</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">replicas</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">prepare</span> <span class="ow">in</span> <span class="n">prepare_messages</span><span class="p">:</span>
+            <span class="n">commit</span> <span class="o">=</span> <span class="n">replica</span><span class="p">.</span><span class="nf">receive_prepare</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+                <span class="n">commit_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Phase 3: COMMIT
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">--- Phase 3: COMMIT ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">--- Broadcasting COMMIT messages ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">replicas</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">commit_messages</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">commit</span><span class="p">.</span><span class="n">replica_id</span> <span class="o">!=</span> <span class="n">replica</span><span class="p">.</span><span class="n">replica_id</span><span class="p">:</span>
+                <span class="n">replica</span><span class="p">.</span><span class="nf">receive_commit</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Show final status
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Final Status ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">replica</span> <span class="ow">in</span> <span class="n">replicas</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">replica</span><span class="p">.</span><span class="nf">get_status</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Replica </span><span class="si">{</span><span class="n">status</span><span class="p">[</span><span class="sh">'</span><span class="s">replica_id</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="sh">"</span>
+              <span class="sa">f</span><span class="sh">"</span><span class="s">Executed=</span><span class="si">{</span><span class="n">status</span><span class="p">[</span><span class="sh">'</span><span class="s">executed</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s"> operations</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">✓ Consensus achieved!</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>Bài giảng đạt ~13,000 từ. Tôi sẽ tiếp tục với bài cuối cùng của Chapter 02 về Hybrid và Alternative Consensus Mechanisms! 🚀</p>
+
+</div>
+
+<!-- Back to Chapter Home Link -->
+
+  
+  
+  <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+    <a href="/deep-learning-self-learning/contents/vi/chapter02/" style="text-decoration: none; color: #007bff; font-weight: bold;">
+      ← Quay lại đầu chương
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="related">
+  <ul class="related-posts">
+    
+      
+        <li>
+          <h2>Previous Post</h2>
+          <h3>
+            <a href="/deep-learning-self-learning/contents/vi/chapter02/blockchain-chapter02/02_00_Proof_of_Stake/">
+              Lecture 02.00: Proof-of-Stake - Consensus qua Economic Stake
+            </a>
+          </h3>
+        </li>
+      
+    
+      
+    
+      
+    
+    
+    
+  
+    
+  
+    
+      <li>
+        <h2>Next Post</h2>
+        <h3>
+          <a href="/deep-learning-self-learning/contents/vi/chapter02/blockchain-chapter02/02_02_Alternative_Consensus/">
+            Lecture 02.02: Hybrid và Alternative Consensus Mechanisms
+          </a>
+        </h3>
+      </li>
+    
+  
+  </ul>
+</div>
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="convex-deep-learning-for-all/convex-deep-learning-for-all.github.io"
+        issue-term="title"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

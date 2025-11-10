@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Chapter 00: Nền Tảng Blockchain &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item active" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <h1>00. Chapter 00: Nền Tảng Blockchain</h1>
+
+
+
+
+
+
+
+
+<!-- Get first post and show it -->
+
+<h1 id="lecture-giới-thiệu-về-blockchain-và-distributed-ledgers">Lecture: Giới thiệu về Blockchain và Distributed Ledgers</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p>Blockchain là một trong những công nghệ đột phá nhất của thế kỷ 21, được sinh ra từ nhu cầu tạo ra một hệ thống thanh toán điện tử ngang hàng (peer-to-peer) không cần bên trung gian tin cậy. Khái niệm này lần đầu tiên được giới thiệu vào năm 2008 bởi một cá nhân hoặc nhóm người ẩn danh dưới bút danh <strong>Satoshi Nakamoto</strong> trong bài báo mang tính cách mạng “Bitcoin: A Peer-to-Peer Electronic Cash System”.</p>
+
+<p>Trước khi Bitcoin ra đời, các hệ thống thanh toán điện tử đều phải đối mặt với một vấn đề cơ bản được gọi là <strong>vấn đề chi tiêu gấp đôi (double-spending problem)</strong>. Trong thế giới vật lý, khi bạn đưa một tờ tiền giấy cho ai đó, bạn không còn sở hữu nó nữa - đó là tính chất vật lý tự nhiên. Nhưng với dữ liệu số, một file có thể được sao chép vô hạn lần. Làm thế nào để đảm bảo rằng một đồng tiền điện tử không thể được “chi tiêu” nhiều lần bởi cùng một người?</p>
+
+<p>Giải pháp truyền thống là dựa vào một bên trung gian đáng tin cậy - như ngân hàng, PayPal, hay Visa - để theo dõi ai sở hữu bao nhiêu tiền và ai đã chuyển cho ai. Nhưng điều này tạo ra nhiều vấn đề: phí giao dịch cao, thời gian xử lý chậm, rủi ro về quyền riêng tư, và quan trọng nhất là <strong>single point of failure</strong> - nếu bên trung gian này bị tấn công, phá sản, hoặc hành động không trung thực, toàn bộ hệ thống sẽ sụp đổ.</p>
+
+<p>Blockchain giải quyết vấn đề này một cách triệt để bằng cách thay thế bên trung gian tin cậy bằng một <strong>cơ chế đồng thuận phân tán (distributed consensus mechanism)</strong>. Thay vì một ngân hàng duy nhất lưu trữ sổ cái, hàng nghìn (hoặc hàng triệu) máy tính độc lập trên toàn thế giới cùng lưu trữ và xác thực cùng một bản sao của sổ cái. Mỗi giao dịch mới phải được đa số mạng lưới xác nhận trước khi được ghi vào sổ cái vĩnh viễn. Điều này tạo ra một hệ thống:</p>
+
+<ul>
+  <li><strong>Phi tập trung (Decentralized)</strong>: Không có một thực thể duy nhất kiểm soát</li>
+  <li><strong>Minh bạch (Transparent)</strong>: Mọi người đều có thể kiểm tra lịch sử giao dịch</li>
+  <li><strong>Bất biến (Immutable)</strong>: Một khi đã ghi vào blockchain, dữ liệu gần như không thể thay đổi</li>
+  <li><strong>An toàn (Secure)</strong>: Được bảo vệ bởi mật mã học và cơ chế đồng thuận</li>
+</ul>
+
+<p>Blockchain không chỉ là công nghệ đằng sau Bitcoin. Nó là một <strong>paradigm mới về cách lưu trữ và xác thực dữ liệu trong môi trường không tin cậy</strong>. Từ các hợp đồng thông minh (smart contracts) trên Ethereum đến quản lý chuỗi cung ứng, từ hệ thống bỏ phiếu điện tử đến quản lý danh tính số, blockchain đang mở ra vô số ứng dụng tiềm năng.</p>
+
+<p>Để hiểu sâu về blockchain, chúng ta cần nắm vững ba trụ cột chính:</p>
+<ol>
+  <li><strong>Mật mã học (Cryptography)</strong>: Hash functions, digital signatures, public-key cryptography</li>
+  <li><strong>Cấu trúc dữ liệu phân tán (Distributed Data Structures)</strong>: Merkle trees, blocks, chains</li>
+  <li><strong>Cơ chế đồng thuận (Consensus Mechanisms)</strong>: Proof-of-Work, Proof-of-Stake, Byzantine Fault Tolerance</li>
+</ol>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<p>Hãy tưởng tượng blockchain như một <strong>cuốn sổ kế toán công khai mà ai cũng có thể xem, nhưng không ai có thể xóa hay chỉnh sửa</strong>.</p>
+
+<p>Trong một ngôi làng nhỏ, thay vì có một ngân hàng trung tâm ghi lại tất cả các giao dịch, mọi người trong làng đều giữ một bản sao của sổ kế toán. Khi Alice muốn chuyển 10 đồng xu cho Bob, cô ấy thông báo cho cả làng:</p>
+
+<blockquote>
+  <p>“Tôi, Alice, muốn chuyển 10 đồng xu cho Bob. Đây là chữ ký số của tôi để chứng minh đây là tôi.”</p>
+</blockquote>
+
+<p>Mọi người trong làng kiểm tra:</p>
+<ul>
+  <li>Alice có thực sự đủ 10 đồng xu không? (bằng cách xem lại lịch sử giao dịch)</li>
+  <li>Chữ ký có thực sự của Alice không?</li>
+  <li>Giao dịch này có hợp lệ không?</li>
+</ul>
+
+<p>Nếu đa số mọi người đồng ý giao dịch là hợp lệ, họ ghi nó vào sổ cái của mình. Nhưng thay vì ghi từng giao dịch riêng lẻ, họ thu thập nhiều giao dịch lại thành một <strong>“trang”</strong> (block). Mỗi trang mới được <strong>“dán chặt”</strong> vào trang trước bằng một <strong>“con dấu mật mã”</strong> đặc biệt (cryptographic hash), tạo thành một chuỗi các trang không thể tách rời.</p>
+
+<p>Nếu ai đó cố gắng gian lận - ví dụ, Charlie muốn thay đổi một giao dịch cũ để lấy thêm tiền - anh ta sẽ phải:</p>
+<ol>
+  <li>Thay đổi trang đó trong sổ của mình</li>
+  <li>Nhưng điều này sẽ phá vỡ “con dấu mật mã” liên kết với trang tiếp theo</li>
+  <li>Vậy anh ta phải tính lại con dấu cho trang đó và TẤT CẢ các trang sau đó</li>
+  <li>Làm điều này nhanh hơn phần còn lại của làng (chiếm hơn 50% sức mạnh tính toán)</li>
+</ol>
+
+<p>Trong thực tế, với hàng nghìn máy tính tham gia, việc này gần như không thể thực hiện.</p>
+
+<p><strong>Analogy khác</strong>: Blockchain giống như <strong>một blockchain vật lý</strong> (chuỗi khối thực sự):</p>
+<ul>
+  <li>Mỗi khối chứa dữ liệu (giao dịch)</li>
+  <li>Mỗi khối được liên kết với khối trước nó bằng một “móc khóa” mật mã</li>
+  <li>Nếu bạn muốn thay đổi một khối ở giữa chuỗi, bạn phải “cắt đứt” và “hàn lại” tất cả các khối sau nó</li>
+  <li>Nhưng mọi người khác trong mạng đều giữ bản sao của chuỗi nguyên gốc, nên họ sẽ từ chối phiên bản đã bị thay đổi của bạn</li>
+</ul>
+
+<p>Hiểu theo cách này, blockchain về cơ bản là:</p>
+<ul>
+  <li><strong>Một cơ sở dữ liệu phân tán</strong> mà không có một bên nào kiểm soát</li>
+  <li><strong>Chỉ có thể thêm vào</strong> (append-only) - bạn có thể thêm dữ liệu mới nhưng không thể xóa dữ liệu cũ</li>
+  <li><strong>Được bảo vệ bằng mật mã</strong> để ngăn chặn gian lận</li>
+  <li><strong>Được đồng bộ hóa</strong> thông qua cơ chế đồng thuận giữa nhiều node</li>
+</ul>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-cấu-trúc-của-một-block">3.1. Cấu trúc của một Block</h3>
+
+<p>Một block trong blockchain chứa ba thành phần chính:</p>
+
+<p><strong>Block Header (Phần đầu khối)</strong>:</p>
+<ul>
+  <li><strong>Previous Block Hash</strong>: Hash của block trước đó, tạo ra chuỗi liên kết</li>
+  <li><strong>Timestamp</strong>: Thời gian block được tạo ra</li>
+  <li><strong>Nonce</strong>: Một số được sử dụng trong quá trình mining (Proof-of-Work)</li>
+  <li><strong>Merkle Root</strong>: Hash tổng hợp của tất cả các giao dịch trong block</li>
+  <li><strong>Difficulty Target</strong>: Mức độ khó của bài toán mật mã cần giải</li>
+</ul>
+
+<p><strong>Transaction List (Danh sách giao dịch)</strong>:</p>
+<ul>
+  <li>Chứa tất cả các giao dịch được đóng gói trong block này</li>
+  <li>Mỗi giao dịch bao gồm: sender, receiver, amount, signature</li>
+</ul>
+
+<p><strong>Metadata</strong>:</p>
+<ul>
+  <li>Block number/height</li>
+  <li>Size of block</li>
+  <li>Number of transactions</li>
+</ul>
+
+<h3 id="32-cryptographic-hash-functions">3.2. Cryptographic Hash Functions</h3>
+
+<p>Hash function là trái tim của blockchain. Một hash function ( H ) là một hàm toán học nhận đầu vào có độ dài bất kỳ và tạo ra đầu ra có độ dài cố định:</p>
+
+<p>[
+H: {0,1}^* \rightarrow {0,1}^n
+]</p>
+
+<p>Trong Bitcoin, sử dụng <strong>SHA-256</strong> (Secure Hash Algorithm 256-bit), tạo ra output 256 bit.</p>
+
+<p><strong>Tính chất quan trọng của cryptographic hash function</strong>:</p>
+
+<ol>
+  <li>
+    <p><strong>Deterministic</strong>: Cùng input luôn cho cùng output
+[
+H(x) = y \implies H(x) = y \text{ (luôn luôn)}
+]</p>
+  </li>
+  <li><strong>Pre-image Resistance</strong>: Từ hash ( h ), cực kỳ khó tìm input ( x ) sao cho ( H(x) = h )
+    <ul>
+      <li>Khó khăn tính toán: ( O(2^n) ) với n = 256</li>
+    </ul>
+  </li>
+  <li><strong>Collision Resistance</strong>: Cực kỳ khó tìm hai input khác nhau ( x_1 \neq x_2 ) sao cho ( H(x_1) = H(x_2) )
+    <ul>
+      <li>Birthday paradox: cần khoảng ( 2^{n/2} ) phép thử, tức ( 2^{128} ) cho SHA-256</li>
+    </ul>
+  </li>
+  <li><strong>Avalanche Effect</strong>: Thay đổi một bit trong input sẽ thay đổi trung bình 50% các bit trong output</li>
+</ol>
+
+<p><strong>Ví dụ thực tế với SHA-256</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: "Hello, Blockchain!"
+Output: 4d5a5e0b7c8d3f8e9a2c1b0d6f3e7a9c5b4d2e1f8a7b6c5d4e3f2a1b0c9d8e7f6
+
+Input: "Hello, Blockchain?" (chỉ thay ! bằng ?)
+Output: 8f7e6d5c4b3a2918d7c6b5a493827160f9e8d7c6b5a4938271605f4e3d2c1b0a
+</code></pre></div></div>
+
+<p>Thay đổi nhỏ → thay đổi hoàn toàn output.</p>
+
+<h3 id="33-cấu-trúc-chuỗi-chain-structure">3.3. Cấu trúc chuỗi (Chain Structure)</h3>
+
+<p>Blockchain được hình thành bằng cách mỗi block chứa hash của block trước đó:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Block 0 (Genesis)          Block 1                Block 2                Block 3
+┌──────────────┐          ┌──────────────┐       ┌──────────────┐       ┌──────────────┐
+│ Prev: 0x000  │          │ Prev: 0xABC  │       │ Prev: 0xDEF  │       │ Prev: 0x123  │
+│ Data: ...    │──────────│ Data: ...    │───────│ Data: ...    │───────│ Data: ...    │
+│ Hash: 0xABC  │          │ Hash: 0xDEF  │       │ Hash: 0x123  │       │ Hash: 0x456  │
+└──────────────┘          └──────────────┘       └──────────────┘       └──────────────┘
+</code></pre></div></div>
+
+<p>Tính bất biến (Immutability) đến từ đây:</p>
+<ul>
+  <li>Nếu thay đổi data trong Block 1</li>
+  <li>Hash của Block 1 thay đổi</li>
+  <li>Previous hash trong Block 2 không còn khớp</li>
+  <li>Toàn bộ chain từ Block 2 trở đi trở nên invalid</li>
+</ul>
+
+<h3 id="34-merkle-tree-hash-tree">3.4. Merkle Tree (Hash Tree)</h3>
+
+<p>Để tổ chức hiệu quả hàng nghìn giao dịch trong một block, blockchain sử dụng <strong>Merkle Tree</strong> - một cấu trúc dữ liệu dạng cây nhị phân trong đó:</p>
+<ul>
+  <li>Các leaf node chứa hash của từng giao dịch</li>
+  <li>Các internal node chứa hash của concatenation hai node con</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                    Merkle Root
+                   /            \
+                Hash01          Hash23
+               /     \         /      \
+            Hash0   Hash1   Hash2   Hash3
+              |       |       |       |
+             Tx0     Tx1     Tx2     Tx3
+</code></pre></div></div>
+
+<p><strong>Lợi ích</strong>:</p>
+<ol>
+  <li><strong>Efficient Verification</strong>: Có thể verify một giao dịch có trong block không chỉ với ( O(\log n) ) hash values</li>
+  <li><strong>Compact Representation</strong>: Block header chỉ cần lưu Merkle root (32 bytes) thay vì toàn bộ transactions (có thể hàng MB)</li>
+  <li><strong>Simplified Payment Verification (SPV)</strong>: Light clients có thể verify transactions mà không cần tải toàn bộ blockchain</li>
+</ol>
+
+<h3 id="35-distributed-ledger-technology-dlt">3.5. Distributed Ledger Technology (DLT)</h3>
+
+<p>Blockchain là một dạng của Distributed Ledger Technology. Một distributed ledger có các đặc điểm:</p>
+
+<p><strong>Replication</strong>: Mỗi node trong mạng lưu trữ một bản sao đầy đủ (hoặc một phần) của ledger</p>
+
+<p><strong>Consensus</strong>: Các node phải đồng ý về trạng thái hiện tại của ledger thông qua consensus protocol</p>
+
+<p><strong>Validation</strong>: Mỗi node độc lập validate các transactions trước khi accept</p>
+
+<p><strong>Synchronization</strong>: Các node liên tục đồng bộ để duy trì consistency</p>
+
+<p><strong>Fault Tolerance</strong>: Hệ thống tiếp tục hoạt động ngay cả khi một số node fail hoặc hành động maliciously</p>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-mật-mã-học">4. Công thức toán học và mật mã học</h2>
+
+<h3 id="41-hash-function---định-nghĩa-chính-thác">4.1. Hash Function - Định nghĩa chính thác</h3>
+
+<p>Cho ( H: {0,1}^* \rightarrow {0,1}^{256} ) là SHA-256 hash function.</p>
+
+<p><strong>Computational Hardness Assumptions</strong>:</p>
+
+<ol>
+  <li>
+    <p><strong>Pre-image Resistance</strong> (One-wayness):
+[
+\Pr[\text{Adversary finds } x \text{ given } H(x)] &lt; \frac{1}{2^{256}}
+]</p>
+  </li>
+  <li>
+    <p><strong>Second Pre-image Resistance</strong>:
+[
+\text{Given } x_1, \text{ find } x_2 \neq x_1 \text{ such that } H(x_1) = H(x_2)
+]
+Probability of success: ( &lt; 2^{-256} )</p>
+  </li>
+  <li>
+    <p><strong>Collision Resistance</strong>:
+[
+\text{Find any } x_1 \neq x_2 \text{ such that } H(x_1) = H(x_2)
+]
+By birthday paradox, requires approximately ( 2^{128} ) attempts.</p>
+  </li>
+</ol>
+
+<h3 id="42-chain-integrity">4.2. Chain Integrity</h3>
+
+<p>Tính toàn vẹn của blockchain được đảm bảo bởi liên kết hash:</p>
+
+<p>Cho blockchain ( B = [B_0, B_1, …, B_n] ) với mỗi block ( B_i ) có:</p>
+<ul>
+  <li>Data: ( D_i )</li>
+  <li>Previous hash: ( h_{i-1} = H(B_{i-1}) )</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Current hash: ( h_i = H(B_i) = H(D_i</td>
+          <td> </td>
+          <td>h_{i-1}</td>
+          <td> </td>
+          <td>\text{metadata}_i) )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>Để thay đổi block ( B_k ) mà không bị phát hiện, attacker phải:</p>
+<ol>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Compute new ( h_k’ = H(D_k’</td>
+          <td> </td>
+          <td>h_{k-1}</td>
+          <td> </td>
+          <td>…) )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Recompute ( h_{k+1}’ = H(D_{k+1}</td>
+          <td> </td>
+          <td>h_k’</td>
+          <td> </td>
+          <td>…) )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Repeat for all blocks ( B_{k+2}, …, B_n )</li>
+  <li>Catch up with the honest chain (if PoW is used)</li>
+</ol>
+
+<p><strong>Computational Cost</strong>:
+[
+\text{Cost} = \sum_{i=k}^{n} \text{Work}(B_i) 
+]</p>
+
+<p>Trong Proof-of-Work, ( \text{Work}(B_i) ) yêu cầu tìm nonce thỏa mãn:
+[
+H(\text{block_header}_i) &lt; \text{Target}_i
+]</p>
+
+<h3 id="43-merkle-proof">4.3. Merkle Proof</h3>
+
+<p>Để chứng minh transaction ( T_x ) có trong block với Merkle root ( M_R ):</p>
+
+<p>Verifier cần:</p>
+<ul>
+  <li>Transaction ( T_x )</li>
+  <li>Authentication path: ( [h_1, h_2, …, h_{\log_2 n}] )</li>
+</ul>
+
+<p>Verification:
+[
+\begin{align}
+h_0 &amp;= H(T_x) <br />
+h_1’ &amp;= H(h_0 || h_1) <br />
+h_2’ &amp;= H(h_1’ || h_2) <br />
+&amp;\vdots <br />
+h_{\log_2 n}’ &amp;= M_R
+\end{align}
+]</p>
+
+<p>Nếu ( h_{\log_2 n}’ = M_R ), transaction được verify.</p>
+
+<p><strong>Complexity</strong>: ( O(\log n) ) thay vì ( O(n) )</p>
+
+<h3 id="44-byzantine-fault-tolerance">4.4. Byzantine Fault Tolerance</h3>
+
+<p>Trong mạng phân tán với ( n ) nodes, trong đó có ( f ) nodes là Byzantine (malicious hoặc faulty), consensus có thể đạt được nếu:</p>
+
+<p>[
+n \geq 3f + 1
+]</p>
+
+<p>Tức là cần ít nhất 2/3 + 1 nodes là honest.</p>
+
+<p><strong>Intuition</strong>:</p>
+<ul>
+  <li>( f ) Byzantine nodes có thể gửi conflicting messages</li>
+  <li>Cần ( f + 1 ) honest nodes để form majority</li>
+  <li>Cần thêm ( f ) honest nodes để overcome worst case where ( f ) Byzantine nodes align</li>
+  <li>Total: ( 2f + 1 ) honest + ( f ) Byzantine = ( 3f + 1 )</li>
+</ul>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-simplified-block-structure-python">5.1. Simplified Block Structure (Python)</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="k">class</span> <span class="nc">Transaction</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">receiver</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">sender</span> <span class="o">=</span> <span class="n">sender</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">receiver</span> <span class="o">=</span> <span class="n">receiver</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">amount</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">sender</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">sender</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">receiver</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">receiver</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">amount</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span>
+        <span class="p">}</span>
+    
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">tx_string</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(),</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">tx_string</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Block</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Transaction</span><span class="p">],</span> 
+                 <span class="n">previous_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">transactions</span> <span class="o">=</span> <span class="n">transactions</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">previous_hash</span> <span class="o">=</span> <span class="n">previous_hash</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp</span> <span class="ow">or</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">nonce</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">hash</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">calculate_hash</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">calculate_hash</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Tính hash của block</span><span class="sh">"""</span>
+        <span class="n">block_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="n">tx</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">transactions</span><span class="p">],</span>
+            <span class="sh">'</span><span class="s">previous_hash</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">previous_hash</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">nonce</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">nonce</span>
+        <span class="p">}</span>
+        <span class="n">block_string</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">block_data</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">block_string</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">mine_block</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Proof-of-Work: tìm nonce sao cho hash bắt đầu với </span><span class="sh">'</span><span class="s">difficulty</span><span class="sh">'</span><span class="s"> số 0</span><span class="sh">"""</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="o">*</span> <span class="n">difficulty</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nb">hash</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">nonce</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">self</span><span class="p">.</span><span class="nb">hash</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">calculate_hash</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block mined: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="nb">hash</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Blockchain</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Block</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Transaction</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">create_genesis_block</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">create_genesis_block</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Tạo block đầu tiên (Genesis Block)</span><span class="sh">"""</span>
+        <span class="n">genesis_block</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[],</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">genesis_block</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">get_latest_block</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Block</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">add_transaction</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Thêm transaction vào pending pool</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">mine_pending_transactions</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Mine một block mới chứa tất cả pending transactions</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="n">new_block</span> <span class="o">=</span> <span class="nc">Block</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">),</span>
+            <span class="n">transactions</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">,</span>
+            <span class="n">previous_hash</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">get_latest_block</span><span class="p">().</span><span class="nb">hash</span>
+        <span class="p">)</span>
+        <span class="n">new_block</span><span class="p">.</span><span class="nf">mine_block</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">new_block</span><span class="p">)</span>
+        
+        <span class="c1"># Clear pending transactions
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">def</span> <span class="nf">is_chain_valid</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Verify tính toàn vẹn của blockchain</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">)):</span>
+            <span class="n">current_block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">previous_block</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># Verify hash của current block
+</span>            <span class="k">if</span> <span class="n">current_block</span><span class="p">.</span><span class="nb">hash</span> <span class="o">!=</span> <span class="n">current_block</span><span class="p">.</span><span class="nf">calculate_hash</span><span class="p">():</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> has been tampered with!</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            
+            <span class="c1"># Verify liên kết với previous block
+</span>            <span class="k">if</span> <span class="n">current_block</span><span class="p">.</span><span class="n">previous_hash</span> <span class="o">!=</span> <span class="n">previous_block</span><span class="p">.</span><span class="nb">hash</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> is not linked to previous block!</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">return</span> <span class="bp">True</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="c1"># Tạo blockchain
+</span>    <span class="n">blockchain</span> <span class="o">=</span> <span class="nc">Blockchain</span><span class="p">()</span>
+    
+    <span class="c1"># Thêm transactions
+</span>    <span class="n">tx1</span> <span class="o">=</span> <span class="nc">Transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Bob</span><span class="sh">"</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">tx2</span> <span class="o">=</span> <span class="nc">Transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Bob</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Charlie</span><span class="sh">"</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+    
+    <span class="n">blockchain</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="n">tx1</span><span class="p">)</span>
+    <span class="n">blockchain</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="n">tx2</span><span class="p">)</span>
+    
+    <span class="c1"># Mine block
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Mining block 1...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain</span><span class="p">.</span><span class="nf">mine_pending_transactions</span><span class="p">()</span>
+    
+    <span class="c1"># Thêm thêm transactions
+</span>    <span class="n">tx3</span> <span class="o">=</span> <span class="nc">Transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Charlie</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">blockchain</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="n">tx3</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Mining block 2...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain</span><span class="p">.</span><span class="nf">mine_pending_transactions</span><span class="p">()</span>
+    
+    <span class="c1"># Verify blockchain
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Blockchain is valid: </span><span class="si">{</span><span class="n">blockchain</span><span class="p">.</span><span class="nf">is_chain_valid</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Print blockchain
+</span>    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blockchain</span><span class="p">.</span><span class="n">chain</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Block </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">index</span><span class="si">}</span><span class="s">:</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Timestamp: </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">timestamp</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Previous Hash: </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">previous_hash</span><span class="p">[</span><span class="si">:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Hash: </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="nb">hash</span><span class="p">[</span><span class="si">:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Nonce: </span><span class="si">{</span><span class="n">block</span><span class="p">.</span><span class="n">nonce</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Transactions: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">block</span><span class="p">.</span><span class="n">transactions</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="52-bitcoin-implementation-c">5.2. Bitcoin Implementation (C++)</h3>
+
+<p>Bitcoin Core implementation sử dụng cấu trúc tương tự nhưng phức tạp hơn:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Simplified Bitcoin block header structure</span>
+<span class="k">class</span> <span class="nc">CBlockHeader</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">int32_t</span> <span class="n">nVersion</span><span class="p">;</span>           <span class="c1">// Block version</span>
+    <span class="n">uint256</span> <span class="n">hashPrevBlock</span><span class="p">;</span>      <span class="c1">// Hash of previous block</span>
+    <span class="n">uint256</span> <span class="n">hashMerkleRoot</span><span class="p">;</span>     <span class="c1">// Merkle root of transactions</span>
+    <span class="kt">uint32_t</span> <span class="n">nTime</span><span class="p">;</span>             <span class="c1">// Timestamp</span>
+    <span class="kt">uint32_t</span> <span class="n">nBits</span><span class="p">;</span>             <span class="c1">// Difficulty target</span>
+    <span class="kt">uint32_t</span> <span class="n">nNonce</span><span class="p">;</span>            <span class="c1">// Nonce for PoW</span>
+    
+    <span class="n">uint256</span> <span class="n">GetHash</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">SerializeHash</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="53-ethereum-block-structure">5.3. Ethereum Block Structure</h3>
+
+<p>Ethereum có cấu trúc phức tạp hơn với state transitions:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Simplified Ethereum block structure</span>
+<span class="kr">interface</span> <span class="nx">Block</span> <span class="p">{</span>
+    <span class="nl">number</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>                    <span class="c1">// Block number</span>
+    <span class="nl">hash</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                      <span class="c1">// Block hash</span>
+    <span class="nl">parentHash</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                <span class="c1">// Previous block hash</span>
+    <span class="nl">nonce</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                     <span class="c1">// PoW nonce</span>
+    <span class="nl">sha3Uncles</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>               <span class="c1">// Hash of uncle blocks</span>
+    <span class="nl">logsBloom</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                <span class="c1">// Bloom filter for logs</span>
+    <span class="nl">transactionsRoot</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>         <span class="c1">// Merkle root of transactions</span>
+    <span class="nl">stateRoot</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                <span class="c1">// State trie root</span>
+    <span class="nl">receiptsRoot</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>             <span class="c1">// Receipts trie root</span>
+    <span class="nl">miner</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                    <span class="c1">// Miner address</span>
+    <span class="nl">difficulty</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">;</span>               <span class="c1">// Mining difficulty</span>
+    <span class="nl">totalDifficulty</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">;</span>          <span class="c1">// Cumulative difficulty</span>
+    <span class="nl">extraData</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>                <span class="c1">// Extra data</span>
+    <span class="nl">size</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>                     <span class="c1">// Block size</span>
+    <span class="nl">gasLimit</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">;</span>                 <span class="c1">// Gas limit</span>
+    <span class="nl">gasUsed</span><span class="p">:</span> <span class="nx">bigint</span><span class="p">;</span>                  <span class="c1">// Gas used</span>
+    <span class="nl">timestamp</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>                <span class="c1">// Timestamp</span>
+    <span class="nl">transactions</span><span class="p">:</span> <span class="nx">Transaction</span><span class="p">[];</span>       <span class="c1">// List of transactions</span>
+    <span class="nl">uncles</span><span class="p">:</span> <span class="nx">string</span><span class="p">[];</span>                 <span class="c1">// Uncle block hashes</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="6-các-thách-thức-và-đánh-đổi-thường-gặp">6. Các thách thức và đánh đổi thường gặp</h2>
+
+<h3 id="61-blockchain-trilemma">6.1. Blockchain Trilemma</h3>
+
+<p>Vitalik Buterin đã mô tả “Blockchain Trilemma” - sự đánh đổi giữa ba thuộc tính:</p>
+
+<ol>
+  <li><strong>Decentralization (Phi tập trung)</strong>: Số lượng nodes tham gia</li>
+  <li><strong>Security (Bảo mật)</strong>: Khó khăn để attack</li>
+  <li><strong>Scalability (Khả năng mở rộng)</strong>: Throughput và latency</li>
+</ol>
+
+<p>Không thể tối ưu hóa cả ba cùng lúc:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>         Decentralization
+              /  \
+             /    \
+            /      \
+           /        \
+    Security -------- Scalability
+    
+Bitcoin: High Decentralization + Security, Low Scalability
+Visa: High Scalability + Security, No Decentralization
+Private Chains: High Scalability, Low Decentralization
+</code></pre></div></div>
+
+<p><strong>Ví dụ cụ thể</strong>:</p>
+<ul>
+  <li><strong>Bitcoin</strong>: ~7 transactions/second (TPS)</li>
+  <li><strong>Ethereum</strong>: ~15-30 TPS</li>
+  <li><strong>Visa</strong>: ~24,000 TPS</li>
+  <li><strong>PayPal</strong>: ~193 TPS</li>
+</ul>
+
+<h3 id="62-storage-requirements">6.2. Storage Requirements</h3>
+
+<p>Blockchain size tăng liên tục:</p>
+<ul>
+  <li>Bitcoin blockchain: ~500 GB (tính đến 2024)</li>
+  <li>Ethereum blockchain: ~1 TB+ (full archive node)</li>
+</ul>
+
+<p>Điều này tạo ra <strong>centralization pressure</strong>: chỉ những entities có resources mới có thể chạy full node.</p>
+
+<p><strong>Solutions</strong>:</p>
+<ul>
+  <li><strong>Light clients</strong>: Chỉ lưu block headers, verify bằng SPV</li>
+  <li><strong>Pruning</strong>: Xóa old state data, chỉ giữ recent</li>
+  <li><strong>Sharding</strong>: Chia blockchain thành multiple shards</li>
+</ul>
+
+<h3 id="63-51-attack">6.3. 51% Attack</h3>
+
+<p>Nếu một attacker kiểm soát &gt;50% mining power (PoW) hoặc stake (PoS), họ có thể:</p>
+<ul>
+  <li>Double-spend coins</li>
+  <li>Censor transactions</li>
+  <li>Reverse transactions</li>
+</ul>
+
+<p><strong>Probability of successful attack</strong> (PoW):</p>
+
+<p>Cho attacker có tỷ lệ hash power ( q ), honest miners có ( p = 1 - q ).</p>
+
+<p>Xác suất attacker bắt kịp honest chain sau ( z ) blocks:</p>
+
+<p>[
+P_{\text{catch-up}} = \begin{cases}
+1 &amp; \text{if } q \geq p <br />
+\left(\frac{q}{p}\right)^z &amp; \text{if } q &lt; p
+\end{cases}
+]</p>
+
+<p>Với ( q = 0.4 ) (40% hash power), sau 6 confirmations:
+[
+P_{\text{catch-up}} = \left(\frac{0.4}{0.6}\right)^6 \approx 0.088 = 8.8\%
+]</p>
+
+<p><strong>Defense</strong>: Wait for more confirmations. Bitcoin thường đợi 6 confirmations (~1 giờ).</p>
+
+<h3 id="64-finality-problem">6.4. Finality Problem</h3>
+
+<p>Trong PoW blockchains, không có <strong>absolute finality</strong>. Luôn có khả năng một chain reorganization xảy ra.</p>
+
+<p><strong>Types of Finality</strong>:</p>
+<ul>
+  <li><strong>Probabilistic Finality</strong> (Bitcoin, PoW Ethereum): Finality increases với số confirmations</li>
+  <li><strong>Absolute Finality</strong> (PoS Ethereum, Tendermint): Blocks are finalized after certain conditions</li>
+</ul>
+
+<h3 id="65-energy-consumption">6.5. Energy Consumption</h3>
+
+<p>Bitcoin PoW tiêu thụ ~150 TWh/năm (tương đương Argentina).</p>
+
+<p><strong>Environmental concerns</strong>:</p>
+<ul>
+  <li>Carbon footprint</li>
+  <li>E-waste from mining hardware</li>
+</ul>
+
+<p><strong>Solutions</strong>:</p>
+<ul>
+  <li>Proof-of-Stake (giảm 99.95% energy)</li>
+  <li>Green mining (renewable energy)</li>
+  <li>Alternative consensus (PoA, DPoS)</li>
+</ul>
+
+<h3 id="66-privacy-concerns">6.6. Privacy Concerns</h3>
+
+<p>Blockchain là <strong>pseudonymous</strong>, không phải anonymous:</p>
+<ul>
+  <li>Tất cả transactions đều public</li>
+  <li>Địa chỉ có thể được link với real-world identity</li>
+  <li>Transaction graph analysis</li>
+</ul>
+
+<p><strong>Solutions</strong>:</p>
+<ul>
+  <li><strong>Zero-Knowledge Proofs</strong> (ZK-SNARKs, ZK-STARKs)</li>
+  <li><strong>Ring Signatures</strong> (Monero)</li>
+  <li><strong>Mixing Services</strong> (CoinJoin)</li>
+</ul>
+
+<hr />
+
+<h2 id="7-các-khái-niệm-liên-quan">7. Các khái niệm liên quan</h2>
+
+<h3 id="71-blockchain-vs-traditional-database">7.1. Blockchain vs Traditional Database</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Blockchain</th>
+      <th>Traditional DB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Control</td>
+      <td>Decentralized</td>
+      <td>Centralized</td>
+    </tr>
+    <tr>
+      <td>Trust Model</td>
+      <td>Trustless</td>
+      <td>Trusted admin</td>
+    </tr>
+    <tr>
+      <td>Transparency</td>
+      <td>Public (or permissioned)</td>
+      <td>Private</td>
+    </tr>
+    <tr>
+      <td>Immutability</td>
+      <td>High</td>
+      <td>Low (can edit/delete)</td>
+    </tr>
+    <tr>
+      <td>Performance</td>
+      <td>Low (consensus overhead)</td>
+      <td>High</td>
+    </tr>
+    <tr>
+      <td>Cost</td>
+      <td>High (redundancy)</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>ACID Properties</td>
+      <td>Eventual consistency</td>
+      <td>Strong consistency</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="72-public-vs-private-blockchains">7.2. Public vs Private Blockchains</h3>
+
+<p><strong>Public (Permissionless)</strong>:</p>
+<ul>
+  <li>Anyone can join</li>
+  <li>Full transparency</li>
+  <li>Token incentives</li>
+  <li>Examples: Bitcoin, Ethereum</li>
+</ul>
+
+<p><strong>Private (Permissioned)</strong>:</p>
+<ul>
+  <li>Restricted access</li>
+  <li>Controlled transparency</li>
+  <li>No token needed</li>
+  <li>Examples: Hyperledger Fabric, R3 Corda</li>
+</ul>
+
+<p><strong>Consortium</strong>:</p>
+<ul>
+  <li>Semi-decentralized</li>
+  <li>Multiple organizations control</li>
+  <li>Example: Energy Web Chain</li>
+</ul>
+
+<h3 id="73-blockchain-vs-dag-directed-acyclic-graph">7.3. Blockchain vs DAG (Directed Acyclic Graph)</h3>
+
+<p><strong>DAG-based systems</strong> (IOTA, Nano, Hedera):</p>
+<ul>
+  <li>Không có blocks, mỗi transaction reference trước đó</li>
+  <li>Potentially higher throughput</li>
+  <li>Different security model</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Blockchain:      DAG:
+  B3               Tx5 ──┐
+  ↑                ↑     ↓
+  B2             Tx3   Tx6
+  ↑              ↑ ↑    
+  B1            Tx1 Tx2
+  ↑               ↑
+  B0             Tx0
+</code></pre></div></div>
+
+<h3 id="74-layer-1-vs-layer-2">7.4. Layer 1 vs Layer 2</h3>
+
+<p><strong>Layer 1</strong>: Base blockchain protocol (Bitcoin, Ethereum)</p>
+
+<p><strong>Layer 2</strong>: Solutions built on top để improve scalability:</p>
+<ul>
+  <li><strong>State Channels</strong> (Lightning Network)</li>
+  <li><strong>Sidechains</strong> (Polygon)</li>
+  <li><strong>Rollups</strong> (Optimistic, ZK-Rollups)</li>
+</ul>
+
+<hr />
+
+<h2 id="8--các-bài-báo-và-whitepaper-nền-tảng">8. ⭐ Các bài báo và whitepaper nền tảng</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paper</th>
+      <th>Year</th>
+      <th>Author(s)</th>
+      <th>Contribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>“Bitcoin: A Peer-to-Peer Electronic Cash System”</strong></td>
+      <td>2008</td>
+      <td>Satoshi Nakamoto</td>
+      <td>Giới thiệu blockchain và Proof-of-Work consensus, giải quyết double-spending problem</td>
+    </tr>
+    <tr>
+      <td><strong>“Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform”</strong></td>
+      <td>2014</td>
+      <td>Vitalik Buterin</td>
+      <td>Mở rộng blockchain thành nền tảng lập trình với smart contracts</td>
+    </tr>
+    <tr>
+      <td><strong>“Practical Byzantine Fault Tolerance”</strong></td>
+      <td>1999</td>
+      <td>Miguel Castro, Barbara Liskov</td>
+      <td>Nền tảng cho modern consensus algorithms (PBFT)</td>
+    </tr>
+    <tr>
+      <td><strong>“The Byzantine Generals Problem”</strong></td>
+      <td>1982</td>
+      <td>Leslie Lamport, Robert Shostak, Marshall Pease</td>
+      <td>Định nghĩa Byzantine fault tolerance problem</td>
+    </tr>
+    <tr>
+      <td><strong>“Merkle Tree”</strong> (concept)</td>
+      <td>1979</td>
+      <td>Ralph Merkle</td>
+      <td>Cấu trúc dữ liệu hiệu quả cho verification</td>
+    </tr>
+    <tr>
+      <td><strong>“Secure Hash Standard (SHS)”</strong></td>
+      <td>2015</td>
+      <td>NIST FIPS 180-4</td>
+      <td>SHA-256 specification</td>
+    </tr>
+    <tr>
+      <td><strong>“Majority is not Enough: Bitcoin Mining is Vulnerable”</strong></td>
+      <td>2013</td>
+      <td>Ittay Eyal, Emin Gün Sirer</td>
+      <td>Phân tích selfish mining attack</td>
+    </tr>
+    <tr>
+      <td><strong>“The Bitcoin Lightning Network”</strong></td>
+      <td>2016</td>
+      <td>Joseph Poon, Thaddeus Dryja</td>
+      <td>Layer 2 scaling solution</td>
+    </tr>
+    <tr>
+      <td><strong>“Chainlink: A Decentralized Oracle Network”</strong></td>
+      <td>2017</td>
+      <td>Steve Ellis et al.</td>
+      <td>Kết nối blockchain với real-world data</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Recommended Reading Order</strong>:</p>
+<ol>
+  <li>Satoshi’s Bitcoin whitepaper (8 pages, accessible)</li>
+  <li>Ethereum whitepaper (technical but readable)</li>
+  <li>Byzantine Generals Problem (understand consensus challenges)</li>
+  <li>PBFT paper (modern consensus mechanisms)</li>
+</ol>
+
+<hr />
+
+<h2 id="9--minh-họa-và-tham-khảo-hình-ảnh">9. 🎨 Minh họa và tham khảo hình ảnh</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Source</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Blockchain structure diagram</strong></td>
+      <td><a href="https://github.com/bitcoinbook/bitcoinbook">Mastering Bitcoin - Chapter 7</a> by Andreas Antonopoulos</td>
+      <td>Open-source educational material, shows block linking</td>
+    </tr>
+    <tr>
+      <td><strong>Hash function visualization</strong></td>
+      <td><a href="https://www.khanacademy.org/computing/computer-science/cryptography">Khan Academy - Cryptographic Hash Functions</a></td>
+      <td>Excellent for understanding one-way property</td>
+    </tr>
+    <tr>
+      <td><strong>Bitcoin transaction flow</strong></td>
+      <td><a href="https://bitcoin.org/en/how-it-works">Bitcoin.org - How Bitcoin Works</a></td>
+      <td>Official Bitcoin documentation</td>
+    </tr>
+    <tr>
+      <td><strong>Merkle tree illustration</strong></td>
+      <td><a href="https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/">Ethereum.org - Merkle Proofs</a></td>
+      <td>Shows efficient verification</td>
+    </tr>
+    <tr>
+      <td><strong>Distributed ledger concept</strong></td>
+      <td><a href="https://www.ibm.com/blockchain/what-is-blockchain">IBM Blockchain Docs</a></td>
+      <td>Enterprise perspective on DLT</td>
+    </tr>
+    <tr>
+      <td><strong>Byzantine Generals visualization</strong></td>
+      <td><a href="https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html">Martin Kleppmann’s Blog</a></td>
+      <td>Distributed systems concepts</td>
+    </tr>
+    <tr>
+      <td><strong>Blockchain trilemma diagram</strong></td>
+      <td><a href="https://vitalik.ca">Vitalik Buterin’s Blog</a></td>
+      <td>Scalability-security-decentralization tradeoff</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Interactive Tools</strong>:</p>
+<ul>
+  <li><a href="https://andersbrownworth.com/blockchain/">Blockchain Demo</a> - Interactive visualization by Anders Brownworth</li>
+  <li><a href="https://www.blockchain.com/explorer">3D Blockchain Visualizer</a> - Real-time Bitcoin blockchain explorer</li>
+  <li><a href="https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf">Ethereum Virtual Machine Illustrated</a> - EVM internals</li>
+</ul>
+
+<hr />
+
+<h2 id="10-tóm-tắt-và-điểm-chính">10. Tóm tắt và điểm chính</h2>
+
+<p><strong>Core Concepts</strong>:</p>
+<ol>
+  <li>Blockchain là distributed ledger giải quyết double-spending không cần bên thứ ba</li>
+  <li>Sử dụng cryptographic hash functions để tạo immutability</li>
+  <li>Consensus mechanisms đảm bảo agreement trong environment không tin cậy</li>
+  <li>Trade-off giữa decentralization, security, và scalability</li>
+</ol>
+
+<p><strong>Technical Foundation</strong>:</p>
+<ul>
+  <li>Hash functions: SHA-256, collision resistance, pre-image resistance</li>
+  <li>Block structure: header, transactions, previous hash</li>
+  <li>Merkle trees: efficient verification</li>
+  <li>Chain linking: tamper-evident structure</li>
+</ul>
+
+<p><strong>Applications</strong>:</p>
+<ul>
+  <li>Cryptocurrency (Bitcoin, Ethereum)</li>
+  <li>Smart contracts</li>
+  <li>Supply chain management</li>
+  <li>Digital identity</li>
+  <li>Decentralized finance (DeFi)</li>
+</ul>
+
+<p><strong>Challenges</strong>:</p>
+<ul>
+  <li>Scalability limitations</li>
+  <li>Energy consumption (PoW)</li>
+  <li>Privacy concerns</li>
+  <li>Finality vs speed tradeoffs</li>
+  <li>Storage requirements</li>
+</ul>
+
+<hr />
+
+<p>✅ <strong>End of Lecture 00.00</strong></p>
+
+<p><strong>Next</strong>: Lecture 00.01 - Distributed Systems and Consensus Theory</p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>Nakamoto, S. (2008). Bitcoin: A peer-to-peer electronic cash system.</li>
+  <li>Buterin, V. (2014). Ethereum whitepaper: A next-generation smart contract and decentralized application platform.</li>
+  <li>Antonopoulos, A. M. (2017). <em>Mastering Bitcoin: Programming the Open Blockchain</em>. O’Reilly Media.</li>
+  <li>Narayanan, A., Bonneau, J., Felten, E., Miller, A., &amp; Goldfeder, S. (2016). <em>Bitcoin and Cryptocurrency Technologies</em>. Princeton University Press.</li>
+  <li>Castro, M., &amp; Liskov, B. (1999). Practical byzantine fault tolerance. OSDI, 99, 173-186.</li>
+</ol>
+
+
+
+<!-- Remove first element from post_list which is already shown above. -->
+  
+
+<!-- List up the posts in the chapter -->
+<ul style="list-style: none;">
+
+  
+  
+  
+  
+    <li style="text-align:left; vertical-align: middle; margin-left: -2em; margin-top: 5px;" >
+      <a href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/blockchain-chapter00/00_01_Distributed_Systems_Consensus/">Lecture 00.01: Distributed Systems và Consensus Theory</a>
+      
+    </li>
+  
+  
+
+  
+  
+  
+  
+    <li style="text-align:left; vertical-align: middle; margin-left: -2em; margin-top: 5px;" >
+      <a href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/blockchain-chapter00/00_02_Cryptographic_Hash_Functions/">Lecture 00.02: Cryptographic Hash Functions - Nền tảng của Blockchain</a>
+      
+    </li>
+  
+  
+
+  
+  
+  
+  
+    <li style="text-align:left; vertical-align: middle; margin-left: -2em; margin-top: 5px;" >
+      <a href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/blockchain-chapter00/00_03_Digital_Signatures/">Lecture 00.03: Digital Signatures và Public-Key Cryptography</a>
+      
+    </li>
+  
+  
+
+</ul>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

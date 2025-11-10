@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Lecture 00.01: Distributed Systems và Consensus Theory &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/contents/en/chapter00/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">
+    Lecture 00.01: Distributed Systems và Consensus Theory
+    
+  </h1>
+  <h1 id="lecture-distributed-systems-và-consensus-theory">Lecture: Distributed Systems và Consensus Theory</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p>Để hiểu sâu về blockchain, chúng ta phải hiểu về <strong>distributed systems</strong> (hệ thống phân tán) - nền tảng lý thuyết mà blockchain được xây dựng trên đó. Một hệ thống phân tán là một tập hợp các máy tính độc lập kết nối qua mạng, làm việc cùng nhau để đạt được một mục tiêu chung, nhưng với người dùng cuối, chúng trông như một hệ thống duy nhất.</p>
+
+<p>Vấn đề cốt lõi trong distributed systems là <strong>consensus</strong> (sự đồng thuận): làm thế nào để nhiều máy tính độc lập, có thể fail bất cứ lúc nào, có thể bị delay về network, hoặc thậm chí có thể hành động maliciously, có thể đồng ý về một giá trị hoặc trạng thái duy nhất?</p>
+
+<p>Vấn đề này không hề đơn giản. Trong năm 1985, hai nhà khoa học máy tính Fisher, Lynch và Paterson đã chứng minh một kết quả nổi tiếng được gọi là <strong>FLP Impossibility Result</strong>: trong một mạng asynchronous (không có bounds về message delay), chỉ cần một node có thể fail, không thể có một consensus algorithm deterministic nào đảm bảo terminate trong finite time. Đây là một kết quả profound, cho thấy rằng perfect consensus trong môi trường distributed thực sự là impossible!</p>
+
+<p>Nhưng trong thực tế, hệ thống phân tán vẫn hoạt động. Tại sao? Bởi vì chúng ta <strong>relaxing một số assumptions</strong>:</p>
+<ul>
+  <li>Chấp nhận probabilistic guarantees thay vì deterministic</li>
+  <li>Giả định network có weak synchrony (không phải hoàn toàn asynchronous)</li>
+  <li>Giới hạn số lượng faulty nodes</li>
+  <li>Chấp nhận eventual consistency thay vì immediate consistency</li>
+</ul>
+
+<p>Blockchain là một distributed system đặc biệt với những đặc tính:</p>
+<ol>
+  <li><strong>No central authority</strong>: Không có coordinator</li>
+  <li><strong>Byzantine environment</strong>: Nodes có thể hành động arbitrarily maliciously</li>
+  <li><strong>Open membership</strong>: Bất kỳ ai cũng có thể tham gia hoặc rời khỏi (trong public blockchains)</li>
+  <li><strong>Incentive-driven</strong>: Sử dụng economic incentives để encourage honest behavior</li>
+</ol>
+
+<p>Consensus trong blockchain không chỉ là vấn đề kỹ thuật, mà còn là <strong>kết hợp của cryptography, game theory, và distributed systems theory</strong>. Bitcoin giải quyết vấn đề này thông qua Proof-of-Work - một breakthrough không chỉ về mặt kỹ thuật mà còn về conceptual, bởi vì nó transform computational resources thành votes, và economic incentives thành security guarantees.</p>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-the-consensus-problem">2.1. The Consensus Problem</h3>
+
+<p>Tưởng tượng bạn và 9 người bạn đang ở 10 thành phố khác nhau, và các bạn muốn quyết định xem nên đi ăn trưa ở đâu vào ngày mai. Các bạn chỉ có thể giao tiếp qua tin nhắn văn bản:</p>
+
+<p><strong>Scenario 1: Centralized (có leader)</strong></p>
+<ul>
+  <li>Alice là leader, cô ấy quyết định: “Pizza!”</li>
+  <li>Mọi người follow Alice</li>
+  <li>✅ Simple, fast</li>
+  <li>❌ Nhưng nếu Alice’s phone die thì sao? Nếu Alice bị hack thì sao?</li>
+</ul>
+
+<p><strong>Scenario 2: Distributed Voting (không có leader)</strong></p>
+<ul>
+  <li>Mọi người gửi vote của mình cho tất cả mọi người khác</li>
+  <li>Mỗi người đếm votes và chọn option có nhiều votes nhất</li>
+  <li>✅ No single point of failure</li>
+  <li>❌ Nhưng các messages có thể bị delay hoặc lost. Bob có thể nhận votes theo thứ tự khác với Charlie. Làm sao đảm bảo mọi người đếm đến cùng kết quả?</li>
+</ul>
+
+<p><strong>Scenario 3: Byzantine Voting (có người gian lận)</strong></p>
+<ul>
+  <li>Eve là một hacker, cô ấy gửi “Pizza” cho một nửa nhóm và “Sushi” cho nửa còn lại</li>
+  <li>Một nửa nhóm nghĩ majority là Pizza, nửa còn lại nghĩ là Sushi</li>
+  <li>Split decision → system fails!</li>
+</ul>
+
+<p>Đây chính xác là <strong>Byzantine Generals Problem</strong>: Làm thế nào để một nhóm generals (nodes) có thể đồng ý về một plan of attack, khi một số generals có thể là traitors (Byzantine/malicious nodes), và communication có thể bị intercepted hoặc delayed?</p>
+
+<h3 id="22-blockchains-solution">2.2. Blockchain’s Solution</h3>
+
+<p>Blockchain giải quyết vấn đề này bằng cách:</p>
+
+<ol>
+  <li>
+    <p><strong>Ordered Log of Events</strong>: Thay vì vote về một decision duy nhất, tạo một log chronological của tất cả decisions (transactions)</p>
+  </li>
+  <li>
+    <p><strong>Proof-of-Work Lottery</strong>: Thay vì mọi người vote cùng lúc, randomly chọn một người (miner) để propose block tiếp theo. “Random” selection dựa trên computational work (giải puzzle mật mã).</p>
+  </li>
+  <li>
+    <p><strong>Longest Chain Rule</strong>: Nếu có conflicts (hai blocks được propose cùng lúc), follow chain dài nhất (có most accumulated work). Eventually, một chain sẽ become dominant.</p>
+  </li>
+  <li>
+    <p><strong>Economic Incentives</strong>: Người được chọn để propose block nhận reward (block reward + transaction fees). Điều này makes it expensive to attack và profitable to be honest.</p>
+  </li>
+</ol>
+
+<p>Giống như trong voting example: thay vì mọi người vote về “Pizza vs Sushi”, blockchain tạo một ordered list: “Transaction 1: Alice → Bob, Transaction 2: Bob → Charlie, …”. Và thay vì everyone agreeing immediately, agreement emerges gradually as more blocks are added.</p>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-properties-of-distributed-systems">3.1. Properties of Distributed Systems</h3>
+
+<p>Một distributed system phải đảm bảo các tính chất:</p>
+
+<p><strong>Safety</strong>: “Nothing bad happens”</p>
+<ul>
+  <li>Consistency: All nodes see the same data</li>
+  <li>Agreement: All correct nodes agree on the same value</li>
+</ul>
+
+<p><strong>Liveness</strong>: “Something good eventually happens”</p>
+<ul>
+  <li>Termination: Algorithm eventually completes</li>
+  <li>Progress: System makes forward progress</li>
+</ul>
+
+<p><strong>Fault Tolerance</strong>:</p>
+<ul>
+  <li><strong>Crash faults</strong>: Node stops responding</li>
+  <li><strong>Omission faults</strong>: Messages are dropped</li>
+  <li><strong>Byzantine faults</strong>: Arbitrary malicious behavior</li>
+</ul>
+
+<h3 id="32-cap-theorem">3.2. CAP Theorem</h3>
+
+<p>Eric Brewer’s CAP theorem (2000) states that trong một distributed system, bạn chỉ có thể đạt được maximum 2 trong 3 tính chất sau:</p>
+
+<p><strong>Consistency (C)</strong>: Mọi read nhận về most recent write
+<strong>Availability (A)</strong>: Mọi request nhận về response (không có error)
+<strong>Partition Tolerance (P)</strong>: System tiếp tục hoạt động khi network bị phân mảnh</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>         C (Consistency)
+         /  \
+        /    \
+       /  CA  \
+      /________\
+    A           P
+(Availability) (Partition Tolerance)
+
+CP Systems: Consistency + Partition Tolerance
+  → May become unavailable during network partition
+  → Bitcoin, Ethereum (prioritize consistency)
+
+AP Systems: Availability + Partition Tolerance
+  → May return stale data during partition
+  → DNS, Cassandra (eventual consistency)
+
+CA Systems: Consistency + Availability
+  → No partition tolerance
+  → Traditional RDBMS in single datacenter
+</code></pre></div></div>
+
+<p>Blockchains thường là <strong>CP systems</strong>: ưu tiên consistency (all nodes agree on chain) hơn availability (có thể temporary unavailable during chain reorganization).</p>
+
+<h3 id="33-consensus-models">3.3. Consensus Models</h3>
+
+<p><strong>State Machine Replication (SMR)</strong>:</p>
+
+<p>Consensus trong distributed systems thường được implement thông qua state machine replication:</p>
+<ul>
+  <li>Mỗi node chạy một deterministic state machine</li>
+  <li>Tất cả nodes bắt đầu từ cùng initial state</li>
+  <li>Nodes nhận cùng sequence of commands trong cùng order</li>
+  <li>Deterministic execution → tất cả nodes đến cùng final state</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Node 1:  S0 --cmd1--&gt; S1 --cmd2--&gt; S2 --cmd3--&gt; S3
+Node 2:  S0 --cmd1--&gt; S1 --cmd2--&gt; S2 --cmd3--&gt; S3
+Node 3:  S0 --cmd1--&gt; S1 --cmd2--&gt; S2 --cmd3--&gt; S3
+
+Consensus = Agreement on sequence of commands
+</code></pre></div></div>
+
+<p>Blockchain áp dụng SMR:</p>
+<ul>
+  <li>State = account balances, smart contract storage</li>
+  <li>Commands = transactions</li>
+  <li>Consensus = agreement on order of transactions (blocks)</li>
+</ul>
+
+<h3 id="34-types-of-consensus-algorithms">3.4. Types of Consensus Algorithms</h3>
+
+<p><strong>Classical Consensus (CFT - Crash Fault Tolerant)</strong>:</p>
+
+<ol>
+  <li><strong>Paxos</strong> (Leslie Lamport, 1989):
+    <ul>
+      <li>Tolerates crash failures</li>
+      <li>Requires majority quorum: ( \lfloor n/2 \rfloor + 1 )</li>
+      <li>Used in Google Chubby, Apache ZooKeeper</li>
+    </ul>
+  </li>
+  <li><strong>Raft</strong> (Diego Ongaro, 2014):
+    <ul>
+      <li>Simpler alternative to Paxos</li>
+      <li>Leader-based, easier to understand</li>
+      <li>Used in etcd, Consul</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Byzantine Fault Tolerant (BFT) Consensus</strong>:</p>
+
+<ol>
+  <li><strong>PBFT</strong> (Practical Byzantine Fault Tolerance, 1999):
+    <ul>
+      <li>Tolerates ( f ) Byzantine faults với ( n \geq 3f + 1 ) nodes</li>
+      <li>Three-phase protocol: pre-prepare, prepare, commit</li>
+      <li>O(n²) message complexity</li>
+      <li>Used in Hyperledger Fabric, Zilliqa</li>
+    </ul>
+  </li>
+  <li><strong>Nakamoto Consensus (Proof-of-Work)</strong>:
+    <ul>
+      <li>Bitcoin’s innovation (2008)</li>
+      <li>Probabilistic finality</li>
+      <li>Open membership (permissionless)</li>
+      <li>Sybil resistance through computational work</li>
+    </ul>
+  </li>
+  <li><strong>Proof-of-Stake</strong>:
+    <ul>
+      <li>Validators stake cryptocurrency</li>
+      <li>Selection based on stake weight</li>
+      <li>Ethereum 2.0, Cardano, Polkadot</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="35-synchrony-assumptions">3.5. Synchrony Assumptions</h3>
+
+<p>Consensus algorithms depend on assumptions về network timing:</p>
+
+<p><strong>Synchronous</strong>:</p>
+<ul>
+  <li>Message delay bounded: ( \Delta ) (known upper bound)</li>
+  <li>Process execution speed bounded</li>
+  <li>Strong assumption, rarely holds in practice</li>
+</ul>
+
+<p><strong>Asynchronous</strong>:</p>
+<ul>
+  <li>No bounds on message delay</li>
+  <li>FLP impossibility: no deterministic consensus possible</li>
+  <li>Weakest assumption, most realistic</li>
+</ul>
+
+<p><strong>Partially Synchronous</strong>:</p>
+<ul>
+  <li>Network is eventually synchronous (after GST - Global Stabilization Time)</li>
+  <li>Before GST: asynchronous (messages can be delayed arbitrarily)</li>
+  <li>After GST: synchronous (messages delivered within ( \Delta ))</li>
+  <li>Most practical consensus algorithms assume partial synchrony</li>
+</ul>
+
+<p>Bitcoin assumes <strong>weak synchrony</strong>: network delays exist but blocks propagate reasonably fast (&lt; 10 minutes typically).</p>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-mật-mã-học">4. Công thức toán học và mật mã học</h2>
+
+<h3 id="41-byzantine-fault-tolerance-bound">4.1. Byzantine Fault Tolerance Bound</h3>
+
+<p><strong>Theorem</strong>: Trong một distributed system with ( n ) nodes, nếu có ( f ) nodes là Byzantine (malicious), consensus chỉ có thể đạt được nếu:</p>
+
+<p>[
+n \geq 3f + 1
+]</p>
+
+<p>Hay nói cách khác:</p>
+
+<p>[
+f &lt; \frac{n}{3}
+]</p>
+
+<p><strong>Intuitive Proof</strong>:</p>
+
+<p>Giả sử chúng ta có ( n ) nodes và muốn tolerate ( f ) Byzantine nodes.</p>
+
+<ol>
+  <li>Trong worst case, ( f ) Byzantine nodes có thể không respond</li>
+  <li>Vậy chúng ta chỉ nghe được từ ( n - f ) nodes</li>
+  <li>Nhưng trong số ( n - f ) nodes này, worst case là ( f ) trong số đó là Byzantine nodes đang lying</li>
+  <li>Vậy số honest responses tối thiểu là: ( (n - f) - f = n - 2f )</li>
+  <li>Để có majority của honest nodes:
+[
+n - 2f &gt; f \implies n &gt; 3f \implies n \geq 3f + 1
+]</li>
+</ol>
+
+<p><strong>Example</strong>:</p>
+<ul>
+  <li>( n = 4 ), ( f = 1 ): ( 4 \geq 3(1) + 1 = 4 ) ✅ (just enough)</li>
+  <li>( n = 3 ), ( f = 1 ): ( 3 \geq 3(1) + 1 = 4 ) ❌ (not enough)</li>
+  <li>( n = 10 ), ( f = 3 ): ( 10 \geq 3(3) + 1 = 10 ) ✅ (just enough)</li>
+</ul>
+
+<h3 id="42-nakamoto-consensus-security">4.2. Nakamoto Consensus Security</h3>
+
+<p>Trong Proof-of-Work, một attacker với fraction ( q ) của total hash power cố gắng overtake honest chain với fraction ( p = 1 - q ).</p>
+
+<p><strong>Probability of Attacker Success</strong>:</p>
+
+<p>Cho ( z ) = số confirmations (blocks ahead của honest chain)</p>
+
+<p>Xác suất attacker catch up từ ( z ) blocks behind:</p>
+
+<p>[
+P_{\text{catch-up}}(q, z) = 
+\begin{cases}
+1 &amp; \text{if } q \geq 0.5 <br />
+\left(\frac{q}{p}\right)^z &amp; \text{if } q &lt; 0.5
+\end{cases}
+]</p>
+
+<p><strong>Derivation</strong> (simplified):</p>
+
+<p>Mô hình như random walk:</p>
+<ul>
+  <li>Mỗi block, attacker có prob ( q ) of winning, honest có prob ( p )</li>
+  <li>Attacker cần win ( z ) more times than honest để catch up</li>
+  <li>Probability: ( \sum_{k=0}^{\infty} P(\text{attacker } z+k, \text{ honest } k) )</li>
+</ul>
+
+<p>Kết quả cuối cùng (Gambler’s Ruin problem):</p>
+
+<p>[
+P_{\text{catch-up}} = \left(\frac{q}{p}\right)^z = \left(\frac{q}{1-q}\right)^z
+]</p>
+
+<p><strong>Numerical Examples</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Attacker Power ( q )</th>
+      <th>Confirmations ( z )</th>
+      <th>Probability ( P )</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.1 (10%)</td>
+      <td>1</td>
+      <td>0.111 (11.1%)</td>
+    </tr>
+    <tr>
+      <td>0.1 (10%)</td>
+      <td>6</td>
+      <td>0.000164 (0.016%)</td>
+    </tr>
+    <tr>
+      <td>0.3 (30%)</td>
+      <td>1</td>
+      <td>0.429 (42.9%)</td>
+    </tr>
+    <tr>
+      <td>0.3 (30%)</td>
+      <td>6</td>
+      <td>0.0078 (0.78%)</td>
+    </tr>
+    <tr>
+      <td>0.4 (40%)</td>
+      <td>6</td>
+      <td>0.088 (8.8%)</td>
+    </tr>
+    <tr>
+      <td>0.45 (45%)</td>
+      <td>10</td>
+      <td>0.267 (26.7%)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Insight</strong>: Ngay cả với 40% hash power, sau 6 confirmations chỉ có ~9% cơ hội thành công. Với 10% hash power, 6 confirmations cho ~0.02% cơ hội - extremely safe.</p>
+
+<h3 id="43-flp-impossibility-result">4.3. FLP Impossibility Result</h3>
+
+<p><strong>Theorem</strong> (Fisher, Lynch, Paterson, 1985):</p>
+
+<p>Trong một asynchronous distributed system, không tồn tại một deterministic consensus protocol có thể guarantee termination nếu ngay cả một process có thể fail (crash).</p>
+
+<p><strong>Formal Statement</strong>:</p>
+
+<p>Cho:</p>
+<ul>
+  <li>System model: asynchronous (no timing assumptions)</li>
+  <li>Failure model: at most 1 crash failure</li>
+  <li>Safety: agreement và validity</li>
+  <li>Liveness: termination</li>
+</ul>
+
+<p>Kết luận: Không thể simultaneously guarantee tất cả properties trên.</p>
+
+<p><strong>Implications</strong>:</p>
+
+<ol>
+  <li><strong>Blockchain’s workaround</strong>: Sử dụng probabilistic/eventual termination thay vì guaranteed termination</li>
+  <li><strong>Bitcoin không terminate</strong>: luôn có khả năng chain reorganization</li>
+  <li><strong>Proof-of-Stake with finality</strong>: thêm synchrony assumptions để avoid FLP</li>
+</ol>
+
+<h3 id="44-consistency-models">4.4. Consistency Models</h3>
+
+<p><strong>Strong Consistency</strong> (Linearizability):</p>
+
+<p>Cho operations ( op_1, op_2, …, op_n ) with real-time ordering ( \prec ):</p>
+
+<p>[
+op_i \prec op_j \implies \text{system executes } op_i \text{ before } op_j
+]</p>
+
+<p><strong>Eventual Consistency</strong>:</p>
+
+<p>[
+\forall \text{ nodes } n_i, n_j: \quad \lim_{t \to \infty} \text{state}(n_i, t) = \text{state}(n_j, t)
+]</p>
+
+<p>Blockchains achieve <strong>eventual consistency</strong>: sau khi không có new transactions, tất cả nodes eventually agree.</p>
+
+<h3 id="45-network-partition-and-quorum">4.5. Network Partition and Quorum</h3>
+
+<p>Trong PBFT-style consensus với ( n = 3f + 1 ) nodes:</p>
+
+<p><strong>Quorum size</strong>:
+[
+Q = 2f + 1 = \frac{2n + 1}{3}
+]</p>
+
+<p>Tại sao? Hai quorums bất kỳ phải overlap trong ít nhất ( f + 1 ) nodes (đảm bảo ít nhất 1 honest node):</p>
+
+<p>[
+Q_1 \cap Q_2 \geq 2Q - n = 2(2f+1) - (3f+1) = f + 1
+]</p>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-simplified-pbft-implementation">5.1. Simplified PBFT Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="k">class</span> <span class="nc">MessageType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PRE_PREPARE</span> <span class="o">=</span> <span class="sh">"</span><span class="s">pre-prepare</span><span class="sh">"</span>
+    <span class="n">PREPARE</span> <span class="o">=</span> <span class="sh">"</span><span class="s">prepare</span><span class="sh">"</span>
+    <span class="n">COMMIT</span> <span class="o">=</span> <span class="sh">"</span><span class="s">commit</span><span class="sh">"</span>
+
+<span class="k">class</span> <span class="nc">Message</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">:</span> <span class="n">MessageType</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+                 <span class="n">sequence</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">digest</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">msg_type</span> <span class="o">=</span> <span class="n">msg_type</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>          <span class="c1"># Current view number
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span>  <span class="c1"># Sequence number of request
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">digest</span> <span class="o">=</span> <span class="n">digest</span>      <span class="c1"># Digest of request
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">node_id</span>    <span class="c1"># Sender's ID
+</span>    
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nf">hash</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">msg_type</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span> 
+                     <span class="n">self</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">node_id</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">msg_type</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">msg_type</span> <span class="ow">and</span> 
+                <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">view</span> <span class="ow">and</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">and</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">digest</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">digest</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">PBFTNode</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">node_id</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">total_nodes</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">3</span>  <span class="c1"># Max Byzantine nodes
+</span>        
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Current view
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Current sequence number
+</span>        
+        <span class="c1"># Message logs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Message</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">Message</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">Message</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># State
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">prepared</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>  <span class="c1"># Prepared requests
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">committed</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>  <span class="c1"># Committed requests
+</span>    
+    <span class="k">def</span> <span class="nf">is_primary</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Check if this node is primary for current view</span><span class="sh">"""</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">node_id</span>
+    
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">request_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Message</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Client request - primary creates PRE-PREPARE</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">is_primary</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Only primary can create pre-prepare</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">sequence</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">request_data</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+        
+        <span class="n">msg</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+            <span class="n">MessageType</span><span class="p">.</span><span class="n">PRE_PREPARE</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span>
+            <span class="n">digest</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">node_id</span>
+        <span class="p">)</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span>
+        <span class="k">return</span> <span class="n">msg</span>
+    
+    <span class="k">def</span> <span class="nf">receive_pre_prepare</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">,</span> <span class="n">request_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Backup receives PRE-PREPARE from primary</span><span class="sh">"""</span>
+        <span class="c1"># Verify message
+</span>        <span class="n">expected_digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">request_data</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">digest</span> <span class="o">!=</span> <span class="n">expected_digest</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Invalid digest</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">view</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Wrong view</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Accept and send PREPARE
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pre_prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="n">msg</span>
+        
+        <span class="n">prepare_msg</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+            <span class="n">MessageType</span><span class="p">.</span><span class="n">PREPARE</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+            <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span>
+            <span class="n">msg</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">node_id</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Add own prepare message
+</span>        <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">prepare_msg</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">prepare_msg</span>
+    
+    <span class="k">def</span> <span class="nf">receive_prepare</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Receive PREPARE from other nodes</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        
+        <span class="c1"># Check if prepared (received 2f PREPARE messages)
+</span>        <span class="nf">if </span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">prepared</span> <span class="ow">and</span> 
+            <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prepare_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">f</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">prepared</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">)</span>
+            
+            <span class="c1"># Send COMMIT
+</span>            <span class="n">commit_msg</span> <span class="o">=</span> <span class="nc">Message</span><span class="p">(</span>
+                <span class="n">MessageType</span><span class="p">.</span><span class="n">COMMIT</span><span class="p">,</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span>
+                <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">,</span>
+                <span class="n">msg</span><span class="p">.</span><span class="n">digest</span><span class="p">,</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">node_id</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">commit_msg</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">commit_msg</span>
+        
+        <span class="k">return</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">receive_commit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Receive COMMIT from other nodes</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">].</span><span class="nf">add</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        
+        <span class="c1"># Check if committed (received 2f+1 COMMIT messages)
+</span>        <span class="nf">if </span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">committed</span> <span class="ow">and</span>
+            <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">commit_log</span><span class="p">[</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">committed</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">True</span>  <span class="c1"># Request is committed!
+</span>        
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="c1"># Create 4 nodes (f=1, tolerates 1 Byzantine)
+</span>    <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="nc">PBFTNode</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== PBFT Consensus Example ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Total nodes: </span><span class="si">{</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">n</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Max Byzantine faults: </span><span class="si">{</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Required PREPARE messages: </span><span class="si">{</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Required COMMIT messages: </span><span class="si">{</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">f</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Client sends request to primary (node 0)
+</span>    <span class="n">request</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Transfer 100 BTC from Alice to Bob</span><span class="sh">"</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Client request: </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Phase 1: PRE-PREPARE (primary broadcasts)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Phase 1: PRE-PREPARE ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">pre_prepare</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Node 0 (primary) creates PRE-PREPARE: seq=</span><span class="si">{</span><span class="n">pre_prepare</span><span class="p">.</span><span class="n">sequence</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Phase 2: PREPARE (backups send PREPARE)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Phase 2: PREPARE ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">prepare_messages</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>  <span class="c1"># Nodes 1, 2, 3
+</span>        <span class="n">prepare</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">receive_pre_prepare</span><span class="p">(</span><span class="n">pre_prepare</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="n">prepare_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">prepare</span><span class="p">))</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Node </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> sends PREPARE</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Broadcast PREPARE messages to all nodes
+</span>    <span class="n">commit_messages</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sender_id</span><span class="p">,</span> <span class="n">prepare</span> <span class="ow">in</span> <span class="n">prepare_messages</span><span class="p">:</span>
+            <span class="n">commit</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nf">receive_prepare</span><span class="p">(</span><span class="n">prepare</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+                <span class="n">commit_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">node</span><span class="p">.</span><span class="n">node_id</span><span class="p">,</span> <span class="n">commit</span><span class="p">))</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Node </span><span class="si">{</span><span class="n">node</span><span class="p">.</span><span class="n">node_id</span><span class="si">}</span><span class="s"> enters PREPARED state, sends COMMIT</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Phase 3: COMMIT
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Phase 3: COMMIT ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sender_id</span><span class="p">,</span> <span class="n">commit</span> <span class="ow">in</span> <span class="n">commit_messages</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">node_id</span> <span class="o">!=</span> <span class="n">sender_id</span><span class="p">:</span>
+                <span class="n">committed</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nf">receive_commit</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">committed</span><span class="p">:</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Node </span><span class="si">{</span><span class="n">node</span><span class="p">.</span><span class="n">node_id</span><span class="si">}</span><span class="s"> COMMITTED request!</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== Consensus Reached! ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">All honest nodes agreed on: </span><span class="si">{</span><span class="n">request</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="52-bitcoins-consensus-simplified">5.2. Bitcoin’s Consensus (Simplified)</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">BitcoinBlock</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> 
+                 <span class="n">previous_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">transactions</span> <span class="o">=</span> <span class="n">transactions</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">previous_hash</span> <span class="o">=</span> <span class="n">previous_hash</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="n">difficulty</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">nonce</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">hash</span> <span class="o">=</span> <span class="sh">""</span>
+    
+    <span class="k">def</span> <span class="nf">mine</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Proof-of-Work: find nonce such that hash &lt; target</span><span class="sh">"""</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nb">hash</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">calculate_hash</span><span class="p">()</span>
+            <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nb">hash</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Block mined! Nonce: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">nonce</span><span class="si">}</span><span class="s">, </span><span class="sh">"</span>
+                      <span class="sa">f</span><span class="sh">"</span><span class="s">Attempts: </span><span class="si">{</span><span class="n">attempts</span><span class="si">}</span><span class="s">, Time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">return</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">nonce</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">calculate_hash</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">block_data</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">index</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">timestamp</span><span class="si">}</span><span class="sh">"</span>
+                     <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">transactions</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">previous_hash</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">nonce</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">block_data</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">BitcoinBlockchain</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BitcoinBlock</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="n">difficulty</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Create genesis block
+</span>        <span class="n">genesis</span> <span class="o">=</span> <span class="nc">BitcoinBlock</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="sh">"</span><span class="s">Genesis</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">)</span>
+        <span class="n">genesis</span><span class="p">.</span><span class="nf">mine</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">genesis</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">add_transaction</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">mine_block</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BitcoinBlock</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Simulate mining a new block</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="n">new_block</span> <span class="o">=</span> <span class="nc">BitcoinBlock</span><span class="p">(</span>
+            <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">),</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span><span class="p">.</span><span class="nf">copy</span><span class="p">(),</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nb">hash</span><span class="p">,</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span>
+        <span class="p">)</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Mining block </span><span class="si">{</span><span class="n">new_block</span><span class="p">.</span><span class="n">index</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">new_block</span><span class="p">.</span><span class="nf">mine</span><span class="p">()</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">new_block</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_transactions</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">return</span> <span class="n">new_block</span>
+    
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Verify blockchain integrity</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">)):</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># Check hash
+</span>            <span class="k">if</span> <span class="n">current</span><span class="p">.</span><span class="nb">hash</span> <span class="o">!=</span> <span class="n">current</span><span class="p">.</span><span class="nf">calculate_hash</span><span class="p">():</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            
+            <span class="c1"># Check previous hash link
+</span>            <span class="k">if</span> <span class="n">current</span><span class="p">.</span><span class="n">previous_hash</span> <span class="o">!=</span> <span class="n">previous</span><span class="p">.</span><span class="nb">hash</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            
+            <span class="c1"># Check PoW difficulty
+</span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">.</span><span class="nb">hash</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">difficulty</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">return</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">resolve_fork</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">other_chain</span><span class="p">:</span> <span class="sh">'</span><span class="s">BitcoinBlockchain</span><span class="sh">'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Longest chain rule: replace if other chain is longer and valid</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">other_chain</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other_chain</span><span class="p">.</span><span class="nf">is_valid</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">other_chain</span><span class="p">.</span><span class="n">chain</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="c1"># Example: Simulating network consensus
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Bitcoin Consensus Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Two miners competing
+</span>    <span class="n">blockchain_A</span> <span class="o">=</span> <span class="nc">BitcoinBlockchain</span><span class="p">(</span><span class="n">difficulty</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">blockchain_B</span> <span class="o">=</span> <span class="nc">BitcoinBlockchain</span><span class="p">(</span><span class="n">difficulty</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    
+    <span class="c1"># Both receive same transactions
+</span>    <span class="n">blockchain_A</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice -&gt; Bob: 5 BTC</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain_A</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Bob -&gt; Charlie: 2 BTC</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="n">blockchain_B</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice -&gt; Bob: 5 BTC</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain_B</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Bob -&gt; Charlie: 2 BTC</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Miner A mining...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain_A</span><span class="p">.</span><span class="nf">mine_block</span><span class="p">()</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">Miner B mining...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain_B</span><span class="p">.</span><span class="nf">mine_block</span><span class="p">()</span>
+    
+    <span class="c1"># Simulate: Miner A mines another block first
+</span>    <span class="n">blockchain_A</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">"</span><span class="s">Charlie -&gt; Alice: 1 BTC</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">Miner A mines block 2...</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">blockchain_A</span><span class="p">.</span><span class="nf">mine_block</span><span class="p">()</span>
+    
+    <span class="c1"># Miner B receives A's longer chain
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Miner B chain length: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">blockchain_B</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Miner A chain length: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">blockchain_A</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">blockchain_B</span><span class="p">.</span><span class="nf">resolve_fork</span><span class="p">(</span><span class="n">blockchain_A</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Miner B adopted Miner A</span><span class="sh">'</span><span class="s">s longer chain!</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">CONSENSUS REACHED - Both miners on same chain</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Final blockchain length: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">blockchain_A</span><span class="p">.</span><span class="n">chain</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Blockchain valid: </span><span class="si">{</span><span class="n">blockchain_A</span><span class="p">.</span><span class="nf">is_valid</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="6-các-thách-thức-và-đánh-đổi-thường-gặp">6. Các thách thức và đánh đổi thường gặp</h2>
+
+<h3 id="61-nothing-at-stake-problem-proof-of-stake">6.1. Nothing-at-Stake Problem (Proof-of-Stake)</h3>
+
+<p>Trong PoS, khi có fork, validators có thể vote cho cả hai chains mà không tốn cost gì (không như PoW phải spend electricity).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      Block 3a
+      /
+Block 2
+      \
+      Block 3b
+
+PoW: Miner must choose one chain (can't mine both simultaneously)
+PoS: Validator can sign both chains at no cost!
+</code></pre></div></div>
+
+<p><strong>Solutions</strong>:</p>
+<ul>
+  <li><strong>Slashing</strong>: Phạt validators vote cho multiple chains</li>
+  <li><strong>Finality Gadgets</strong>: Casper FFG, Tendermint - absolute finality sau certain conditions</li>
+</ul>
+
+<h3 id="62-long-range-attacks-pos">6.2. Long-Range Attacks (PoS)</h3>
+
+<p>Attacker có thể mua old private keys của validators và rewrite history từ đầu.</p>
+
+<p><strong>Solution</strong>:</p>
+<ul>
+  <li><strong>Checkpoints</strong>: Clients hardcode recent block hashes</li>
+  <li><strong>Weak subjectivity</strong>: Require social consensus for very old history</li>
+</ul>
+
+<h3 id="63-selfish-mining">6.3. Selfish Mining</h3>
+
+<p>Miners có thể giữ blocks họ mine được private, release strategically để gain unfair advantage.</p>
+
+<p><strong>Example Strategy</strong>:</p>
+<ol>
+  <li>Mine block B1, keep private</li>
+  <li>If another miner mines B1’, release your B1 immediately</li>
+  <li>Race condition → sometimes your block wins</li>
+  <li>Can profit with &lt;50% hash power (minimum ~25%)</li>
+</ol>
+
+<p><strong>Impact</strong>: Lowers security threshold từ 50% xuống ~33%</p>
+
+<h3 id="64-network-partitions">6.4. Network Partitions</h3>
+
+<p>Nếu network bị split thành hai partitions:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Partition A (60% nodes)    |    Partition B (40% nodes)
+   Chain A continues       |       Chain B continues
+        ...                |            ...
+        
+When partition heals:
+- Longest chain wins (A)
+- Transactions on chain B get reverted (!)
+- Users on B experienced "false confirmations"
+</code></pre></div></div>
+
+<p><strong>Mitigation</strong>:</p>
+<ul>
+  <li>Wait for more confirmations</li>
+  <li>Monitor network health</li>
+  <li>Use finality gadgets</li>
+</ul>
+
+<h3 id="65-sybil-attacks">6.5. Sybil Attacks</h3>
+
+<p>Attacker tạo nhiều fake identities để gain control.</p>
+
+<p><strong>PoW Defense</strong>: One CPU = one vote → can’t create fake identities without hardware
+<strong>PoS Defense</strong>: One coin = one vote → expensive to acquire enough stake
+<strong>PBFT Defense</strong>: Permissioned network, identity verified</p>
+
+<hr />
+
+<h2 id="7-các-khái-niệm-liên-quan">7. Các khái niệm liên quan</h2>
+
+<h3 id="71-paxos-vs-bitcoin-consensus">7.1. Paxos vs Bitcoin Consensus</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Paxos</th>
+      <th>Bitcoin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Environment</td>
+      <td>Permissioned, CFT</td>
+      <td>Permissionless, BFT</td>
+    </tr>
+    <tr>
+      <td>Fault Model</td>
+      <td>Crash faults</td>
+      <td>Byzantine faults</td>
+    </tr>
+    <tr>
+      <td>Membership</td>
+      <td>Fixed, known</td>
+      <td>Dynamic, unknown</td>
+    </tr>
+    <tr>
+      <td>Finality</td>
+      <td>Strong (immediate)</td>
+      <td>Probabilistic (gradual)</td>
+    </tr>
+    <tr>
+      <td>Performance</td>
+      <td>High throughput</td>
+      <td>Low throughput</td>
+    </tr>
+    <tr>
+      <td>Sybil Resistance</td>
+      <td>Identity-based</td>
+      <td>Resource-based (PoW)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="72-consistency-vs-consensus">7.2. Consistency vs Consensus</h3>
+
+<p><strong>Consistency</strong>: Property của data - all replicas have same value
+<strong>Consensus</strong>: Protocol to achieve consistency - how replicas agree</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Consensus Algorithm → Achieves → Data Consistency
+     (PBFT)                        (Linearizability)
+     (Raft)                        (Sequential)
+     (Nakamoto)                    (Eventual)
+</code></pre></div></div>
+
+<h3 id="73-synchronous-vs-asynchronous-vs-partial-synchrony">7.3. Synchronous vs Asynchronous vs Partial Synchrony</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Assumption</th>
+      <th>Consensus Possible?</th>
+      <th>Examples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Synchronous</td>
+      <td>Known message delay bound Δ</td>
+      <td>Yes (trivial)</td>
+      <td>Theoretical only</td>
+    </tr>
+    <tr>
+      <td>Asynchronous</td>
+      <td>No timing assumptions</td>
+      <td>No (FLP)</td>
+      <td>Realistic Internet</td>
+    </tr>
+    <tr>
+      <td>Partial Synchrony</td>
+      <td>Eventually synchronous (after GST)</td>
+      <td>Yes (practical)</td>
+      <td>PBFT, Tendermint, Ethereum 2.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="74-permissioned-vs-permissionless">7.4. Permissioned vs Permissionless</h3>
+
+<p><strong>Permissioned</strong> (Hyperledger, Corda):</p>
+<ul>
+  <li>Known participants</li>
+  <li>Faster consensus (no PoW needed)</li>
+  <li>Higher throughput</li>
+  <li>Lower decentralization</li>
+</ul>
+
+<p><strong>Permissionless</strong> (Bitcoin, Ethereum):</p>
+<ul>
+  <li>Open participation</li>
+  <li>Slower consensus (need Sybil resistance)</li>
+  <li>Lower throughput</li>
+  <li>Maximum decentralization</li>
+</ul>
+
+<hr />
+
+<h2 id="8--các-bài-báo-và-whitepaper-nền-tảng">8. ⭐ Các bài báo và whitepaper nền tảng</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paper</th>
+      <th>Year</th>
+      <th>Author(s)</th>
+      <th>Contribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>“Impossibility of Distributed Consensus with One Faulty Process”</strong></td>
+      <td>1985</td>
+      <td>Fischer, Lynch, Paterson</td>
+      <td>FLP impossibility result - fundamental limit of consensus</td>
+    </tr>
+    <tr>
+      <td><strong>“The Byzantine Generals Problem”</strong></td>
+      <td>1982</td>
+      <td>Lamport, Shostak, Pease</td>
+      <td>Defined Byzantine fault tolerance</td>
+    </tr>
+    <tr>
+      <td><strong>“Practical Byzantine Fault Tolerance”</strong></td>
+      <td>1999</td>
+      <td>Castro, Liskov</td>
+      <td>First practical BFT algorithm, O(n²) complexity</td>
+    </tr>
+    <tr>
+      <td><strong>“Paxos Made Simple”</strong></td>
+      <td>2001</td>
+      <td>Leslie Lamport</td>
+      <td>Simplified explanation of Paxos consensus</td>
+    </tr>
+    <tr>
+      <td><strong>“In Search of an Understandable Consensus Algorithm (Raft)”</strong></td>
+      <td>2014</td>
+      <td>Ongaro, Ousterhout</td>
+      <td>More understandable alternative to Paxos</td>
+    </tr>
+    <tr>
+      <td><strong>“Bitcoin: A Peer-to-Peer Electronic Cash System”</strong></td>
+      <td>2008</td>
+      <td>Satoshi Nakamoto</td>
+      <td>Nakamoto consensus - probabilistic BFT</td>
+    </tr>
+    <tr>
+      <td><strong>“The Bitcoin Backbone Protocol”</strong></td>
+      <td>2015</td>
+      <td>Garay, Kiayias, Leonardos</td>
+      <td>Formal analysis of Bitcoin’s consensus security</td>
+    </tr>
+    <tr>
+      <td><strong>“Consensus in the Age of Blockchains”</strong></td>
+      <td>2017</td>
+      <td>Cachin, Vukolić</td>
+      <td>Survey of blockchain consensus mechanisms</td>
+    </tr>
+    <tr>
+      <td><strong>“Tendermint: Consensus without Mining”</strong></td>
+      <td>2014</td>
+      <td>Jae Kwon</td>
+      <td>BFT consensus for public blockchains</td>
+    </tr>
+    <tr>
+      <td><strong>“Casper the Friendly Finality Gadget”</strong></td>
+      <td>2017</td>
+      <td>Buterin, Griffith</td>
+      <td>Ethereum’s PoS finality mechanism</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Reading Path</strong>:</p>
+<ol>
+  <li>Start: Byzantine Generals Problem (understand the challenge)</li>
+  <li>Classical: Paxos/Raft (CFT consensus)</li>
+  <li>BFT: PBFT paper (permissioned BFT)</li>
+  <li>Blockchain: Bitcoin whitepaper + Backbone Protocol (permissionless BFT)</li>
+  <li>Modern: Tendermint, Casper (modern approaches)</li>
+</ol>
+
+<hr />
+
+<h2 id="9--minh-họa-và-tham-khảo-hình-ảnh">9. 🎨 Minh họa và tham khảo hình ảnh</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Source</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Byzantine Generals illustration</strong></td>
+      <td><a href="https://lamport.azurewebsites.net/pubs/byz.pdf">The Byzantine Generals Problem (Lamport et al.)</a></td>
+      <td>Original paper with diagrams</td>
+    </tr>
+    <tr>
+      <td><strong>PBFT protocol flow</strong></td>
+      <td><a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT paper (Castro &amp; Liskov)</a></td>
+      <td>Three-phase commit visualization</td>
+    </tr>
+    <tr>
+      <td><strong>CAP Theorem Venn diagram</strong></td>
+      <td><a href="http://blog.nahurst.com/visual-guide-to-nosql-systems">Visual Guide to NoSQL Systems</a></td>
+      <td>Simple visualization</td>
+    </tr>
+    <tr>
+      <td><strong>Nakamoto consensus</strong></td>
+      <td><a href="https://developer.bitcoin.org/devguide/block_chain.html">Bitcoin Developer Guide</a></td>
+      <td>Chain selection and forks</td>
+    </tr>
+    <tr>
+      <td><strong>State machine replication</strong></td>
+      <td><a href="https://raft.github.io/">Raft visualization</a></td>
+      <td>Interactive animation</td>
+    </tr>
+    <tr>
+      <td><strong>FLP impossibility intuition</strong></td>
+      <td><a href="https://blog.acolyer.org/2015/03/01/impossibility-of-distributed-consensus-with-one-faulty-process/">The Morning Paper - FLP</a></td>
+      <td>Accessible explanation</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Interactive Tools</strong>:</p>
+<ul>
+  <li><a href="https://raft.github.io/raftscope/index.html">Raft Consensus Simulator</a> - visualize leader election</li>
+  <li><a href="http://www.pbft.org/">PBFT Simulator</a> - understand three-phase commit</li>
+  <li><a href="https://anders.com/blockchain/blockchain.html">Bitcoin Fork Simulator</a> - see how forks resolve</li>
+</ul>
+
+<hr />
+
+<h2 id="10-tóm-tắt-và-điểm-chính">10. Tóm tắt và điểm chính</h2>
+
+<p><strong>Core Concepts</strong>:</p>
+<ol>
+  <li>Consensus in distributed systems là fundamentally hard (FLP impossibility)</li>
+  <li>Byzantine fault tolerance requires ( n \geq 3f + 1 ) nodes</li>
+  <li>Blockchain sử dụng probabilistic consensus với economic incentives</li>
+  <li>Trade-off giữa strong consistency vs availability (CAP theorem)</li>
+</ol>
+
+<p><strong>Consensus Types</strong>:</p>
+<ul>
+  <li><strong>Classical (Paxos, Raft)</strong>: Permissioned, CFT, strong finality</li>
+  <li><strong>BFT (PBFT)</strong>: Permissioned, Byzantine-tolerant, O(n²) communication</li>
+  <li><strong>Nakamoto (PoW)</strong>: Permissionless, probabilistic finality, Sybil-resistant</li>
+  <li><strong>Modern (PoS, Tendermint)</strong>: Combining BFT với open participation</li>
+</ul>
+
+<p><strong>Key Insights</strong>:</p>
+<ul>
+  <li>Blockchain trades immediate finality for openness</li>
+  <li>Security comes from economic cost (PoW) or economic stake (PoS)</li>
+  <li>Network assumptions matter: synchrony vs asynchrony</li>
+  <li>Perfect consensus impossible; practical consensus với reasonable assumptions</li>
+</ul>
+
+<p><strong>Mathematical Foundations</strong>:</p>
+<ul>
+  <li>BFT bound: ( f &lt; n/3 )</li>
+  <li>PoW security: exponentially decreasing với confirmations</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Quorum intersection: (</td>
+          <td>Q_1 \cap Q_2</td>
+          <td>\geq f + 1 )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<hr />
+
+<p>✅ <strong>End of Lecture 00.01</strong></p>
+
+<p><strong>Next</strong>: Lecture 00.02 - Cryptographic Hash Functions Deep Dive</p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>Fischer, M. J., Lynch, N. A., &amp; Paterson, M. S. (1985). Impossibility of distributed consensus with one faulty process. <em>Journal of the ACM</em>, 32(2), 374-382.</li>
+  <li>Lamport, L., Shostak, R., &amp; Pease, M. (1982). The Byzantine generals problem. <em>ACM Transactions on Programming Languages and Systems</em>, 4(3), 382-401.</li>
+  <li>Castro, M., &amp; Liskov, B. (1999). Practical Byzantine fault tolerance. <em>OSDI</em>, 99, 173-186.</li>
+  <li>Nakamoto, S. (2008). Bitcoin: A peer-to-peer electronic cash system.</li>
+  <li>Garay, J., Kiayias, A., &amp; Leonardos, N. (2015). The bitcoin backbone protocol: Analysis and applications. <em>EUROCRYPT 2015</em>.</li>
+  <li>Cachin, C., &amp; Vukolić, M. (2017). Blockchain consensus protocols in the wild. <em>arXiv:1707.01873</em>.</li>
+</ol>
+
+
+</div>
+
+<!-- Back to Chapter Home Link -->
+
+  
+  
+  <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+    <a href="/deep-learning-self-learning/contents/vi/chapter00/" style="text-decoration: none; color: #007bff; font-weight: bold;">
+      ← Quay lại đầu chương
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="related">
+  <ul class="related-posts">
+    
+      
+        <li>
+          <h2>Previous Post</h2>
+          <h3>
+            <a href="/deep-learning-self-learning/contents/vi/chapter00/blockchain-chapter00/00_00_Introduction_to_Blockchain/">
+              Lecture 00.00: Giới thiệu về Blockchain và Distributed Ledgers
+            </a>
+          </h3>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  
+    
+  
+    
+      <li>
+        <h2>Next Post</h2>
+        <h3>
+          <a href="/deep-learning-self-learning/contents/vi/chapter00/blockchain-chapter00/00_02_Cryptographic_Hash_Functions/">
+            Lecture 00.02: Cryptographic Hash Functions - Nền tảng của Blockchain
+          </a>
+        </h3>
+      </li>
+    
+  
+    
+  
+  </ul>
+</div>
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="convex-deep-learning-for-all/convex-deep-learning-for-all.github.io"
+        issue-term="title"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

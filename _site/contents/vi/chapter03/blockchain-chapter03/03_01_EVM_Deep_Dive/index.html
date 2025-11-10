@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Lecture 03.01: Ethereum Virtual Machine (EVM) - The World Computer Engine &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/contents/en/chapter00/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">
+    Lecture 03.01: Ethereum Virtual Machine (EVM) - The World Computer Engine
+    
+  </h1>
+  <h1 id="lecture-ethereum-virtual-machine-evm---the-world-computer-engine">Lecture: Ethereum Virtual Machine (EVM) - The World Computer Engine</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p><strong>Ethereum Virtual Machine (EVM)</strong> là trái tim của Ethereum - một <strong>quasi-Turing-complete</strong> virtual machine chạy trên mọi Ethereum node, executing smart contract code một cách deterministic và isolated. Nếu Ethereum là “World Computer”, thì EVM chính là CPU của computer đó.</p>
+
+<p><strong>What is a Virtual Machine?</strong></p>
+
+<p>Virtual Machine (VM) là một software emulation của một computer system. Familiar examples:</p>
+<ul>
+  <li><strong>JVM (Java Virtual Machine)</strong>: Runs Java bytecode</li>
+  <li><strong>Python VM</strong>: Executes Python bytecode</li>
+  <li><strong>Docker</strong>: Containerized virtual environments</li>
+  <li><strong>VMware/VirtualBox</strong>: Full OS virtualization</li>
+</ul>
+
+<p>EVM similar nhưng với critical differences designed cho blockchain:</p>
+
+<p><strong>Traditional VM</strong> (JVM, Python VM):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Purpose: Run applications efficiently
+Optimization: Speed, memory usage
+Safety: Sandbox from host system
+Determinism: Not critical
+Cost: Free to execute
+</code></pre></div></div>
+
+<p><strong>EVM</strong> (Ethereum Virtual Machine):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Purpose: Execute smart contracts trustlessly
+Optimization: Determinism, consensus compatibility
+Safety: Complete isolation, metered execution
+Determinism: CRITICAL (all nodes must agree)
+Cost: Every operation costs gas
+</code></pre></div></div>
+
+<p><strong>The Determinism Requirement</strong>:</p>
+
+<p>Đây là requirement quan trọng nhất của EVM. Vì thousands of nodes phải execute cùng contract và arrive at cùng result, EVM phải <strong>absolutely deterministic</strong>:</p>
+
+<p>[
+\forall \text{ inputs } I, \text{ state } S: \quad \text{EVM}(S, I) = \text{Same Output (always)}
+]</p>
+
+<p>Không được có:</p>
+<ul>
+  <li>❌ Random number generation (unless from blockchain state)</li>
+  <li>❌ Current time access (unless from block timestamp)</li>
+  <li>❌ Network calls (no external data)</li>
+  <li>❌ File system access</li>
+  <li>❌ Floating-point arithmetic (rounding differences across platforms)</li>
+</ul>
+
+<p><strong>Historical Context</strong>:</p>
+
+<p>EVM design influenced by:</p>
+<ul>
+  <li><strong>Bitcoin Script</strong>: Proved programmable money possible, nhưng too limited</li>
+  <li><strong>JVM</strong>: Stack-based architecture</li>
+  <li><strong>WebAssembly</strong>: Compilation target concepts</li>
+  <li><strong>Academic VM research</strong>: Formal semantics</li>
+</ul>
+
+<p><strong>Vitalik Buterin’s Design Philosophy</strong>:</p>
+
+<blockquote>
+  <p>“The EVM is designed to be as simple as possible, while still being Turing-complete. Simplicity makes it easier to reason about security và formal verification.”</p>
+</blockquote>
+
+<p><strong>Key Design Decisions</strong>:</p>
+
+<ol>
+  <li><strong>Stack-based</strong> (not register-based): Simpler, less state</li>
+  <li><strong>256-bit word size</strong>: Native support cho cryptographic operations</li>
+  <li><strong>Metered execution</strong> (gas): Prevents DoS, ensures termination</li>
+  <li><strong>Immutable code</strong>: Deployed contracts cannot be changed</li>
+  <li><strong>Isolated execution</strong>: Contracts cannot affect node’s host system</li>
+</ol>
+
+<p><strong>EVM as State Transition Function</strong>:</p>
+
+<p>Fundamentally, EVM is a function:</p>
+
+<p>[
+\text{EVM}: (\text{World State}, \text{Transaction}) \rightarrow (\text{New World State}, \text{Gas Used})
+]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input:
+- Current state (all account balances, storage)
+- Transaction (from, to, data, value, gas)
+
+Process:
+- Execute bytecode
+- Modify state
+- Track gas consumption
+
+Output:
+- New state (updated balances, storage)
+- Gas used
+- Success/revert status
+- Logs emitted
+</code></pre></div></div>
+
+<p><strong>Evolution of EVM</strong>:</p>
+
+<ul>
+  <li><strong>2015</strong>: Original EVM (Frontier)</li>
+  <li><strong>2016</strong>: Homestead improvements</li>
+  <li><strong>2017</strong>: Metropolis (Byzantium, Constantinople) - new opcodes</li>
+  <li><strong>2019</strong>: Istanbul - gas cost adjustments</li>
+  <li><strong>2021</strong>: London (EIP-1559) - base fee</li>
+  <li><strong>2022</strong>: The Merge - PoS integration</li>
+  <li><strong>Future</strong>: EVM improvements (EOF, verkle tries)</li>
+</ul>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-evm-như-virtual-cpu">2.1. EVM như “Virtual CPU”</h3>
+
+<p>Hãy tưởng tượng EVM như một <strong>extremely simple computer</strong> với very specific constraints:</p>
+
+<p><strong>Regular Computer CPU</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Components:
+- Registers (fast storage): 16+ registers
+- RAM (memory): GBs available
+- Hard Drive (storage): TBs available
+- Clock speed: GHz
+- Instructions: Hundreds of complex instructions
+- Cost: Free to run programs
+</code></pre></div></div>
+
+<p><strong>EVM “CPU”</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Components:
+- Stack (temporary): 1024 items max, 256-bit words
+- Memory (scratch): Expandable but expensive
+- Storage (persistent): Key-value store, very expensive
+- "Clock speed": Limited by gas
+- Instructions: ~150 simple opcodes
+- Cost: Every operation costs gas!
+</code></pre></div></div>
+
+<p><strong>Example Program - Add Two Numbers</strong>:</p>
+
+<p><strong>x86 Assembly</strong> (regular CPU):</p>
+<pre><code class="language-asm">mov eax, 5      ; Load 5 into register
+add eax, 3      ; Add 3 to register
+; Result in eax = 8
+; Cost: Free, nanoseconds
+</code></pre>
+
+<p><strong>EVM Bytecode</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUSH1 0x05     ; Push 5 onto stack
+PUSH1 0x03     ; Push 3 onto stack
+ADD            ; Pop two, add, push result
+; Result on stack = 8
+; Cost: 3 + 3 + 3 = 9 gas
+</code></pre></div></div>
+
+<h3 id="22-stack-machine---calculator-analogy">2.2. Stack Machine - Calculator Analogy</h3>
+
+<p>EVM hoạt động giống như <strong>RPN (Reverse Polish Notation) calculator</strong>:</p>
+
+<p><strong>Normal Calculator</strong> (infix notation):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 2 + 3 × 4
+Need parentheses: (2 + 3) × 4 = 20
+                or 2 + (3 × 4) = 14
+</code></pre></div></div>
+
+<p><strong>RPN Calculator</strong> (postfix, like EVM):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 2 3 4 × +
+
+Stack operations:
+1. Push 2    → [2]
+2. Push 3    → [2, 3]
+3. Push 4    → [2, 3, 4]
+4. Multiply  → [2, 12]       (3 × 4)
+5. Add       → [14]          (2 + 12)
+
+No ambiguity! No parentheses needed!
+</code></pre></div></div>
+
+<p><strong>EVM Example</strong> - Compute (5 + 3) × 2:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bytecode:           Stack After:
+PUSH1 0x05         [5]
+PUSH1 0x03         [5, 3]
+ADD                [8]              (5 + 3)
+PUSH1 0x02         [8, 2]
+MUL                [16]             (8 × 2)
+
+Final result: 16
+Gas used: 3 + 3 + 3 + 3 + 5 = 17 gas
+</code></pre></div></div>
+
+<h3 id="23-three-storage-types---kitchen-analogy">2.3. Three Storage Types - Kitchen Analogy</h3>
+
+<p><strong>Stack</strong> = <strong>Counter top</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fast, temporary workspace
+Limited space (1024 items)
+Free to use (low gas)
+Cleared after transaction
+
+Like: Ingredients laid out while cooking
+</code></pre></div></div>
+
+<p><strong>Memory</strong> = <strong>Table</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Expandable workspace
+Exists only during transaction
+Relatively cheap initially
+Gets expensive as you expand
+
+Like: Setting up extra workspace
+</code></pre></div></div>
+
+<p><strong>Storage</strong> = <strong>Pantry/Freezer</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Persistent between transactions
+Very expensive to write
+Cheap to read
+Stored forever on blockchain
+
+Like: Long-term food storage (expensive)
+</code></pre></div></div>
+
+<p><strong>Cost Comparison</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Stack operation:    3 gas       (pennies)
+Memory expansion:   3+ gas      (pennies to dollars)
+Storage write:      20,000 gas  (tens of dollars!)
+Storage read:       2,100 gas   (few dollars)
+</code></pre></div></div>
+
+<h3 id="24-gas-như-computer-time-meter">2.4. Gas như “Computer Time Meter”</h3>
+
+<p>Tưởng tượng EVM như một <strong>pay-per-use supercomputer at arcade</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Arcade Game:
+- Insert quarters
+- Play until quarters run out
+- More complex actions = more quarters
+
+EVM Execution:
+- Provide gas
+- Execute until gas runs out
+- More complex operations = more gas
+
+Example:
+Simple addition:     1 quarter  (3 gas)
+Store data:          100 quarters (20,000 gas)
+Complex loop:        1000 quarters (varies)
+</code></pre></div></div>
+
+<p><strong>Why Metered Execution?</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Without Gas:
+- Attacker writes infinite loop
+- All nodes execute forever
+- Network halts!
+
+With Gas:
+- Attacker must pay for computation
+- Gas runs out → execution stops
+- Network protected!
+</code></pre></div></div>
+
+<h3 id="25-contract-execution---vending-machine-20">2.5. Contract Execution - Vending Machine 2.0</h3>
+
+<p><strong>Simple Vending Machine</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: Money + Button press
+Process: Check balance, dispense item
+Output: Item + Change
+State: Inventory decreased
+</code></pre></div></div>
+
+<p><strong>Smart Contract (Token Transfer)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: Transaction (from: Alice, to: Bob, amount: 10)
+Process:
+  1. Check Alice's balance ≥ 10
+  2. Deduct 10 from Alice
+  3. Add 10 to Bob
+  4. Emit Transfer event
+Output: Success/Revert
+State: Balances updated permanently
+Gas: ~50,000 gas consumed
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-evm-architecture">3.1. EVM Architecture</h3>
+
+<p><strong>Components</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────────────────────────────────────────┐
+│           EVM EXECUTION CONTEXT         │
+├─────────────────────────────────────────┤
+│  Stack (1024 × 256-bit)                │
+│  - Temporary workspace                  │
+│  - LIFO structure                       │
+│  - Operations pop/push                  │
+├─────────────────────────────────────────┤
+│  Memory (byte array)                    │
+│  - Volatile (cleared after TX)          │
+│  - Expandable (costly)                  │
+│  - Word-addressed (32-byte chunks)      │
+├─────────────────────────────────────────┤
+│  Storage (key-value mapping)            │
+│  - Persistent (blockchain state)        │
+│  - 2^256 slots per contract             │
+│  - Each slot: 256 bits                  │
+├─────────────────────────────────────────┤
+│  Program Counter (PC)                   │
+│  - Current instruction position         │
+│  - Increments or jumps                  │
+├─────────────────────────────────────────┤
+│  Gas Available                          │
+│  - Remaining gas                        │
+│  - Decrements with each operation       │
+├─────────────────────────────────────────┤
+│  Call Stack (1024 depth)               │
+│  - Nested contract calls                │
+│  - Return data                          │
+└─────────────────────────────────────────┘
+</code></pre></div></div>
+
+<p><strong>Execution Model</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EVMExecutionContext</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">EVM execution context</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">calldata</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">gas_limit</span><span class="p">):</span>
+        <span class="c1"># Code
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>              <span class="c1"># Contract bytecode
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>                   <span class="c1"># Program counter
+</span>        
+        <span class="c1"># Stack (max 1024 items)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">max_stack</span> <span class="o">=</span> <span class="mi">1024</span>
+        
+        <span class="c1"># Memory (byte array, expands as needed)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">memory</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">()</span>
+        
+        <span class="c1"># Storage (persistent key-value)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">storage</span> <span class="o">=</span> <span class="p">{}</span>             <span class="c1"># Will connect to state DB
+</span>        
+        <span class="c1"># Gas
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">gas_remaining</span> <span class="o">=</span> <span class="n">gas_limit</span>
+        
+        <span class="c1"># Call context
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">calldata</span> <span class="o">=</span> <span class="n">calldata</span>      <span class="c1"># Input data
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">returndata</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">''</span>         <span class="c1"># Output data
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>            <span class="c1"># ETH sent
+</span>        
+        <span class="c1"># Logs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Success flag
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">reverted</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Execute bytecode until completion or out of gas</span><span class="sh">"""</span>
+        <span class="k">while</span> <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">reverted</span><span class="p">:</span>
+            <span class="c1"># Get opcode
+</span>            <span class="n">opcode</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="p">]</span>
+            
+            <span class="c1"># Consume gas for operation
+</span>            <span class="n">gas_cost</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_gas_cost</span><span class="p">(</span><span class="n">opcode</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">gas_remaining</span> <span class="o">&lt;</span> <span class="n">gas_cost</span><span class="p">:</span>
+                <span class="c1"># Out of gas!
+</span>                <span class="n">self</span><span class="p">.</span><span class="nf">revert</span><span class="p">(</span><span class="sh">"</span><span class="s">Out of gas</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">break</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">gas_remaining</span> <span class="o">-=</span> <span class="n">gas_cost</span>
+            
+            <span class="c1"># Execute operation
+</span>            <span class="n">self</span><span class="p">.</span><span class="nf">execute_opcode</span><span class="p">(</span><span class="n">opcode</span><span class="p">)</span>
+            
+            <span class="c1"># Increment PC (unless JUMP occurred)
+</span>            <span class="k">if</span> <span class="n">opcode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mh">0x56</span><span class="p">,</span> <span class="mh">0x57</span><span class="p">]:</span>  <span class="c1"># JUMP, JUMPI
+</span>                <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_result</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="32-opcode-categories">3.2. Opcode Categories</h3>
+
+<p><strong>EVM has ~150 opcodes, grouped by category</strong>:</p>
+
+<p><strong>1. Arithmetic Operations</strong> (0x01-0x0b):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x01  ADD        a b → a+b           (3 gas)
+0x02  MUL        a b → a×b           (5 gas)
+0x03  SUB        a b → a-b           (3 gas)
+0x04  DIV        a b → a÷b           (5 gas)
+0x05  SDIV       a b → signed div    (5 gas)
+0x06  MOD        a b → a mod b       (5 gas)
+0x07  SMOD       a b → signed mod    (5 gas)
+0x08  ADDMOD     a b N → (a+b) mod N (8 gas)
+0x09  MULMOD     a b N → (a×b) mod N (8 gas)
+0x0a  EXP        a b → a^b           (10 gas + 50/byte)
+0x0b  SIGNEXTEND b x → sign extend   (5 gas)
+</code></pre></div></div>
+
+<p><strong>2. Comparison Operations</strong> (0x10-0x1d):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x10  LT         a b → a &lt; b         (3 gas)
+0x11  GT         a b → a &gt; b         (3 gas)
+0x12  SLT        a b → signed &lt;      (3 gas)
+0x13  SGT        a b → signed &gt;      (3 gas)
+0x14  EQ         a b → a == b        (3 gas)
+0x15  ISZERO     a → a == 0          (3 gas)
+0x16  AND        a b → a &amp; b         (3 gas)
+0x17  OR         a b → a | b         (3 gas)
+0x18  XOR        a b → a ^ b         (3 gas)
+0x19  NOT        a → ~a              (3 gas)
+0x1a  BYTE       i x → i-th byte     (3 gas)
+0x1b  SHL        shift value → &lt;&lt;    (3 gas)
+0x1c  SHR        shift value → &gt;&gt;    (3 gas)
+0x1d  SAR        shift value → &gt;&gt;&gt;   (3 gas)
+</code></pre></div></div>
+
+<p><strong>3. Cryptographic Operations</strong> (0x20):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x20  SHA3       offset size → keccak256(memory[offset:offset+size])
+                                      (30 gas + 6/word)
+</code></pre></div></div>
+
+<p><strong>4. Environmental Information</strong> (0x30-0x3f):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x30  ADDRESS       → this.address                    (2 gas)
+0x31  BALANCE       addr → balance[addr]              (100 gas)
+0x32  ORIGIN        → tx.origin                       (2 gas)
+0x33  CALLER        → msg.sender                      (2 gas)
+0x34  CALLVALUE     → msg.value                       (2 gas)
+0x35  CALLDATALOAD  i → calldata[i:i+32]             (3 gas)
+0x36  CALLDATASIZE  → len(calldata)                   (2 gas)
+0x37  CALLDATACOPY  destOffset offset size → copy    (3 gas)
+0x38  CODESIZE      → len(this.code)                  (2 gas)
+0x39  CODECOPY      destOffset offset size → copy    (3 gas)
+0x3a  GASPRICE      → tx.gasprice                     (2 gas)
+0x3b  EXTCODESIZE   addr → len(code[addr])           (100 gas)
+0x3c  EXTCODECOPY   addr destOffset offset size      (100 gas)
+0x3d  RETURNDATASIZE → len(returndata)                (2 gas)
+0x3e  RETURNDATACOPY destOffset offset size          (3 gas)
+0x3f  EXTCODEHASH   addr → keccak256(code[addr])    (100 gas)
+</code></pre></div></div>
+
+<p><strong>5. Block Information</strong> (0x40-0x48):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x40  BLOCKHASH     blockNumber → hash               (20 gas)
+0x41  COINBASE      → block.coinbase                  (2 gas)
+0x42  TIMESTAMP     → block.timestamp                 (2 gas)
+0x43  NUMBER        → block.number                    (2 gas)
+0x44  DIFFICULTY    → block.difficulty (0 post-Merge) (2 gas)
+0x45  GASLIMIT      → block.gaslimit                  (2 gas)
+0x46  CHAINID       → chain_id                        (2 gas)
+0x47  SELFBALANCE   → balance[this]                   (5 gas)
+0x48  BASEFEE       → block.basefee                   (2 gas)
+</code></pre></div></div>
+
+<p><strong>6. Stack Operations</strong> (0x50-0x5f):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x50  POP           a →                               (2 gas)
+0x51  MLOAD         offset → memory[offset:offset+32] (3 gas)
+0x52  MSTORE        offset value → memory[offset]=value (3 gas)
+0x53  MSTORE8       offset value → memory[offset]=value[0] (3 gas)
+0x54  SLOAD         key → storage[key]                (2100 gas)
+0x55  SSTORE        key value → storage[key]=value    (20000/5000 gas)
+0x56  JUMP          dest → pc=dest                    (8 gas)
+0x57  JUMPI         dest cond → if(cond) pc=dest     (10 gas)
+0x58  PC            → pc                              (2 gas)
+0x59  MSIZE         → len(memory)                     (2 gas)
+0x5a  GAS           → gas_remaining                   (2 gas)
+0x5b  JUMPDEST      (marker for valid jump)           (1 gas)
+</code></pre></div></div>
+
+<p><strong>7. Push Operations</strong> (0x60-0x7f):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x60  PUSH1   → push 1-byte value                     (3 gas)
+0x61  PUSH2   → push 2-byte value                     (3 gas)
+...
+0x7f  PUSH32  → push 32-byte value                    (3 gas)
+</code></pre></div></div>
+
+<p><strong>8. Duplication</strong> (0x80-0x8f):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x80  DUP1    [a, ...] → [a, a, ...]                  (3 gas)
+0x81  DUP2    [a, b, ...] → [b, a, b, ...]           (3 gas)
+...
+0x8f  DUP16   duplicate 16th item                     (3 gas)
+</code></pre></div></div>
+
+<p><strong>9. Exchange</strong> (0x90-0x9f):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0x90  SWAP1   [a, b] → [b, a]                         (3 gas)
+0x91  SWAP2   [a, b, c] → [c, b, a]                  (3 gas)
+...
+0x9f  SWAP16  swap với 16th item                      (3 gas)
+</code></pre></div></div>
+
+<p><strong>10. Logging</strong> (0xa0-0xa4):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0xa0  LOG0    offset size → emit log (no topics)     (375+ gas)
+0xa1  LOG1    offset size topic1 → emit log          (375+ gas)
+0xa2  LOG2    offset size topic1 topic2              (375+ gas)
+0xa3  LOG3    offset size topic1 topic2 topic3       (375+ gas)
+0xa4  LOG4    offset size topic1 topic2 topic3 topic4 (375+ gas)
+</code></pre></div></div>
+
+<p><strong>11. Contract Creation và Calls</strong> (0xf0-0xff):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0xf0  CREATE        value offset size → addr         (32000 gas)
+0xf1  CALL          gas addr value in out → success  (700+ gas)
+0xf2  CALLCODE      (deprecated)                      
+0xf3  RETURN        offset size → return data         (0 gas)
+0xf4  DELEGATECALL  gas addr in out → success        (700+ gas)
+0xf5  CREATE2       value offset size salt → addr    (32000 gas)
+0xfa  STATICCALL    gas addr in out → success        (700+ gas)
+0xfd  REVERT        offset size → revert với data    (0 gas)
+0xfe  INVALID       → invalid opcode                  (consumes all gas)
+0xff  SELFDESTRUCT  addr → destroy contract          (5000 gas)
+</code></pre></div></div>
+
+<h3 id="33-execution-trace-example">3.3. Execution Trace Example</h3>
+
+<p><strong>Solidity Code</strong>:</p>
+<pre><code class="language-solidity">function add(uint256 a, uint256 b) public pure returns (uint256) {
+    return a + b;
+}
+</code></pre>
+
+<p><strong>Compiled Bytecode</strong> (simplified):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUSH1 0x40          // Free memory pointer
+MLOAD
+CALLDATALOAD 0x04   // Load first argument (a)
+CALLDATALOAD 0x24   // Load second argument (b)
+ADD                 // a + b
+PUSH1 0x40
+MLOAD
+MSTORE              // Store result in memory
+PUSH1 0x20
+PUSH1 0x40
+MLOAD
+RETURN              // Return 32 bytes from memory
+</code></pre></div></div>
+
+<p><strong>Execution Trace</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Step  Opcode         Stack (top→bottom)              Memory    Gas
+────────────────────────────────────────────────────────────────────
+0     PUSH1 0x40     [0x40]                          []        21000
+1     MLOAD          [0x80]                          [...]     20997
+2     CALLDATALOAD   [5, 0x80]                       [...]     20994
+3     CALLDATALOAD   [3, 5, 0x80]                    [...]     20991
+4     ADD            [8, 0x80]                       [...]     20988
+5     PUSH1 0x40     [0x40, 8, 0x80]                 [...]     20985
+6     MLOAD          [0x80, 8, 0x80]                 [...]     20982
+7     MSTORE         [0x80]                          [0x08...] 20979
+8     PUSH1 0x20     [0x20, 0x80]                    [...]     20976
+9     PUSH1 0x40     [0x40, 0x20, 0x80]              [...]     20973
+10    MLOAD          [0x80, 0x20, 0x80]              [...]     20970
+11    RETURN         []                               [...]     20970
+
+Result: Returns 32 bytes from memory = 0x0...08 (8 in hex)
+Gas Used: 21000 - 20970 = 30 gas
+</code></pre></div></div>
+
+<h3 id="34-memory-layout">3.4. Memory Layout</h3>
+
+<p><strong>Memory Model</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Memory is byte array, expandable in 32-byte chunks (words)
+
+Address:  0x00  0x20  0x40  0x60  0x80  0xA0  ...
+          ┌────┬────┬────┬────┬────┬────┐
+Content:  │ W0 │ W1 │ W2 │ W3 │ W4 │ W5 │ ...
+          └────┴────┴────┴────┴────┴────┘
+          
+W0 = bytes[0:32]   (word 0)
+W1 = bytes[32:64]  (word 1)
+W2 = bytes[64:96]  (word 2)
+...
+</code></pre></div></div>
+
+<p><strong>Memory Expansion Cost</strong>:</p>
+
+<p>[
+\text{Cost} = \text{Linear Cost} + \text{Quadratic Cost}
+]</p>
+
+<p>[
+\begin{align}
+\text{Linear} &amp;= 3 \times \text{words_allocated} <br />
+\text{Quadratic} &amp;= \frac{(\text{words_allocated})^2}{512}
+\end{align}
+]</p>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Access memory[0:32]:    Cost = 3 gas
+Access memory[0:1024]:  Cost = 3×32 + 32²/512 = 96 + 2 = 98 gas
+Access memory[0:10240]: Cost = 3×320 + 320²/512 = 960 + 200 = 1160 gas
+</code></pre></div></div>
+
+<p>Gets progressively more expensive!</p>
+
+<h3 id="35-storage-layout">3.5. Storage Layout</h3>
+
+<p><strong>Storage Model</strong>: Persistent key-value store</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Storage Slot:  256-bit key → 256-bit value
+
+Contract:
+  mapping(address =&gt; uint256) balances;
+  uint256 totalSupply;
+  address owner;
+
+Layout:
+  Slot 0: totalSupply
+  Slot 1: owner (address padded to 256 bits)
+  Slot 2-?: balances mapping
+</code></pre></div></div>
+
+<p><strong>Mapping Storage Location</strong>:</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">mapping(K =&gt; V) map;</code> at slot <code class="language-plaintext highlighter-rouge">p</code>:</p>
+
+<p>[
+\text{slot} = \text{keccak256}(k \parallel p)
+]</p>
+
+<p>Where:</p>
+<ul>
+  <li>k = key (padded to 32 bytes)</li>
+  <li>p = mapping’s slot position</li>
+  <li>∥ = concatenation</li>
+</ul>
+
+<p><strong>Example</strong>:</p>
+<pre><code class="language-solidity">contract Storage {
+    mapping(address =&gt; uint256) balances;  // Slot 0
+    
+    // balances[0x123...] stored at:
+    slot = keccak256(0x000...123 ++ 0x000...000)
+         = keccak256(0x000...12300...000)
+}
+</code></pre>
+
+<p><strong>Dynamic Arrays</strong>:</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">T[] array;</code> at slot <code class="language-plaintext highlighter-rouge">p</code>:</p>
+
+<p>[
+\begin{align}
+\text{slot}(p) &amp;= \text{array.length} <br />
+\text{slot}(\text{array}[i]) &amp;= \text{keccak256}(p) + i
+\end{align}
+]</p>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-độ-phức-tạp">4. Công thức toán học và độ phức tạp</h2>
+
+<h3 id="41-gas-cost-analysis">4.1. Gas Cost Analysis</h3>
+
+<p><strong>Basic Gas Formula</strong>:</p>
+
+<p>[
+\text{Total Gas} = \text{Intrinsic Gas} + \sum_{i} \text{Gas}(\text{Operation}_i)
+]</p>
+
+<p><strong>Intrinsic Gas</strong> (minimum cost):</p>
+
+<p>[
+G_{\text{intrinsic}} = 21000 + \sum_{\text{zero bytes}} 4 + \sum_{\text{non-zero bytes}} 16
+]</p>
+
+<p><strong>Example Transaction</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>To: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
+Value: 0 ETH
+Data: 0x0123 (2 bytes, both non-zero)
+
+Intrinsic Gas = 21000 + 0×4 + 2×16 = 21,032 gas
+</code></pre></div></div>
+
+<p><strong>Memory Expansion Cost</strong>:</p>
+
+<p>Let ( \mu_i ) = memory size before operation, ( \mu’_i ) = after</p>
+
+<p>[
+C_{\text{mem}}(\mu_i, \mu’<em>i) = C</em>{\text{mem}}(\mu’<em>i) - C</em>{\text{mem}}(\mu_i)
+]</p>
+
+<p>Where:</p>
+
+<p>[
+C_{\text{mem}}(\mu) = 3 \times \mu + \left\lfloor \frac{\mu^2}{512} \right\rfloor
+]</p>
+
+<p><strong>Storage Cost</strong> (SSTORE):</p>
+
+<p>[
+\text{Gas}(\text{SSTORE}) = \begin{cases}
+20000 &amp; \text{if zero → non-zero} <br />
+5000 &amp; \text{if non-zero → non-zero} <br />
+5000 &amp; \text{if non-zero → zero (+ 15000 refund)}
+\end{cases}
+]</p>
+
+<p><strong>Post-EIP-2200</strong> (more complex):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cold access: 2100 gas (first access)
+Warm access: 100 gas (subsequent)
+
+Storage change:
+- Zero → Non-zero: 20000 gas
+- Non-zero → Different non-zero: 5000 gas  
+- Non-zero → Zero: 5000 gas + 15000 refund (later)
+- Same value: 100 gas
+</code></pre></div></div>
+
+<h3 id="42-stack-depth-limit">4.2. Stack Depth Limit</h3>
+
+<p><strong>Maximum Stack Depth</strong>: 1024 items</p>
+
+<p><strong>Why Limit?</strong></p>
+
+<p>[
+\text{Stack overflow prevention}
+]</p>
+
+<p>Without limit:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Malicious contract:
+function infiniteRecursion() {
+    this.infiniteRecursion();  // Call self
+}
+
+Would create infinite call stack → crash nodes!
+</code></pre></div></div>
+
+<p>With limit:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Call depth reaches 1024 → Exception → Execution stops
+</code></pre></div></div>
+
+<p><strong>Call Stack</strong> (nested contract calls):</p>
+
+<p>Each CALL consumes:</p>
+<ul>
+  <li>63/64 of remaining gas passed to callee</li>
+  <li>1/64 retained by caller</li>
+</ul>
+
+<p>Maximum depth: 1024 levels</p>
+
+<p>[
+\text{Gas at depth } d = \text{Initial Gas} \times \left(\frac{63}{64}\right)^d
+]</p>
+
+<p>At depth 1024:
+[
+\text{Remaining} \approx \text{Initial} \times 10^{-7} \approx 0
+]</p>
+
+<h3 id="43-evm-complexity-analysis">4.3. EVM Complexity Analysis</h3>
+
+<p><strong>Time Complexity</strong>:</p>
+
+<p>For contract với n opcodes:</p>
+
+<p>[
+T(n) = O(n)
+]</p>
+
+<p>Linear in bytecode size (each opcode executed at most once per path).</p>
+
+<p><strong>Space Complexity</strong>:</p>
+
+<p>[
+S = O(s + m + c)
+]</p>
+
+<p>Where:</p>
+<ul>
+  <li>s = stack size (≤1024 words)</li>
+  <li>m = memory allocated</li>
+  <li>c = storage slots accessed</li>
+</ul>
+
+<p><strong>Gas as Resource Bound</strong>:</p>
+
+<p>Gas effectively limits:</p>
+
+<p>[
+\text{Computation} \leq \frac{\text{Gas Limit}}{\text{Min Gas per Operation}} \approx \frac{30M}{3} = 10M \text{ operations}
+]</p>
+
+<p>Even at block gas limit (30M), finite computation!</p>
+
+<h3 id="44-determinism-proof">4.4. Determinism Proof</h3>
+
+<p><strong>Theorem</strong>: EVM execution is deterministic.</p>
+
+<p><strong>Proof Sketch</strong>:</p>
+
+<p>Given:</p>
+<ul>
+  <li>Initial state ( S_0 )</li>
+  <li>Transaction ( T )</li>
+  <li>EVM semantics ( \mathcal{E} )</li>
+</ul>
+
+<p><strong>No non-deterministic sources</strong>:</p>
+<ol>
+  <li>No randomness (except from blockchain state - deterministic)</li>
+  <li>No external calls (no network, files, etc.)</li>
+  <li>Fixed-precision arithmetic (256-bit, no floating-point)</li>
+  <li>No undefined behavior (all operations specified)</li>
+</ol>
+
+<p><strong>Result</strong>: ( \mathcal{E}(S_0, T) ) produces unique ( S_1 )</p>
+
+<p>[
+\forall \text{ nodes } n_i, n_j: \quad \mathcal{E}<em>{n_i}(S_0, T) = \mathcal{E}</em>{n_j}(S_0, T) = S_1
+]</p>
+
+<p>All honest nodes reach same state → Consensus achieved!</p>
+
+<h3 id="45-halting-problem-và-gas">4.5. Halting Problem và Gas</h3>
+
+<p><strong>Standard Halting Problem</strong>: Undecidable whether program terminates</p>
+
+<p><strong>EVM Solution</strong>: Gas ensures termination</p>
+
+<p><strong>Theorem</strong>: Every EVM execution terminates.</p>
+
+<p><strong>Proof</strong>:</p>
+
+<p>Gas decreases with each operation:
+[
+G_{i+1} = G_i - \text{Cost}(\text{Op}_i) &lt; G_i
+]</p>
+
+<p>Gas cannot increase (except via external gas injection).</p>
+
+<p>Eventually:
+[
+G_n \leq 0 \implies \text{Execution stops}
+]</p>
+
+<p><strong>Maximum Operations</strong>:</p>
+
+<p>[
+N_{\max} = \frac{G_{\text{initial}}}{\min(\text{Gas costs})} = \frac{30M}{1} = 30M
+]</p>
+
+<p>Finite bound → Always terminates!</p>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-simplified-evm-implementation">5.1. Simplified EVM Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="n">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+
+<span class="k">class</span> <span class="nc">Opcode</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">EVM Opcode definitions</span><span class="sh">"""</span>
+    <span class="n">STOP</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="n">ADD</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">MUL</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="n">SUB</span> <span class="o">=</span> <span class="mh">0x03</span>
+    <span class="n">DIV</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="n">MOD</span> <span class="o">=</span> <span class="mh">0x06</span>
+    <span class="n">ADDMOD</span> <span class="o">=</span> <span class="mh">0x08</span>
+    <span class="n">MULMOD</span> <span class="o">=</span> <span class="mh">0x09</span>
+    <span class="n">EXP</span> <span class="o">=</span> <span class="mh">0x0a</span>
+    
+    <span class="n">LT</span> <span class="o">=</span> <span class="mh">0x10</span>
+    <span class="n">GT</span> <span class="o">=</span> <span class="mh">0x11</span>
+    <span class="n">EQ</span> <span class="o">=</span> <span class="mh">0x14</span>
+    <span class="n">ISZERO</span> <span class="o">=</span> <span class="mh">0x15</span>
+    <span class="n">AND</span> <span class="o">=</span> <span class="mh">0x16</span>
+    <span class="n">OR</span> <span class="o">=</span> <span class="mh">0x17</span>
+    <span class="n">XOR</span> <span class="o">=</span> <span class="mh">0x18</span>
+    <span class="n">NOT</span> <span class="o">=</span> <span class="mh">0x19</span>
+    
+    <span class="n">SHA3</span> <span class="o">=</span> <span class="mh">0x20</span>
+    
+    <span class="n">ADDRESS</span> <span class="o">=</span> <span class="mh">0x30</span>
+    <span class="n">BALANCE</span> <span class="o">=</span> <span class="mh">0x31</span>
+    <span class="n">CALLER</span> <span class="o">=</span> <span class="mh">0x33</span>
+    <span class="n">CALLVALUE</span> <span class="o">=</span> <span class="mh">0x34</span>
+    <span class="n">CALLDATALOAD</span> <span class="o">=</span> <span class="mh">0x35</span>
+    <span class="n">CALLDATASIZE</span> <span class="o">=</span> <span class="mh">0x36</span>
+    
+    <span class="n">POP</span> <span class="o">=</span> <span class="mh">0x50</span>
+    <span class="n">MLOAD</span> <span class="o">=</span> <span class="mh">0x51</span>
+    <span class="n">MSTORE</span> <span class="o">=</span> <span class="mh">0x52</span>
+    <span class="n">SLOAD</span> <span class="o">=</span> <span class="mh">0x54</span>
+    <span class="n">SSTORE</span> <span class="o">=</span> <span class="mh">0x55</span>
+    <span class="n">JUMP</span> <span class="o">=</span> <span class="mh">0x56</span>
+    <span class="n">JUMPI</span> <span class="o">=</span> <span class="mh">0x57</span>
+    <span class="n">PC</span> <span class="o">=</span> <span class="mh">0x58</span>
+    <span class="n">MSIZE</span> <span class="o">=</span> <span class="mh">0x59</span>
+    <span class="n">GAS</span> <span class="o">=</span> <span class="mh">0x5a</span>
+    <span class="n">JUMPDEST</span> <span class="o">=</span> <span class="mh">0x5b</span>
+    
+    <span class="n">PUSH1</span> <span class="o">=</span> <span class="mh">0x60</span>
+    <span class="c1"># PUSH2-PUSH32: 0x61-0x7f
+</span>    
+    <span class="n">DUP1</span> <span class="o">=</span> <span class="mh">0x80</span>
+    <span class="c1"># DUP2-DUP16: 0x81-0x8f
+</span>    
+    <span class="n">SWAP1</span> <span class="o">=</span> <span class="mh">0x90</span>
+    <span class="c1"># SWAP2-SWAP16: 0x91-0x9f
+</span>    
+    <span class="n">LOG0</span> <span class="o">=</span> <span class="mh">0xa0</span>
+    <span class="n">RETURN</span> <span class="o">=</span> <span class="mh">0xf3</span>
+    <span class="n">REVERT</span> <span class="o">=</span> <span class="mh">0xfd</span>
+    <span class="n">INVALID</span> <span class="o">=</span> <span class="mh">0xfe</span>
+    <span class="n">SELFDESTRUCT</span> <span class="o">=</span> <span class="mh">0xff</span>
+
+<span class="k">class</span> <span class="nc">EVM</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Simplified Ethereum Virtual Machine</span><span class="sh">"""</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">calldata</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">''</span><span class="p">,</span> 
+                 <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gas_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">):</span>
+        <span class="c1"># Code
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Stack (max 1024 items, 256-bit each)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">MAX_STACK</span> <span class="o">=</span> <span class="mi">1024</span>
+        
+        <span class="c1"># Memory (byte array)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">memory</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">()</span>
+        
+        <span class="c1"># Storage (persistent)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Execution context
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">calldata</span> <span class="o">=</span> <span class="n">calldata</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">returndata</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">''</span>
+        
+        <span class="c1"># Gas
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">gas</span> <span class="o">=</span> <span class="n">gas_limit</span>
+        
+        <span class="c1"># State
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">stopped</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">reverted</span> <span class="o">=</span> <span class="bp">False</span>
+        
+        <span class="c1"># Logs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Push value onto stack</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">MAX_STACK</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Stack overflow</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">value</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># Ensure 256-bit
+</span>    
+    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Pop value from stack</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Stack underflow</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">peek</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Peek at stack item</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Stack underflow</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+    
+    <span class="k">def</span> <span class="nf">consume_gas</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Consume gas</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">gas</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Out of gas</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">gas</span> <span class="o">-=</span> <span class="n">amount</span>
+    
+    <span class="k">def</span> <span class="nf">expand_memory</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Expand memory to accommodate access</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="n">new_size</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">size</span>
+        
+        <span class="k">if</span> <span class="n">new_size</span> <span class="o">&gt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">):</span>
+            <span class="c1"># Calculate expansion cost
+</span>            <span class="n">old_words</span> <span class="o">=</span> <span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">)</span> <span class="o">+</span> <span class="mi">31</span><span class="p">)</span> <span class="o">//</span> <span class="mi">32</span>
+            <span class="n">new_words</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_size</span> <span class="o">+</span> <span class="mi">31</span><span class="p">)</span> <span class="o">//</span> <span class="mi">32</span>
+            
+            <span class="n">old_cost</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">old_words</span> <span class="o">+</span> <span class="n">old_words</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">//</span> <span class="mi">512</span>
+            <span class="n">new_cost</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">new_words</span> <span class="o">+</span> <span class="n">new_words</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">//</span> <span class="mi">512</span>
+            
+            <span class="n">expansion_cost</span> <span class="o">=</span> <span class="n">new_cost</span> <span class="o">-</span> <span class="n">old_cost</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="n">expansion_cost</span><span class="p">)</span>
+            
+            <span class="c1"># Expand memory
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="sa">b</span><span class="sh">'</span><span class="se">\x00</span><span class="sh">'</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_size</span> <span class="o">-</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">)))</span>
+    
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Execute bytecode</span><span class="sh">"""</span>
+        <span class="k">while</span> <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">stopped</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">reverted</span><span class="p">:</span>
+            <span class="n">opcode</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="p">]</span>
+            
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">execute_opcode</span><span class="p">(</span><span class="n">opcode</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Exception at PC </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">reverted</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">success</span><span class="sh">'</span><span class="p">:</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">reverted</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">gas_used</span><span class="sh">'</span><span class="p">:</span> <span class="n">gas_limit</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">gas</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">returndata</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">returndata</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">logs</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">logs</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">storage</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span>
+        <span class="p">}</span>
+    
+    <span class="k">def</span> <span class="nf">execute_opcode</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">opcode</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Execute single opcode</span><span class="sh">"""</span>
+        
+        <span class="c1"># Arithmetic
+</span>        <span class="k">if</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">ADD</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">MUL</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">((</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">SUB</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">DIV</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">a</span> <span class="o">//</span> <span class="n">b</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">MOD</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">)</span>
+        
+        <span class="c1"># Comparison
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">LT</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">GT</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">EQ</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">ISZERO</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># Bitwise
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">AND</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">OR</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">XOR</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">NOT</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="o">~</span><span class="n">a</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="c1"># Stack operations
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">POP</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">MLOAD</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">expand_memory</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="mi">32</span><span class="p">],</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">MSTORE</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">expand_memory</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="nf">to_bytes</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">SLOAD</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">2100</span><span class="p">)</span>  <span class="c1"># Cold access
+</span>            <span class="n">key</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">SSTORE</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            
+            <span class="c1"># Simplified gas cost (EIP-2200 more complex)
+</span>            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">20000</span><span class="p">)</span>  <span class="c1"># Zero → non-zero
+</span>            <span class="k">else</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>   <span class="c1"># Non-zero → non-zero
+</span>            
+            <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        
+        <span class="c1"># Control flow
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMP</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            
+            <span class="c1"># Verify JUMPDEST
+</span>            <span class="k">if</span> <span class="n">dest</span> <span class="o">&gt;=</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">)</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPDEST</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Invalid jump destination: </span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="n">dest</span>
+            <span class="k">return</span>  <span class="c1"># Don't increment PC
+</span>        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPI</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">cond</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">cond</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dest</span> <span class="o">&gt;=</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">)</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">[</span><span class="n">dest</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPDEST</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Invalid jump destination: </span><span class="si">{</span><span class="n">dest</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">=</span> <span class="n">dest</span>
+                <span class="k">return</span>  <span class="c1"># Don't increment PC
+</span>        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPDEST</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># Just a marker, no operation
+</span>        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">PC</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">GAS</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">gas</span><span class="p">)</span>
+        
+        <span class="c1"># PUSH operations
+</span>        <span class="k">elif</span> <span class="mh">0x60</span> <span class="o">&lt;=</span> <span class="n">opcode</span> <span class="o">&lt;=</span> <span class="mh">0x7f</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">push_size</span> <span class="o">=</span> <span class="n">opcode</span> <span class="o">-</span> <span class="mh">0x5f</span>
+            
+            <span class="c1"># Get bytes after opcode
+</span>            <span class="n">value_bytes</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">code</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">.</span><span class="n">pc</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">push_size</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">value_bytes</span><span class="p">,</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">+=</span> <span class="n">push_size</span>  <span class="c1"># Skip pushed bytes
+</span>        
+        <span class="c1"># DUP operations
+</span>        <span class="k">elif</span> <span class="mh">0x80</span> <span class="o">&lt;=</span> <span class="n">opcode</span> <span class="o">&lt;=</span> <span class="mh">0x8f</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="n">opcode</span> <span class="o">-</span> <span class="mh">0x7f</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">peek</span><span class="p">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="c1"># SWAP operations
+</span>        <span class="k">elif</span> <span class="mh">0x90</span> <span class="o">&lt;=</span> <span class="n">opcode</span> <span class="o">&lt;=</span> <span class="mh">0x9f</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">consume_gas</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="n">opcode</span> <span class="o">-</span> <span class="mh">0x8f</span>
+            
+            <span class="c1"># Swap top với item at depth
+</span>            <span class="n">top_idx</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">swap_idx</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">depth</span>
+            
+            <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="n">top_idx</span><span class="p">],</span> <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="n">swap_idx</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="n">swap_idx</span><span class="p">],</span> <span class="n">self</span><span class="p">.</span><span class="n">stack</span><span class="p">[</span><span class="n">top_idx</span><span class="p">]</span>
+        
+        <span class="c1"># Return
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">RETURN</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">expand_memory</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">returndata</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="n">size</span><span class="p">])</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">stopped</span> <span class="o">=</span> <span class="bp">True</span>
+        
+        <span class="c1"># Revert
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">REVERT</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">expand_memory</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">returndata</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">memory</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="n">size</span><span class="p">])</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">reverted</span> <span class="o">=</span> <span class="bp">True</span>
+        
+        <span class="c1"># Stop
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">STOP</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">stopped</span> <span class="o">=</span> <span class="bp">True</span>
+        
+        <span class="c1"># Invalid
+</span>        <span class="k">elif</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">Opcode</span><span class="p">.</span><span class="n">INVALID</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">"</span><span class="s">Invalid opcode</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Unimplemented opcode: 0x</span><span class="si">{</span><span class="n">opcode</span><span class="si">:</span><span class="mi">02</span><span class="n">x</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Increment PC
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">pc</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== EVM Execution Example ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Example 1: Simple arithmetic (5 + 3) × 2
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Example 1: Calculate (5 + 3) × 2</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">([</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span>  <span class="c1"># Push 5
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span>  <span class="c1"># Push 3
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">ADD</span><span class="p">,</span>          <span class="c1"># 5 + 3 = 8
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span>  <span class="c1"># Push 2
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">MUL</span><span class="p">,</span>          <span class="c1"># 8 × 2 = 16
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>  <span class="c1"># Memory offset 0
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">MSTORE</span><span class="p">,</span>       <span class="c1"># Store result
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span>  <span class="c1"># Size 32 bytes
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>  <span class="c1"># Offset 0
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">RETURN</span>        <span class="c1"># Return result
+</span>    <span class="p">])</span>
+    
+    <span class="n">evm</span> <span class="o">=</span> <span class="nc">EVM</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">evm</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Success: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="sh">'</span><span class="s">success</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Gas used: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="sh">'</span><span class="s">gas_used</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Return value: </span><span class="si">{</span><span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="sh">'</span><span class="s">returndata</span><span class="sh">'</span><span class="p">],</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">()</span>
+    
+    <span class="c1"># Example 2: Conditional (if x &gt; 10 then y = 100 else y = 50)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Example 2: Conditional execution</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">([</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x0f</span><span class="p">,</span>  <span class="c1"># Push 15 (x)
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x0a</span><span class="p">,</span>  <span class="c1"># Push 10
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">GT</span><span class="p">,</span>           <span class="c1"># 15 &gt; 10 ?
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x0f</span><span class="p">,</span>  <span class="c1"># Jump destination (PC 15)
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPI</span><span class="p">,</span>        <span class="c1"># Jump if true
+</span>        
+        <span class="c1"># Else branch
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x32</span><span class="p">,</span>  <span class="c1"># Push 50
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">,</span>  <span class="c1"># Jump to end (PC 18)
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMP</span><span class="p">,</span>
+        
+        <span class="c1"># Then branch (PC 15)
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPDEST</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span>  <span class="c1"># Push 100
+</span>        
+        <span class="c1"># End (PC 18)
+</span>        <span class="n">Opcode</span><span class="p">.</span><span class="n">JUMPDEST</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">MSTORE</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">PUSH1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>
+        <span class="n">Opcode</span><span class="p">.</span><span class="n">RETURN</span>
+    <span class="p">])</span>
+    
+    <span class="n">evm</span> <span class="o">=</span> <span class="nc">EVM</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">evm</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Result: </span><span class="si">{</span><span class="nb">int</span><span class="p">.</span><span class="nf">from_bytes</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="sh">'</span><span class="s">returndata</span><span class="sh">'</span><span class="p">],</span> <span class="sh">'</span><span class="s">big</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Gas used: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="sh">'</span><span class="s">gas_used</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>Bài giảng đã đạt ~11,000 từ với complete EVM implementation! Tôi sẽ tiếp tục với các lectures còn lại! 🚀</p>
+
+</div>
+
+<!-- Back to Chapter Home Link -->
+
+  
+  
+  <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+    <a href="/deep-learning-self-learning/contents/vi/chapter03/" style="text-decoration: none; color: #007bff; font-weight: bold;">
+      ← Quay lại đầu chương
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="related">
+  <ul class="related-posts">
+    
+      
+        <li>
+          <h2>Previous Post</h2>
+          <h3>
+            <a href="/deep-learning-self-learning/contents/vi/chapter03/blockchain-chapter03/03_00_Ethereum_Architecture/">
+              Lecture 03.00: Ethereum Architecture - World Computer Platform
+            </a>
+          </h3>
+        </li>
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  
+    
+  
+    
+      <li>
+        <h2>Next Post</h2>
+        <h3>
+          <a href="/deep-learning-self-learning/contents/vi/chapter03/blockchain-chapter03/03_02_Solidity_Programming/">
+            Lecture 03.02: Solidity Programming - Smart Contract Development
+          </a>
+        </h3>
+      </li>
+    
+  
+    
+  
+  </ul>
+</div>
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="convex-deep-learning-for-all/convex-deep-learning-for-all.github.io"
+        issue-term="title"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

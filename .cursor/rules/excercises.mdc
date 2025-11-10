@@ -1,0 +1,170 @@
+---
+alwaysApply: false
+---
+
+Blockchain Technology Exercises Rule (for Cursor)
+
+Purpose:
+Generate practical, project-based exercises that teach blockchain concepts through real-world tools and coding stacks used in the industry — rather than simplified notebook simulations.
+
+Each exercise should:
+
+Reinforce the lecture topic (cryptography, consensus, smart contracts, etc.)
+
+Use modern blockchain development tools
+
+End with a working demo, deployed locally or on a testnet
+
+Encourage critical exploration, not rote coding
+
+🧠 1. Stack and Environment
+
+All exercises must use mainstream developer tools:
+
+Category	Recommended Stack
+Smart Contracts	Solidity, Hardhat, Truffle
+Blockchain Node / Network	Ganache (local), Anvil, or Sepolia Testnet
+Frontend Interaction	React + Web3.js or Ethers.js
+Wallet Integration	MetaMask
+Deployment / Verification	Hardhat plugins, Etherscan API
+Optional Advanced	Foundry, Brownie (Python), Chainlink (for oracles)
+
+Each exercise should mention setup commands, e.g.:
+
+npx hardhat init
+npm install --save-dev @nomicfoundation/hardhat-toolbox
+npx hardhat node
+
+📘 2. Exercise Format
+
+Each exercise should follow this Markdown structure:
+
+# Exercise: [Topic Title]
+
+## 🎯 Objective
+State what the learner will build and what concepts they’ll understand.
+
+Example:
+> Implement a simple Proof-of-Work blockchain in Solidity and deploy it on a local Hardhat node.
+
+---
+
+## 🧩 Prerequisites
+List required tools or prior knowledge:
+- Node.js ≥ 18
+- Hardhat
+- MetaMask wallet
+- Basic Solidity syntax
+
+---
+
+## 🧠 Concepts Reinforced
+- Blockchain immutability
+- Smart contract logic
+- Event logs and state changes
+- Wallet and transaction flow
+
+---
+
+## ⚙️ Task Breakdown
+Provide 3–6 steps, each mapping to key concepts.
+
+Example:
+1. **Initialize a new Hardhat project**
+   ```bash
+   npx hardhat init
+
+
+Create a Solidity contract that stores messages on-chain.
+
+Write deployment script using Hardhat.
+
+Deploy to Ganache / Anvil local node.
+
+Interact via MetaMask or a simple React frontend.
+
+🧪 Verification & Exploration
+
+Ask open-ended or exploratory questions:
+
+What happens if two users submit at the same time?
+
+How can you verify the contract address on Etherscan?
+
+How does gas usage change with contract complexity?
+
+🚀 Challenge Extension
+
+Optional deeper work:
+
+Add event emission and listen to it with Ethers.js.
+
+Add access control using Ownable from OpenZeppelin.
+
+Deploy to Sepolia or Polygon testnet.
+
+📚 References
+
+List trusted official documentation:
+
+Solidity Docs
+
+Hardhat Docs
+
+Web3.js Docs
+
+Ethers.js Docs
+
+OpenZeppelin Contracts
+
+
+---
+
+### 🧱 3. Example Topics & Exercise Ideas
+
+| Lecture Topic | Exercise Title | Description |
+|----------------|----------------|--------------|
+| Blockchain Basics | Build and Query a Simple Blockchain Explorer | Use Ethers.js to read blocks, transactions, and balances from a local node |
+| Transactions | Simulate Wallet Transfers on Local Testnet | Send ETH between accounts using MetaMask + Hardhat |
+| Smart Contracts | Create and Deploy a “Hello Blockchain” Contract | Solidity + Hardhat basic deployment |
+| Storage and Gas | Analyze Gas Cost for State Updates | Compare cost of `storage` vs `memory` variables |
+| Events and Logs | Listen to Smart Contract Events | Emit and subscribe to events using Web3.js |
+| Access Control | Implement Ownable Pattern | Use OpenZeppelin’s `Ownable` contract |
+| Tokens | Create and Deploy an ERC-20 Token | Mint, transfer, and view balance |
+| NFTs | Mint Your First NFT | Implement ERC-721 contract and view it in MetaMask |
+| Oracles | Use Chainlink Price Feed | Fetch off-chain data and use it in smart contract logic |
+| Consensus | Analyze Proof-of-Work and Proof-of-Stake | Compare mining simulation using block explorer |
+| Layer 2 | Interact with Polygon Testnet | Deploy same contract and measure performance difference |
+| DAO / Governance | Implement a Voting Smart Contract | Build a DAO-style on-chain voting app |
+
+---
+
+### 🧭 4. Design Philosophy
+
+- Each exercise is **a mini project** — not a quiz.  
+- Must produce something **runnable and observable** (deploy, call, verify).  
+- Learner should understand:
+  - what they did ✅  
+  - why it works 🔍  
+  - what could break ⚠️  
+- Prefer **testnet deployments** over pure local simulation when possible.
+- Encourage **reading transaction traces and gas reports**.
+
+---
+
+### 🧩 5. Optional Add-ons
+
+For advanced learners:
+- Integrate **Hardhat tests** with Chai.
+- Write **scripts** for deployment automation.
+- Visualize data using a simple **React dashboard**.
+- Integrate **IPFS / Filecoin** for storage.
+- Use **The Graph** for off-chain queries.
+
+---
+
+### ✅ Example Output File Name
+
+
+exercise_03_smart_contracts_hello_blockchain.md
+exercise_06_erc20_token_deployment.md

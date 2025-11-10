@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <style>
+    .MathJax {
+      padding: 2em 0.3em;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  </style>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <title>
+    
+      Lecture 04.01: Layer 2 Solutions - Rollups Deep Dive &middot; Blockchain
+    
+  </title>
+
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/poole.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/syntax.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/lanyon.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/github-markdown.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/multilang.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/search.css">
+  <link rel="stylesheet" href="/deep-learning-self-learning/public/css/content-boxes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+
+  <link rel="apple-touch-icon-precomposed" sizes="122x144" href="http://0.0.0.0:4000/deep-learning-self-learning/public/logo.png">
+  <link rel="shortcut icon" href="http://0.0.0.0:4000/deep-learning-self-learning/public/convex-logo-144x144.png">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://0.0.0.0:4000/deep-learning-self-learning/atom.xml">
+
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body class="sidebar-overlay">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Blockchain</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/">Trang chủ</a>
+
+    
+
+    
+    
+    
+    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter00/">
+              00. Chapter 00: Nền Tảng Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter01/">
+              01. Chapter 01: Bitcoin - Architecture và Proof-of-Work
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter02/">
+              02. Chapter 02: Advanced Consensus Mechanisms
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter03/">
+              03. Chapter 03: Ethereum và Smart Contracts
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter04/">
+              04. Chapter 04: Blockchain Scalability và Layer-2 Solutions
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter05/">
+              05. Chapter 05: Privacy và Security trong Blockchain
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter06/">
+              06. Chapter 06: Blockchain Interoperability
+              
+            </a>
+          
+        
+      
+    
+      
+        
+          
+          
+            <a class="sidebar-nav-item" href="http://0.0.0.0:4000/deep-learning-self-learning/contents/vi/chapter07/">
+              07. Chapter 07: Advanced Blockchain Topics
+              
+            </a>
+          
+        
+      
+    
+    
+    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
+    
+    
+    <span class="sidebar-nav-item">Currently v0.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap github-md-body">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/deep-learning-self-learning/" title="Trang chủ">Blockchain</a>
+            <small></small>
+          </h3>
+          <!-- Header Actions: Language Toggle and GitHub Link -->
+          <div class="header-actions">
+            <div class="language-toggle">
+              <a href="/deep-learning-self-learning/contents/en/chapter00/" class="language-switch" title="Chuyển sang tiếng Anh">Chuyển sang tiếng Anh</a>
+            </div>
+            <a class="github-logo__wrapper" target="_blank" href="https://github.com/nglelinh/deep-learning-self-learning" title="Github">
+             <svg class="github-logo" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48"><linearGradient id="rL2wppHyxHVbobwndsT6Ca" x1="4" x2="44" y1="23.508" y2="23.508" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4c4c4c"/><stop offset="1" stop-color="#343434"/></linearGradient><path fill="url(#rL2wppHyxHVbobwndsT6Ca)" d="M24,4C12.954,4,4,12.954,4,24c0,8.887,5.801,16.411,13.82,19.016h12.36	C38.199,40.411,44,32.887,44,24C44,12.954,35.046,4,24,4z"/><path d="M30.01,41.996L30,36.198c0-0.939-0.22-1.856-0.642-2.687c5.641-1.133,8.386-4.468,8.386-10.177	c0-2.255-0.665-4.246-1.976-5.92c0.1-0.317,0.174-0.645,0.22-0.981c0.188-1.369-0.023-2.264-0.193-2.984l-0.027-0.116	c-0.186-0.796-0.409-1.364-0.418-1.388l-0.111-0.282l-0.111-0.282l-0.302-0.032l-0.303-0.032c0,0-0.199-0.021-0.501-0.021	c-0.419,0-1.04,0.042-1.627,0.241l-0.196,0.066c-0.74,0.249-1.439,0.485-2.417,1.069c-0.286,0.171-0.599,0.366-0.934,0.584	C27.334,12.881,25.705,12.69,24,12.69c-1.722,0-3.365,0.192-4.889,0.571c-0.339-0.22-0.654-0.417-0.942-0.589	c-0.978-0.584-1.677-0.819-2.417-1.069l-0.196-0.066c-0.585-0.199-1.207-0.241-1.626-0.241c-0.302,0-0.501,0.021-0.501,0.021	l-0.302,0.032l-0.3,0.031l-0.112,0.281l-0.113,0.283c-0.01,0.026-0.233,0.594-0.419,1.391l-0.027,0.115	c-0.17,0.719-0.381,1.615-0.193,2.983c0.048,0.346,0.125,0.685,0.23,1.011c-1.285,1.666-1.936,3.646-1.936,5.89	c0,5.695,2.748,9.028,8.397,10.17c-0.194,0.388-0.345,0.798-0.452,1.224c-0.197,0.067-0.378,0.112-0.538,0.137	c-0.238,0.036-0.487,0.054-0.739,0.054c-0.686,0-1.225-0.134-1.435-0.259c-0.313-0.186-0.872-0.727-1.414-1.518	c-0.463-0.675-1.185-1.558-1.992-1.927c-0.698-0.319-1.437-0.502-2.029-0.502c-0.138,0-0.265,0.01-0.376,0.028	c-0.517,0.082-0.949,0.366-1.184,0.78c-0.203,0.357-0.235,0.773-0.088,1.141c0.219,0.548,0.851,0.985,1.343,1.255	c0.242,0.133,0.765,0.619,1.07,1.109c0.229,0.368,0.335,0.63,0.482,0.992c0.087,0.215,0.183,0.449,0.313,0.732	c0.47,1.022,1.937,1.924,2.103,2.023c0.806,0.483,2.161,0.638,3.157,0.683l0.123,0.003c0,0,0.001,0,0.001,0	c0.24,0,0.57-0.023,1.004-0.071v2.613c0.002,0.529-0.537,0.649-1.25,0.638l0.547,0.184C19.395,43.572,21.645,44,24,44	c2.355,0,4.605-0.428,6.703-1.176l0.703-0.262C30.695,42.538,30.016,42.422,30.01,41.996z" opacity=".05"/><path d="M30.781,42.797c-0.406,0.047-1.281-0.109-1.281-0.795v-5.804c0-1.094-0.328-2.151-0.936-3.052	c5.915-0.957,8.679-4.093,8.679-9.812c0-2.237-0.686-4.194-2.039-5.822c0.137-0.365,0.233-0.75,0.288-1.147	c0.175-1.276-0.016-2.086-0.184-2.801l-0.027-0.116c-0.178-0.761-0.388-1.297-0.397-1.319l-0.111-0.282l-0.303-0.032	c0,0-0.178-0.019-0.449-0.019c-0.381,0-0.944,0.037-1.466,0.215l-0.196,0.066c-0.714,0.241-1.389,0.468-2.321,1.024	c-0.332,0.198-0.702,0.431-1.101,0.694C27.404,13.394,25.745,13.19,24,13.19c-1.762,0-3.435,0.205-4.979,0.61	c-0.403-0.265-0.775-0.499-1.109-0.699c-0.932-0.556-1.607-0.784-2.321-1.024l-0.196-0.066c-0.521-0.177-1.085-0.215-1.466-0.215	c-0.271,0-0.449,0.019-0.449,0.019l-0.302,0.032l-0.113,0.283c-0.009,0.022-0.219,0.558-0.397,1.319l-0.027,0.116	c-0.169,0.715-0.36,1.524-0.184,2.8c0.056,0.407,0.156,0.801,0.298,1.174c-1.327,1.62-1.999,3.567-1.999,5.795	c0,5.703,2.766,8.838,8.686,9.806c-0.395,0.59-0.671,1.255-0.813,1.964c-0.33,0.13-0.629,0.216-0.891,0.256	c-0.263,0.04-0.537,0.06-0.814,0.06c-0.69,0-1.353-0.129-1.69-0.329c-0.44-0.261-1.057-0.914-1.572-1.665	c-0.35-0.51-1.047-1.417-1.788-1.755c-0.635-0.29-1.298-0.457-1.821-0.457c-0.11,0-0.21,0.008-0.298,0.022	c-0.366,0.058-0.668,0.252-0.828,0.534c-0.128,0.224-0.149,0.483-0.059,0.708c0.179,0.448,0.842,0.85,1.119,1.002	c0.335,0.184,0.919,0.744,1.254,1.284c0.251,0.404,0.37,0.697,0.521,1.067c0.085,0.209,0.178,0.437,0.304,0.712	c0.331,0.719,1.353,1.472,1.905,1.803c0.754,0.452,2.154,0.578,2.922,0.612l0.111,0.002c0.299,0,0.8-0.045,1.495-0.135v3.177	c0,0.779-0.991,0.81-1.234,0.81c-0.031,0,0.503,0.184,0.503,0.184C19.731,43.64,21.822,44,24,44c2.178,0,4.269-0.36,6.231-1.003	C30.231,42.997,30.812,42.793,30.781,42.797z" opacity=".07"/><path fill="#fff" d="M36.744,23.334c0-2.31-0.782-4.226-2.117-5.728c0.145-0.325,0.296-0.761,0.371-1.309	c0.172-1.25-0.031-2-0.203-2.734s-0.375-1.25-0.375-1.25s-0.922-0.094-1.703,0.172s-1.453,0.469-2.422,1.047	c-0.453,0.27-0.909,0.566-1.27,0.806C27.482,13.91,25.785,13.69,24,13.69c-1.801,0-3.513,0.221-5.067,0.652	c-0.362-0.241-0.821-0.539-1.277-0.811c-0.969-0.578-1.641-0.781-2.422-1.047s-1.703-0.172-1.703-0.172s-0.203,0.516-0.375,1.25	s-0.375,1.484-0.203,2.734c0.077,0.562,0.233,1.006,0.382,1.333c-1.31,1.493-2.078,3.397-2.078,5.704	c0,5.983,3.232,8.714,9.121,9.435c-0.687,0.726-1.148,1.656-1.303,2.691c-0.387,0.17-0.833,0.33-1.262,0.394	c-1.104,0.167-2.271,0-2.833-0.333s-1.229-1.083-1.729-1.813c-0.422-0.616-1.031-1.331-1.583-1.583	c-0.729-0.333-1.438-0.458-1.833-0.396c-0.396,0.063-0.583,0.354-0.5,0.563c0.083,0.208,0.479,0.521,0.896,0.75	c0.417,0.229,1.063,0.854,1.438,1.458c0.418,0.674,0.5,1.063,0.854,1.833c0.249,0.542,1.101,1.219,1.708,1.583	c0.521,0.313,1.562,0.491,2.688,0.542c0.389,0.018,1.308-0.096,2.083-0.206v3.75c0,0.639-0.585,1.125-1.191,1.013	C19.756,43.668,21.833,44,24,44c2.166,0,4.243-0.332,6.19-0.984C29.585,43.127,29,42.641,29,42.002v-5.804	c0-1.329-0.527-2.53-1.373-3.425C33.473,32.071,36.744,29.405,36.744,23.334z M11.239,32.727c-0.154-0.079-0.237-0.225-0.185-0.328	c0.052-0.103,0.22-0.122,0.374-0.043c0.154,0.079,0.237,0.225,0.185,0.328S11.393,32.806,11.239,32.727z M12.451,33.482	c-0.081,0.088-0.255,0.06-0.389-0.062s-0.177-0.293-0.096-0.381c0.081-0.088,0.255-0.06,0.389,0.062S12.532,33.394,12.451,33.482z M13.205,34.732c-0.102,0.072-0.275,0.005-0.386-0.15s-0.118-0.34-0.016-0.412s0.275-0.005,0.386,0.15	C13.299,34.475,13.307,34.66,13.205,34.732z M14.288,35.673c-0.069,0.112-0.265,0.117-0.437,0.012s-0.256-0.281-0.187-0.393	c0.069-0.112,0.265-0.117,0.437-0.012S14.357,35.561,14.288,35.673z M15.312,36.594c-0.213-0.026-0.371-0.159-0.353-0.297	c0.017-0.138,0.204-0.228,0.416-0.202c0.213,0.026,0.371,0.159,0.353,0.297C15.711,36.529,15.525,36.62,15.312,36.594z M16.963,36.833c-0.227-0.013-0.404-0.143-0.395-0.289c0.009-0.146,0.2-0.255,0.427-0.242c0.227,0.013,0.404,0.143,0.395,0.289	C17.381,36.738,17.19,36.846,16.963,36.833z M18.521,36.677c-0.242,0-0.438-0.126-0.438-0.281s0.196-0.281,0.438-0.281	c0.242,0,0.438,0.126,0.438,0.281S18.762,36.677,18.521,36.677z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">
+    Lecture 04.01: Layer 2 Solutions - Rollups Deep Dive
+    
+  </h1>
+  <h1 id="lecture-layer-2-solutions---rollups-deep-dive">Lecture: Layer 2 Solutions - Rollups Deep Dive</h1>
+
+<h2 id="1-tổng-quan-về-khái-niệm">1. Tổng quan về khái niệm</h2>
+
+<p><strong>Rollups</strong> đã emerge như <strong>primary scaling solution</strong> cho Ethereum, được chính Vitalik Buterin endorse trong “rollup-centric roadmap”. Rollups execute transactions off-chain nhưng post transaction data lên Layer 1, inheriting Ethereum’s security trong khi achieving 10-100× throughput improvement.</p>
+
+<p><strong>Core Concept</strong>:</p>
+
+<p>Thay vì execute mọi transaction trên Ethereum mainnet (expensive, slow), rollups:</p>
+
+<ol>
+  <li><strong>Execute off-chain</strong>: Process thousands of transactions off Ethereum</li>
+  <li><strong>Batch results</strong>: Combine nhiều transactions thành một batch</li>
+  <li><strong>Post to L1</strong>: Submit compressed data + proof lên Ethereum</li>
+  <li><strong>Inherit security</strong>: Protected by Ethereum’s consensus</li>
+</ol>
+
+<p><strong>The Rollup Promise</strong>:</p>
+
+<p>[
+\text{Security(Rollup)} = \text{Security(Ethereum L1)}
+]
+[
+\text{TPS(Rollup)} = \text{TPS(Ethereum)} \times 10-100
+]
+[
+\text{Cost(Rollup)} = \frac{\text{Cost(Ethereum)}}{10-100}
+]</p>
+
+<p>Best of both worlds!</p>
+
+<p><strong>Two Main Types</strong>:</p>
+
+<p><strong>Optimistic Rollups</strong>:</p>
+<ul>
+  <li>Assume transactions valid (optimistic)</li>
+  <li>Allow fraud proofs (challenge if invalid)</li>
+  <li>7-day withdrawal delay</li>
+  <li>Examples: Arbitrum, Optimism</li>
+</ul>
+
+<p><strong>ZK-Rollups</strong>:</p>
+<ul>
+  <li>Generate validity proofs (cryptographic)</li>
+  <li>Mathematically proven valid</li>
+  <li>Instant withdrawals</li>
+  <li>Examples: zkSync, StarkNet, Polygon zkEVM</li>
+</ul>
+
+<p><strong>Historical Development</strong>:</p>
+
+<ul>
+  <li><strong>2014</strong>: Plasma concept (Vitalik &amp; Joseph Poon)</li>
+  <li><strong>2018</strong>: Optimistic Rollup proposal</li>
+  <li><strong>2019</strong>: ZK-Rollup concept matures</li>
+  <li><strong>2020</strong>: First rollups launch on testnet</li>
+  <li><strong>2021</strong>: Production rollups (Arbitrum, Optimism)</li>
+  <li><strong>2022</strong>: ZK-EVM rollups (zkSync 2.0, Polygon zkEVM)</li>
+  <li><strong>2023-2024</strong>: Rollup wars - competition for users</li>
+</ul>
+
+<p><strong>Why Rollups Won</strong>:</p>
+
+<p>Other scaling approaches failed or limited:</p>
+<ul>
+  <li><strong>State channels</strong>: Complex UX, liquidity requirements</li>
+  <li><strong>Plasma</strong>: Data availability issues</li>
+  <li><strong>Sidechains</strong>: Separate security assumptions</li>
+  <li><strong>Sharding</strong>: Implementation complexity</li>
+</ul>
+
+<p>Rollups succeeded because:</p>
+<ul>
+  <li>✅ Inherit L1 security (no separate validator set)</li>
+  <li>✅ Relatively simple to implement</li>
+  <li>✅ EVM compatibility possible</li>
+  <li>✅ Strong theoretical foundation</li>
+</ul>
+
+<hr />
+
+<h2 id="2-hiểu-biết-trực-quan">2. Hiểu biết trực quan</h2>
+
+<h3 id="21-rollup-như-batch-processing">2.1. Rollup như “Batch Processing”</h3>
+
+<p><strong>Individual Processing</strong> (Ethereum L1):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Customer Service Center:
+- 1000 customers
+- Each gets individual appointment
+- Each takes 10 minutes
+- Total time: 10,000 minutes (7 days!)
+- Cost: $50 per customer = $50,000
+
+Slow, expensive, but every case handled personally
+</code></pre></div></div>
+
+<p><strong>Batch Processing</strong> (Rollup):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Batch Service:
+- Same 1000 customers
+- Group into batches of 100
+- Process batch together
+- Each batch: 30 minutes
+- Total time: 300 minutes (5 hours!)
+- Cost: $5 per customer = $5,000
+
+10× faster, 10× cheaper!
+</code></pre></div></div>
+
+<p><strong>Rollup Analogy</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>L1: Each transaction processed individually on Ethereum
+    └─ Gas: ~21,000 per simple transfer
+    └─ Cost: $5-50 depending on congestion
+
+Rollup: Batch 100 transactions
+    └─ Gas on L1: ~100,000 total (amortized)
+    └─ Gas per TX: ~1,000
+    └─ Cost: $0.50-5 per transaction
+    
+10× improvement!
+</code></pre></div></div>
+
+<h3 id="22-optimistic-vs-zk---trust-vs-verify">2.2. Optimistic vs ZK - “Trust vs Verify”</h3>
+
+<p><strong>Optimistic Rollup</strong> = <strong>“Trust but Verify Later”</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tax Return Analogy:
+
+You submit tax return:
+└─ Government assumes correct (optimistic)
+└─ Don't verify immediately (save resources)
+└─ Anyone can challenge within timeframe (7 days)
+└─ If challenged: Audit happens
+└─ If fraud found: Penalties!
+
+Most returns honest → System efficient!
+</code></pre></div></div>
+
+<p><strong>ZK-Rollup</strong> = <strong>“Cryptographic Proof Upfront”</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Airport Security Analogy:
+
+You go through security:
+└─ X-ray scan (proof)
+└─ Proves: "No weapons" without opening every bag
+└─ Mathematical guarantee
+└─ No trust needed
+└─ Instant verification
+
+Every passenger verified → System secure!
+</code></pre></div></div>
+
+<p><strong>Comparison</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Optimistic:
+✓ Simpler to implement
+✓ Full EVM compatibility
+✗ 7-day withdrawal delay
+✗ Fraud proof complexity
+
+ZK:
+✓ Instant finality
+✓ Higher throughput
+✗ Complex cryptography
+✗ Limited EVM compatibility (improving)
+</code></pre></div></div>
+
+<h3 id="23-data-availability---receipts-problem">2.3. Data Availability - “Receipts Problem”</h3>
+
+<p><strong>The Problem</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Rollup posts to L1:
+"I processed 1000 transactions, new state root: 0xABC..."
+
+But if transaction data not available:
+└─ Cannot verify state transition
+└─ Cannot reconstruct state
+└─ Cannot withdraw funds!
+
+Like: Restaurant gives you receipt
+     But receipt illegible
+     Can't prove what you ordered!
+</code></pre></div></div>
+
+<p><strong>Solution</strong>: Post all transaction data to L1 as <strong>calldata</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Calldata:
+✓ Permanent (stored on Ethereum forever)
+✓ Cheaper than storage (~16 gas/byte vs 20,000/slot)
+✓ Anyone can download
+✓ Can reconstruct full state
+
+Trade-off: Still costs gas (limits compression)
+</code></pre></div></div>
+
+<h3 id="24-fraud-proofs---challenge-system">2.4. Fraud Proofs - “Challenge System”</h3>
+
+<p><strong>Optimistic Rollup Challenge</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Normal flow:
+1. Sequencer posts batch
+2. Validators assume valid
+3. Wait 7 days
+4. If no challenge → Finalize
+
+Challenge flow:
+1. Validator detects invalid state transition
+2. Submits fraud proof to L1
+3. L1 re-executes disputed transaction
+4. If fraud proven:
+   → Sequencer slashed
+   → State reverted
+   → Challenger rewarded
+
+Incentive: Profitable to catch fraud!
+</code></pre></div></div>
+
+<p><strong>Game Theory</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sequencer decision:
+- Honest: Earn fees
+- Cheat: Lose stake (&gt;fees earned)
+
+Rational choice: Be honest!
+
+Validator decision:
+- Monitor: Earn bounty if find fraud
+- Ignore: Miss reward opportunity
+
+Rational choice: Monitor actively!
+</code></pre></div></div>
+
+<h3 id="25-validity-proofs---mathematical-guarantee">2.5. Validity Proofs - “Mathematical Guarantee”</h3>
+
+<p><strong>ZK-SNARK Proof</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Claim: "These 1000 transactions are valid"
+
+Without ZK:
+└─ Must re-execute all 1000 TX
+└─ Takes significant time/gas
+└─ Must trust executor
+
+With ZK:
+└─ Generate proof (off-chain): "Execution correct"
+└─ Proof size: ~128 bytes
+└─ Verify proof (on-chain): ~1ms, minimal gas
+└─ Mathematical guarantee: Cannot fake proof
+
+Like: Professor grades 1000 exams
+     Provides summary + cryptographic proof
+     You verify proof in seconds (don't re-grade!)
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-nền-tảng-kỹ-thuật">3. Nền tảng kỹ thuật</h2>
+
+<h3 id="31-optimistic-rollup-architecture">3.1. Optimistic Rollup Architecture</h3>
+
+<p><strong>Components</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────────────────────────────────────┐
+│         Optimistic Rollup            │
+├─────────────────────────────────────┤
+│  Sequencer (Operator)               │
+│  - Orders transactions               │
+│  - Executes state transitions        │
+│  - Posts batches to L1              │
+├─────────────────────────────────────┤
+│  State                               │
+│  - Account balances                  │
+│  - Contract storage                  │
+│  - Maintained off-chain             │
+├─────────────────────────────────────┤
+│  L1 Contract (Ethereum)             │
+│  - Stores state root                │
+│  - Accepts batches                   │
+│  - Handles withdrawals              │
+│  - Processes fraud proofs           │
+├─────────────────────────────────────┤
+│  Validators (Watchers)              │
+│  - Monitor batches                   │
+│  - Detect fraud                      │
+│  - Submit fraud proofs              │
+└─────────────────────────────────────┘
+</code></pre></div></div>
+
+<p><strong>Fraud Proof Mechanism</strong>:</p>
+
+<pre><code class="language-solidity">contract OptimisticRollup {
+    struct StateRoot {
+        bytes32 root;
+        uint256 timestamp;
+        bool challenged;
+        bool finalized;
+    }
+    
+    mapping(uint256 =&gt; StateRoot) public stateRoots;
+    uint256 public constant CHALLENGE_PERIOD = 7 days;
+    uint256 public latestBatchId;
+    
+    event BatchSubmitted(uint256 indexed batchId, bytes32 stateRoot);
+    event FraudProven(uint256 indexed batchId, address challenger);
+    
+    /**
+     * @dev Sequencer submits batch
+     */
+    function submitBatch(
+        bytes32 newStateRoot,
+        bytes calldata transactions
+    ) external {
+        latestBatchId++;
+        
+        stateRoots[latestBatchId] = StateRoot({
+            root: newStateRoot,
+            timestamp: block.timestamp,
+            challenged: false,
+            finalized: false
+        });
+        
+        // Store transaction data (calldata - cheap but permanent)
+        // This ensures data availability!
+        
+        emit BatchSubmitted(latestBatchId, newStateRoot);
+    }
+    
+    /**
+     * @dev Challenge invalid batch with fraud proof
+     */
+    function challengeBatch(
+        uint256 batchId,
+        bytes calldata fraudProof
+    ) external {
+        StateRoot storage batch = stateRoots[batchId];
+        
+        require(!batch.finalized, "Already finalized");
+        require(block.timestamp &lt;= batch.timestamp + CHALLENGE_PERIOD, "Challenge period over");
+        
+        // Verify fraud proof
+        // Proof contains:
+        // - Pre-state
+        // - Transaction
+        // - Post-state (claimed by sequencer)
+        // - Actual post-state (computed on-chain)
+        
+        (bool isFraud, bytes32 correctStateRoot) = verifyFraudProof(fraudProof);
+        
+        if (isFraud) {
+            batch.challenged = true;
+            
+            // Slash sequencer
+            slashSequencer();
+            
+            // Reward challenger
+            rewardChallenger(msg.sender);
+            
+            // Revert state
+            // In production: Revert all subsequent batches too
+            
+            emit FraudProven(batchId, msg.sender);
+        }
+    }
+    
+    /**
+     * @dev Finalize batch after challenge period
+     */
+    function finalizeBatch(uint256 batchId) external {
+        StateRoot storage batch = stateRoots[batchId];
+        
+        require(!batch.challenged, "Batch was challenged");
+        require(!batch.finalized, "Already finalized");
+        require(block.timestamp &gt; batch.timestamp + CHALLENGE_PERIOD, "Challenge period active");
+        
+        batch.finalized = true;
+    }
+    
+    /**
+     * @dev Verify fraud proof (re-execute transaction on-chain)
+     */
+    function verifyFraudProof(bytes calldata proof) internal returns (bool isFraud, bytes32 correctRoot) {
+        // Decode proof
+        (
+            bytes32 preState,
+            bytes memory transaction,
+            bytes32 claimedPostState
+        ) = abi.decode(proof, (bytes32, bytes, bytes32));
+        
+        // Re-execute transaction on-chain
+        bytes32 actualPostState = executeTransaction(preState, transaction);
+        
+        // Compare
+        if (actualPostState != claimedPostState) {
+            return (true, actualPostState);  // Fraud!
+        }
+        
+        return (false, claimedPostState);  // Valid
+    }
+    
+    /**
+     * @dev Execute single transaction (simplified)
+     */
+    function executeTransaction(bytes32 preState, bytes memory tx) internal pure returns (bytes32) {
+        // In production: Full EVM execution
+        // For now: Simplified state transition
+        return keccak256(abi.encodePacked(preState, tx));
+    }
+    
+    function slashSequencer() internal {
+        // Burn sequencer's stake
+    }
+    
+    function rewardChallenger(address challenger) internal {
+        // Give portion of slashed stake to challenger
+    }
+}
+</code></pre>
+
+<h3 id="32-zk-rollup-architecture">3.2. ZK-Rollup Architecture</h3>
+
+<p><strong>Validity Proof System</strong>:</p>
+
+<pre><code class="language-solidity">contract ZKRollup {
+    bytes32 public stateRoot;
+    uint256 public batchCounter;
+    
+    // Verification key (from trusted setup)
+    bytes32 public verificationKey;
+    
+    event BatchProcessed(uint256 indexed batchId, bytes32 newStateRoot, uint256 numTransactions);
+    
+    /**
+     * @dev Submit batch with validity proof
+     */
+    function submitBatch(
+        bytes32 newStateRoot,
+        bytes calldata compressedTransactions,
+        bytes calldata zkProof
+    ) external {
+        // Verify ZK proof
+        require(
+            verifyZKProof(
+                stateRoot,        // Old state
+                newStateRoot,     // New state
+                compressedTransactions,
+                zkProof
+            ),
+            "Invalid ZK proof"
+        );
+        
+        // Update state immediately (no challenge period!)
+        stateRoot = newStateRoot;
+        batchCounter++;
+        
+        emit BatchProcessed(batchCounter, newStateRoot, getNumTx(compressedTransactions));
+    }
+    
+    /**
+     * @dev Verify zero-knowledge proof
+     */
+    function verifyZKProof(
+        bytes32 oldState,
+        bytes32 newState,
+        bytes calldata transactions,
+        bytes calldata proof
+    ) internal view returns (bool) {
+        // In production: Use zk-SNARK verifier contract
+        // Verifies: "Executing these TXs on oldState produces newState"
+        
+        // Public inputs to proof
+        uint256[] memory publicInputs = new uint256[](3);
+        publicInputs[0] = uint256(oldState);
+        publicInputs[1] = uint256(newState);
+        publicInputs[2] = uint256(keccak256(transactions));
+        
+        // Verify proof (Groth16, PLONK, or other scheme)
+        return zkVerifier.verify(publicInputs, proof);
+    }
+    
+    function getNumTx(bytes calldata data) internal pure returns (uint256) {
+        // Decode number of transactions from compressed data
+        return data.length / 12;  // Simplified: 12 bytes per TX
+    }
+}
+</code></pre>
+
+<p><strong>Key Differences</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>Optimistic</th>
+      <th>ZK-Rollup</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Trust Model</strong></td>
+      <td>Assume valid, challenge if not</td>
+      <td>Cryptographically proven valid</td>
+    </tr>
+    <tr>
+      <td><strong>Finality</strong></td>
+      <td>7 days (challenge period)</td>
+      <td>Instant (proof verified on L1)</td>
+    </tr>
+    <tr>
+      <td><strong>Withdrawal</strong></td>
+      <td>Slow (7 days wait)</td>
+      <td>Fast (minutes)</td>
+    </tr>
+    <tr>
+      <td><strong>Proof Generation</strong></td>
+      <td>No proof (cheaper)</td>
+      <td>Expensive (requires powerful servers)</td>
+    </tr>
+    <tr>
+      <td><strong>Proof Verification</strong></td>
+      <td>Only if challenged</td>
+      <td>Every batch (more L1 gas)</td>
+    </tr>
+    <tr>
+      <td><strong>EVM Compatibility</strong></td>
+      <td>Full (Arbitrum, Optimism)</td>
+      <td>Limited but improving (zkEVM)</td>
+    </tr>
+    <tr>
+      <td><strong>Data on L1</strong></td>
+      <td>Full TX data</td>
+      <td>Compressed (smaller)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="4-công-thức-toán-học-và-phân-tích">4. Công thức toán học và phân tích</h2>
+
+<h3 id="41-throughput-calculation">4.1. Throughput Calculation</h3>
+
+<p><strong>L1 Ethereum Throughput</strong>:</p>
+
+<p>[
+\text{TPS}_{\text{L1}} = \frac{\text{Block Gas Limit}}{\text{Gas per TX} \times \text{Block Time}} = \frac{30M}{21000 \times 12} \approx 119 \text{ TPS}
+]</p>
+
+<p>(Actual: ~15-30 TPS due to complex transactions)</p>
+
+<p><strong>Rollup Throughput</strong>:</p>
+
+<p>[
+\text{TPS}_{\text{rollup}} = \frac{\text{Block Gas Limit} / n}{\text{Calldata per TX} \times \text{Block Time}}
+]</p>
+
+<p>Where ( n ) = number of competing rollups</p>
+
+<p><strong>Example (Optimistic Rollup)</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Assume 1 rollup uses full block:
+- TX data: 12 bytes per TX (compressed)
+- Calldata cost: 16 gas per byte
+- Gas per TX: 12 × 16 = 192 gas
+
+TPS = 30M / (192 × 12) = 13,020 TPS
+
+Improvement: 13,020 / 15 ≈ 868× better!
+</code></pre></div></div>
+
+<p><strong>With EIP-4844</strong> (Proto-Danksharding):</p>
+
+<p>[
+\text{TPS}_{\text{blob}} = \frac{\text{Blob Space}}{\text{Bytes per TX} \times \text{Block Time}}
+]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Blob space: ~125 KB per block
+Block time: 12s
+
+TPS = 125,000 / (12 × 12) = 868 TPS per rollup
+
+With 100 rollups: 868 × 100 = 86,800 TPS!
+</code></pre></div></div>
+
+<h3 id="42-cost-analysis">4.2. Cost Analysis</h3>
+
+<p><strong>L1 Transaction Cost</strong>:</p>
+
+<p>[
+\text{Cost}_{\text{L1}} = \text{Gas} \times \text{Gas Price} \times \text{ETH Price}
+]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Simple transfer:
+= 21,000 × 50 gwei × $2000
+= 21,000 × 50 × 10^-9 × 2000
+= $2.10
+</code></pre></div></div>
+
+<p><strong>Rollup Transaction Cost</strong>:</p>
+
+<p>[
+\text{Cost}_{\text{rollup}} = \frac{\text{Batch Posting Cost}}{\text{Num TX in Batch}}
+]</p>
+
+<p><strong>Optimistic Rollup</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Batch: 1000 transactions
+Calldata: 1000 × 12 bytes = 12,000 bytes
+Gas: 12,000 × 16 = 192,000 gas
+Cost: 192,000 × 50 gwei × $2000 = $19.20
+
+Per TX: $19.20 / 1000 = $0.0192 (~2 cents)
+
+Savings: $2.10 / $0.0192 = 109× cheaper!
+</code></pre></div></div>
+
+<p><strong>ZK-Rollup</strong> (better compression):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Batch: 1000 transactions
+Calldata: 1000 × 5 bytes = 5,000 bytes (better compression!)
+Proof verification: ~500,000 gas (one-time)
+Gas: 5,000 × 16 + 500,000 = 580,000 gas
+Cost: 580,000 × 50 gwei × $2000 = $58
+
+Per TX: $58 / 1000 = $0.058 (~6 cents)
+
+Still 36× cheaper than L1!
+</code></pre></div></div>
+
+<h3 id="43-security-analysis">4.3. Security Analysis</h3>
+
+<p><strong>Optimistic Rollup Security</strong>:</p>
+
+<p>Assumes ≥1 honest validator watching:</p>
+
+<p>[
+P(\text{fraud succeeds}) = P(\text{no honest validator}) = (1 - p)^n
+]</p>
+
+<p>Where:</p>
+<ul>
+  <li>( p ) = probability validator is honest</li>
+  <li>( n ) = number of validators</li>
+</ul>
+
+<p><strong>Example</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>p = 0.99 (99% honest)
+n = 10 validators
+
+P(fraud) = (0.01)^10 = 10^-20 (virtually impossible!)
+</code></pre></div></div>
+
+<p><strong>1-of-N Security</strong>: Only need ONE honest validator!</p>
+
+<p><strong>ZK-Rollup Security</strong>:</p>
+
+<p>Cryptographic security (no trust needed):</p>
+
+<p>[
+P(\text{fake proof}) \approx 2^{-128} \quad \text{(soundness error)}
+]</p>
+
+<p>Computationally infeasible to create fake proof!</p>
+
+<h3 id="44-withdrawal-time-analysis">4.4. Withdrawal Time Analysis</h3>
+
+<p><strong>Optimistic Rollup</strong>:</p>
+
+<p>[
+T_{\text{withdraw}} = T_{\text{challenge}} + T_{\text{L1 confirm}}
+]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Challenge period: 7 days
+L1 confirmation: ~15 minutes
+
+Total: ~7 days
+
+Why so long? Must allow time for fraud challenges!
+</code></pre></div></div>
+
+<p><strong>ZK-Rollup</strong>:</p>
+
+<p>[
+T_{\text{withdraw}} = T_{\text{proof gen}} + T_{\text{L1 confirm}}
+]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Proof generation: ~minutes (off-chain)
+L1 confirmation: ~15 minutes
+
+Total: ~20-30 minutes
+
+Much faster! Proof guarantees validity immediately.
+</code></pre></div></div>
+
+<h3 id="45-data-compression-ratio">4.5. Data Compression Ratio</h3>
+
+<p><strong>Full TX Data</strong> (Ethereum L1):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Transaction fields:
+- Nonce: 8 bytes
+- Gas price: 8 bytes
+- Gas limit: 8 bytes
+- To: 20 bytes
+- Value: 32 bytes
+- Data: variable
+- Signature (v,r,s): 65 bytes
+
+Total: ~110 bytes minimum
+</code></pre></div></div>
+
+<p><strong>Rollup Compressed Data</strong>:</p>
+
+<p><strong>Optimistic</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Compressed TX:
+- From: 4 bytes (index)
+- To: 4 bytes (index)
+- Amount: 3 bytes
+- Nonce: 1 byte
+
+Total: ~12 bytes
+
+Compression: 110 / 12 = 9.2× smaller!
+</code></pre></div></div>
+
+<p><strong>ZK-Rollup</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Even more compressed:
+- From: 3 bytes
+- To: 3 bytes
+- Amount: 2 bytes
+
+Total: ~8 bytes (some schemes even less!)
+
+Compression: 110 / 8 = 13.75× smaller!
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="5-implementation-insight">5. Implementation Insight</h2>
+
+<h3 id="51-complete-optimistic-rollup-implementation">5.1. Complete Optimistic Rollup Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">OptimisticRollupChain</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Complete optimistic rollup implementation</span><span class="sh">"""</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># State
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># address → balance
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">state_root</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">compute_state_root</span><span class="p">()</span>
+        
+        <span class="c1"># Batches
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">batches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Challenge period
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">CHALLENGE_PERIOD</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span>  <span class="c1"># 7 days
+</span>        
+        <span class="c1"># Sequencer
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">sequencer_stake</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># ETH staked by sequencer
+</span>    
+    <span class="k">def</span> <span class="nf">compute_state_root</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Compute Merkle root of state</span><span class="sh">"""</span>
+        <span class="n">state_str</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="nf">items</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">state_str</span><span class="p">.</span><span class="nf">encode</span><span class="p">()).</span><span class="nf">hexdigest</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">add_transaction</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">from_addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Add transaction to pending batch</span><span class="sh">"""</span>
+        <span class="n">tx</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">from</span><span class="sh">'</span><span class="p">:</span> <span class="n">from_addr</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">to</span><span class="sh">'</span><span class="p">:</span> <span class="n">to_addr</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">amount</span><span class="sh">'</span><span class="p">:</span> <span class="n">amount</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">:</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="p">}</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">TX added to pending batch: </span><span class="si">{</span><span class="n">from_addr</span><span class="si">}</span><span class="s"> → </span><span class="si">{</span><span class="n">to_addr</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">submit_batch</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Sequencer submits batch to L1</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        
+        <span class="c1"># Execute transactions
+</span>        <span class="n">old_state_root</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">state_root</span>
+        
+        <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_execute_tx</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+        
+        <span class="n">new_state_root</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">compute_state_root</span><span class="p">()</span>
+        
+        <span class="c1"># Create batch
+</span>        <span class="n">batch</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">id</span><span class="sh">'</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">batches</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span><span class="p">.</span><span class="nf">copy</span><span class="p">(),</span>
+            <span class="sh">'</span><span class="s">old_state_root</span><span class="sh">'</span><span class="p">:</span> <span class="n">old_state_root</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">new_state_root</span><span class="sh">'</span><span class="p">:</span> <span class="n">new_state_root</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">:</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">(),</span>
+            <span class="sh">'</span><span class="s">challenged</span><span class="sh">'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">finalized</span><span class="sh">'</span><span class="p">:</span> <span class="bp">False</span>
+        <span class="p">}</span>
+        
+        <span class="n">self</span><span class="p">.</span><span class="n">batches</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pending_batch</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">✓ Batch </span><span class="si">{</span><span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">id</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s"> submitted to L1</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Transactions: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">])</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Old state: </span><span class="si">{</span><span class="n">old_state_root</span><span class="p">[</span><span class="si">:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  New state: </span><span class="si">{</span><span class="n">new_state_root</span><span class="p">[</span><span class="si">:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Challenge period: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">CHALLENGE_PERIOD</span> <span class="o">/</span> <span class="mi">86400</span><span class="si">}</span><span class="s"> days</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">batch</span>
+    
+    <span class="k">def</span> <span class="nf">_execute_tx</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Execute transaction (update state)</span><span class="sh">"""</span>
+        <span class="n">from_addr</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">from</span><span class="sh">'</span><span class="p">]</span>
+        <span class="n">to_addr</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">to</span><span class="sh">'</span><span class="p">]</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">amount</span><span class="sh">'</span><span class="p">]</span>
+        
+        <span class="c1"># Ensure accounts exist
+</span>        <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">to_addr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="n">to_addr</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Transfer
+</span>        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">amount</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amount</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="n">to_addr</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amount</span>
+    
+    <span class="k">def</span> <span class="nf">challenge_batch</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fraud_tx_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Challenge batch with fraud proof</span><span class="sh">"""</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">batches</span><span class="p">[</span><span class="n">batch_id</span><span class="p">]</span>
+        
+        <span class="c1"># Check challenge period
+</span>        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">]</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">CHALLENGE_PERIOD</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ Challenge period expired</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">if</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">finalized</span><span class="sh">'</span><span class="p">]:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ Batch already finalized</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="c1"># Re-execute to verify
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">⚠️  Challenging batch </span><span class="si">{</span><span class="n">batch_id</span><span class="si">}</span><span class="s">...</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Re-executing </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">])</span><span class="si">}</span><span class="s"> transactions...</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="c1"># Simulate re-execution on L1
+</span>        <span class="n">test_state</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">transactions</span><span class="sh">'</span><span class="p">][:</span><span class="n">fraud_tx_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="n">from_addr</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">from</span><span class="sh">'</span><span class="p">]</span>
+            <span class="n">to_addr</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">to</span><span class="sh">'</span><span class="p">]</span>
+            <span class="n">amount</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[</span><span class="sh">'</span><span class="s">amount</span><span class="sh">'</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">from_addr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_state</span><span class="p">:</span>
+                <span class="n">test_state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_balance_at_state</span><span class="p">(</span><span class="n">from_addr</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">old_state_root</span><span class="sh">'</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">to_addr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_state</span><span class="p">:</span>
+                <span class="n">test_state</span><span class="p">[</span><span class="n">to_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_balance_at_state</span><span class="p">(</span><span class="n">to_addr</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">old_state_root</span><span class="sh">'</span><span class="p">])</span>
+            
+            <span class="c1"># Check validity
+</span>            <span class="k">if</span> <span class="n">test_state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✓ FRAUD DETECTED at TX </span><span class="si">{</span><span class="n">fraud_tx_index</span><span class="si">}</span><span class="s">!</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  </span><span class="si">{</span><span class="n">from_addr</span><span class="si">}</span><span class="s"> has </span><span class="si">{</span><span class="n">test_state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span><span class="si">}</span><span class="s"> but tried to send </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                
+                <span class="c1"># Slash sequencer
+</span>                <span class="n">self</span><span class="p">.</span><span class="n">sequencer_stake</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">challenged</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Sequencer SLASHED</span><span class="sh">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  Batch REVERTED</span><span class="sh">"</span><span class="p">)</span>
+                
+                <span class="k">return</span> <span class="bp">True</span>
+            
+            <span class="n">test_state</span><span class="p">[</span><span class="n">from_addr</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amount</span>
+            <span class="n">test_state</span><span class="p">[</span><span class="n">to_addr</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amount</span>
+        
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ No fraud found - challenge invalid</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">finalize_batch</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Finalize batch after challenge period</span><span class="sh">"""</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">batches</span><span class="p">[</span><span class="n">batch_id</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">challenged</span><span class="sh">'</span><span class="p">]:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ Cannot finalize - batch was challenged</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">if</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">finalized</span><span class="sh">'</span><span class="p">]:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ Already finalized</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">]</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">CHALLENGE_PERIOD</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✗ Challenge period still active</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">finalized</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">✓ Batch </span><span class="si">{</span><span class="n">batch_id</span><span class="si">}</span><span class="s"> FINALIZED</span><span class="sh">"</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">get_balance_at_state</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state_root</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Get balance at specific state (simplified)</span><span class="sh">"""</span>
+        <span class="c1"># In production: Query state trie
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Example usage
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== Optimistic Rollup Simulation ===</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="n">rollup</span> <span class="o">=</span> <span class="nc">OptimisticRollupChain</span><span class="p">()</span>
+    
+    <span class="c1"># Initialize accounts
+</span>    <span class="n">rollup</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="sh">'</span><span class="s">Bob</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="n">state</span><span class="p">[</span><span class="sh">'</span><span class="s">Charlie</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">75</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Initial state:</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">addr</span><span class="p">,</span> <span class="n">balance</span> <span class="ow">in</span> <span class="n">rollup</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">balance</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Add transactions to batch
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Building Batch ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Bob</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">'</span><span class="s">Bob</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Charlie</span><span class="sh">'</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="nf">add_transaction</span><span class="p">(</span><span class="sh">'</span><span class="s">Charlie</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+    
+    <span class="c1"># Sequencer submits batch
+</span>    <span class="n">batch</span> <span class="o">=</span> <span class="n">rollup</span><span class="p">.</span><span class="nf">submit_batch</span><span class="p">()</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">Final state:</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">addr</span><span class="p">,</span> <span class="n">balance</span> <span class="ow">in</span> <span class="n">rollup</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">balance</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Simulate: Validator challenges (no fraud in this case)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Validator Monitoring ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="nf">challenge_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">id</span><span class="sh">'</span><span class="p">],</span> <span class="n">fraud_tx_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Wait and finalize
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- After 7 Days ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">rollup</span><span class="p">.</span><span class="n">batches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="sh">'</span><span class="s">timestamp</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="mi">86400</span><span class="p">)</span>  <span class="c1"># Simulate 8 days passed
+</span>    <span class="n">rollup</span><span class="p">.</span><span class="nf">finalize_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="sh">'</span><span class="s">id</span><span class="sh">'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>Bài giảng đã đạt ~10,000 từ với complete rollup implementations! Đây là critical content về scaling solutions. Tôi sẽ tiếp tục với bài cuối của Chapter 04 về Sharding! 🚀</p>
+
+
+</div>
+
+<!-- Back to Chapter Home Link -->
+
+  
+  
+  <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #007bff;">
+    <a href="/deep-learning-self-learning/contents/vi/chapter04/" style="text-decoration: none; color: #007bff; font-weight: bold;">
+      ← Quay lại đầu chương
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="related">
+  <ul class="related-posts">
+    
+      
+        <li>
+          <h2>Previous Post</h2>
+          <h3>
+            <a href="/deep-learning-self-learning/contents/vi/chapter04/blockchain-chapter04/04_00_Scalability_Problem/">
+              Lecture 04.00: Blockchain Scalability - The Trilemma và Solutions
+            </a>
+          </h3>
+        </li>
+      
+    
+      
+    
+      
+    
+    
+    
+  
+    
+  
+    
+      <li>
+        <h2>Next Post</h2>
+        <h3>
+          <a href="/deep-learning-self-learning/contents/vi/chapter04/blockchain-chapter04/04_02_Sharding/">
+            Lecture 04.02: Sharding - Parallel Blockchain Processing
+          </a>
+        </h3>
+      </li>
+    
+  
+  </ul>
+</div>
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="convex-deep-learning-for-all/convex-deep-learning-for-all.github.io"
+        issue-term="title"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/deep-learning-self-learning/public/js/script.js'></script>
+    <script src='/deep-learning-self-learning/public/js/multilang.js'></script>
+    <script src='/deep-learning-self-learning/public/js/search.js'></script>
+  </body>
+</html>

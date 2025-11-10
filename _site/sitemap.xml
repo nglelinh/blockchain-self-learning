@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+    <url>
+      <loc>http://0.0.0.0:4000/home/author-details/</loc>
+      
+        <lastmod>2021-05-20T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/reference/26_reference/</loc>
+      
+        <lastmod>2021-03-28T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/home/makers/</loc>
+      
+        <lastmod>2021-02-03T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/home/link_to_how_to_contribute/</loc>
+      
+        <lastmod>2021-01-27T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/home/introduction/</loc>
+      
+        <lastmod>2021-01-20T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/home/contents/</loc>
+      
+        <lastmod>2021-01-20T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_05_Future_Blockchain/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_04_Quantum_Resistance/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_03_MEV/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_02_Web3_Infrastructure/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_01_NFTs_Digital_Ownership/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter07/blockchain-chapter07/07_00_DAOs/</loc>
+      
+        <lastmod>2021-01-08T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter06/blockchain-chapter06/06_02_Polkadot_Cosmos/</loc>
+      
+        <lastmod>2021-01-07T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter06/blockchain-chapter06/06_01_Blockchain_Bridges/</loc>
+      
+        <lastmod>2021-01-07T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter06/blockchain-chapter06/06_00_Cross_Chain_Communication/</loc>
+      
+        <lastmod>2021-01-07T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_05_Advanced_Privacy/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_04_Post_Quantum_Cryptography/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_03_Formal_Verification/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_02_Smart_Contract_Security/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_01_Zero_Knowledge_Proofs/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter05/blockchain-chapter05/05_00_Blockchain_Privacy/</loc>
+      
+        <lastmod>2021-01-06T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter04/blockchain-chapter04/04_02_Sharding/</loc>
+      
+        <lastmod>2021-01-05T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter04/blockchain-chapter04/04_01_Layer2_Rollups/</loc>
+      
+        <lastmod>2021-01-05T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter04/blockchain-chapter04/04_00_Scalability_Problem/</loc>
+      
+        <lastmod>2021-01-05T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter03/blockchain-chapter03/03_03_DeFi_Protocols/</loc>
+      
+        <lastmod>2021-01-04T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter03/blockchain-chapter03/03_02_Solidity_Programming/</loc>
+      
+        <lastmod>2021-01-04T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter03/blockchain-chapter03/03_01_EVM_Deep_Dive/</loc>
+      
+        <lastmod>2021-01-04T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter03/blockchain-chapter03/03_00_Ethereum_Architecture/</loc>
+      
+        <lastmod>2021-01-04T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter02/blockchain-chapter02/02_02_Alternative_Consensus/</loc>
+      
+        <lastmod>2021-01-03T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter02/blockchain-chapter02/02_01_BFT_Consensus/</loc>
+      
+        <lastmod>2021-01-03T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter02/blockchain-chapter02/02_00_Proof_of_Stake/</loc>
+      
+        <lastmod>2021-01-03T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter01/blockchain-chapter01/01_02_Bitcoin_Economics/</loc>
+      
+        <lastmod>2021-01-02T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter01/blockchain-chapter01/01_01_Proof_of_Work/</loc>
+      
+        <lastmod>2021-01-02T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter01/blockchain-chapter01/01_00_Bitcoin_Architecture/</loc>
+      
+        <lastmod>2021-01-02T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter00/blockchain-chapter00/00_03_Digital_Signatures/</loc>
+      
+        <lastmod>2021-01-01T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter00/blockchain-chapter00/00_02_Cryptographic_Hash_Functions/</loc>
+      
+        <lastmod>2021-01-01T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter00/blockchain-chapter00/00_01_Distributed_Systems_Consensus/</loc>
+      
+        <lastmod>2021-01-01T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+    <url>
+      <loc>http://0.0.0.0:4000/contents/vi/chapter00/blockchain-chapter00/00_00_Introduction_to_Blockchain/</loc>
+      
+        <lastmod>2021-01-01T00:00:00+07:00</lastmod>
+      
+
+      
+        <changefreq>weekly</changefreq>
+      
+
+      
+          <priority>0.5</priority>
+      
+
+    </url>
+  
+</urlset>
