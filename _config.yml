@@ -2,8 +2,8 @@
 title:               "Blockchain"
 description:         'Blockchain'
 url:                 https://nglelinh.github.io
-baseurl:             '/deep-learning-self-learning'
-imgurl:              https://nglelinh.github.io/deep-learning-self-learning/img
+baseurl:             '/blockchain-self-learning'
+imgurl:              https://nglelinh.github.io/blockchain-self-learning/img
 paginate:            5
 permalink:           pretty
 
