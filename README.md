@@ -194,31 +194,6 @@ Mỗi bài giảng được thiết kế theo cấu trúc:
 5. **Bitcoin and Cryptocurrency Technologies** - Narayanan et al.
 6. **Practical Byzantine Fault Tolerance** - Castro & Liskov (1999)
 
-## 🚀 Tiến độ và Cập nhật
-
-- ✅ **Chapter 00**: Nền Tảng Blockchain - HOÀN THÀNH (4/4 lectures)
-- ✅ **Chapter 01**: Bitcoin - HOÀN THÀNH (3/3 lectures)
-- ✅ **Chapter 02**: Advanced Consensus - HOÀN THÀNH (3/3 lectures)
-- ✅ **Chapter 03**: Ethereum và Smart Contracts - HOÀN THÀNH (4/4 lectures)
-- ✅ **Chapter 04**: Scalability và Layer-2 - HOÀN THÀNH (3/3 lectures)
-- 🔄 **Chapter 05**: Privacy và Security - ĐÃ CÓ (3/6 lectures, 50%)
-- ✅ **Chapter 06**: Interoperability - HOÀN THÀNH (3/3 lectures)
-- 🔄 **Chapter 07**: Advanced Topics - ĐÃ CÓ (2/6 lectures, 33%)
-
-**Tổng số bài giảng hoàn thành**: 23/30 lectures (77%)  
-**Tổng số từ**: ~272,000+ từ (2.7+ books!)  
-**Implementations**: 80+ working code examples  
-**Chất lượng**: Research-grade academic content  
-**Chapters hoàn chỉnh 100%**: 6/7 (86%)
-
-**Cập nhật gần nhất**: Hoàn thành Chapter 06 (Interoperability) - 23 lectures total covering toàn bộ blockchain technology stack từ cryptography đến cross-chain protocols!
-
-## 📝 Chú thích
-
-- ✅ = Hoàn thành
-- 🔄 = Đang thực hiện
-- 📝 = Chưa bắt đầu
-
 ## 💡 Đóng góp
 
 Khóa học này được phát triển như một tài liệu học tập mở. Mọi đóng góp, phản hồi và đề xuất đều được hoan nghênh.

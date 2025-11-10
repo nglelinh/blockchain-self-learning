@@ -1,10 +1,10 @@
-# 🚀 Quick Start Guide - Blockchain Course
+# 🚀 Quick Start Guide
 
-**Welcome!** Đây là hướng dẫn nhanh để bắt đầu với khóa học Blockchain Technology.
+Hướng dẫn nhanh để bắt đầu học khóa Blockchain Technology.
 
 ---
 
-## 📖 Xem Ngay (3 Options)
+## 📖 Xem Khóa Học
 
 ### Option 1: Browse Files Directly (Fastest)
 ```bash

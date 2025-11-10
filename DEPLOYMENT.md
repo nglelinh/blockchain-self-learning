@@ -1,48 +1,70 @@
-# GitHub Pages Deployment Setup
+# 🚀 Deployment Guide
 
-This site uses **GitHub Actions** for deployment to enable custom Jekyll plugins.
+## Quick Deploy to GitHub Pages
+
+### Step 1: Push to GitHub
+```bash
+git add .
+git commit -m "Complete blockchain course"
+git push origin main
+```
+
+### Step 2: Enable GitHub Pages
+1. Go to repository **Settings**
+2. Click **Pages** in left sidebar
+3. Source: **Deploy from a branch**
+4. Branch: **main** / **/ (root)**
+5. Click **Save**
+
+### Step 3: Access Your Site
+```
+https://YOUR_USERNAME.github.io/blockchain-self-learning/
+```
+
+Wait 1-2 minutes for GitHub to build and deploy.
+
+---
 
 ## Local Development
 
+### Run Jekyll Locally
 ```bash
+# Install dependencies (first time)
 bundle install
+
+# Start server
 bundle exec jekyll serve
+
+# Access at http://localhost:4000
 ```
 
-The site will be available at `http://127.0.0.1:4000/deep-learning-self-learning/`
+### Build Static Site
+```bash
+bundle exec jekyll build
+# Output in _site/ folder
+```
 
-## GitHub Pages Deployment
+---
 
-This repository is configured to use GitHub Actions for deployment instead of the default GitHub Pages Jekyll build process. This allows us to:
+## Configuration
 
-1. Use Jekyll 4.x (instead of GitHub Pages' restricted Jekyll 3.x)
-2. Use custom plugins (like our multilang plugin)
-3. Have full control over the build process
+Update `_config.yml` if needed:
 
-### Configuration Files
+```yaml
+title: "Blockchain Technology Course"
+baseurl: '/blockchain-self-learning'  # Your repo name
+url: https://YOUR_USERNAME.github.io
+```
 
-- `.github/workflows/jekyll.yml` - GitHub Actions workflow for building and deploying
-- `.nojekyll` - Tells GitHub Pages to skip the default Jekyll build
-- `_config.yml` - Configured with proper baseurl for GitHub Pages
+---
 
-### Repository Settings
+## 📚 Course Content
 
-Make sure your repository has the following settings:
-1. Go to **Settings > Pages**
-2. Set **Source** to "GitHub Actions"
-3. The workflow will automatically deploy on pushes to the `main` branch
+- **30 comprehensive lectures** on Blockchain Technology
+- **Vietnamese language** (unique comprehensive resource)
+- **7 chapters** covering fundamentals to advanced topics
+- **340,000+ words** of research-grade content
 
-## Multilang Support
+---
 
-The site supports English and Vietnamese content with automatic language switching. Custom Liquid tags:
-
-- `{% t key %}` - Translate text based on current language
-- `{% language_switch %}` - Generate language switch button
-- `{% multilang_post_url %}` - Generate multilingual post URLs
-
-## URL Structure
-
-- English: `/contents/en/chapter00/`
-- Vietnamese: `/contents/vi/chapter00/`
-
-All URLs include the repository baseurl for proper GitHub Pages deployment.
+**Ready to share knowledge with the world! 🌍🇻🇳**
