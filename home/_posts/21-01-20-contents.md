@@ -18,6 +18,10 @@ A comprehensive introduction to Blockchain, covering neural network fundamentals
 
 - Prepare students to read and implement cutting-edge research papers and contribute to the advancement of Blockchain.
 
+## Optional modern path (2022–2026)
+
+Each Vietnamese content chapter (00–07) now has one **optional** lesson `XX.99` (badge: Tùy chọn) plus a one-sentence pointer on the chapter landing page. These notes cite recent EIPs, research papers, and production L2/ZK systems. They do **not** replace the required theory lectures. An English theory track is not present on `main`, so optional lessons are Vietnamese-only.
+
 ## Main Textbooks
 
 ### Primary References

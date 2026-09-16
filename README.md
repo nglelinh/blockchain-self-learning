@@ -2,6 +2,8 @@
 
 Một khóa học toàn diện về công nghệ Blockchain, từ các khái niệm cơ bản đến chủ đề nâng cao, được thiết kế theo phong cách giảng dạy của giáo sư đại học với độ sâu về lý thuyết, toán học, và thực hành.
 
+Các bài **00.99–07.99** là lộ trình *tùy chọn* (2022–2026): EIP, paper, L2/ZK production. Chúng **không** viết lại lý thuyết. Track tiếng Anh chưa có chương nội dung — bài tùy chọn hiện chỉ có tiếng Việt.
+
 ## 📚 Cấu trúc khóa học
 
 ### Chapter 00: Nền Tảng Blockchain
@@ -26,6 +28,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Key generation, signing, verification
   - Bitcoin transaction signing, security considerations
 
+- ⚪ **Lecture 00.99** *(tùy chọn)*: Ứng dụng 2022–2026 — Verkle/KZG, EIP-4844 blobs, BLS, EIP-4337/7702. Không viết lại lý thuyết hash/chữ ký.
+
 ### Chapter 01: Bitcoin - Architecture và Proof-of-Work
 **Mục tiêu**: Hiểu sâu về Bitcoin - blockchain đầu tiên và quan trọng nhất
 
@@ -44,6 +48,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Incentive mechanisms, fee market
   - Game-theoretic security
 
+- ⚪ **Lecture 01.99** *(tùy chọn)*: BIP-324, BitVM/BitVM2, inscriptions, assumeUTXO.
+
 ### Chapter 02: Advanced Consensus Mechanisms
 **Mục tiêu**: So sánh các cơ chế đồng thuận khác nhau
 
@@ -61,6 +67,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Proof-of-Authority (PoA)
   - Delegated Proof-of-Stake (DPoS)
   - Proof-of-Space, Proof-of-History
+
+- ⚪ **Lecture 02.99** *(tùy chọn)*: The Merge, MEV-Boost/PBS, Pectra staking (EIP-7251/7002), CometBFT.
 
 ### Chapter 03: Ethereum và Smart Contracts
 **Mục tiêu**: Hiểu Ethereum - world computer platform
@@ -85,6 +93,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - AMMs, lending protocols
   - Yield farming, liquidity mining
 
+- ⚪ **Lecture 03.99** *(tùy chọn)*: Dencun opcodes, ERC-4337, EIP-7702, Uniswap v4, ERC-4626, Foundry.
+
 ### Chapter 04: Blockchain Scalability
 **Mục tiêu**: Giải quyết blockchain trilemma
 
@@ -102,6 +112,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Sharding fundamentals
   - Ethereum sharding design
   - Cross-shard communication
+
+- ⚪ **Lecture 04.99** *(tùy chọn)*: EIP-4844, OP fault proofs / Stage 1, Arbitrum BoLD, zkEVM, PeerDAS.
 
 ### Chapter 05: Privacy và Security
 **Mục tiêu**: Hiểu privacy techniques và security considerations
@@ -121,6 +133,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Formal verification
   - Audit practices
 
+- ⚪ **Lecture 05.99** *(tùy chọn)*: Nova folding, zkVM (RISC Zero, SP1, Jolt), FIPS 203–205.
+
 ### Chapter 06: Interoperability
 **Mục tiêu**: Kết nối các blockchain khác nhau
 
@@ -138,6 +152,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Polkadot's parachain model
   - Cosmos IBC protocol
   - Comparison với other approaches
+
+- ⚪ **Lecture 06.99** *(tùy chọn)*: IBC v2 / Eureka, CCIP, LayerZero v2, ERC-7683 intents.
 
 ### Chapter 07: Advanced Topics
 **Mục tiêu**: Các chủ đề tiên tiến và tương lai
@@ -161,6 +177,8 @@ Một khóa học toàn diện về công nghệ Blockchain, từ các khái ni�
   - Quantum computing threats
   - Post-quantum cryptography
   - Migration strategies
+
+- ⚪ **Lecture 07.99** *(tùy chọn)*: restaking, ERC-6551, inclusion lists / ePBS, ML-KEM.
 
 ## 🎓 Phương pháp học tập
 
