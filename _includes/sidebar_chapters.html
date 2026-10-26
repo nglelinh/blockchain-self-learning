@@ -1,0 +1,45 @@
+{% comment %}
+  Chapter entries with a lesson submenu for one language.
+  Lessons are site.posts with the same lang and chapter, sorted by front matter `order`,
+  so a new lesson appears here without editing the menu.
+
+  Do not use the `where` filter on `chapter`. Liquid coerces strings like "00"
+  into integers, so `where: "chapter", "00"` compares 0 with "00" and matches nothing.
+{% endcomment %}
+{% assign nav_lang = include.nav_lang %}
+{% assign pages_list = site.pages | where: "lang", nav_lang | sort: "chapter" %}
+{% assign lang_posts = site.posts | where: "lang", nav_lang %}
+
+{% for node in pages_list %}
+  {% if node.title != null and node.chapter and node.layout == "page" %}
+    {% assign is_hidden = node.hidden | default: false %}
+    {% unless is_hidden %}
+      {% assign chapter_key = node.chapter | append: "" %}
+      {% assign chapter_lessons = "" | split: "" %}
+      {% for post in lang_posts %}
+        {% assign post_chapter = post.chapter | append: "" %}
+        {% if post_chapter == chapter_key %}
+          {% assign chapter_lessons = chapter_lessons | push: post %}
+        {% endif %}
+      {% endfor %}
+      {% assign chapter_lessons = chapter_lessons | sort: "order" %}
+      <details class="sidebar-chapter{% if page.url == node.url %} is-current{% endif %}"{% if page.chapter == node.chapter %} open{% endif %}>
+        <summary class="sidebar-chapter-summary">
+          <a class="sidebar-chapter-link{% if page.url == node.url %} active{% endif %}" href="{{ node.url | absolute_url }}">{{ node.chapter }}. {{ node.title }}</a>
+        </summary>
+        <div class="sidebar-submenu">
+          {% for lesson in chapter_lessons %}
+            <a class="sidebar-nav-item sidebar-lesson{% if page.url == lesson.url %} active{% endif %}" href="{{ lesson.url | absolute_url }}">
+              {{ lesson.title }}
+              {% if lesson.lesson_type == 'required' %}
+                <span class="lesson-badge required">{{ site.t[nav_lang].required }}</span>
+              {% elsif lesson.lesson_type == 'optional' %}
+                <span class="lesson-badge optional">{{ site.t[nav_lang].optional }}</span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      </details>
+    {% endunless %}
+  {% endif %}
+{% endfor %}

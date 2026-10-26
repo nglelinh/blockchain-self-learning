@@ -13,59 +13,48 @@
     <a class="sidebar-nav-item{% if page.title == 'Home' %} active{% endif %}" href="{{ '/' | absolute_url }}">{{ site.t[current_lang].home }}</a>
 
     {% comment %}
-      The code below dynamically generates a sidebar nav of pages with
-      `layout: page` in the front-matter. See readme for usage.
+      Chapter pages stay the top-level entries. Each chapter's lessons are
+      grouped in a collapsible submenu from posts (lang + chapter + order).
+      A page with an explicit lang shows that language. The language-neutral
+      home lists every language that actually has chapter pages.
     {% endcomment %}
 
-    {% assign pages_list = site.pages | where: "lang", current_lang | sort: "chapter" %}
-    
-    <!-- Hiển thị các chương có sẵn cho ngôn ngữ hiện tại -->
-    {% for node in pages_list %}
-      {% if node.title != null and node.chapter %}
-        {% if node.layout == "page" %}
-          {% assign is_hidden = node.hidden | default: false %}
-          {% unless is_hidden %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url | absolute_url }}">
-              {{node.chapter}}. {{ node.title }}
-              {% if node.lesson_type %}
-                {% if node.lesson_type == 'required' %}
-                  <span class="lesson-badge required">{{ site.t[current_lang].required }}</span>
-                {% elsif node.lesson_type == 'optional' %}
-                  <span class="lesson-badge optional">{{ site.t[current_lang].optional }}</span>
-                {% endif %}
+    {% if page.lang %}
+      {% assign pages_list = site.pages | where: "lang", page.lang %}
+      {% include sidebar_chapters.html nav_lang=page.lang %}
+
+      {% if pages_list.size == 0 %}
+        <div class="sidebar-nav-item" style="color: #999; font-style: italic;">
+          {% if page.lang == 'vi' %}
+            Nội dung tiếng Việt đang được cập nhật...
+          {% else %}
+            Content is being updated...
+          {% endif %}
+        </div>
+
+        {% assign other_lang = page.lang == 'en' ? 'vi' : 'en' %}
+        {% assign other_pages = site.pages | where: "lang", other_lang %}
+        {% if other_pages.size > 0 %}
+          <div class="sidebar-nav-item">
+            <a href="{{ '/contents/' | append: other_lang | append: '/chapter00/' | absolute_url }}" style="color: #268bd2;">
+              {% if page.lang == 'vi' %}
+                → Xem nội dung tiếng Anh
+              {% else %}
+                → View Vietnamese content
               {% endif %}
             </a>
-          {% endunless %}
+          </div>
         {% endif %}
       {% endif %}
-    {% endfor %}
-    
-    <!-- Nếu không có nội dung cho ngôn ngữ hiện tại, hiển thị thông báo -->
-    {% if pages_list.size == 0 %}
-      <div class="sidebar-nav-item" style="color: #999; font-style: italic;">
-        {% if current_lang == 'vi' %}
-          Nội dung tiếng Việt đang được cập nhật...
-        {% else %}
-          Content is being updated...
+    {% else %}
+      {% for lang in site.languages %}
+        {% assign lang_pages = site.pages | where: "lang", lang %}
+        {% if lang_pages.size > 0 %}
+          {% include sidebar_chapters.html nav_lang=lang %}
         {% endif %}
-      </div>
-      
-      <!-- Hiển thị link chuyển sang ngôn ngữ có nội dung -->
-      {% assign other_lang = current_lang == 'en' ? 'vi' : 'en' %}
-      {% assign other_pages = site.pages | where: "lang", other_lang | sort: "chapter" %}
-      {% if other_pages.size > 0 %}
-        <div class="sidebar-nav-item">
-          <a href="{{ '/contents/' | append: other_lang | append: '/chapter00/' | absolute_url }}" style="color: #268bd2;">
-            {% if current_lang == 'vi' %}
-              → Xem nội dung tiếng Anh
-            {% else %}
-              → View Vietnamese content
-            {% endif %}
-          </a>
-        </div>
-      {% endif %}
+      {% endfor %}
     {% endif %}
-    
+
     <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
   </nav>
 

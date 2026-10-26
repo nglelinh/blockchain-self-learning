@@ -181,8 +181,8 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: -14rem;
-  width: 14rem;
+  left: -18rem;
+  width: 18rem;
   visibility: hidden;
   overflow-y: auto;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -227,6 +227,63 @@ a.sidebar-nav-item:focus {
   border-color: transparent;
 }
 
+/* Chapter row with a collapsible lesson list (native details/summary). */
+.sidebar-chapter {
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.sidebar-chapter-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: .4rem;
+  padding: .5rem 1rem;
+  list-style: none;
+  cursor: pointer;
+}
+.sidebar-chapter-summary::-webkit-details-marker {
+  display: none;
+}
+.sidebar-chapter-summary::marker {
+  content: "";
+}
+.sidebar-chapter-link {
+  flex: 1;
+  color: #fff;
+  text-decoration: none;
+  line-height: 1.35;
+}
+.sidebar-chapter-summary::after {
+  content: "";
+  width: .4rem;
+  height: .4rem;
+  margin-top: .4rem;
+  border-right: 2px solid rgba(255,255,255,.75);
+  border-bottom: 2px solid rgba(255,255,255,.75);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.sidebar-chapter[open] > .sidebar-chapter-summary::after {
+  transform: rotate(-135deg);
+  margin-top: .55rem;
+}
+.sidebar-chapter-summary:hover,
+.sidebar-chapter-summary:focus-within,
+.sidebar-chapter.is-current > .sidebar-chapter-summary {
+  background-color: rgba(255,255,255,.1);
+}
+.sidebar-submenu .sidebar-lesson {
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  padding-left: 1.75rem;
+  font-size: .8125rem;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.sidebar-lesson .lesson-badge {
+  margin-top: .15rem;
+}
+
 @media (min-width: 48em) {
   .sidebar-item {
     padding: 1.5rem;
@@ -234,6 +291,13 @@ a.sidebar-nav-item:focus {
   .sidebar-nav-item {
     padding-left:  1.5rem;
     padding-right: 1.5rem;
+  }
+  .sidebar-chapter-summary {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .sidebar-submenu .sidebar-lesson {
+    padding-left: 2.15rem;
   }
 }
 
@@ -329,9 +393,9 @@ a.sidebar-nav-item:focus {
 #sidebar-checkbox:checked ~ .sidebar,
 #sidebar-checkbox:checked ~ .wrap,
 #sidebar-checkbox:checked ~ .sidebar-toggle {
-  -webkit-transform: translateX(14rem);
-      -ms-transform: translateX(14rem);
-          transform: translateX(14rem);
+  -webkit-transform: translateX(18rem);
+      -ms-transform: translateX(18rem);
+          transform: translateX(18rem);
 }
 
 
@@ -466,7 +530,7 @@ a.pagination-item:hover {
 
 .layout-reverse .sidebar {
   left: auto;
-  right: -14rem;
+  right: -18rem;
 }
 .layout-reverse .sidebar-toggle {
   left: auto;
@@ -476,9 +540,9 @@ a.pagination-item:hover {
 .layout-reverse #sidebar-checkbox:checked ~ .sidebar,
 .layout-reverse #sidebar-checkbox:checked ~ .wrap,
 .layout-reverse #sidebar-checkbox:checked ~ .sidebar-toggle {
-  -webkit-transform: translateX(-14rem);
-      -ms-transform: translateX(-14rem);
-          transform: translateX(-14rem);
+  -webkit-transform: translateX(-18rem);
+      -ms-transform: translateX(-18rem);
+          transform: translateX(-18rem);
 }
 
 
