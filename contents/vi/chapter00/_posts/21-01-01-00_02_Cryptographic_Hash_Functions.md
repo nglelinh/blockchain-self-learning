@@ -1010,6 +1010,12 @@ Hash functions enable **commitment schemes** - commit to a value without reveali
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [SHA: Secure Hashing Algorithm - Computerphile](https://www.youtube.com/watch?v=DMtFhACPnTY) — Computerphile, tiếng Anh. Computerphile tách hàm nén và cấu trúc Merkle–Damgård; xem trước khi đọc SHA-256 trong phần nền tảng kỹ thuật.
+- [How secure is 256 bit security?](https://www.youtube.com/watch?v=S9JGmA5_unY) — 3Blue1Brown, tiếng Anh. 3Blue1Brown cho cảm giác về 2^256 và vì sao preimage của SHA-256 nằm ngoài tầm tìm kiếm, đúng mục kháng va chạm.
+- [Merkle Tree | Merkle Root | Blockchain](https://www.youtube.com/watch?v=fB41w3JcR7U) — Telusko, tiếng Anh. Dựng Merkle root từ các lá giao dịch; đối chiếu với Merkle tree và light client trong bài.
+
 ## References
 
 1. National Institute of Standards and Technology (NIST). (2015). *FIPS 180-4: Secure Hash Standard (SHS)*.

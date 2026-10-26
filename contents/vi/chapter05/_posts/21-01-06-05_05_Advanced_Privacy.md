@@ -169,6 +169,12 @@ Next: Chapter 07 - Advanced Topics
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [18. Confidential Transactions](https://www.youtube.com/watch?v=UySc4jxbqi4) — MIT OpenCourseWare, tiếng Anh. Bài 18 của MIT OpenCourseWare về confidential transactions; xem trước cam kết đồng cấu và range proof.
+- [Bulletproofs: Short Proofs for Confidential Transactions and More](https://www.youtube.com/watch?v=sgruTaH_w1s) — Stanford Online, tiếng Anh. Stanford Online trình bày Bulletproofs; đối chiếu chứng minh khoảng ngắn trong bài.
+- [MimbleWimble with Andrew Poelstra](https://www.youtube.com/watch?v=aHTRlbCaUyM) — SF Bitcoin Developers, tiếng Anh. Andrew Poelstra nói Mimblewimble tại SF Bitcoin Developers; đúng mục cắt bớt lịch sử giao dịch.
+
 ## References
 
 1. Back, A. (2016). *Confidential Transactions*. Bitcoin Elements Project.

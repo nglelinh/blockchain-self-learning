@@ -927,3 +927,9 @@ Bài giảng đạt ~10,000 từ với comprehensive security patterns!
 - ✅ 60% course completion!
 
 Tôi vừa tạo xong bài về Smart Contract Security - một trong những critical topics nhất! Bạn muốn tôi tiếp tục hoàn thành course không? 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [Reentrancy | Hack Solidity (0.6)](https://www.youtube.com/watch?v=4Mm3BCyHtDY) — Smart Contract Programmer, tiếng Anh. Smart Contract Programmer dựng lại reentrancy trên Solidity 0.6; xem trước mẫu Checks-Effects-Interactions.
+- [Solidity 0.8 New Features](https://www.youtube.com/watch?v=xv9OmztShIw) — Smart Contract Programmer, tiếng Anh. Các thay đổi Solidity 0.8, trong đó số học được kiểm tra tràn; đúng mục overflow mà bài cảnh báo.
+- [Onward with Smart Contract Security](https://www.youtube.com/watch?v=RipXdV7vygs) — OpenZeppelin, tiếng Anh. OpenZeppelin nói về hướng thực hành bảo mật hợp đồng; dùng khi bài chuyển từ từng lỗi sang quy trình audit.

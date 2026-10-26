@@ -914,3 +914,9 @@ contract PaymentChannel {
 Bài giảng đã đạt ~9,000 từ. Tôi sẽ tiếp tục creating comprehensive content về scalability! Đây là một critical topic và tôi đang cover it thoroughly với both theory và implementations! 🚀
 
 Còn nhiều content nữa để add (sections 6-10, comparison tables, security analysis, etc). Bạn muốn tôi tiếp tục không? 💪
+
+## Video tham khảo
+
+- **Xem trước:** [The Blockchain Trilemma EXPLAINED](https://www.youtube.com/watch?v=F3b5C7AjZnk) — EatTheBlocks, tiếng Anh. EatTheBlocks vẽ tam giác phi tập trung, an toàn và thông lượng; xem trước mục blockchain trilemma.
+- [Bitcoin's Lightning Network, Simply Explained!](https://www.youtube.com/watch?v=rrr_zPmEiME) — Simply Explained, tiếng Anh. Simply Explained mô tả kênh Lightning: phần lớn giao dịch nằm ngoài chuỗi; đúng họ state channel trong bài.
+- [A Technical Introduction to The Lightning Network - We Are Developers 2020](https://www.youtube.com/watch?v=E1n3sKKPD_k) — aantonop, tiếng Anh. Antonopoulos đi vào kỹ thuật Lightning; dùng khi nối giới hạn TPS lớp 1 với lớp kênh thanh toán.

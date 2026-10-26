@@ -89,6 +89,12 @@ Vẫn đọc 06.00–06.02 cho HTLC, phân loại cầu, IBC/Polkadot cổ đi�
 | [BitVM2 Bridge](https://bitvm.org/bitvm_bridge.pdf) | 2024 | 1-of-n Bitcoin-side bridge |
 | L2BEAT / Rekt newsletters | 2022–2024 | Bridge incident catalog (đọc phê phán) |
 
+## Video tham khảo
+
+- **Xem trước:** [What Is Chainlink CCIP?](https://www.youtube.com/watch?v=VvNSVyo2vJ8) — Chainlink, tiếng Anh. Chainlink giải thích CCIP; xem trước làn tin nhắn giữa các chuỗi mà bài đưa vào production.
+- [What is LayerZero? - LayerZero ZRO Interoperability Solution Explained](https://www.youtube.com/watch?v=bREuo9hRVyY) — University of Crypto, tiếng Anh. University of Crypto trình bày LayerZero như lớp tương tác đa chuỗi; đối chiếu mục omnichain messaging.
+- [The Security of Blockchain Bridges](https://www.youtube.com/watch?v=FOHweLsxQS4) — Rootstock, tiếng Anh. Rootstock nhắc lại bề mặt an toàn của cầu; dùng cho bài học sau các vụ mất quỹ 2022–2024.
+
 ## 7. Bài tập định hướng
 
 1. Vẽ trust set: HTLC hai party vs CCIP lane vs IBC Tendermint client. Ai có thể đánh cắp quỹ?

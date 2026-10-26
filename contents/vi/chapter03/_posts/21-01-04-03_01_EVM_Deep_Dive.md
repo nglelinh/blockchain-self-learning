@@ -1317,3 +1317,8 @@ if __name__ == "__main__":
 ---
 
 Bài giảng đã đạt ~11,000 từ với complete EVM implementation! Tôi sẽ tiếp tục với các lectures còn lại! 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto dựng stack, memory và storage của EVM; xem trước trước khi đọc opcode.
+- [What Is GAS? Ethereum HIGH Transaction Fees Explained](https://www.youtube.com/watch?v=Yh8cHUB-KoU) — Finematics, tiếng Anh. Finematics giải thích gas như đồng hồ đo tài nguyên; đối chiếu công thức phí và metering trong bài.

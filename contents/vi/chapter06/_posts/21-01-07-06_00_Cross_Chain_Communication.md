@@ -570,6 +570,12 @@ Next: Lecture 06.01 - Blockchain Bridges: Architecture và Security
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [What is an Atomic Swap in Crypto? Time Locked Smart Contracts](https://www.youtube.com/watch?v=-9NDKbJo_A4) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto giải thích atomic swap và khóa thời gian; xem trước trước công thức HTLC.
+- [Introduction to Atomic Swaps: Live Demo +  Solidity Tutorial Of Hash Timelocked Contract (HTLC)](https://www.youtube.com/watch?v=VZX2ApRLuwM) — EatTheBlocks, tiếng Anh. EatTheBlocks viết hash timelock contract bằng Solidity và chạy demo; đúng phần hiện thực trong bài.
+- [A Technical Introduction to The Lightning Network - We Are Developers 2020](https://www.youtube.com/watch?v=E1n3sKKPD_k) — aantonop, tiếng Anh. Antonopoulos cho thấy Lightning dùng cùng primitive HTLC ở quy mô thanh toán; nối bài với một hệ đang chạy.
+
 ## References
 
 1. Nolan, T. (2013). *Atomic Cross-Chain Swaps*. BitcoinTalk Forum.

@@ -533,6 +533,11 @@ Next: Lecture 07.02 - Web3 Infrastructure và Decentralized Storage
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [What are ERC-721 Contracts? ERC-721 Explained with Animations](https://www.youtube.com/watch?v=f4KgeGwuyzs) — Crypto Explained, tiếng Anh. Crypto Explained dựng ERC-721 bằng hoạt hình; xem trước mapping token id và chủ sở hữu.
+- [ERC-721 Tokens Explained: Complete NFT Standard Guide for Beginners](https://www.youtube.com/watch?v=8Nj1lA9Hl-c) — CodeLucky, tiếng Anh. CodeLucky đi tiếp giao diện ERC-721; dùng khi đối chiếu metadata và chuyển nhượng trong bài.
+
 ## References
 
 1. Entriken, W., Shirley, D., Evans, J., & Sachs, N. (2018). *ERC-721: Non-Fungible Token Standard*. Ethereum Improvement Proposals.

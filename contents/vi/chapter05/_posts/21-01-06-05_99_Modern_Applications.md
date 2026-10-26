@@ -82,6 +82,12 @@ Vẫn học 05.00–05.05 cho privacy classic, Groth16/STARK math, vuln, formal 
 | [FIPS 203 ML-KEM](https://csrc.nist.gov/pubs/fips/203/final) | 2024-08-13 | Kyber standardized |
 | [Halo2 book](https://zcash.github.io/halo2/) / [Noir](https://noir-lang.org/) | 2022– | Circuit toolchains |
 
+## Video tham khảo
+
+- **Xem trước:** [Nova: Recursive Zero-Knowledge Arguments from Folding Schemes - Srinath Setty](https://www.youtube.com/watch?v=mY-LWXKsBLc) — Protocol Labs, tiếng Anh. Srinath Setty trình bày Nova tại Protocol Labs; xem trước folding và IVC rẻ hơn Groth16 từng bước.
+- [What is Jolt? The simplest and most extensible zkVM, explained.](https://www.youtube.com/watch?v=WxjOF1oPmNs) — a16z Frontier, tiếng Anh. a16z Frontier giải thích zkVM Jolt; đối chiếu mục chứng minh trace thay vì viết mạch tay.
+- [FIPS 203 Post-Quantum Cryptography](https://www.youtube.com/watch?v=GLBCdATgSbg) — Dr. Carmenatty - AI, Cybersecurity & Quantum Comp., tiếng Anh. Video đi vào FIPS 203; dùng khi bài neo ML-KEM với số hiệu chuẩn NIST tháng 8 năm 2024.
+
 ## 7. Bài tập định hướng
 
 1. Nova folding giảm *gì* so với recursive Groth16 mỗi bước? Cái gì *không* giảm (kích thước proof cuối nếu không nén)?

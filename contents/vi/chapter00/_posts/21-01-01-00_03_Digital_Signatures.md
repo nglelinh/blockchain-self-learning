@@ -1121,6 +1121,12 @@ Signer signs message without seeing its content:
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [What are Digital Signatures? - Computerphile](https://www.youtube.com/watch?v=s22eJ1eVLTU) — Computerphile, tiếng Anh. Computerphile tách người ký và người xác minh, rồi ký trên hash của thông điệp; xem trước mục authenticity.
+- [Elliptic Curves - Computerphile](https://www.youtube.com/watch?v=NF1pwjL9-DE) — Computerphile, tiếng Anh. Đường cong elliptic và bài toán logarit rời rạc; nền cho ECDSA trên secp256k1 ở phần toán.
+- [Public Key Cryptography - Computerphile](https://www.youtube.com/watch?v=GSIDS_lvRv4) — Computerphile, tiếng Anh. Cặp khóa công khai và bí mật, đúng bước sinh khóa trước khi bài đi vào công thức ký và xác minh.
+
 ## References
 
 1. Diffie, W., & Hellman, M. (1976). *New directions in cryptography*. IEEE transactions on Information Theory, 22(6), 644-654.

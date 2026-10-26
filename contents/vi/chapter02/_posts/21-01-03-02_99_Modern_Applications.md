@@ -85,6 +85,12 @@ Vẫn chứng minh safety/liveness từ 02.00–02.02. Bài tùy chọn chỉ g�
 | [CometBFT docs](https://docs.cometbft.com/) | 2023– | Tendermint successor |
 | [HotStuff-2 (arXiv:2302.07871)](https://arxiv.org/abs/2302.07871) | 2023 | BFT latency refinements |
 
+## Video tham khảo
+
+- **Xem trước:** [Proof of Stake and The Merge: Why, What, How, Wen? - Ethereum Foundation](https://www.youtube.com/watch?v=2xhAGQsF-Ss) — ETHBarcelona, tiếng Anh. Cùng bài nói của Ethereum Foundation về vì sao Merge chuyển execution sang beacon chain; xem trước mục 15 tháng 9 năm 2022.
+- [A study of the transaction supply chain from CryptoKitties to MEV-Boost to PBS - Barnabé Monnot (EF)](https://www.youtube.com/watch?v=jQjBNbEv9Mg) — Flashbots, tiếng Anh. Barnabé Monnot (EF) đi từ MEV-Boost tới PBS; đúng chỗ proposer chọn bid và relay nằm ngoài protocol.
+- [CometBFT Explained Simply: ABCI and ABCI++](https://www.youtube.com/watch?v=IlepSxHQO_w) — redshiftzero, tiếng Anh. Giải thích CometBFT qua ABCI và ABCI++; dùng cho đoạn Tendermint đổi tên và vote extensions.
+
 ## 7. Bài tập định hướng
 
 1. Vẽ lại sơ đồ “proposer / attester” của 02.00 và đánh dấu chỗ MEV-Boost chèn vào. Safety của FFG có phụ thuộc relay không?

@@ -329,6 +329,11 @@ Next: Lecture 05.04 - Post-Quantum Cryptography
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [What is Certora and Formal Verification - Simply Explained](https://www.youtube.com/watch?v=8ON0Vpo7zls) — JohnnyTime, tiếng Anh. JohnnyTime giới thiệu Certora và ý nghĩa chứng minh thuộc tính; xem trước trước khi đọc đặc tả hình thức.
+- [Certora AutoProver Demo: How AutoProver Automates Formal Verification](https://www.youtube.com/watch?v=ZJ0KMwR_NvU) — Certora, tiếng Anh. Certora chạy AutoProver trên một đặc tả; đối chiếu mục prover và invariant trong bài.
+
 ## References
 
 1. Hoare, C. A. R. (1969). *An axiomatic basis for computer programming*. Communications of the ACM, 12(10), 576-580.

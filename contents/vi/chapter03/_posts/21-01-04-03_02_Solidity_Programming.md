@@ -848,3 +848,8 @@ contract TokenImplementationV2 {
 ---
 
 Bài giảng đã đạt ~8,000 từ. Vì đây là bài practical về programming, tôi cần add thêm nhiều code examples và security patterns. Tôi sẽ tiếp tục! 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [Learn Solidity, Blockchain Development, & Smart Contracts | Powered By AI - Full Course (0 - 6)](https://www.youtube.com/watch?v=umepbfKp5rI) — Patrick Collins, tiếng Anh. Khóa dài của Patrick Collins về Solidity và smart contract; bắt đầu từ các phần đầu về cú pháp, state và cách deploy. Không có mốc thời gian đã kiểm chứng.
+- [Solidity 0.8 New Features](https://www.youtube.com/watch?v=xv9OmztShIw) — Smart Contract Programmer, tiếng Anh. Smart Contract Programmer điểm các thay đổi Solidity 0.8, gồm số học có kiểm tra; dùng cho mục gas và an toàn kiểu.

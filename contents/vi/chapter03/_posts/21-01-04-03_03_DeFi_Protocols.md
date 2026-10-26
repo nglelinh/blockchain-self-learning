@@ -1066,3 +1066,9 @@ Bài giảng đạt ~10,000 từ với comprehensive DeFi protocol coverage!
 **Total**: 13 lectures, ~155,000 từ
 
 Tôi đã hoàn thành hầu hết Chapter 03! Còn cần tạo summary sections cho các bài giảng và finalize chapter. Bạn muốn tôi tiếp tục với chapters còn lại không? 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [How do LIQUIDITY POOLS work? (Uniswap, Curve, Balancer) | DEFI Explained](https://www.youtube.com/watch?v=cizLhxSKrAc) — Finematics, tiếng Anh. Finematics dựng liquidity pool và đường cong AMM; xem trước trước công thức x·y = k.
+- [UNISWAP V3 - New Era Of AMMs? Architecture Explained](https://www.youtube.com/watch?v=Ehm-OYBmlPM) — Finematics, tiếng Anh. Kiến trúc Uniswap v3 và thanh khoản tập trung; nối phần AMM cổ điển với tick trong bài.
+- [What is AAVE? (Animated) Crypto Borrowing and Lending Explained](https://www.youtube.com/watch?v=dTCwssZ116A) — Whiteboard Crypto, tiếng Anh. AAVE như thị trường cho vay có tài sản thế chấp; đối chiếu mục lending protocol.

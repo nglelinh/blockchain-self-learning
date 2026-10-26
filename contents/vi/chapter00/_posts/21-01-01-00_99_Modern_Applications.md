@@ -92,6 +92,12 @@ Vẫn dùng 00.00–00.03 để giải thích *tại sao* hash one-way, *tại s
 | [PeerDAS](https://ethereum.org/roadmap/fusaka/peerdas/) / [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594) | 2025 | DAS cho blob columns |
 | [Verkle trees (Buterin)](https://vitalik.eth.limo/general/2021/06/18/verkle.html) | 2021+ | Vector commitment thay Merkle path |
 
+## Video tham khảo
+
+- **Xem trước:** [Goodbye Merkle Trees? Verkle Trees & Multiproofs Demystified | Episode7 - Season 1 Finale](https://www.youtube.com/watch?v=3PyDkMYrzAs) — zkMarek, tiếng Anh. So sánh witness Merkle với Verkle multiproof; xem trước mục từ cây Merkle sang vector commitment.
+- [What is EIP-4844? | Blobs & Proto-danksharding](https://www.youtube.com/watch?v=LmQTRGqUL9s) — Patrick Collins, tiếng Anh. Patrick Collins giải thích blob và proto-danksharding, đúng đoạn EIP-4844 và cam kết KZG trên dữ liệu tạm.
+- [5. BLS aggregation by Vitalik Buterin and Justin Drake (Ethereum Foundation)](https://www.youtube.com/watch?v=DpV0Hh9YajU) — Ethereum Foundation, tiếng Anh. Vitalik Buterin và Justin Drake trình bày gộp chữ ký BLS, đúng phần beacon chain và EIP-2537.
+
 ## 7. Bài tập định hướng
 
 1. So sánh độ dài witness Merkle (state Ethereum ~\(2^{28}\) lá) với một KZG opening. Con số nào quan trọng cho *light client*?

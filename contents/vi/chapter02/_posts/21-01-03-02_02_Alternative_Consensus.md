@@ -1249,3 +1249,9 @@ Bài giảng đạt ~14,000 từ! Tôi đã hoàn thành Chapter 02 với 3 bài
 **10 bài giảng tổng cộng (~125,000 từ)** covering toàn bộ foundation của blockchain technology! 🚀
 
 Bạn muốn tôi tiếp tục với Chapter 03 về Ethereum và Smart Contracts không? 💪
+
+## Video tham khảo
+
+- **Xem trước:** [Avalanche Consensus Simply Explained](https://www.youtube.com/watch?v=3TAgLJHTYRg) — Decentralized Thought, tiếng Anh. Decentralized Thought giải thích Avalanche bằng lấy mẫu lặp; xem trước nhóm cơ chế mới trong bài.
+- [The Stellar Consensus Protocol | David Mazières | Talks at Google](https://www.youtube.com/watch?v=vmwnhZmEZjc) — Talks at Google, tiếng Anh. David Mazières trình bày Stellar Consensus Protocol tại Google; đúng mục Federated Byzantine Agreement.
+- [How Proof of History Works on Solana](https://www.youtube.com/watch?v=GU4igNeYr-Q) — base256, tiếng Anh. Cách Proof of History tạo đồng hồ trước khi bỏ phiếu; đối chiếu mục Solana trong các hướng tiếp cận mới.

@@ -1019,3 +1019,9 @@ Words: ~172,000+
 
 Tôi đã cross the halfway mark! 🎉 Bạn muốn tôi tiếp tục không? 🚀
 
+
+## Video tham khảo
+
+- **Xem trước:** [LIGHTNING SESSION: CoinJoin Explained 🌀](https://www.youtube.com/watch?v=kOghnRgX9L4) — BTC Sessions, tiếng Anh. BTC Sessions giải thích CoinJoin; xem trước trước khi đọc mixer và việc làm mờ liên kết đầu vào.
+- [Monero: Ring Signatures](https://www.youtube.com/watch?v=zHN_B_H_fCs) — Monero, tiếng Anh. Kênh Monero trình bày ring signature; đúng cơ chế ẩn người gửi mà bài đối lập với pseudonym.
+- [Zcash Shielded Transactions Explained](https://www.youtube.com/watch?v=bGmsx4XhV4g) — Chadwick Bailey, tiếng Anh. Giải thích giao dịch shielded của Zcash; dùng cho nhánh ẩn số lượng và địa chỉ bằng chứng minh không tiết lộ.

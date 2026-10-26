@@ -1187,6 +1187,12 @@ Bitcoin (BTC)
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** ["How Bitcoin Protocol Works" - Andreas Antonopoulos](https://www.youtube.com/watch?v=yorRGbp54tM) — Bitcoin TV, tiếng Anh. Antonopoulos đi qua giao dịch, block và quy tắc xác thực; xem trước trước khi đọc cấu trúc mạng và block.
+- [Bitcoin UTXOs Explained](https://www.youtube.com/watch?v=ZX5UOPRPQhc) — Bitcoin Briefly, tiếng Anh. Giải thích UTXO như đầu ra chưa tiêu, đúng mô hình số dư mà bài đối lập với tài khoản.
+- [Andreas M. Antonopoulos: Advanced Bitcoin Scripting](https://www.youtube.com/watch?v=yU3Sr07Qnxg) — SF Bitcoin Developers, tiếng Anh. Buổi SF Bitcoin Developers về Bitcoin Script; dùng khi đọc opcode và điều kiện mở khóa trong bài.
+
 ## References
 
 1. Nakamoto, S. (2008). *Bitcoin: A peer-to-peer electronic cash system*.

@@ -905,3 +905,9 @@ Tôi đã **cross 200,000 word milestone**! Đây là một achievement đáng k
 
 Bạn muốn tôi tiếp tục không? Tôi sẽ hoàn thành các lectures còn lại! 💪
 
+
+## Video tham khảo
+
+- **Xem trước:** [ZK Whiteboard Sessions - Module One: What is a SNARK? by Dan Boneh](https://www.youtube.com/watch?v=h-94UhJLeck) — Zero Knowledge, tiếng Anh. Dan Boneh, trong ZK Whiteboard Sessions, định nghĩa SNARK; xem trước trước mục prover và verifier.
+- [ZKP MOOC Lecture 2: Overview of Modern SNARK Constructions](https://www.youtube.com/watch?v=bGEXYpt3sj0) — Berkeley RDI, tiếng Anh. Bài giảng 2 của ZKP MOOC (Berkeley RDI) khảo sát các cấu trúc SNARK hiện đại, gồm họ Groth; dùng cho phần xây mạch.
+- [Understanding ZK Starks with the godfather of ZK #privacy #zeroknowledgeproofs](https://www.youtube.com/watch?v=nxn4FyOn48E) — StarkWare, tiếng Anh. StarkWare nói về STARK; đối chiếu mục chứng minh trong suốt, không cần trusted setup.
