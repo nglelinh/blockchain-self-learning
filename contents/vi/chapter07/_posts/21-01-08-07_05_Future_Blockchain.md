@@ -112,6 +112,12 @@ Despite challenges, blockchain's core value propositions - decentralization, tra
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [Celestia EXPLAINED (Animated Modular Blockchains)](https://www.youtube.com/watch?v=ToHbt8pYBfA) — gogoDiego, tiếng Anh. gogoDiego giải thích chuỗi module với Celestia; xem trước hướng tách thực thi và data availability.
+- [What is Account Abstraction? ERC-4337](https://www.youtube.com/watch?v=PZ8svp68NXM) — Patrick Collins, tiếng Anh. Patrick Collins giải thích account abstraction qua ERC-4337; đúng trục UX mà bài liệt kê cho giai đoạn sau.
+- [The Secrets of zkEVM: A Deep Dive into Zero-Knowledge Rollups](https://www.youtube.com/watch?v=LtDtCgVztg4) — James Bachini, tiếng Anh. James Bachini đi vào zkEVM; dùng cho mục chứng minh tương thích EVM trên lớp 2.
+
 ## References
 
 1. Buterin, V. (2021). *Endgame*. Vitalik's Blog.

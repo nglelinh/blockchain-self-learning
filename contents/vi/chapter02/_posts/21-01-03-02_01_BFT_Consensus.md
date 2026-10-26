@@ -1133,3 +1133,9 @@ if __name__ == "__main__":
 ---
 
 Bài giảng đạt ~13,000 từ. Tôi sẽ tiếp tục với bài cuối cùng của Chapter 02 về Hybrid và Alternative Consensus Mechanisms! 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [\[CS198.2x Week 1\] Practical Byzantine Fault Tolerance](https://www.youtube.com/watch?v=IafgKJN3nwU) — Blockchain at BerkeleyX, tiếng Anh. Buổi BerkeleyX về PBFT: prepare và commit với quorum hai phần ba; xem trước mục thuật toán.
+- [Tendermint - How the consensus mechanism works](https://www.youtube.com/watch?v=AFiLxS7f1Lo) — PONTON, tiếng Anh. Vòng đề xuất, prevote và precommit của Tendermint; đối chiếu mục Tendermint trong bài.
+- [Dr. Ted Yin: Consensus Mechanisms (HotStuff) | Gigabrains Blockchain Reading Group 2024](https://www.youtube.com/watch?v=RKRk-TpaVrg) — Nubit, tiếng Anh. Ted Yin, đồng tác giả HotStuff, trình bày cơ chế đó; dùng cho phần giảm vòng giao tiếp so với PBFT.

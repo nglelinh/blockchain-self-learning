@@ -925,3 +925,9 @@ if __name__ == "__main__":
 
 Bài giảng đã đạt ~10,000 từ với complete rollup implementations! Đây là critical content về scaling solutions. Tôi sẽ tiếp tục với bài cuối của Chapter 04 về Sharding! 🚀
 
+
+## Video tham khảo
+
+- **Xem trước:** [ROLLUPS - The Ultimate Ethereum Scaling Strategy? Arbitrum & Optimism Explained](https://www.youtube.com/watch?v=7pWxCklcNsU) — Finematics, tiếng Anh. Finematics tách optimistic rollup và ZK rollup, cùng vai trò của dữ liệu đăng lên L1; xem trước định nghĩa rollup.
+- [Peek a live code-walkthrough of the new OP Stack fault proof code!](https://www.youtube.com/watch?v=2n9qTmsdYbQ) — Optimism , tiếng Anh. Optimism đi qua mã fault proof trên OP Stack; đối chiếu cửa sổ tranh chấp trong bài.
+- [The Secrets of zkEVM: A Deep Dive into Zero-Knowledge Rollups](https://www.youtube.com/watch?v=LtDtCgVztg4) — James Bachini, tiếng Anh. James Bachini đi vào zkEVM; dùng cho nhánh validity proof khi bài so với fraud proof.

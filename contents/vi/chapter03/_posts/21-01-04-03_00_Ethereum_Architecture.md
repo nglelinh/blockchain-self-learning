@@ -700,3 +700,9 @@ def apply_transaction(state, tx):
 Bài giảng đã đạt ~10,000 từ và covering core Ethereum architecture concepts. Tôi sẽ tiếp tục tạo các phần còn lại (sections 4-10) và các bài giảng tiếp theo về EVM, Solidity, và DeFi!
 
 Bạn muốn tôi tiếp tục không? 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [What is ETHEREUM? EXPLAINED For Beginners](https://www.youtube.com/watch?v=1Hu8lzoi0Tw) — CoinGecko, tiếng Anh. Bức tranh Ethereum như máy tính thế giới và smart contract; xem trước mục động lực so với Bitcoin.
+- [Account Based vs. UTxO - Understanding Ethereum](https://www.youtube.com/watch?v=5Mhvk0U6zqE) — Unbounded Capital, tiếng Anh. Đối chiếu sổ cái theo tài khoản với UTXO; đúng mô hình state mà bài lấy làm trục.
+- [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Hoạt hình EVM cho thấy giao dịch làm đổi state; cầu nối sang bài sau về bytecode và gas.

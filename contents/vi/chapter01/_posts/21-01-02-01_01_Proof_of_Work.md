@@ -1356,6 +1356,12 @@ Pool fee:    Medium (2-3%)
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Phần đào của 3Blue1Brown cho thấy nonce và hash nhỏ hơn ngưỡng; xem trước trước mục mining và target.
+- [Bitcoin Mining Difficulty Made Simple! | Hashpower Academy](https://www.youtube.com/watch?v=qrvdXAf1UOY) — Hashpower Academy, tiếng Anh. Cách difficulty chỉnh theo thời gian block; đối chiếu công thức điều chỉnh độ khó trong bài.
+- [Cryptoeconomics - 3.5 - Bitcoin: Selfish Mining](https://www.youtube.com/watch?v=SWKjSEi-9pg) — Cryptoeconomics Study, tiếng Anh. Bài giảng selfish mining: vì sao dưới 50% hashrate vẫn có chiến lược lệch, đúng mục an toàn và tấn công.
+
 ## References
 
 1. Nakamoto, S. (2008). *Bitcoin: A peer-to-peer electronic cash system*.

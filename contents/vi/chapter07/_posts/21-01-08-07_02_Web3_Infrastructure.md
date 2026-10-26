@@ -423,6 +423,12 @@ Next: Lecture 07.03 - MEV (Maximal Extractable Value)
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [Why IPFS? - Juan Benet](https://www.youtube.com/watch?v=zE_WSLbqqvo) — IPFS, tiếng Anh. Juan Benet giải thích vì sao IPFS định địa chỉ bằng nội dung; xem trước mục lưu trữ phi tập trung.
+- [What Is Filecoin? (2023)](https://www.youtube.com/watch?v=26ZdMAo23mM) — Filecoin, tiếng Anh. Kênh Filecoin mô tả thị trường lưu trữ; đối chiếu lớp khuyến khích phía trên IPFS trong bài.
+- [What is Ethereum Name Service (ENS) and Why It Matters?](https://www.youtube.com/watch?v=wDPy-SIwHOU) — CoinGecko, tiếng Anh. CoinGecko giải thích Ethereum Name Service; dùng cho phần danh tính và tên người đọc được.
+
 ## References
 
 1. Benet, J. (2014). *IPFS - Content Addressed, Versioned, P2P File System*. IPFS Whitepaper.

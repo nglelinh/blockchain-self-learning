@@ -114,6 +114,12 @@ Next: Lecture 07.05 - Future of Blockchain Technology
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [Bitcoin Q&A: Is Quantum Computing a Threat?](https://www.youtube.com/watch?v=wlzJyp3Qm7s) — aantonop, tiếng Anh. Antonopoulos trả lời Bitcoin có bị máy lượng tử đe dọa không, và khóa lộ public key khác khóa còn hash; xem trước kế hoạch di trú.
+- [Dilithium Signatures (ML-DSA) \[Post-Quantum Cryptography Explained\]](https://www.youtube.com/watch?v=JvqUS8Ai87g) — Cryptography 101, tiếng Anh. Dilithium / ML-DSA như chữ ký thay thế; đối chiếu mục sơ đồ chữ ký hậu lượng tử.
+- [What Is Hybrid Cryptography? | Bridging Classical and Post-Quantum Security](https://www.youtube.com/watch?v=QDF5d4PdQfQ) — Cyberpedia by Palo Alto Networks, tiếng Anh. Palo Alto Networks giải thích mật mã lai cổ điển và hậu lượng tử; đúng chiến lược chuyển dần trong bài.
+
 ## References
 
 1. Aggarwal, D., et al. (2017). *Quantum attacks on Bitcoin*. Ledger, 2.

@@ -79,6 +79,12 @@ Vẫn đọc 07.00–07.05 cho DAO, NFT standards, Web3 stack, MEV basics, PQC t
 | [Pectra](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025 | Validator + blob + 7702 |
 | [OP Superchain / Stage 1](https://optimism.io/blog/permissionless-fault-proofs-and-stage-1-arrive-to-the-op-stack) | 2024 | Fleet governance + proofs |
 
+## Video tham khảo
+
+- **Xem trước:** [Ethereum Inclusion Lists Explained | Censorship Resistance & EIP-7547](https://www.youtube.com/watch?v=n2P_ZUqP6Fs) — Wolfgang Vitale, tiếng Anh. Wolfgang Vitale giải thích inclusion list và EIP-7547; xem trước thuộc tính chống kiểm duyệt so với PBS thuần.
+- [Axelar Tech Talks With Sreeram Kannan of EigenLayer](https://www.youtube.com/watch?v=yuIlzgValaA) — Axelar Network, tiếng Anh. Sreeram Kannan nói về EigenLayer trong một tech talk; dùng cho mục restaking và điều kiện slashing thêm.
+- [ERC 6551: Token Bound Accounts Explained](https://www.youtube.com/watch?v=8N8OdTyFmd8) — The Web3 IP Lawyer, tiếng Anh. Giải thích ERC-6551 token bound account; đối chiếu chỗ bài gắn tài khoản với chính token NFT.
+
 ## 7. Bài tập định hướng
 
 1. Restaking: viết điều kiện slashing *thứ hai* (AVS) và giải thích vì sao tương quan với slashing beacon là rủi ro hệ thống.

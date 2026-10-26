@@ -92,6 +92,12 @@ Vẫn đọc 03.00–03.03 để hiểu state, gas, Solidity, AMM, lending. Bài
 | [Foundry Book](https://book.getfoundry.sh/) | 2022– | `forge` / `anvil` / `cast` |
 | [EVM docs](https://ethereum.org/developers/docs/evm/) | — | Tham chiếu opcode / execution |
 
+## Video tham khảo
+
+- **Xem trước:** [EIP-7702 (Type 4 transactions) | Everything you need to know](https://www.youtube.com/watch?v=0uy4nd8vIe8) — Patrick Collins, tiếng Anh. Patrick Collins giải thích giao dịch loại 4 và EIP-7702; xem trước mục EOA mang code sau Pectra.
+- [What is Account Abstraction? ERC-4337](https://www.youtube.com/watch?v=PZ8svp68NXM) — Patrick Collins, tiếng Anh. ERC-4337: UserOperation, bundler và paymaster; đúng lớp account abstraction ngoài protocol mà bài phân biệt với 7702.
+- [What is Uniswap V4? - Uniswap V4 Upgrade Proposal Explained](https://www.youtube.com/watch?v=tpYeroi4zCc) — University of Crypto, tiếng Anh. Đề xuất Uniswap v4 và hook; dùng khi đọc singleton pool và callback quanh swap.
+
 ## 7. Bài tập định hướng
 
 1. Kể một invariant Uniswap v2 (\(x\cdot y \ge k\)) và chỉ ra hook v4 nào có thể *cố ý* phá nếu author hook không bị ràng buộc.

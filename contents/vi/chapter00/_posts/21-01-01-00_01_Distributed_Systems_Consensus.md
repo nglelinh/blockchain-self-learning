@@ -876,6 +876,12 @@ Consensus Algorithm → Achieves → Data Consistency
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [Distributed Systems 2.2: The Byzantine generals problem](https://www.youtube.com/watch?v=LoGx_ldRBU0) — Martin Kleppmann, tiếng Anh. Martin Kleppmann dựng bài toán các tướng Byzantine; xem trước khi đọc định nghĩa lỗi Byzantine và ngưỡng một phần ba.
+- [Impossibility of Consensus](https://www.youtube.com/watch?v=2fnS-f-mwIo) — Computational Thinking, tiếng Anh. Bài nói về tính bất khả của đồng thuận, đúng chỗ bài gắn FLP với mô hình đồng bộ một phần.
+- [\[CS198.2x Week 1\] Practical Byzantine Fault Tolerance](https://www.youtube.com/watch?v=IafgKJN3nwU) — Blockchain at BerkeleyX, tiếng Anh. Buổi học BerkeleyX đi qua Practical Byzantine Fault Tolerance, thuật toán mà mục kỹ thuật của bài lấy làm nền.
+
 ## References
 
 1. Fischer, M. J., Lynch, N. A., & Paterson, M. S. (1985). Impossibility of distributed consensus with one faulty process. *Journal of the ACM*, 32(2), 374-382.

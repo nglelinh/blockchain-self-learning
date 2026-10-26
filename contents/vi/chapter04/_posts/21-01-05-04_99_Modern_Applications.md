@@ -85,6 +85,12 @@ Vẫn dùng 04.00–04.02 cho trilemma, kênh thanh toán, định nghĩa rollup
 | [EIP-7691](https://eips.ethereum.org/EIPS/eip-7691) | 2025 | Tăng blob throughput |
 | [L2BEAT scaling](https://l2beat.com/scaling/summary) | 2022– | Stage 0/1/2 taxonomy |
 
+## Video tham khảo
+
+- **Xem trước:** [Unlocking Ethereum’s Scaling: EIP-4844 Explained](https://www.youtube.com/watch?v=HT9PHWloIiU) — Finematics, tiếng Anh. Finematics giải thích blob và EIP-4844; xem trước mục proto-danksharding và phí blob.
+- [PeerDAS in 4 min by Tim Beiko | How Ethereum's Fusaka Upgrade Enhances Scalability #ethereum](https://www.youtube.com/watch?v=LSjSwsnpxyo) — ECH Institute, tiếng Anh. Tim Beiko nói PeerDAS trong khoảng bốn phút: cột và lấy mẫu; đúng mục Fusaka và EIP-7594.
+- [Arbitrum’s BoLD - A Layer 2 Rollup Dispute Protocol (Explained with Animation)](https://www.youtube.com/watch?v=OQQfAbMUNro) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto minh họa giao thức tranh chấp BoLD của Arbitrum; đối chiếu mục chặn delay attack.
+
 ## 7. Bài tập định hướng
 
 1. Vì sao cửa sổ prune blob ~18 ngày phải dài hơn withdrawal delay 7 ngày của optimistic rollup?

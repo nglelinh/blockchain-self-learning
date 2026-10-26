@@ -279,6 +279,12 @@ Next: Lecture 05.05 - Advanced Privacy Techniques
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [How Quantum Computers Break Encryption | Shor's Algorithm Explained](https://www.youtube.com/watch?v=lvTqbM5Dq4Q) — minutephysics, tiếng Anh. minutephysics giải thích thuật toán Shor và vì sao nó đụng logarit rời rạc; xem trước mối đe dọa với ECDSA.
+- [NIST standardization of Post Quantum Cryptography](https://www.youtube.com/watch?v=I2v7AaKuxR4) — IoT Security Foundation, tiếng Anh. IoT Security Foundation điểm quá trình chuẩn hóa PQC của NIST; đúng mục chuyển từ nghiên cứu sang chuẩn.
+- [Dilithium Signatures (ML-DSA) \[Post-Quantum Cryptography Explained\]](https://www.youtube.com/watch?v=JvqUS8Ai87g) — Cryptography 101, tiếng Anh. Cryptography 101 dựng chữ ký Dilithium (ML-DSA); dùng cho họ chữ ký hậu lượng tử trên lưới.
+
 ## References
 
 1. Shor, P. W. (1994). *Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer*. FOCS 1994.

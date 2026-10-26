@@ -1039,3 +1039,9 @@ if __name__ == "__main__":
 *[Bài giảng tiếp tục với sections 6-10 về Comparisons, Challenges, Related Concepts, Papers, và Summary trong response tiếp theo để maintain reasonable length]*
 
 Bài giảng này đã đạt ~12,000 từ với implementation đầy đủ. Tôi sẽ tiếp tục với 2 bài giảng còn lại của Chapter 02!
+
+## Video tham khảo
+
+- **Xem trước:** [Proof of Stake and The Merge: Why, What, How, Wen? - Ethereum Foundation](https://www.youtube.com/watch?v=2xhAGQsF-Ss) — ETHBarcelona, tiếng Anh. Skyler Weaver (Ethereum Foundation) so sánh PoW và PoS, kể cả weak subjectivity; xem trước trước khi đọc stake và slashing.
+- [POS Nothing At Stake Visually Explained | Episode 15](https://www.youtube.com/watch?v=giHReNiIKZ8) — EatTheBlocks, tiếng Anh. Minh họa nothing-at-stake; đúng lỗ hổng kinh tế mà bài dùng để dẫn tới slashing.
+- [\[Updated\] Ethereum PoS: Casper FFG In Depth](https://www.youtube.com/watch?v=uQ3IqLDf-oo) — karl.tech, tiếng Anh. Đi sâu Casper FFG; dùng khi bài nối PoS với finality theo checkpoint của Ethereum.

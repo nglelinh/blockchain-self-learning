@@ -722,6 +722,12 @@ Blockchain:      DAG:
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Đi từ sổ cái chung và chữ ký số tới câu đố proof-of-work; trực giác cho phần tổng quan và chuỗi hash của bài.
+- [How does a blockchain work - Simply Explained](https://www.youtube.com/watch?v=SSo_EIwHSd4) — Simply Explained, tiếng Anh. Xem cách một block được nối với block trước bằng hash, đúng mô hình notebook công khai ở phần hiểu biết trực quan.
+- [Introduction to Bitcoin: what is bitcoin and why does it matter?](https://www.youtube.com/watch?v=l1si5ZWLgy0) — aantonop, tiếng Anh. Antonopoulos đặt Bitcoin vào bài toán truyền giá trị không cần trung gian, bối cảnh lịch sử mà mục 1 của bài mở ra.
+
 ## References
 
 1. Nakamoto, S. (2008). Bitcoin: A peer-to-peer electronic cash system.

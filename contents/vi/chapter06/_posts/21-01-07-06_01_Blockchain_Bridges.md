@@ -610,6 +610,11 @@ Next: Lecture 06.02 - Polkadot & Cosmos: Purpose-Built Interoperability
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [What is a Crypto Bridge? (Examples + Purpose for Blockchains)](https://www.youtube.com/watch?v=nT26cIz8HjI) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto phân loại cầu và mục đích chuyển tài sản; xem trước kiến trúc lock-and-mint.
+- [The Security of Blockchain Bridges](https://www.youtube.com/watch?v=FOHweLsxQS4) — Rootstock, tiếng Anh. Rootstock tập trung vào giả định tin cậy của cầu; đối chiếu mục tấn công và trade-off an toàn.
+
 ## References
 
 1. BitGo, Kyber, Ren. (2019). *WBTC: Wrapped Bitcoin Whitepaper*.

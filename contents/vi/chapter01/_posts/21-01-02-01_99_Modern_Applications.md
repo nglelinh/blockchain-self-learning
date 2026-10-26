@@ -82,6 +82,12 @@ Vẫn đọc 01.00–01.02 để hiểu UTXO, Script, PoW, halving, fee market. 
 | [assumeUTXO design notes](https://github.com/bitcoin/bitcoin) / Bitcoin Core docs | 2023–2025 | IBD song song với snapshot UTXO |
 | Ordinals / inscriptions (Rodarmor) | 2023 | Witness as publication layer |
 
+## Video tham khảo
+
+- **Xem trước:** [BIP324: Improving #bitcoin ’s P2P Transport Protocol](https://www.youtube.com/watch?v=7J7EfqknVpM) — Bitcoin Developers, tiếng Anh. Bitcoin Developers trình bày BIP-324, transport P2P mã hóa; xem trước mục transport v2, không phải consensus mới.
+- [Ordinals Workshop with Casey Rodarmor](https://www.youtube.com/watch?v=MC_haVa6N3I) — PlebLab, tiếng Anh. Casey Rodarmor hướng dẫn Ordinals; xem để nối witness Taproot với lớp xuất bản dữ liệu trong bài.
+- [Robin Linus Presents BitVM3 | Bitcoin Amsterdam 2025](https://www.youtube.com/watch?v=_lYakucObZ0) — Bitcoin Magazine, tiếng Anh. Robin Linus trình bày BitVM3 tại Bitcoin Amsterdam; đối chiếu mô hình tính toán lạc quan trên Script mà bài mô tả.
+
 ## 7. Bài tập định hướng
 
 1. BIP-324 chống được lớp tấn công nào mà bài 01.00 (network architecture) đã nêu, và *không* chống được lớp nào?

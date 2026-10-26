@@ -392,6 +392,12 @@ Next: Chapter 07 - Advanced Blockchain Topics
 
 ---
 
+## Video tham khảo
+
+- **Xem trước:** [Polkadot Explained: Multi-Chain Ecosystem & Parachain Architecture for Beginners](https://www.youtube.com/watch?v=WYZKO6Beb8w) — CodeLucky, tiếng Anh. CodeLucky dựng relay chain và parachain; xem trước mô hình an ninh chia sẻ của Polkadot.
+- [Cosmos Blockchain Explained: Internet of Blockchains & IBC Protocol Tutorial](https://www.youtube.com/watch?v=HddEOo-zeDM) — CodeLucky, tiếng Anh. Cùng kênh giải thích Cosmos như mạng các chuỗi và IBC; đối chiếu chủ quyền từng chain trong bài.
+- [Cosmos IBC simply explained](https://www.youtube.com/watch?v=G0KpgQSAUAM) — Finality: The Business of Decentralized Networks, tiếng Anh. Finality đi vào giao thức IBC; dùng khi đọc packet, client và cách một thông điệp được xác minh.
+
 ## References
 
 1. Wood, G. (2016). *Polkadot: Vision for a Heterogeneous Multi-Chain Framework*. Polkadot Whitepaper.

@@ -1098,3 +1098,9 @@ Bạn có muốn tôi:
 3. Tạm dừng để review
 
 Tôi recommend option 1 - tiếp tục momentum với chapter mới! 🚀
+
+## Video tham khảo
+
+- **Xem trước:** [Bitcoin Halving 2024: How It's Different This Time, Myths Debunked, Bitcoin Bugs, and More](https://www.youtube.com/watch?v=vwkRsp0gqX4) — aantonop, tiếng Anh. Antonopoulos nói về lịch halving và cách subsidy đổi động lực thợ đào; xem trước mục chính sách tiền tệ.
+- [Bitcoin Fees Explained](https://www.youtube.com/watch?v=EHYDeORj_tc) — Exodus, tiếng Anh. Cách phí giao dịch được đấu giá trong block; dùng cho mô hình fee market của bài.
+- [EB76 – Emin Gün Sirer & Ittay Eyal: From Selfish Miners To The Miner's Dilemma](https://www.youtube.com/watch?v=DWielchhe00) — Epicenter Podcast, tiếng Anh. Eyal và Sirer kể từ selfish mining tới miner’s dilemma, đúng phần lý thuyết trò chơi của phần thưởng.
