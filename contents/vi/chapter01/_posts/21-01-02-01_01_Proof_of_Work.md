@@ -13,45 +13,35 @@ categories:
 
 ## 1. Tổng quan về khái niệm
 
-**Proof-of-Work (PoW)** là trái tim của Bitcoin - cơ chế đồng thuận cho phép hàng nghìn nodes độc lập đồng ý về transaction order mà không cần trust lẫn nhau. Đây là một trong những innovations quan trọng nhất của Satoshi Nakamoto, mặc dù ý tưởng cơ bản đã tồn tại trước đó.
+**Proof-of-Work (PoW)** là cơ chế đồng thuận cốt lõi của Bitcoin, cho phép hàng nghìn nút độc lập thống nhất về thứ tự giao dịch mà không cần tin cậy lẫn nhau. Ý tưởng nền tảng của PoW đã xuất hiện trước Bitcoin nhưng được Satoshi Nakamoto tích hợp theo một cách mới vào bài toán đồng thuận phân tán.
 
-**Historical Context**:
+**Bối cảnh lịch sử**:
 
-Khái niệm "proof-of-work" lần đầu được đề xuất bởi **Cynthia Dwork và Moni Naor** năm 1992 như một cách chống spam email. Năm 1997, **Adam Back** đã phát triển **Hashcash** - một proof-of-work system được dùng để combat email spam và denial-of-service attacks. Hashcash yêu cầu sender thực hiện một computational work nhỏ trước khi gửi email - không đáng kể với người dùng bình thường nhưng expensive cho spammers muốn gửi millions of emails.
+Khái niệm "bằng chứng công việc" (proof-of-work) được **Cynthia Dwork và Moni Naor** đề xuất lần đầu năm 1992 nhằm chống thư rác (email spam). Đến năm 1997, **Adam Back** phát triển **Hashcash** — một hệ thống PoW chống thư rác và tấn công từ chối dịch vụ (DoS) bằng cách buộc người gửi thực hiện một lượng tính toán nhỏ trước khi gửi thư: hầu như không đáng kể với người dùng bình thường nhưng rất tốn kém với kẻ gửi hàng triệu thư rác.
 
-Satoshi Nakamoto đã brilliant adapt ý tưởng này cho distributed consensus. Thay vì dùng PoW để chống spam, Bitcoin dùng nó để:
-1. **Select block proposer**: Random lottery dựa trên computational power
-2. **Prevent Sybil attacks**: Attacker không thể tạo nhiều fake identities để gain control
-3. **Rate-limit block creation**: Maintain ~10 minute block time
-4. **Create economic cost for attacks**: Attacker phải spend real resources (hardware + electricity)
+Satoshi Nakamoto điều chỉnh cơ chế này cho bài toán đồng thuận phân tán của Bitcoin với bốn chức năng chính:
+1. **Chọn người đề xuất khối**: Phân bổ quyền tạo khối ngẫu nhiên theo tỷ lệ năng lực tính toán.
+2. **Chống tấn công Sybil**: Kẻ tấn công không thể tạo hàng loạt danh tính giả để giành quyền kiểm soát nếu không bỏ ra phần cứng và điện năng thực.
+3. **Điều tiết tốc độ tạo khối**: Duy trì thời gian tạo khối trung bình khoảng 10 phút.
+4. **Tạo rào cản chi phí kinh tế**: Muốn tấn công mạng lưới, kẻ tấn công phải chi trả tài nguyên thực tương đương hoặc lớn hơn mạng trung thực.
 
-**Core Idea - Simple but Profound**:
+**Nguyên lý cốt lõi**:
 
-Miners compete để tìm một số gọi là **nonce** sao cho khi hash block header với nonce đó, resulting hash nhỏ hơn một target value nhất định:
+Các thợ đào (miners) cạnh tranh tìm một số gọi là **nonce** sao cho giá trị băm kép của phần đầu khối nhỏ hơn một ngưỡng mục tiêu (`Target`) cho trước:
 
 \[
 \text{SHA256}(\text{SHA256}(\text{Block Header with Nonce})) < \text{Target}
 \]
 
-Điều này đơn giản nhưng brilliant vì:
-- **Hard to find**: Average \( 2^{difficulty} \) attempts needed
-- **Easy to verify**: Single hash computation verifies
-- **Adjustable difficulty**: Target can be adjusted to maintain block time
-- **No shortcuts**: No algorithm better than brute force (assuming SHA-256 security)
+Cơ chế này hiệu quả nhờ bốn đặc điểm:
+- **Khó tìm**: Trung bình cần khoảng \( \text{Difficulty} \times 2^{32} \) phép thử băm để tìm ra một khối hợp lệ.
+- **Dễ xác minh**: Các nút khác chỉ cần một phép băm kép duy nhất để kiểm tra tính hợp lệ.
+- **Tự điều chỉnh độ khó**: Ngưỡng `Target` tự động thay đổi để ổn định thời gian tạo khối.
+- **Không có đường tắt**: Nếu SHA-256 an toàn, không có thuật toán nào nhanh hơn cách thử vét cạn.
 
-**Why "Work"?**
+**Vì sao gọi là "Work" (Công việc)?**
 
-PoW gọi là "work" vì requires **expenditure of real-world resources**:
-- **Hardware**: ASICs cost thousands to millions of dollars
-- **Electricity**: Bitcoin network consumes ~150 TWh/year
-- **Cooling**: Datacenters need cooling infrastructure
-- **Maintenance**: Human labor to maintain operations
-
-Đây là key security feature: attacker phải spend same resources as honest miners to attack network.
-
-**Economic Innovation**:
-
-PoW kết hợp với **block rewards** và **transaction fees** tạo ra một elegant economic system:
+PoW gắn trực tiếp với việc tiêu hao tài nguyên vật lý gồm phần cứng chuyên dụng (ASIC), điện năng (~150 TWh/năm trên toàn mạng Bitcoin), hệ thống làm mát và chi phí vận hành trung tâm dữ liệu. Khi kết hợp với **phần thưởng khối** và **phí giao dịch**, cơ chế này tạo ra trạng thái cân bằng kinh tế tự điều tiết:
 
 ```
 Mining Cost = Hardware + Electricity + Operational Costs
@@ -63,43 +53,26 @@ If Revenue < Cost → Miners leave → Difficulty decreases
 Result: Self-regulating equilibrium!
 ```
 
-Đây là first time trong lịch sử có một digital system tự regulate security level dựa trên economic incentives, without central authority.
+Nhờ vòng phản hồi này, mức độ bảo mật của mạng lưới tự động điều chỉnh theo động lực kinh tế mà không cần cơ quan quản lý trung tâm.
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Mining như "Lottery with Work"
+### 2.1. Quá trình đào như một trò chơi xổ số gắn với công sức
 
-Hãy tưởng tượng mining như một **lottery có vé rất đặc biệt**:
+Có thể so sánh quá trình đào Bitcoin với xổ số truyền thống:
 
-**Traditional Lottery**:
-- Mua vé với số in sẵn
-- Ai trúng số → thắng
-- Hoàn toàn random, không cần "work"
+- **Xổ số truyền thống**: Mua vé có sẵn số in; kết quả hoàn toàn ngẫu nhiên và không cần tính toán.
+- **Xổ số đào Bitcoin**: Không có vé in sẵn — thợ đào phải tự tạo từng "tấm vé" bằng cách lấy dữ liệu phần đầu khối, thay một giá trị `nonce`, tính băm kép và kiểm tra xem giá trị băm có nhỏ hơn `Target` hay không. Mỗi phép thử băm tương ứng một tấm vé.
 
-**Bitcoin Mining Lottery**:
-- Không có vé in sẵn
-- Phải "create your own ticket" bằng cách:
-  1. Take block data
-  2. Add a random number (nonce)
-  3. Hash it
-  4. Check if hash < target
-  5. If no → try different nonce
-- Mỗi attempt = mua một vé lottery
-- Winning ticket = hash nhỏ hơn target
+**Tính công bằng theo xác suất**: Năng lực tính toán càng lớn thì số vé thử mỗi giây càng nhiều, nhưng từng phép thử độc lập đều có xác suất trúng như nhau và không thể dự đoán trước phép thử nào sẽ thắng.
 
-**Fairness**:
-- More computational power = more lottery tickets per second
-- But each ticket has equal chance
-- Cannot predict which ticket will win
-- Giống như lottery: mua nhiều vé → more chance, nhưng không guarantee
+### 2.2. Độ khó như một "ổ khóa tự điều chỉnh"
 
-### 2.2. Difficulty như "Adjustable Lock"
+Ngưỡng `Target` / độ khó hoạt động giống như một ổ khóa số tự điều chỉnh độ chặt:
 
-Target/Difficulty giống như một **combination lock tự động adjust**:
-
-**Easy Lock** (Low Difficulty):
+**Độ khó thấp**:
 ```
 Target: 0000FFFF... (many leading zeros not required)
 Hash:   0003A5B2... ✓ Valid! (starts with few zeros)
@@ -108,7 +81,7 @@ Probability: High (1 in thousands)
 Time: Seconds to find
 ```
 
-**Hard Lock** (High Difficulty):
+**Độ khó cao**:
 ```
 Target: 00000000000019... (many leading zeros required)
 Hash:   000000000000A2... ✓ Valid! (many leading zeros)
@@ -117,7 +90,7 @@ Probability: Low (1 in trillions)
 Time: ~10 minutes for entire network
 ```
 
-**Auto-Adjustment**:
+**Cơ chế tự điều chỉnh**:
 ```
 Many miners → Blocks found too fast → Lock becomes harder
 Few miners → Blocks found too slow → Lock becomes easier
@@ -125,9 +98,9 @@ Few miners → Blocks found too slow → Lock becomes easier
 Goal: Always ~10 minutes per block
 ```
 
-### 2.3. Mining Hardware Evolution - Arms Race
+### 2.3. Quá trình tiến hóa phần cứng đào Bitcoin
 
-**2009-2010: CPU Era**
+**2009–2010: Kỷ nguyên CPU**
 ```
 Your laptop: ~1 MH/s (million hashes/second)
 Cost: $500
@@ -135,7 +108,7 @@ Power: 65W
 Profitability: High (BTC = $0.001)
 ```
 
-**2010-2013: GPU Era**
+**2010–2013: Kỷ nguyên GPU**
 ```
 Gaming GPU: ~100-500 MH/s
 Cost: $200-500
@@ -144,7 +117,7 @@ Profitability: Very high (BTC = $1-100)
 Why better: Parallel processing (hundreds of cores)
 ```
 
-**2013-2016: ASIC Era Begins**
+**2013–2016: Bắt đầu kỷ nguyên ASIC**
 ```
 First ASICs: ~5 GH/s (billion hashes/second)
 Cost: $1,000-5,000
@@ -153,7 +126,7 @@ Profitability: Initially very high
 Why better: Specialized hardware for SHA-256 only
 ```
 
-**2016-2024: Modern ASIC Era**
+**2016–2024: Kỷ nguyên ASIC hiện đại**
 ```
 Antminer S19 Pro: ~110 TH/s (trillion hashes/second)
 Cost: $2,000-8,000
@@ -162,7 +135,7 @@ Profitability: Moderate (competitive market)
 Efficiency: 29.5 J/TH (joules per terahash)
 ```
 
-**Performance Growth**:
+**Tốc độ tăng trưởng hiệu năng**:
 ```
 CPU → GPU:     100x improvement
 GPU → ASIC:    1,000x improvement
@@ -175,9 +148,9 @@ Total: ~2,000,000x since 2009!
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. Block Header Structure (80 bytes)
+### 3.1. Cấu trúc phần đầu khối (Block Header — 80 byte)
 
-Mining works with **only block header**, không phải entire block:
+Quá trình băm PoW chỉ thao tác trực tiếp trên **80 byte của phần đầu khối**, không băm lặp lại toàn bộ danh sách giao dịch:
 
 ```
 Bytes 0-3:    Version (4 bytes)
@@ -188,7 +161,7 @@ Bytes 72-75:  Bits/Target (4 bytes)
 Bytes 76-79:  Nonce (4 bytes)
 ```
 
-**Example Block Header (Block 125552)**:
+**Ví dụ phần đầu khối (Block 125552)**:
 ```
 01000000    // Version 1
 81cd02ab    // Previous block hash
@@ -201,7 +174,7 @@ e320b6c2    // Merkle root
 bc192a6a    // Nonce (found by miner!)
 ```
 
-**Hashing Process**:
+**Vòng lặp băm cơ bản**:
 ```python
 # Pseudocode
 block_header = version + prev_hash + merkle_root + timestamp + bits + nonce
@@ -214,11 +187,10 @@ else:
     nonce += 1  # Try again
 ```
 
-### 3.2. Target và Difficulty
+### 3.2. Ngưỡng mục tiêu (Target) và Độ khó (Difficulty)
 
-**Target**: Một 256-bit number. Valid hash phải < target.
+**Target** là một số nguyên 256-bit; giá trị băm của khối hợp lệ phải nhỏ hơn ngưỡng này. Trong phần đầu khối, `Target` được lưu dưới dạng nén 4 byte (trường `Bits`):
 
-**Compact Representation (Bits field)**:
 ```
 Bits = 0x1d00ffff
 
@@ -232,44 +204,39 @@ Target = Coefficient × 2^(8 × (Exponent - 3))
        = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
 ```
 
-**Difficulty** (alternative representation):
+**Độ khó (Difficulty)** biểu diễn tỷ số giữa ngưỡng tối đa (khi độ khó bằng 1 ở khối nguyên thủy) và ngưỡng hiện tại:
 \[
 \text{Difficulty} = \frac{\text{Max Target}}{\text{Current Target}}
 \]
 
-Where Max Target = target when difficulty = 1 (genesis block):
+Với:
 ```
 Max Target = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
 ```
 
-**Current Difficulty** (2024): ~60 trillion
+Ở mức độ khó tham khảo khoảng 60 nghìn tỷ (năm 2024):
 ```
 Current Target = Max Target / 60,000,000,000,000
                ≈ 0x0000000000000000000429...
 ```
+Điều này nghĩa là việc tìm một khối hợp lệ khó hơn khoảng 60 nghìn tỷ lần so với thời điểm ra mắt khối nguyên thủy.
 
-**Meaning**: Finding valid block is ~60 trillion times harder than at genesis!
+### 3.3. Thuật toán điều chỉnh độ khó
 
-### 3.3. Difficulty Adjustment Algorithm
+Bitcoin điều chỉnh độ khó định kỳ sau mỗi 2.016 block (~2 tuần với tốc độ 10 phút/block):
 
-**Adjustment Frequency**: Every 2016 blocks (~2 weeks at 10 min/block)
-
-**Formula**:
 \[
 \text{New Difficulty} = \text{Old Difficulty} \times \frac{\text{Expected Time}}{\text{Actual Time}}
 \]
 
-More precisely:
+Hay theo ngưỡng mục tiêu:
 \[
 \text{New Target} = \text{Old Target} \times \frac{\text{Actual Time (last 2016 blocks)}}{\text{20160 minutes}}
 \]
 
-**Constraints**:
-- Maximum increase: 4x per period
-- Maximum decrease: 4x per period (1/4 of previous)
-- Prevents rapid difficulty swings
+**Giới hạn điều chỉnh**: Mỗi kỳ chỉ được tăng tối đa 4 lần hoặc giảm tối đa 4 lần (xuống 1/4) nhằm tránh biến động đột ngột.
 
-**Implementation** (Bitcoin Core):
+**Cài đặt trong Bitcoin Core (C++)**:
 ```cpp
 int64_t GetNextWorkRequired(const CBlockIndex* pindexLast) {
     // Find the first block in the adjustment period
@@ -301,7 +268,7 @@ int64_t GetNextWorkRequired(const CBlockIndex* pindexLast) {
 }
 ```
 
-**Example Adjustment** (Block 630000 → 632016):
+**Ví dụ điều chỉnh (Block 630000 → 632016)**:
 ```
 Old Difficulty: 15,138,043,247,082
 Blocks took:    13.5 days (instead of 14)
@@ -314,33 +281,16 @@ New Difficulty = 15,138,043,247,082 × (20160 / 19440)
 Result: ~3.7% harder (within 4x constraint)
 ```
 
-### 3.4. Hash Rate và Network Security
+### 3.4. Sức mạnh băm (Hash Rate) và Bảo mật mạng
 
-**Hash Rate**: Total computational power của network
+**Hash Rate** đo tổng năng lực tính băm của toàn mạng theo các đơn vị: H/s, KH/s (\(10^3\)), MH/s (\(10^6\)), GH/s (\(10^9\)), TH/s (\(10^{12}\)), PH/s (\(10^{15}\)) và EH/s (\(10^{18}\)). Tính đến năm 2024, tổng hash rate mạng Bitcoin đạt khoảng 600 EH/s (600 tỷ tỷ phép băm mỗi giây).
 
-**Units**:
-- H/s = Hashes per second
-- KH/s = Thousand (10³)
-- MH/s = Million (10⁶)
-- GH/s = Billion (10⁹)
-- TH/s = Trillion (10¹²)
-- PH/s = Quadrillion (10¹⁵)
-- EH/s = Quintillion (10¹⁸)
-
-**Bitcoin Network** (2024):
-- Total hash rate: ~600 EH/s
-- = 600,000,000,000,000,000,000 hashes/second
-- = 600 quintillion hashes per second!
-
-**Relationship with Difficulty**:
+**Quan hệ với độ khó**:
 \[
 \text{Hash Rate} = \frac{\text{Difficulty} \times 2^{32}}{600 \text{ seconds}}
 \]
 
-**Security Implication**:
-Higher hash rate = more expensive to attack
-
-**Attack Cost** (51% attack):
+Hash rate càng cao thì chi phí tấn công 51% càng lớn:
 ```
 Required hash rate: 51% of 600 EH/s = 306 EH/s
 
@@ -354,13 +304,13 @@ Electricity cost (ongoing):
 - Cost: $0.05/kWh × 9,000,000 kW = $450,000/hour
 - Per day: $10.8 million
 
-Total to attack for 1 day: ~$8.3B + $0.26B = $8.56 billion
+Total to attack for 1 day: ~$8.3B + $10.8M ≈ $8.31 billion
 And you'd likely crash BTC price, making your investment worthless!
 ```
 
-### 3.5. Mining Process - Step by Step
+### 3.5. Quy trình đào một khối theo từng bước
 
-**Step 1: Construct Block Template**
+**Bước 1: Tạo mẫu khối (Block Template)**
 ```python
 block_template = {
     'version': 0x20000000,
@@ -372,7 +322,7 @@ block_template = {
 }
 ```
 
-**Step 2: Select Transactions**
+**Bước 2: Chọn giao dịch từ mempool (ưu tiên tỷ lệ phí/byte cao nhất)**
 ```python
 # Select from mempool (ordered by fee/byte)
 transactions = []
@@ -387,7 +337,7 @@ for tx in mempool.sort_by_fee_rate():
     total_fees += tx.fee
 ```
 
-**Step 3: Add Coinbase Transaction**
+**Bước 3: Tạo giao dịch coinbase (phần thưởng khối + tổng phí)**
 ```python
 coinbase = Transaction()
 coinbase.add_input(
@@ -403,7 +353,7 @@ coinbase.add_output(
 transactions.insert(0, coinbase)  # Coinbase is first tx
 ```
 
-**Step 4: Compute Merkle Root**
+**Bước 4: Tính Merkle Root**
 ```python
 def merkle_root(transactions):
     hashes = [sha256(sha256(tx)) for tx in transactions]
@@ -422,7 +372,7 @@ def merkle_root(transactions):
 block_template['merkleroot'] = merkle_root(transactions)
 ```
 
-**Step 5: Mining Loop**
+**Bước 5: Vòng lặp tìm Nonce hợp lệ**
 ```python
 def mine_block(block_template):
     target = bits_to_target(block_template['bits'])
@@ -446,7 +396,7 @@ def mine_block(block_template):
     return None  # Nonce space exhausted, need new block
 ```
 
-**Step 6: Broadcast Block**
+**Bước 6: Phát tán khối hợp lệ ra toàn mạng**
 ```python
 if nonce is not None:
     complete_block = {
@@ -460,205 +410,150 @@ if nonce is not None:
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. Probability of Finding Block
+### 4.1. Xác suất tìm thấy khối hợp lệ
 
-**Single Hash Attempt**:
+**Với một phép thử băm đơn lẻ**:
 \[
 P(\text{success}) = \frac{\text{Target}}{2^{256}}
 \]
 
-**Current Difficulty** (~60 trillion):
+**Ở mức độ khó khoảng 60 nghìn tỷ**:
 \[
-P(\text{success}) = \frac{1}{60 \times 10^{12} \times 2^{32}} \approx \frac{1}{2.58 \times 10^{23}}
+P(\text{success}) \approx \frac{1}{60 \times 10^{12} \times 2^{32}} \approx \frac{1}{2.58 \times 10^{23}}
 \]
 
-**Expected Number of Attempts**:
+**Số phép thử kỳ vọng**:
 \[
 E[\text{attempts}] = \frac{1}{P(\text{success})} = \text{Difficulty} \times 2^{32}
 \]
 
-**For entire network** (600 EH/s):
+**Thời gian kỳ vọng với toàn mạng đạt 600 EH/s**:
 \[
 \begin{align}
 \text{Attempts per second} &= 600 \times 10^{18} \\
 \text{Expected time} &= \frac{\text{Difficulty} \times 2^{32}}{600 \times 10^{18}} \\
-&= \frac{60 \times 10^{12} \times 4.3 \times 10^9}{600 \times 10^{18}} \\
-&\approx 600 \text{ seconds} = 10 \text{ minutes} ✓
+&= \frac{60 \times 10^{12} \times 4.295 \times 10^9}{600 \times 10^{18}} \\
+&\approx 430 \text{ seconds} \approx 7.2 \text{ minutes}
 \end{align}
 \]
+(Khi mạng duy trì ổn định ở mức 600 EH/s, thuật toán điều chỉnh độ khó sẽ tự động nâng độ khó lên khoảng \( 83.8 \times 10^{12} \) để đưa thời gian kỳ vọng về đúng 600 giây = 10 phút).
 
-### 4.2. Mining as Poisson Process
+### 4.2. Quá trình đào theo phân phối Poisson
 
-Block discovery follows **Poisson distribution** với rate parameter λ = 1/600 (1 block per 10 minutes):
+Do mỗi phép thử băm độc lập và có xác suất thành công rất nhỏ, sự kiện tìm thấy block tuân theo **phân phối Poisson** với tốc độ trung bình \( \lambda = 1/600 \) block/giây (1 block mỗi 10 phút):
 
-**Probability of k blocks in time t**:
 \[
 P(X = k) = \frac{(\lambda t)^k e^{-\lambda t}}{k!}
 \]
 
-**Examples**:
+- **Xác suất không có block nào trong 10 phút**:
+  \[
+  P(X = 0) = e^{-1} \approx 0.368 = 36.8\%
+  \]
+- **Xác suất xuất hiện từ 2 block trở lên trong 10 phút** (nguy cơ xung đột/orphan):
+  \[
+  P(X \geq 2) = 1 - P(X=0) - P(X=1) = 1 - e^{-1} - e^{-1} \approx 0.264 = 26.4\%
+  \]
+- **Thời gian kỳ vọng đến block kế tiếp**:
+  \[
+  E[T] = \frac{1}{\lambda} = 600 \text{ seconds}
+  \]
+- **Phương sai và độ lệch chuẩn**:
+  \[
+  \text{Var}(T) = \frac{1}{\lambda^2} = 360,000 \text{ seconds}^2, \qquad \sigma = 600 \text{ seconds} = 10 \text{ minutes}
+  \]
 
-**Probability of NO blocks in 10 minutes**:
+Do độ lệch chuẩn bằng đúng giá trị trung bình, khoảng cách thực tế giữa hai block biến thiên rất mạnh: có khi chỉ 1 phút, có khi kéo dài tới 30 phút.
+
+### 4.3. Phân tích tấn công đào ích kỷ (Selfish Mining)
+
+Trong **đào trung thực**, mọi thợ đào công bố ngay block vừa tìm được và doanh thu kỳ vọng tỷ lệ thuận với phần trăm sức mạnh băm của họ.
+
+Trong **đào ích kỷ** (Eyal & Sirer, 2014), giả sử nhóm tấn công nắm tỷ lệ sức mạnh băm \( q \), mạng trung thực nắm \( p = 1 - q \), và \( \gamma \) là tỷ lệ thợ đào trung thực chọn đào tiếp trên nhánh của kẻ tấn công khi hai nhánh hòa nhau.
+
+**Tỷ trọng doanh thu tương đối của nhóm đào ích kỷ**:
 \[
-P(X = 0) = e^{-1} \approx 0.368 = 36.8\%
+R_{\text{pool}} = \frac{q(1-q)^2\big(4q + \gamma(1-2q)\big) - q^3}{1 - q\big(1 + (2-q)q\big)}
 \]
 
-**Probability of 2+ blocks in 10 minutes** (orphan risk):
+**Ngưỡng sinh lợi** (khi \( R_{\text{pool}} > q \)):
 \[
-P(X \geq 2) = 1 - P(X=0) - P(X=1) = 1 - e^{-1} - e^{-1} \approx 0.264 = 26.4\%
+q > \frac{1 - \gamma}{3 - 2\gamma}
 \]
 
-**Expected time until first block**:
-\[
-E[T] = \frac{1}{\lambda} = 600 \text{ seconds}
-\]
+- **Trường hợp bất lợi nhất cho kẻ tấn công** (\( \gamma = 0 \), toàn bộ thợ đào trung thực bám chuỗi trung thực):
+  \[
+  q > \frac{1}{3} \approx 33.3\%
+  \]
+- **Trường hợp thuận lợi nhất cho kẻ tấn công** (\( \gamma = 1 \), toàn bộ chuyển sang nhánh của kẻ tấn công khi hòa):
+  \[
+  q > \frac{0}{1} = 0\% \text{ (luôn có lợi về mặt lý thuyết)}
+  \]
+- **Trường hợp thực tế** (\( \gamma \approx 0.5 \)):
+  \[
+  q > \frac{0.5}{2} = 25\%
+  \]
 
-**Variance**:
-\[
-\text{Var}(T) = \frac{1}{\lambda^2} = 360,000 \text{ seconds}^2
-\]
+Kết quả này cho thấy ngưỡng an toàn trước chiến lược ích kỷ nằm quanh 25%–33% sức mạnh băm, thấp hơn đáng kể so với mốc 51%.
 
-**Standard deviation**:
-\[
-\sigma = 600 \text{ seconds} = 10 \text{ minutes}
-\]
+### 4.4. Tấn công 51% — Xác suất chi tiêu gấp đôi
 
-Meaning: Block times vary widely! Sometimes 1 minute, sometimes 30 minutes.
-
-### 4.3. Selfish Mining Attack Analysis
-
-**Honest Mining** (all broadcast immediately):
-```
-Revenue per hash = Block Reward × (Your Hash Rate / Total Hash Rate)
-```
-
-**Selfish Mining** (withhold blocks strategically):
-
-**Attacker với fraction q of hash power, honest miners có p = 1-q**
-
-**Relative Revenue**:
-\[
-\text{Relative Revenue} = \frac{q(1 - p)}{1 - q}
-\]
-
-**Profit threshold** (when selfish mining > honest):
-\[
-\frac{q(1-p)}{1-q} > q \implies q > \frac{1 - \gamma}{3 - 2\gamma}
-\]
-
-Where γ = fraction of honest miners following attacker during ties.
-
-**Worst case** (γ = 0, all honest miners mine on honest chain):
-\[
-q > \frac{1}{3} = 33.3\%
-\]
-
-**Best case for attacker** (γ = 1, all follow attacker):
-\[
-q > \frac{0}{2} = 0\% \text{ (always profitable!)}
-\]
-
-**Realistic** (γ ≈ 0.5):
-\[
-q > \frac{0.5}{2} = 25\%
-\]
-
-**Implication**: Selfish mining profitable với ~25-33% hash power, lower than 51% threshold!
-
-### 4.4. 51% Attack - Double Spend Probability
-
-**Scenario**: Attacker controls fraction q of hash power, wants to double-spend.
-
-**Attack Process**:
-1. Send transaction to merchant (buy item)
-2. Merchant waits for z confirmations
-3. Attacker secretly mines alternative chain without that transaction
-4. If attacker catches up, broadcasts longer chain → double spend!
-
-**Success Probability** (Satoshi's analysis):
+Kẻ tấn công nắm tỷ lệ \( q \) sức mạnh băm gửi giao dịch thanh toán cho người bán (người bán chờ \( z \) xác nhận), đồng thời bí mật đào một nhánh song song không chứa giao dịch đó. Theo bài toán bước đi ngẫu nhiên (Gambler's Ruin), xác suất đuổi kịp từ vị trí tụt lại \( z \) block là:
 
 \[
-P_{\text{catch-up}} = \begin{cases}
-1 & \text{if } q \geq 0.5 \\
-\left(\frac{q}{1-q}\right)^z & \text{if } q < 0.5
-\end{cases}
-\]
-
-**Derivation** (Gambler's Ruin):
-
-Let z = confirmation depth (honest chain's lead)
-
-Each new block:
-- Prob q: attacker closes gap by 1
-- Prob 1-q: gap increases by 1
-
-Probability attacker catches up from z behind:
-\[
-P(z) = \begin{cases}
+P_{\text{catch-up}}(q, z) = \begin{cases}
 \left(\frac{q}{1-q}\right)^z & \text{if } q < 0.5 \\
 1 & \text{if } q \geq 0.5
 \end{cases}
 \]
 
-**Numerical Examples**:
+**Bảng xác suất minh họa theo \( \left(\frac{q}{1-q}\right)^z \)**:
 
-| q (attacker %) | z=1 | z=2 | z=3 | z=6 | z=10 |
+| \( q \) (% kẻ tấn công) | \( z=1 \) | \( z=2 \) | \( z=3 \) | \( z=6 \) | \( z=10 \) |
 |----------------|-----|-----|-----|-----|------|
-| 10% | 11.1% | 1.2% | 0.14% | 0.000% | ~0% |
-| 20% | 25% | 6.25% | 1.56% | 0.024% | ~0% |
-| 30% | 42.9% | 18.4% | 7.8% | 1.4% | 0.18% |
-| 40% | 66.7% | 44.4% | 29.6% | 13.1% | 3.8% |
-| 45% | 81.8% | 66.9% | 54.8% | 33.2% | 16.7% |
-| 49% | 96.1% | 92.3% | 88.7% | 77.8% | 64.9% |
+| 10% | 11.1% | 1.2% | 0.14% | 0.0002% | ~0% |
+| 20% | 25.0% | 6.25% | 1.56% | 0.024% | ~0% |
+| 30% | 42.9% | 18.4% | 7.9% | 0.62% | 0.021% |
+| 40% | 66.7% | 44.4% | 29.6% | 8.8% | 1.73% |
+| 45% | 81.8% | 66.9% | 54.8% | 30.0% | 13.4% |
+| 49% | 96.1% | 92.3% | 88.7% | 78.7% | 67.0% |
 
-**Observation**: 
-- With 10% hash power, 6 confirmations → ~0% success
-- With 40% hash power, 6 confirmations → 13% success (risky!)
-- Need >50% for guaranteed success
+Nhận xét: Với 10% sức mạnh băm, 6 xác nhận đưa xác suất đuổi kịp về gần bằng 0; với 40%, 6 xác nhận vẫn còn khoảng 8,8% rủi ro; và cần trên 50% để đảm bảo chắc chắn đuổi kịp.
 
-### 4.5. Variance và Mining Pool Economics
+### 4.5. Phương sai thu nhập và Kinh tế học của Mining Pool
 
-**Solo Mining Variance**:
+Xét một thợ đào đơn lẻ (solo miner) sở hữu tốc độ băm \( h \) trong mạng lưới có tổng tốc độ \( H \) và thời gian khối \( T = 600\text{ s} \):
 
-Với hash rate h, network hash rate H, block time T = 600s:
-
-**Expected blocks per day**:
+**Số block kỳ vọng mỗi ngày**:
 \[
-E[\text{blocks}] = \frac{h}{H} \times \frac{86400}{600} = \frac{144h}{H}
+E[\text{blocks/day}] = \frac{h}{H} \times \frac{86400}{600} = \frac{144h}{H}
 \]
 
-**Example**: 100 TH/s miner, network 600 EH/s:
+**Ví dụ**: Một máy đào 100 TH/s hoạt động trong mạng lưới 600 EH/s:
 \[
-E[\text{blocks/day}] = \frac{144 \times 100 \times 10^{12}}{600 \times 10^{18}} = 0.024 \text{ blocks/day}
+E[\text{blocks/day}] = \frac{144 \times 100 \times 10^{12}}{600 \times 10^{18}} = 0.000024 \text{ blocks/day}
 \]
 
-**Mean time to find block**:
+**Thời gian trung bình để tìm được 1 block**:
 \[
-\frac{1}{0.024 \text{ days}} \approx 42 \text{ days}
+\frac{1}{0.000024 \text{ days}} \approx 41,667 \text{ days} \approx 114 \text{ years}
 \]
 
-**Standard deviation** (Poisson):
+**Độ lệch chuẩn (theo Poisson) và hệ số biến thiên**:
 \[
-\sigma = \sqrt{E[\text{blocks}]} = \sqrt{0.024} \approx 0.155
+\sigma = \sqrt{E[\text{blocks/day}]} = \sqrt{0.000024} \approx 0.0049
+\]
+\[
+CV = \frac{\sigma}{E} = \frac{1}{\sqrt{E}} = \frac{1}{\sqrt{0.000024}} \approx 204
 \]
 
-**Coefficient of Variation**:
-\[
-CV = \frac{\sigma}{E} = \frac{1}{\sqrt{E}} = \frac{1}{\sqrt{0.024}} \approx 6.5
-\]
-
-Extremely high variance! Income very unpredictable.
-
-**Mining Pools** (reduce variance):
-- N miners pool together
-- Variance reduces by factor √N
-- Trade-off: Pool fee (1-3%)
+Phương sai thu nhập khi đào đơn lẻ cực kỳ lớn khiến dòng tiền gần như không thể dự đoán. **Nhóm đào (Mining Pools)** giải quyết vấn đề này bằng cách gom sức mạnh băm của \( N \) thợ đào lại với nhau, giúp giảm hệ số biến thiên thu nhập theo tỷ lệ \( \sqrt{N} \) với mức phí dịch vụ thường từ 1%–3%.
 
 ---
 
-## 5. Implementation Insight
+## 5. Minh họa triển khai
 
-### 5.1. Complete Mining Implementation
+### 5.1. Cài đặt mô phỏng đào khối (Python)
 
 ```python
 import hashlib
@@ -844,7 +739,7 @@ if __name__ == "__main__":
         print(f"Block can now be broadcast to network")
 ```
 
-### 5.2. Difficulty Adjustment Simulation
+### 5.2. Mô phỏng thuật toán điều chỉnh độ khó
 
 ```python
 import random
@@ -978,64 +873,37 @@ if __name__ == "__main__":
 
 ---
 
-*[Do giới hạn độ dài, tôi sẽ tiếp tục với các phần 6-10 trong một message riêng. Bài giảng này đang rất chi tiết và comprehensive!]*
-
 ## 6. Các thách thức và đánh đổi thường gặp
 
-### 6.1. Mining Centralization
+### 6.1. Tập trung hóa hoạt động đào
 
-**Problem**: Mining đã trở nên highly centralized
+Hoạt động đào Bitcoin có xu hướng tập trung cả về địa lý lẫn nhóm đào (pool):
 
-**Geographic Concentration** (2024):
-- USA: ~38% hash rate
-- China: ~21% (down from >65% in 2021)
-- Kazakhstan: ~13%
-- Russia: ~10%
-- Canada: ~7%
+**Phân bổ địa lý tham khảo (2024)**:
+- Mỹ: ~38% hash rate.
+- Trung Quốc: ~21% (giảm mạnh từ mức trên 65% năm 2021).
+- Kazakhstan: ~13%.
+- Nga: ~10%.
+- Canada: ~7%.
 
-**Pool Concentration**:
-- Top 4 pools: ~55% của total hash rate
-- Foundry USA: ~30%
-- Antpool: ~15%
-- F2Pool: ~12%
-- Binance Pool: ~10%
+**Tập trung nhóm đào**: Các pool lớn nhất chiếm hơn một nửa tổng sức mạnh băm toàn mạng (tiêu biểu gồm Foundry USA, Antpool, F2Pool và Binance Pool).
 
-**Risks**:
-1. **Government intervention**: Single country could disrupt significant portion
-2. **Pool collusion**: Top pools could coordinate 51% attack
-3. **Transaction censorship**: Pools could refuse certain transactions
+**Rủi ro chính**: Can thiệp pháp lý từ một quốc gia duy nhất, nguy cơ thông đồng giữa các pool lớn để tấn công 51%, hoặc kiểm duyệt giao dịch ở tầng tạo mẫu khối.
 
-**Mitigations**:
-- **Stratum V2**: Allows individual miners to choose transactions (not pool)
-- **P2Pool**: Decentralized pool using sharechain
-- **Geographic diversification**: Miners spreading globally
-- **Pool hopping**: Miners can quickly switch pools
+**Giải pháp giảm thiểu**:
+- **Stratum V2**: Cho phép từng thợ đào tự chọn giao dịch đưa vào mẫu khối thay vì phụ thuộc hoàn toàn vào pool.
+- **P2Pool**: Mô hình pool phi tập trung dựa trên chuỗi chia sẻ (sharechain).
+- **Đa dạng hóa địa lý** và khả năng chuyển đổi pool nhanh chóng của thợ đào.
 
-### 6.2. ASIC Resistance Debate
+### 6.2. Tranh luận về tính kháng ASIC
 
-**Pro-ASIC Arguments**:
-- Higher hash rate = more security
-- Specialized hardware harder to requisition for attacks
-- Investment in hardware aligns long-term interests
+- **Quan điểm ủng hộ ASIC**: Tạo ra tổng hash rate rất cao giúp tăng bảo mật; phần cứng chuyên dụng khó bị trưng dụng cho mục đích tấn công; khoản đầu tư phần cứng lớn gắn chặt lợi ích của thợ đào với sự ổn định dài hạn của mạng lưới.
+- **Quan điểm phản đối ASIC**: Dễ gây tập trung hóa vào vài nhà sản xuất chip, tạo rào cản gia nhập cao và làm phát sinh rác thải điện tử khi máy đào lỗi thời.
+- **Hướng tiếp cận kháng ASIC**: Dùng thuật toán đòi hỏi nhiều bộ nhớ (Ethash, RandomX), thay đổi thuật toán định kỳ hoặc kết hợp nhiều thuật toán. Bitcoin chọn chấp nhận ASIC vì đánh giá lợi ích bảo mật vượt trội hơn rủi ro tập trung phần cứng.
 
-**Anti-ASIC Arguments**:
-- Centralization (few manufacturers)
-- Barriers to entry (expensive hardware)
-- E-waste when ASICs obsolete
+### 6.3. Đào ích kỷ và tấn công giữ khối (Block Withholding)
 
-**ASIC-Resistant Alternatives**:
-- **Memory-hard algorithms**: Ethash (Ethereum pre-merge), RandomX (Monero)
-- **Frequent algorithm changes**: Prevents ASIC development
-- **Mixed algorithms**: Multiple algorithms combined
-
-**Bitcoin's Stance**: Embraced ASICs
-- Argues security benefits outweigh centralization risks
-- Market has matured with competition
-- Geographic distribution improving
-
-### 6.3. Selfish Mining and Block Withholding
-
-**Selfish Mining**:
+**Đào ích kỷ (Selfish Mining)**:
 ```
 Normal strategy: Found block → broadcast immediately
 Selfish strategy: Found block → keep secret → strategic release
@@ -1048,15 +916,9 @@ Example:
 5. Attacker broadcasts n+1 and n+2
    → Longer chain → Honest block orphaned
 ```
+Ngưỡng sinh lợi lý thuyết khoảng 25%–33% hash rate. Các biện pháp giảm thiểu gồm chọn ngẫu nhiên nhánh khi hòa, thưởng khối chú (uncle block rewards như Ethereum thời PoW) và tăng tốc lan truyền khối (FIBRE, Compact Blocks).
 
-**Profitability Threshold**: ~25-33% hash rate
-
-**Defenses**:
-- **Random block propagation**: Harder to predict which chain wins ties
-- **Uncle block rewards** (Ethereum): Reduce orphan cost
-- **Faster block propagation**: P2P improvements (FIBRE, Compact Blocks)
-
-**Block Withholding Attack** (on pools):
+**Tấn công giữ khối (Block Withholding Attack)** nhắm vào pool đối thủ:
 ```
 Attacker joins pool:
 - Submits partial proofs (gets rewards shares)
@@ -1065,142 +927,38 @@ Attacker joins pool:
 
 Goal: Sabotage competitor pools
 ```
+Tấn công này khó phân biệt với vận may kém trong ngắn hạn; các pool thường phòng chống bằng phân tích thống kê dài hạn và loại bỏ tài khoản bất thường.
 
-**Pool Defense**:
-- Difficult to detect (looks like bad luck)
-- Some pools ban suspicious miners
-- Statistical analysis over time
+### 6.4. Sự tiến hóa của thị trường phí và kỷ nguyên hậu trợ cấp
 
-### 6.4. Fee Market Evolution
+Diễn biến phí giao dịch trong lịch sử rất biến động: từ ~0,0001 BTC giai đoạn 2009–2016 lên đỉnh trên 50 USD (2017) và trên 60 USD (2021), trước khi dao động quanh 1–20 USD tùy mức độ tắc nghẽn (2024). Hai cơ chế hỗ trợ điều chỉnh phí gồm **Replace-by-Fee (RBF)** (thay giao dịch chưa xác nhận bằng giao dịch trả phí cao hơn) và **Child-Pays-for-Parent (CPFP)** (tạo giao dịch con trả phí cao để khuyến khích thợ đào gộp luôn giao dịch cha).
 
-**Historical Evolution**:
-```
-2009-2016: Tiny fees (~0.0001 BTC)
-2017:      Fee spike ($50+ during bull run)
-2018-2020: Moderate fees ($0.50-5)
-2021:      Another spike ($60+ peak)
-2024:      Variable ($1-20 depending on congestion)
-```
+Sau khoảng năm 2140, khi trợ cấp khối về 0 và chỉ còn phí giao dịch, câu hỏi mở đặt ra là liệu nguồn phí có đủ duy trì mức bảo mật cao hay không: quan điểm lạc quan kỳ vọng giá BTC và thị trường phí trưởng thành kết hợp Layer 2 sẽ đủ bù đắp, trong khi quan điểm thận trọng lo ngại hash rate suy giảm và đặt vấn đề về cơ chế phát hành đuôi (tail emission).
 
-**Replace-by-Fee (RBF)**:
-- Allows replacing unconfirmed transaction with higher fee
-- Pro: Helps unstick transactions
-- Con: Enables double-spend attempts (before confirmation)
+### 6.5. Vấn đề khối rỗng (Empty Blocks)
 
-**Child-Pays-for-Parent (CPFP)**:
-- Spend unconfirmed coins với high fee
-- Incentivizes miners to include parent transaction
-- Useful when receiver wants faster confirmation
-
-**Future: Post-Subsidy Era** (after 2140):
-```
-Block Reward → 0
-Only transaction fees remain
-
-Question: Will fees alone suffice for security?
-
-Optimistic view:
-- High BTC price → fees in BTC worth a lot
-- Layer 2 solutions reduce on-chain congestion
-- Fee market matures
-
-Pessimistic view:
-- Insufficient fees → hash rate drops
-- Security decreases
-- Need for tail emission (perpetual small subsidy)?
-```
-
-### 6.5. Empty Block Problem
-
-**Problem**: Some miners mine empty blocks (no transactions except coinbase)
-
-**Why?**:
-- Faster validation (no transaction verification)
-- Get block reward ASAP
-- Start mining next block immediately
-
-**Impact**:
-- Wastes block space
-- Increases confirmation times
-- Foregoes fee revenue (usually small anyway)
-
-**Prevalence**: ~1-3% of blocks
-
-**Not necessarily malicious**:
-- SPV mining: Start mining before fully validating previous block
-- Optimization: Saves ~100ms validation time
-
-**Solution**: Generally acceptable as temporary measure
+Khoảng 1%–3% số block được đào chỉ chứa duy nhất giao dịch coinbase mà không có giao dịch người dùng nào khác. Nguyên nhân chủ yếu không hẳn do ác ý mà do tối ưu **SPV mining**: thợ đào bắt đầu đào khối mới ngay khi nhận được block header của khối trước (tiết kiệm ~100 ms xác thực giao dịch) để giành lợi thế thời gian, chấp nhận bỏ qua phần phí giao dịch nhỏ.
 
 ---
 
 ## 7. Các khái niệm liên quan
 
-### 7.1. Mining Pool Reward Schemes
+### 7.1. Các cơ chế chia thưởng của Mining Pool
 
-**Pay-Per-Share (PPS)**:
-```
-Miner gets: Fixed amount per share submitted
-Pool risk:   Bears variance (pays even if pool unlucky)
-Miner risk:  None (guaranteed payout)
-Pool fee:    Higher (3-5%) to cover variance
-```
+- **Pay-Per-Share (PPS)**: Trả cố định cho mỗi share hợp lệ gửi lên; thợ đào không chịu rủi ro phương sai nhưng phí pool cao hơn (3%–5%) vì pool gánh rủi ro.
+- **Proportional (PROP)**: Chia thưởng theo tỷ lệ số share đóng góp trong từng vòng đào; phí thấp (1%–2%) nhưng phương sai cao và dễ bị khai thác kiểu nhảy pool (pool hopping).
+- **Pay-Per-Last-N-Shares (PPLNS)**: Chia thưởng dựa trên \( N \) share gần nhất thay vì theo từng vòng riêng lẻ; phí trung bình (2%–3%) và chống nhảy pool hiệu quả hơn.
 
-**Proportional (PROP)**:
-```
-Miner gets: Reward proportional to shares in round
-Pool risk:   None
-Miner risk:  High variance, vulnerable to pool hopping
-Pool fee:    Lower (1-2%)
-```
+### 7.2. Đào gộp (Merged Mining)
 
-**Pay-Per-Last-N-Shares (PPLNS)**:
-```
-Miner gets: Reward based on last N shares (not just current round)
-Pool risk:   Reduced
-Miner risk:  Medium, resistant to pool hopping
-Pool fee:    Medium (2-3%)
-```
+Cho phép dùng chung một công sức băm để đào đồng thời nhiều blockchain (ví dụ: Bitcoin và Namecoin) bằng cách nhúng dữ liệu tiêu đề của chuỗi phụ vào giao dịch coinbase của chuỗi chính. Chuỗi nhỏ nhờ đó thừa hưởng thêm bảo mật từ hash rate của chuỗi lớn, đổi lại giao dịch coinbase lớn hơn và đòi hỏi hỗ trợ tương thích ở tầng giao thức.
 
-### 7.2. Merged Mining
+### 7.3. Giao thức Stratum
 
-**Concept**: Mine multiple blockchains simultaneously
+Giao thức kết nối giữa thợ đào và pool:
+- **Stratum V1**: Pool toàn quyền chọn giao dịch và gửi mẫu khối cho thợ đào, làm tăng mức độ tập trung ở khâu chọn giao dịch.
+- **Stratum V2**: Cho phép thợ đào tự chọn giao dịch, tăng tính phi tập trung, giảm lưu lượng truyền tải và bổ sung mã hóa đầu cuối.
 
-**How**:
-```
-1. Create auxiliary blockchain transaction
-2. Include auxiliary header in main blockchain's coinbase
-3. If main blockchain block valid:
-   → Auxiliary blockchain also gets valid block (if hash < aux target)
-```
-
-**Example**: Namecoin merged-mined với Bitcoin
-- Bitcoin miners include Namecoin data
-- Free extra coins for same work
-- Secures smaller blockchain
-
-**Trade-offs**:
-- Pro: Smaller chains get security
-- Con: Larger coinbase (more data)
-- Compatibility: Must be specifically designed for
-
-### 7.3. Stratum Protocol
-
-**Purpose**: Communication between miners và pools
-
-**V1 (Current)**:
-- Pool controls transaction selection
-- Pool sends: block template, difficulty target
-- Miner sends: shares found
-- Centralized transaction selection
-
-**V2 (New)**:
-- Miners can select own transactions
-- Better decentralization
-- Improved efficiency (less data transfer)
-- End-to-end encryption
-
-**Job Assignment**:
 ```json
 {
   "id": 1,
@@ -1219,148 +977,96 @@ Pool fee:    Medium (2-3%)
 }
 ```
 
-### 7.4. ASICBoost Optimization
+### 7.4. Tối ưu ASICBoost
 
-**Concept**: Optimization making mining ~20% more efficient
+ASICBoost là kỹ thuật tối ưu khai thác cấu trúc nội bộ của SHA-256 để tiết kiệm khoảng 20% năng lượng tính toán. **Overt ASICBoost** (điều chỉnh các bit phiên bản trong block header) dễ nhận diện trên chuỗi và tương thích với nâng cấp giao thức, trong khi **Covert ASICBoost** (thay đổi thứ tự giao dịch để tìm trùng lặp) không tương thích với SegWit và từng gây nhiều tranh cãi.
 
-**How**:
-- Exploit SHA-256 internal structure
-- Reduce number of operations per hash
-- Patented (controversial)
+### 7.5. Các thuật toán PoW thay thế
 
-**Overt ASICBoost**:
-- Detectable on-chain (version bits manipulation)
-- Compatible with protocol upgrades
+- **Ethash** (Ethereum trước The Merge): Đòi hỏi bộ nhớ lớn (~4 GB RAM) nhằm hạn chế ASIC ban đầu, nhưng về sau vẫn xuất hiện ASIC chuyên dụng.
+- **RandomX** (Monero): Tối ưu cho CPU đa dụng và cập nhật định kỳ để duy trì tính kháng ASIC cao.
+- **Equihash** (Zcash): Thiết kế hướng bộ nhớ nhưng cuối cùng vẫn có máy ASIC hỗ trợ.
 
-**Covert ASICBoost**:
-- Hidden in transaction ordering
-- Incompatible with SegWit
-- Controversial (seen as bug exploitation)
-
-**Outcome**:
-- SegWit adoption discouraged covert ASICBoost
-- Some modern ASICs include overt ASICBoost
-- Not universally supported
-
-### 7.5. Alternative PoW Algorithms
-
-**Ethash** (Ethereum pre-merge):
-- Memory-hard (needs ~4GB RAM)
-- ASIC-resistant (initially)
-- Eventually ASICs developed anyway
-
-**RandomX** (Monero):
-- CPU-optimized
-- Frequent updates
-- Strong ASIC resistance
-
-**Equihash** (Zcash):
-- Memory-oriented
-- ASIC-resistant design
-- ASICs eventually created
-
-**Lessons**:
-- True ASIC resistance is hard
-- Economic incentive drives ASIC development
-- Arms race between algorithm designers and hardware manufacturers
+Thực tế cho thấy tính kháng ASIC tuyệt đối rất khó duy trì dài hạn vì động lực kinh tế luôn thúc đẩy các nhà sản xuất chế tạo phần cứng chuyên dụng.
 
 ---
 
 ## 8. ⭐ Các bài báo và whitepaper nền tảng
 
-| Paper | Year | Author(s) | Contribution |
+| Bài báo | Năm | Tác giả | Đóng góp chính |
 |-------|------|-----------|--------------|
-| **"Pricing via Processing or Combating Junk Mail"** | 1992 | Dwork, Naor | First proof-of-work concept |
-| **"Hashcash - A Denial of Service Counter-Measure"** | 2002 | Adam Back | PoW for email spam prevention |
-| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | PoW for consensus |
-| **"Majority is not Enough: Bitcoin Mining is Vulnerable"** | 2013 | Eyal, Sirer | Selfish mining attack |
-| **"The Bitcoin Backbone Protocol: Analysis and Applications"** | 2015 | Garay, Kiayias, Leonardos | Formal security analysis of PoW |
-| **"Analysis of Bitcoin Pooled Mining Reward Systems"** | 2011 | Rosenfeld | Mining pool mathematics |
-| **"Be Selfish and Avoid Dilemmas"** | 2016 | Sapirshtein et al. | Optimal selfish mining strategies |
-| **"On the Security and Performance of PoW Blockchains"** | 2016 | Gervais et al. | Security vs performance trade-offs |
-| **"Blockchain Mining Games"** | 2016 | Biais et al. | Game-theoretic analysis |
-| **"Consensus Redux: Distributed Ledgers in the Face of Adversarial Supremacy"** | 2020 | Garay et al. | Advanced PoW security |
+| **"Pricing via Processing or Combating Junk Mail"** | 1992 | Dwork, Naor | Đề xuất khái niệm Proof-of-Work đầu tiên |
+| **"Hashcash - A Denial of Service Counter-Measure"** | 2002 | Adam Back | Ứng dụng PoW chống thư rác và DoS |
+| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Tích hợp PoW vào cơ chế đồng thuận phân tán |
+| **"Majority is not Enough: Bitcoin Mining is Vulnerable"** | 2013 | Eyal, Sirer | Phân tích tấn công đào ích kỷ (selfish mining) |
+| **"The Bitcoin Backbone Protocol: Analysis and Applications"** | 2015 | Garay, Kiayias, Leonardos | Chứng minh bảo mật hình thức cho giao thức PoW |
+| **"Analysis of Bitcoin Pooled Mining Reward Systems"** | 2011 | Rosenfeld | Mô hình hóa toán học các cơ chế chia thưởng mining pool |
+| **"Be Selfish and Avoid Dilemmas"** | 2016 | Sapirshtein et al. | Phân tích chiến lược đào ích kỷ tối ưu |
+| **"On the Security and Performance of PoW Blockchains"** | 2016 | Gervais et al. | Phân tích đánh đổi giữa bảo mật và hiệu năng PoW |
+| **"Blockchain Mining Games"** | 2016 | Biais et al. | Phân tích hoạt động đào dưới góc độ lý thuyết trò chơi |
+| **"Consensus Redux: Distributed Ledgers in the Face of Adversarial Supremacy"** | 2020 | Garay et al. | Nghiên cứu chuyên sâu về an toàn PoW |
 
-**Essential Reading**:
-1. Satoshi's whitepaper Section 4: Proof-of-Work (must-read)
-2. Eyal & Sirer's selfish mining paper (understand attacks)
-3. Bitcoin Backbone Protocol (formal security proofs)
-4. Rosenfeld's pool analysis (understand mining economics)
+**Tài liệu nên ưu tiên đọc**:
+1. Mục 4 của Whitepaper Bitcoin (Proof-of-Work).
+2. Bài báo *Majority is not Enough* của Eyal & Sirer.
+3. *The Bitcoin Backbone Protocol*.
+4. Bài báo phân tích mining pool của Rosenfeld.
 
 ---
 
 ## 9. 🎨 Minh họa và tham khảo hình ảnh
 
-| Description | Source | Notes |
+| Mô tả | Nguồn | Ghi chú |
 |-------------|--------|-------|
-| **Mining process visualization** | [Anders Brownworth Demo](https://andersbrownworth.com/blockchain/blockchain) | Interactive PoW demo |
-| **Hash rate charts** | [Blockchain.com Charts](https://www.blockchain.com/charts/hash-rate) | Real-time network hash rate |
-| **Mining difficulty history** | [BitcoinWisdom](https://bitcoinwisdom.com/bitcoin/difficulty) | Difficulty adjustments over time |
-| **Mining pool distribution** | [BTC.com Pool Stats](https://btc.com/stats/pool) | Current pool market share |
-| **ASIC efficiency evolution** | [ASIC Miner Value](https://www.asicminervalue.com/) | Hardware comparison |
-| **Selfish mining diagram** | [Cornell Tech](https://www.cs.cornell.edu/~ie53/publications/btcProcFC.pdf) | Attack visualization |
-| **Fee estimation** | [Mempool.space](https://mempool.space/) | Real-time fee market |
+| **Minh họa quy trình đào** | [Anders Brownworth Demo](https://andersbrownworth.com/blockchain/blockchain) | Mô phỏng PoW tương tác |
+| **Biểu đồ Hash Rate** | [Blockchain.com Charts](https://www.blockchain.com/charts/hash-rate) | Sức mạnh băm toàn mạng theo thời gian thực |
+| **Lịch sử điều chỉnh độ khó** | [BitcoinWisdom](https://bitcoinwisdom.com/bitcoin/difficulty) | Biến động độ khó theo các chu kỳ |
+| **Thị phần nhóm đào** | [BTC.com Pool Stats](https://btc.com/stats/pool) | Phân bổ hash rate giữa các pool |
+| **Hiệu suất phần cứng ASIC** | [ASIC Miner Value](https://www.asicminervalue.com/) | So sánh thông số các dòng máy đào |
+| **Sơ đồ Selfish Mining** | [Cornell Tech](https://www.cs.cornell.edu/~ie53/publications/btcProcFC.pdf) | Minh họa mô hình tấn công |
+| **Ước lượng phí giao dịch** | [Mempool.space](https://mempool.space/) | Theo dõi thị trường phí trực tiếp |
 
-**Interactive Tools**:
-- [Bitcoin Mining Calculator](https://www.cryptocompare.com/mining/calculator/) - Profitability estimation
-- [Difficulty Estimator](https://diff.cryptothis.com/) - Next adjustment prediction
-- [Block Explorer](https://blockchair.com/bitcoin) - View actual mined blocks
+**Công cụ tương tác**:
+- [Bitcoin Mining Calculator](https://www.cryptocompare.com/mining/calculator/) — Ước tính lợi nhuận đào.
+- [Difficulty Estimator](https://diff.cryptothis.com/) — Dự báo kỳ điều chỉnh độ khó tiếp theo.
+- [Block Explorer](https://blockchair.com/bitcoin) — Tra cứu chi tiết các block thực tế.
 
 ---
 
 ## 10. Tóm tắt và điểm chính
 
-**Core Concepts**:
-1. PoW là lottery-based consensus: more hash rate = more tickets
-2. SHA-256 double hashing với adjustable difficulty target
-3. Difficulty adjusts every 2016 blocks để maintain ~10 min block time
-4. Mining profitable when: Block Reward + Fees > Hardware + Electricity costs
+**Khái niệm cốt lõi**:
+1. PoW là cơ chế đồng thuận kiểu xổ số: sức mạnh băm càng lớn, xác suất thắng càng cao.
+2. Sử dụng băm kép SHA-256 so sánh với ngưỡng `Target` điều chỉnh động.
+3. Độ khó tự cập nhật sau mỗi 2.016 block để giữ nhịp độ trung bình 10 phút/block.
+4. Hoạt động đào có lãi khi phần thưởng khối cộng phí vượt chi phí phần cứng, điện năng và vận hành.
 
-**Technical Mechanisms**:
-- **Mining**: Find nonce such that hash(header) < target
-- **Difficulty**: Target = Max Target / Difficulty
-- **Hash Rate**: Total computational power, ~600 EH/s (2024)
-- **Adjustment**: New Difficulty = Old × (Expected Time / Actual Time)
+**Cơ chế kỹ thuật và bảo mật**:
+- Đào khối: tìm `nonce` sao cho `hash(header) < target`.
+- Tấn công 51%: đòi hỏi trên 50% hash rate, chi phí phần cứng ước tính nhiều tỷ USD.
+- Đào ích kỷ: có thể sinh lợi về lý thuyết từ ngưỡng 25%–33% hash rate.
+- Chi tiêu gấp đôi: xác suất thành công giảm theo hàm mũ khi số xác nhận tăng.
 
-**Security Analysis**:
-- **51% attack**: Requires >50% hash rate, cost ~$8B+ in hardware
-- **Selfish mining**: Profitable with ~25-33% hash rate (theoretical)
-- **Double-spend**: Exponentially harder with more confirmations
-- **Economic security**: Attack costs exceed potential gains
+**Kinh tế học và thách thức**:
+- Phần thưởng khối giảm một nửa sau mỗi 210.000 block (6,25 BTC giai đoạn 2020–2024; 3,125 BTC từ halving 2024).
+- Các mining pool giúp giảm phương sai thu nhập nhưng tạo thách thức tập trung hóa.
+- Tiêu thụ năng lượng (~150 TWh/năm) và câu hỏi về độ an toàn sau năm 2140 khi chỉ còn phí giao dịch vẫn là những bài toán dài hạn.
 
-**Economics**:
-- **Block Reward**: Currently 6.25 BTC (halves every 210,000 blocks)
-- **Transaction Fees**: Variable, market-driven (typically $1-20)
-- **Mining Pools**: Reduce variance, dominate landscape (top 4 = 55%)
-- **Hardware Evolution**: CPU → GPU → ASIC (2 million times more efficient)
-
-**Challenges**:
-- **Centralization**: Geographic and pool concentration
-- **Energy**: ~150 TWh/year consumption
-- **ASIC dominance**: Barriers to entry
-- **Post-subsidy security**: Will fees suffice after 2140?
-
-**Future Developments**:
-- **Stratum V2**: Miner transaction selection
-- **Renewable energy**: Increasing adoption (~50%+)
-- **Hardware efficiency**: Continuous improvement
-- **Layer 2**: Reduce on-chain load (Lightning Network)
-
-**Key Takeaway**: PoW transforms physical resources (hardware + electricity) into digital security through cryptographic puzzles. While energy-intensive, it provides battle-tested security for a $500B+ network through elegant economic incentives and game theory.
+**Điểm chốt**: Proof-of-Work chuyển hóa tài nguyên vật lý (phần cứng và điện năng) thành bảo mật số thông qua bài toán mật mã và cơ chế cân bằng kinh tế tự điều tiết.
 
 ---
 
-✅ **End of Lecture 01.01**
+✅ **Kết thúc Lecture 01.01**
 
-**Next**: Lecture 01.02 - Bitcoin Economics, Game Theory, và Monetary Policy
+**Bài tiếp theo**: Lecture 01.02 - Kinh tế học Bitcoin, Lý thuyết trò chơi và Chính sách tiền tệ
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Phần đào của 3Blue1Brown cho thấy nonce và hash nhỏ hơn ngưỡng; xem trước trước mục mining và target.
-- [Bitcoin Mining Difficulty Made Simple! | Hashpower Academy](https://www.youtube.com/watch?v=qrvdXAf1UOY) — Hashpower Academy, tiếng Anh. Cách difficulty chỉnh theo thời gian block; đối chiếu công thức điều chỉnh độ khó trong bài.
-- [Cryptoeconomics - 3.5 - Bitcoin: Selfish Mining](https://www.youtube.com/watch?v=SWKjSEi-9pg) — Cryptoeconomics Study, tiếng Anh. Bài giảng selfish mining: vì sao dưới 50% hashrate vẫn có chiến lược lệch, đúng mục an toàn và tấn công.
+- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Phần giải thích cơ chế đào cho thấy cách hoạt động của `nonce` và ngưỡng mục tiêu; nên xem trước mục mining và target.
+- [Bitcoin Mining Difficulty Made Simple! | Hashpower Academy](https://www.youtube.com/watch?v=qrvdXAf1UOY) — Hashpower Academy, tiếng Anh. Giải thích cách điều chỉnh độ khó theo thời gian tạo khối, phù hợp đối chiếu với công thức trong bài.
+- [Cryptoeconomics - 3.5 - Bitcoin: Selfish Mining](https://www.youtube.com/watch?v=SWKjSEi-9pg) — Cryptoeconomics Study, tiếng Anh. Phân tích chiến lược selfish mining và lý do dưới 50% hashrate vẫn có thể trục lợi, khớp với phần phân tích bảo mật.
 
 ## References
 
@@ -1371,4 +1077,3 @@ Pool fee:    Medium (2-3%)
 5. Rosenfeld, M. (2011). *Analysis of bitcoin pooled mining reward systems*. arXiv:1112.4980.
 6. Sapirshtein, A., Sompolinsky, Y., & Zohar, A. (2016). *Optimal selfish mining strategies*. FC 2016.
 7. Cambridge Bitcoin Electricity Consumption Index: https://cbeci.org/
-

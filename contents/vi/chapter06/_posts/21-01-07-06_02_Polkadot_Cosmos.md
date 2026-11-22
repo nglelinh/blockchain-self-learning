@@ -9,49 +9,44 @@ categories:
 - blockchain-chapter06
 ---
 
-# Lecture: Polkadot & Cosmos - Purpose-Built Interoperability Platforms
+# Bài giảng 06.02: Polkadot và Cosmos — Các nền tảng thiết kế chuyên biệt cho tương tác xuyên chuỗi
 
-## 1. Concept Overview
+## 1. Tổng quan về khái niệm
 
-Trong khi bridges attempt connect existing blockchains sau khi chúng đã được built independently, Polkadot và Cosmos represent fundamental rethinking của blockchain architecture itself, designing interoperability vào core protocol từ đầu. Hai platforms này embody different philosophies về cách achieve blockchain internet - Polkadot through shared security và coordinated execution, Cosmos through sovereign chains với standardized communication protocol. Understanding architectural differences giữa these approaches illuminates broader trade-offs trong blockchain interoperability design space.
+Trong khi các cầu nối cố gắng liên kết những blockchain đã được xây dựng tách biệt từ trước, **Polkadot** và **Cosmos** tiếp cận bài toán bằng cách thiết kế lại kiến trúc blockchain để tích hợp khả năng tương tác ngay vào giao thức lõi. Hai nền tảng này đại diện cho hai triết lý khác nhau về "mạng internet của các blockchain": Polkadot hướng tới **bảo mật chia sẻ** và thực thi phối hợp, còn Cosmos ưu tiên **chủ quyền độc lập** kết hợp giao thức truyền tin chuẩn hóa.
 
-**Polkadot**, conceived bởi **Gavin Wood** (Ethereum co-founder) và described trong whitepaper năm 2016, introduces **heterogeneous multi-chain architecture**. Vision là enable multiple specialized blockchains (parachains) operate independently whilst sharing security của central relay chain. Key innovation: parachains không need bootstrap own validator sets - they inherit security từ relay chain's validators, dramatically lowering barrier to launching new blockchain. This shared security model fundamentally different từ independent chains requiring separate consensus mechanisms.
+**Polkadot**, do **Gavin Wood** (đồng sáng lập Ethereum) đề xuất trong sách trắng năm 2016, giới thiệu **kiến trúc đa chuỗi không đồng nhất (heterogeneous multi-chain architecture)**. Mục tiêu là cho phép nhiều blockchain chuyên biệt (**parachains**) hoạt động độc lập nhưng dùng chung lớp bảo mật của một chuỗi trung tâm (**relay chain**). Nhờ đó, các parachain không cần tự xây dựng tập trình xác thực riêng mà kế thừa trực tiếp an ninh từ relay chain, giúp giảm đáng kể rào cản khi khởi chạy một blockchain mới.
 
-Relay chain serves như coordinator và security provider. Validators on relay chain validate parachain blocks, ensuring correctness globally. Parachains submit block candidates to relay chain, validators verify state transitions valid, finalize blocks when consensus achieved. Cross-chain messages routed through relay chain, guaranteeing delivery và ordering. Architecture enables parachains focus on application logic rather than security bootstrapping, whilst maintaining trustless communication với other parachains.
+Trên Polkadot, relay chain đóng vai trò điều phối và bảo chứng an ninh: các nút thu gom (collator) của parachain tạo khối ứng viên gửi lên relay chain để các trình xác thực kiểm tra chuyển trạng thái và hoàn tất khối. Thông điệp xuyên chuỗi được định tuyến qua relay chain nhằm đảm bảo tính toàn vẹn và thứ tự, giúp parachain tập trung vào logic ứng dụng.
 
-**Cosmos**, developed bởi **Jae Kwon** và **Ethan Buchman**, takes different approach emphasizing sovereignty. Vision "internet of blockchains" enables independent chains (zones) communicate through standardized **Inter-Blockchain Communication (IBC)** protocol whilst maintaining complete autonomy. Unlike Polkadot's shared security, Cosmos chains each secure themselves independently, using IBC purely for communication layer. This preserves sovereignty - chains control own governance, consensus, economics - nhưng requires each chain sufficiently secure independently.
+**Cosmos**, do **Jae Kwon** và **Ethan Buchman** phát triển, đi theo hướng đề cao tính tự chủ. Các blockchain độc lập (**zones**) giao tiếp với nhau qua giao thức chuẩn **IBC (Inter-Blockchain Communication)** trong khi vẫn giữ trọn quyền kiểm soát về quản trị, cơ chế đồng thuận và kinh tế token. Khác với Polkadot, mỗi zone trong Cosmos tự chịu trách nhiệm bảo mật cho chính mình; **Cosmos Hub** là chuỗi đầu tiên hỗ trợ IBC và đóng vai trò điểm kết nối nhưng không áp đặt lớp bảo mật lên các zone khác.
 
-Cosmos Hub serves như first IBC-enabled chain và connection point, but không impose security on connected zones. Zones run Tendermint consensus (hoặc IBC-compatible BFT variant), implementing IBC modules enabling packet routing, verification, và acknowledgment. Communication trustless because each chain verifies counterparty's consensus proofs cryptographically. No shared security means no systemic risk - compromise của one zone doesn't affect others - nhưng also means weaker chains vulnerable individually.
+Sự khác biệt về triết lý này phản ánh sự đánh đổi cốt lõi trong thiết kế hệ thống: Polkadot ưu tiên khởi tạo bảo mật đồng đều và phối hợp chặt chẽ, chấp nhận giảm một phần chủ quyền của từng chuỗi; Cosmos ưu tiên chủ quyền và tính linh hoạt tối đa, chấp nhận mức độ bảo mật không đồng đều giữa các zone.
 
-Philosophical divide between approaches reflects fundamental tension trong blockchain design. Polkadot prioritizes **security bootstrapping** và **coordination efficiency** through shared validator set, accepting reduced sovereignty as tradeoff. Cosmos prioritizes **sovereignty** và **flexibility**, accepting security variance across zones và increased complexity trong ensuring individual chain security. Neither approach strictly superior - choice depends on specific requirements và trust assumptions acceptable for given use case.
-
-Historical development timelines parallel but divergent. Polkadot mainnet launched May 2020, gradually onboarding parachains through auction mechanism starting December 2021. Cosmos Hub launched March 2019, với IBC protocol going live February 2021. Both ecosystems grown substantially - Polkadot hos numerous parachains (Moonbeam, Astar, Acala), Cosmos extensive zone network (Osmosis, Juno, Secret Network). Total value locked across both ecosystems exceeds tens of billions, demonstrating viability của purpose-built interoperability approaches.
+Về mốc phát triển, Polkadot ra mắt mạng chính vào tháng 5/2020 và bắt đầu đấu giá vị trí parachain từ tháng 12/2021 (với các dự án như Moonbeam, Astar, Acala). Cosmos Hub ra mắt tháng 3/2019 và kích hoạt IBC vào tháng 2/2021 (hình thành mạng lưới các zone như Osmosis, Juno, Secret Network). Cả hai hệ sinh thái đều chứng minh khả năng vận hành thực tế ở quy mô hàng chục tỷ USD tổng giá trị khóa.
 
 ---
 
-## 2. Intuitive Understanding
+## 2. Hiểu biết trực quan
 
-Để grasp architectural differences intuitively, consider Polkadot như **federal government system** và Cosmos như **United Nations**. Federal system (Polkadot) features central authority (relay chain) providing shared defense (security) và coordination (cross-chain messaging) cho member states (parachains). States specialized - some focused on DeFi, some on identity, some on gaming - nhưng all protected by federal military (shared validators). States cannot secede easily (parachain slots limited, acquired through auction), nhưng benefit from shared security apparatus.
+Để dễ hình dung sự khác biệt giữa hai mô hình, có thể so sánh Polkadot với **mô hình nhà nước liên bang** và Cosmos với **Liên Hợp Quốc**:
 
-United Nations model (Cosmos) consists of independent sovereign nations (zones) với own armies (validators) và laws (governance). UN provides forum for communication (IBC protocol) và standards (Tendermint consensus), nhưng không enforce security. Each nation responsible for own defense. Strong nations secure, weak nations vulnerable. Communication between nations formalized through treaties (IBC channels), verified independently by each side. Nations can join hoặc leave freely, maintain complete autonomy, nhưng must ensure adequate self-defense.
+- **Polkadot (Nhà nước liên bang)**: Chính quyền trung ương (relay chain) cung cấp quốc phòng chung (bảo mật) và cơ chế phối hợp (truyền tin xuyên chuỗi) cho các bang thành viên (parachains). Các bang có thể chuyên môn hóa (DeFi, danh tính, trò chơi) và cùng được bảo vệ bởi quân đội liên bang, nhưng phải tuân thủ quy tắc chung và cạnh tranh để giành vị trí (parachain slot).
+- **Cosmos (Liên Hợp Quốc)**: Gồm các quốc gia có chủ quyền hoàn toàn (zones) với quân đội (trình xác thực) và luật pháp (quản trị) riêng. Liên Hợp Quốc cung cấp diễn đàn và chuẩn giao tiếp (IBC, Tendermint) nhưng không bảo vệ hộ từng nước: quốc gia mạnh thì an toàn, quốc gia yếu dễ bị tổn thương hơn, đổi lại họ có quyền gia nhập hoặc rời đi tự do.
 
-Polkadot relay chain comparable to operating system kernel coordinating processes. Kernel manages resources (block space), schedules execution (parachain blocks), facilitates inter-process communication (cross-chain messages), và ensures overall system security. Processes (parachains) specialized - web browser, text editor, media player - each doing specific tasks efficiently. Kernel guarantees no process can crash system, processes can communicate safely, và resources allocated fairly. Trade-off: processes must conform to kernel's rules, cannot execute arbitrary code without kernel permission.
+Ở góc độ kỹ thuật máy tính, relay chain của Polkadot tương tự **nhân hệ điều hành (OS kernel)** quản lý tài nguyên (không gian khối), lập lịch thực thi và điều phối giao tiếp liên tiến trình giữa các parachain. Trong khi đó, IBC của Cosmos giống như **bộ giao thức TCP/IP**: cho phép mọi chuỗi nói chung ngôn ngữ IBC kết nối với nhau bất kể cài đặt bên trong, nhưng không tự đảm bảo an toàn nội bộ cho từng chuỗi.
 
-Cosmos IBC protocol analogous to TCP/IP internet protocol suite. TCP/IP enables computers worldwide communicate regardless of hardware, operating system, hoặc network. Similarly, IBC enables blockchains communicate regardless of internal implementation, as long as they speak IBC language. Just như TCP/IP doesn't guarantee computer security (each responsible for own firewalls, antivirus), IBC doesn't guarantee blockchain security (each responsible for own consensus, validation). Flexibility maximized - any Tendermint chain can implement IBC - nhưng heterogeneity means varying security levels across network.
+Cơ chế **đấu giá parachain** trên Polkadot tương tự đấu giá băng tần viễn thông: tài nguyên vị trí có hạn được phân bổ thông qua việc khóa DOT trong kỳ thuê (96 tuần), giúp ưu tiên các dự án có cộng đồng và nguồn lực tốt nhưng tạo rào cản vốn cao.
 
-Parachain auctions trong Polkadot comparable to spectrum auctions for telecommunications. Parachain slots scarce resource (limited by relay chain capacity), acquired through competitive bidding using DOT tokens. Winners secure slot for lease period (96 weeks currently), during which inherit relay chain security. Auction mechanism ensures slots allocated to projects community values highest, creating market-based priority system. Trade-off: high capital requirements barrier to entry, but ensures only serious projects với community support acquire slots.
-
-Cross-chain messaging patterns differ fundamentally. Polkadot's **XCMP (Cross-Chain Message Passing)** operates within shared security context - relay chain validators ensure message delivery và execution correctness. Messages cannot be lost, corrupted, hoặc spoofed because shared validators enforce integrity. Cosmos's **IBC** operates between independent chains - each chain verifies counterparty's signatures và consensus proofs independently. No shared authority guarantees messages, pure cryptographic verification ensures authenticity. This requires chains trust counterparty securing itself properly, introducing assumption Polkadot avoids.
+Cơ chế truyền tin giữa hai nền tảng cũng khác biệt căn bản: **XCMP (Cross-Chain Message Passing)** của Polkadot vận hành trong môi trường bảo mật chia sẻ nơi trình xác thực relay chain bảo đảm thông điệp không bị mất hay giả mạo; còn **IBC** của Cosmos dựa trên xác minh mật mã độc lập giữa hai chuỗi riêng biệt, đòi hỏi mỗi bên tin rằng chuỗi đối tác đang tự bảo vệ đồng thuận của mình đủ tốt.
 
 ---
 
-## 3. Technical Foundation
+## 3. Nền tảng kỹ thuật
 
-Polkadot architecture consists of multiple specialized components working together cohesively. **Relay chain** forms security backbone, implementing nominated proof-of-stake consensus (NPoS) với validator selection based on stake-weighted nomination. Validators randomly assigned to parachains each epoch, preventing long-term collusion. Parachain collators produce block candidates, submit to assigned validators, validators verify state transitions match claimed. Only after threshold validators attest block included trong relay chain, finalizing parachain state.
+Kiến trúc **Polkadot** xoay quanh relay chain sử dụng đồng thuận **Nominated Proof-of-Stake (NPoS)**. Các trình xác thực được gán ngẫu nhiên cho các parachain theo từng kỷ nguyên (epoch) để hạn chế thông đồng dài hạn. Collator của parachain tạo khối ứng viên gửi tới các trình xác thực được phân công; khi đủ ngưỡng chứng thực, khối parachain được đưa vào và hoàn tất cùng relay chain.
 
-Relay chain runtime implemented using **Substrate framework** - modular blockchain development toolkit. Substrate provides consensus layer, networking, database, và runtime environment, allowing developers focus on application logic. All Polkadot parachains built using Substrate (though technically possible use other frameworks), ensuring compatibility và reducing integration complexity. Standardization enables rapid parachain development - projects can launch production blockchain in months rather than years required for building from scratch.
-
-**XCMP protocol** defines communication between parachains. When parachain A sends message to parachain B, message placed in relay chain state during parachain A's block finalization. Parachain B reads message from relay chain state when processing next block. Relay chain validators guarantee message delivered exactly once, in order, without possibility of loss hoặc duplication. Security inherited from relay chain's finality - once parachain block finalized, cross-chain messages finalized simultaneously.
+Runtime của relay chain và phần lớn parachain được xây dựng trên **Substrate** — bộ công cụ phát triển blockchain dạng mô-đun cung cấp sẵn đồng thuận, mạng ngang hàng, lưu trữ và môi trường thực thi. Trong giao thức **XCMP**, khi parachain A gửi thông điệp tới parachain B, thông điệp được ghi nhận vào trạng thái relay chain khi khối của A hoàn tất, và B đọc thông điệp đó ở khối tiếp theo với đảm bảo gửi đúng một lần và đúng thứ tự.
 
 ```python
 class PolkadotParachain:
@@ -113,9 +108,7 @@ class PolkadotParachain:
         return False
 ```
 
-Cosmos architecture fundamentally different. Each zone runs independently, implementing Tendermint BFT consensus locally. **Cosmos Hub** serves like router - first zone implementing IBC, connecting to many other zones, facilitating multi-hop routing. However, Hub doesn't validate other zones' state transitions - purely relays messages. Security model relies on each zone's validator set properly securing chain, với IBC providing secure communication channel.
-
-**IBC protocol** operates through light client model. Each chain maintains light client của counterparty chain - tracking validator set changes và verifying block headers. When chain A sends packet to chain B, IBC relayer (off-chain process) submits proof to chain B showing packet committed in chain A's state. Chain B verifies proof using chain A's validator signatures stored trong light client state, confirming packet authentic. Acknowledgment flows back similarly, creating reliable bidirectional communication.
+Trong **Cosmos**, mỗi zone vận hành độc lập với đồng thuận Tendermint BFT (hoặc biến thể tương thích IBC). **Giao thức IBC** hoạt động dựa trên mô hình khách nhẹ (light client): mỗi chuỗi duy trì một khách nhẹ theo dõi tập trình xác thực và tiêu đề khối của chuỗi đối tác. Khi chuỗi A gửi gói tin sang chuỗi B, tiến trình chuyển tiếp (IBC relayer) mang bằng chứng cam kết gói tin sang chuỗi B để chuỗi B tự kiểm chứng và gửi lại xác nhận (acknowledgment).
 
 ```python
 class CosmosZone:
@@ -208,45 +201,37 @@ class CosmosZone:
 
 ---
 
-## 4. Mathematical / Cryptographic Formulation
+## 4. Công thức toán học và mật mã học
 
-Shared security model trong Polkadot requires validator set size analysis. Total validators \(N\), distributed across \(p\) parachains và relay chain. To maintain security level \(\alpha\) for each parachain:
+Trong mô hình bảo mật chia sẻ của Polkadot, giả sử tổng số trình xác thực là \(N\), phân bổ cho \(p\) parachain và relay chain. Để duy trì ngưỡng an toàn tương ứng với mức \(\alpha\) cho mỗi chuỗi:
 
 \[
 \frac{N}{p+1} \geq \frac{N_{\min}}{\alpha}
 \]
 
-Where \(N_{\min}\) minimum validators for target security level.
-
-Example: Target 128-bit security, need ~150 validators minimum per chain:
+Trong đó \(N_{\min}\) là số trình xác thực tối thiểu cho mức bảo mật mục tiêu. Ví dụ, nếu giả định mỗi chuỗi cần tối thiểu 150 trình xác thực:
 \[
 150p \leq N_{\text{total}}
 \]
 
-With 1000 total validators:
+Với tổng cộng 1.000 trình xác thực:
 \[
 p \leq \frac{1000}{150} \approx 6 \text{ parachains}
 \]
 
-More parachains = security per parachain decreases!
+Công thức này minh họa giới hạn phân bổ: khi số parachain tăng lên với tập trình xác thực cố định, số trình xác thực phân công trực tiếp cho từng parachain sẽ giảm xuống.
 
-**Cosmos IBC verification** requires proving consensus on source chain. For Tendermint với validator set \(V\), proving block \(B\) finalized requires:
+Đối với **xác minh IBC trên Cosmos**, với chuỗi Tendermint có tập trình xác thực \(V\), để chứng minh khối \(B\) đã hoàn tất cần tổng trọng số đặt cọc của các trình xác thực đã ký đạt ít nhất \(2/3\):
 
 \[
 \sum_{v \in V_{\text{signed}}} \text{stake}(v) \geq \frac{2}{3} \sum_{v \in V} \text{stake}(v)
 \]
 
-Verifier on destination chain:
-1. Has validator set \(V\) (from light client)
-2. Receives signatures \(\{\sigma_1, ..., \sigma_k\}\)
-3. Verifies each \(\sigma_i\) valid
-4. Checks total stake ≥ 2/3
-
-Cost: \(O(k)\) signature verifications where \(k\) typically ~100.
+Người xác minh trên chuỗi đích dùng tập \(V\) lưu trong khách nhẹ để kiểm tra từng chữ ký trong tập \(\{\sigma_1, \dots, \sigma_k\}\) và cộng tổng trọng số, với độ phức tạp \(O(k)\) phép xác minh chữ ký (thường \(k \approx 100\)).
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
 ```python
 class PolkadotRelayChain:
@@ -329,80 +314,75 @@ class PolkadotRelayChain:
 
 ---
 
-## 6. Common Challenges / Attacks / Trade-offs
+## 6. Thách thức, tấn công và sự đánh đổi
 
-Polkadot faces **parachain slot scarcity**. Limited slots (initially ~100, expanding gradually) means not all projects can become parachains. Auction mechanism requires significant DOT token lockup (millions of dollars), favoring well-funded projects. Alternative **parathreads** (pay-as-you-go model) proposed but adoption limited. Trade-off: scarcity ensures quality control và prevents validator dilution, but limits ecosystem growth.
-
-Cosmos **sovereign security** creates variance risk. Strong zones like Cosmos Hub highly secure, smaller zones may have inadequate validator sets. Chain dengan only 10 validators vulnerable to collusion hoặc targeted attacks. IBC doesn't solve this - communication trustless but communicating với insecure chain still risky. Users must evaluate each zone's security independently, increasing complexity.
-
----
-
-## 7. Related Concepts
-
-**Layer 0 protocols** like Cosmos và Polkadot enable **Layer 1 diversity**. Instead of one-size-fits-all blockchain, specialized chains optimized for specific use cases. DeFi chain maximizes throughput, privacy chain implements advanced cryptography, gaming chain low-cost transactions. Specialization improves efficiency versus general-purpose chains attempting everything.
-
-**Interoperability trilemma** parallels blockchain trilemma: cannot simultaneously achieve trustlessness, generalizability, và extensibility. Polkadot maximizes trustlessness và extensibility, sacrifices generalizability (parachains must use Substrate). Cosmos maximizes generalizability và extensibility, accepts varying trustlessness. Bridges maximize generalizability, sacrifice trustlessness.
+- **Sự khan hiếm vị trí parachain trên Polkadot**: Số lượng slot có giới hạn (giai đoạn đầu khoảng 100 slot và mở rộng dần) cùng yêu cầu khóa lượng lớn DOT trong các phiên đấu giá tạo lợi thế cho các dự án giàu vốn và giới hạn tốc độ mở rộng hệ sinh thái. Mô hình parathread (trả phí theo nhu cầu) được đề xuất để khắc phục nhưng mức độ ứng dụng ban đầu còn hạn chế.
+- **Độ chênh lệch bảo mật trên Cosmos**: Các zone lớn như Cosmos Hub có tập trình xác thực mạnh, nhưng những zone nhỏ chỉ có khoảng 10 trình xác thực rất dễ bị thông đồng hoặc tấn công có chủ đích. Dù kênh truyền IBC không cần tin cậy, giao tiếp với một chuỗi có lớp bảo mật yếu vẫn tiềm ẩn rủi ro, buộc người dùng phải tự đánh giá độ an toàn của từng zone.
 
 ---
 
-## 8. ⭐ Fundamental Papers / Whitepapers
+## 7. Các khái niệm liên quan
 
-| Paper | Year | Author(s) | Contribution |
-|-------|------|-----------|--------------|
-| **"Polkadot: Vision for Heterogeneous Multi-Chain Framework"** | 2016 | Gavin Wood | Relay chain và parachain architecture |
-| **"Cosmos: A Network of Distributed Ledgers"** | 2016 | Jae Kwon, Ethan Buchman | Cosmos Hub và IBC protocol foundations |
-| **"IBC Protocol Specification v1"** | 2020 | Cosmos core team | Complete technical specification for IBC |
-| **"Polkadot Runtime Specification"** | 2020 | Web3 Foundation | Detailed relay chain mechanics |
-| **"XCMP Design Documentation"** | 2021 | Parity Technologies | Cross-chain messaging protocol |
+- **Giao thức tầng 0 (Layer 0) và sự đa dạng tầng 1**: Thay vì ép mọi ứng dụng lên một blockchain đa dụng duy nhất, các nền tảng như Polkadot và Cosmos cho phép xây dựng các chuỗi chuyên biệt cho DeFi, quyền riêng tư hay trò chơi nhằm tối ưu hiệu năng cho từng bài toán.
+- **Bộ ba bất khả thi về tương tác (Interoperability trilemma)**: Tương tự bộ ba của blockchain, khó có thể đồng thời tối ưu hóa tính không cần tin cậy (trustlessness), tính tổng quát (generalizability) và khả năng mở rộng kết nối (extensibility). Polkadot mạnh về bảo mật và mở rộng trong hệ Substrate nhưng kém tổng quát ngoài hệ; Cosmos linh hoạt và dễ mở rộng giữa các chuỗi BFT nhưng mức độ tin cậy phụ thuộc từng zone; còn cầu nối truyền thống tổng quát hơn nhưng thường phải hy sinh tính không cần tin cậy.
 
 ---
 
-## 9. 🎨 Illustrations & Visual References
+## 8. Tài liệu nền tảng và bài báo quan trọng
+
+| Tài liệu | Năm | Tác giả | Đóng góp chính |
+|----------|-----|---------|----------------|
+| **"Polkadot: Vision for Heterogeneous Multi-Chain Framework"** | 2016 | Gavin Wood | Kiến trúc relay chain và parachain |
+| **"Cosmos: A Network of Distributed Ledgers"** | 2016 | Jae Kwon, Ethan Buchman | Nền tảng Cosmos Hub và giao thức IBC |
+| **"IBC Protocol Specification v1"** | 2020 | Nhóm cốt lõi Cosmos | Đặc tả kỹ thuật đầy đủ cho IBC |
+| **"Polkadot Runtime Specification"** | 2020 | Web3 Foundation | Cơ chế chi tiết của relay chain |
+| **"XCMP Design Documentation"** | 2021 | Parity Technologies | Giao thức truyền thông điệp xuyên parachain |
+
+---
+
+## 9. Minh họa và tài liệu trực quan
 
 ![Polkadot Architecture](https://wiki.polkadot.network/assets/images/polkadot-architecture-diagram.png)  
-*Source: [Polkadot Wiki](https://wiki.polkadot.network/)*
+*Nguồn: [Polkadot Wiki](https://wiki.polkadot.network/)*
 
 ![Cosmos IBC Protocol Flow](https://tutorials.cosmos.network/resized-images/600/academy/2-cosmos-concepts/images/ibc-flow.png)  
-*Source: [Cosmos Academy](https://tutorials.cosmos.network/)*
+*Nguồn: [Cosmos Academy](https://tutorials.cosmos.network/)*
 
-### Architecture Comparison
+### So sánh kiến trúc
 
-| Feature | Polkadot | Cosmos |
-|---------|----------|--------|
-| **Security Model** | Shared (relay chain) | Sovereign (per zone) |
-| **Validator Set** | Unified | Independent per zone |
-| **Communication** | XCMP (coordinated) | IBC (peer-to-peer) |
-| **Flexibility** | Medium (Substrate framework) | High (any Tendermint) |
-| **Slot Acquisition** | Auction (expensive) | Free (permissionless) |
-| **Security Guarantee** | Uniform across parachains | Varies per zone |
-
----
-
-## 10. Summary
-
-Polkadot và Cosmos represent mature approaches to blockchain interoperability, each with distinct architectural philosophies và trade-offs. Polkadot's shared security model provides strong guarantees uniformly across ecosystem whilst requiring coordination và limiting sovereignty. Cosmos's sovereign chain model maximizes flexibility và autonomy whilst creating security variance và requiring careful zone evaluation.
-
-Both platforms demonstrate interoperability feasible at scale when designed from inception, offering compelling alternatives to post-hoc bridge solutions. Understanding these architectures essential for evaluating interoperability landscape và choosing appropriate approach for specific applications.
+| Đặc điểm | Polkadot | Cosmos |
+|----------|----------|--------|
+| **Mô hình bảo mật** | Bảo mật chia sẻ (relay chain) | Chủ quyền độc lập (từng zone) |
+| **Tập trình xác thực** | Thống nhất | Độc lập theo từng zone |
+| **Giao tiếp xuyên chuỗi** | XCMP (điều phối qua relay chain) | IBC (ngang hàng qua khách nhẹ) |
+| **Tính linh hoạt** | Trung bình (hệ sinh thái Substrate) | Cao (mọi chuỗi Tendermint/BFT tương thích) |
+| **Gia nhập mạng lưới** | Đấu giá slot (chi phí cao) | Tự do, không cần cấp phép |
+| **Mức đảm bảo bảo mật** | Đồng đều giữa các parachain | Khác nhau tùy từng zone |
 
 ---
 
-✅ **End of Lecture**
+## 10. Tóm tắt
 
-Next: Chapter 07 - Advanced Blockchain Topics
+Polkadot và Cosmos đại diện cho hai hướng thiết kế hoàn chỉnh cho khả năng tương tác xuyên chuỗi ngay từ nền tảng. Polkadot cung cấp mức bảo mật đồng đều thông qua relay chain với đánh đổi về chủ quyền và chi phí slot, trong khi Cosmos tối đa hóa tính tự chủ và linh hoạt của từng chuỗi với đánh đổi về sự phân hóa bảo mật giữa các zone. Hiểu rõ hai kiến trúc này giúp đánh giá khách quan bức tranh tương tác đa chuỗi và lựa chọn nền tảng phù hợp với yêu cầu ứng dụng.
+
+---
+
+**Kết thúc bài giảng**
+
+Chương tiếp theo: Chapter 07 — Advanced Blockchain Topics
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [Polkadot Explained: Multi-Chain Ecosystem & Parachain Architecture for Beginners](https://www.youtube.com/watch?v=WYZKO6Beb8w) — CodeLucky, tiếng Anh. CodeLucky dựng relay chain và parachain; xem trước mô hình an ninh chia sẻ của Polkadot.
-- [Cosmos Blockchain Explained: Internet of Blockchains & IBC Protocol Tutorial](https://www.youtube.com/watch?v=HddEOo-zeDM) — CodeLucky, tiếng Anh. Cùng kênh giải thích Cosmos như mạng các chuỗi và IBC; đối chiếu chủ quyền từng chain trong bài.
-- [Cosmos IBC simply explained](https://www.youtube.com/watch?v=G0KpgQSAUAM) — Finality: The Business of Decentralized Networks, tiếng Anh. Finality đi vào giao thức IBC; dùng khi đọc packet, client và cách một thông điệp được xác minh.
+- **Xem trước:** [Polkadot Explained: Multi-Chain Ecosystem & Parachain Architecture for Beginners](https://www.youtube.com/watch?v=WYZKO6Beb8w) — CodeLucky, tiếng Anh. Giới thiệu trực quan relay chain và parachain; nên xem trước mô hình bảo mật chia sẻ của Polkadot.
+- [Cosmos Blockchain Explained: Internet of Blockchains & IBC Protocol Tutorial](https://www.youtube.com/watch?v=HddEOo-zeDM) — CodeLucky, tiếng Anh. Trình bày mô hình mạng các chuỗi và IBC của Cosmos, giúp đối chiếu tính chủ quyền của từng chuỗi trong bài.
+- [Cosmos IBC simply explained](https://www.youtube.com/watch?v=G0KpgQSAUAM) — Finality: The Business of Decentralized Networks, tiếng Anh. Đi sâu vào cơ chế gói tin, khách nhẹ và quy trình xác minh thông điệp của IBC.
 
-## References
+## Tài liệu tham khảo
 
 1. Wood, G. (2016). *Polkadot: Vision for a Heterogeneous Multi-Chain Framework*. Polkadot Whitepaper.
 2. Kwon, J., & Buchman, E. (2016). *Cosmos: A Network of Distributed Ledgers*. Cosmos Whitepaper.
 3. Cosmos Network. (2020). *IBC Protocol Specification*. https://github.com/cosmos/ibc
 4. Web3 Foundation. (2020). *Polkadot Runtime Specification*.
 5. Parity Technologies. (2021). *XCMP Design Documentation*.
-

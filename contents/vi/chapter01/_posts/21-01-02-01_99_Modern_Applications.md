@@ -12,46 +12,48 @@ lesson_type: optional
 
 # Lecture (tùy chọn): Bitcoin 2022–2026 — BIP-324, BitVM, inscriptions, assumeUTXO
 
-> Bài này là **tùy chọn**. Nó **không** viết lại UTXO, Script, difficulty adjustment, hay game theory phí. Nó chỉ chỉ các hệ thống *đã triển khai hoặc đặc tả* trên cùng kiến trúc Bitcoin mà Chapter 01 đã dạy.
+> Bài này là **tùy chọn**, **không** viết lại các kiến thức về UTXO, Script, điều chỉnh độ khó hay lý thuyết trò chơi của phí giao dịch. Nội dung dưới đây chỉ ra những hệ thống *đã triển khai hoặc đang đặc tả* dựa trên chính kiến trúc Bitcoin mà Chapter 01 đã trình bày.
 
-## 1. Vì sao kiến trúc 2008–2017 vẫn là nền — và lớp nào đã chuyển
+## 1. Vì sao kiến trúc 2008–2017 vẫn là nền tảng — và những lớp nào đã chuyển dịch
 
-Bitcoin Core vẫn là node PoW + UTXO + Script. Khoảng 2022–2026, ba lớp *xung quanh* consensus thay đổi nhanh: (1) **transport P2P** được mã hóa (BIP-324), (2) **compute lạc quan trên Script/Taproot** (BitVM / BitVM2) mà không soft-fork opcode mới, (3) **dữ liệu trong witness** (inscriptions / Ordinals) biến block space thành lớp xuất bản, và (4) **đồng bộ node** (assumeUTXO) để IBD không còn là rào cản xã hội duy nhất.
+Bitcoin Core vẫn vận hành trên nền PoW, mô hình UTXO và ngôn ngữ Script. Tuy nhiên, trong giai đoạn 2022–2026, bốn lớp *xung quanh* tầng đồng thuận đã phát triển nhanh: (1) **tầng truyền tải P2P** được mã hóa (BIP-324), (2) **tính toán lạc quan trên Script/Taproot** (BitVM / BitVM2) mà không cần soft-fork thêm opcode mới, (3) **lưu dữ liệu trong phần witness** (inscriptions / Ordinals) biến không gian khối thành lớp xuất bản dữ liệu, và (4) **tối ưu hóa đồng bộ nút** (assumeUTXO) giúp giảm rào cản tải khối ban đầu (IBD).
 
-Taproot (BIP-340/341/342, kích hoạt tháng 11 năm 2021) là điều kiện tiên quyết — bài 01.00 đã nhắc. Bài này bắt đầu *sau* Taproot: người ta *dùng* cây MAST và Schnorr để làm những việc mà Script đời 2011 không tưởng.
+Nâng cấp Taproot (BIP-340/341/342, kích hoạt tháng 11 năm 2021) đóng vai trò điều kiện tiên quyết như đã đề cập ở bài 01.00. Bài học này tiếp nối từ sau mốc Taproot: cách cộng đồng khai thác cây MAST và chữ ký Schnorr để xây dựng những cơ chế vượt xa phạm vi của Script đời đầu.
 
 ![Cấu trúc block Bitcoin — UTXO/Script vẫn là lớp BitVM và BIP-324 bám vào](https://upload.wikimedia.org/wikipedia/commons/5/55/Bitcoin_Block_Data.svg)
 *Nguồn: [Wikimedia Commons — Bitcoin block data](https://commons.wikimedia.org/wiki/File:Bitcoin_Block_Data.svg)*
 
 ## 2. Các bước tiến then chốt
 
-### 2.1. BIP-324: transport v2, không phải consensus mới
+### 2.1. BIP-324: Giao thức truyền tải v2, không phải đồng thuận mới
 
-[BIP-324](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawiki) (Mehta, Ruffing, Schnelli, Wuille; status *Deployed*, bản 1.0.0 ngày 10-Jul-2024) thay P2P v1 plaintext bằng transport mã hóa cơ hội: handshake ECDH, bytestream trông ngẫu nhiên với eavesdropper thụ động, và khả năng đàm phán nâng cấp *trước* khi đổi message ứng dụng. Node quảng bá `NODE_P2P_V2`. Nếu peer cắt kết nối, client thử lại v1.
+[BIP-324](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawiki) (Mehta, Ruffing, Schnelli, Wuille; trạng thái *Deployed*, phiên bản 1.0.0 ngày 10/07/2024) thay thế giao thức P2P v1 truyền văn bản rõ bằng tầng truyền tải mã hóa cơ hội (opportunistic encryption): bắt tay bằng ECDH, biến luồng byte thành dạng giả ngẫu nhiên trước các bên nghe lén thụ động và cho phép thương lượng nâng cấp *trước* khi trao đổi thông điệp tầng ứng dụng. Các nút hỗ trợ sẽ quảng bá cờ dịch vụ `NODE_P2P_V2`; nếu nút đối tác ngắt kết nối, phần mềm khách tự động quay lại v1.
 
-Đây là bài tập distributed systems của 00.01 gắn lên Bitcoin: kẻ tấn công nghe chùa trên ISP không còn đọc inventory/tx một cách miễn phí; chi phí traffic analysis tăng. **Không** có opcode mới, **không** đổi PoW. Bitcoin Core 26+ bật v2 theo mặc định cho kết nối outbound.
+Đây là ứng dụng trực tiếp của bài toán hệ thống phân tán ở bài 00.01 vào mạng Bitcoin: bên quan sát ở cấp nhà cung cấp mạng (ISP) không còn dễ dàng đọc trực tiếp danh sách giao dịch hay dữ liệu truyền qua, đồng thời chi phí phân tích lưu lượng tăng lên. BIP-324 **không** thêm opcode mới và **không** thay đổi PoW. Từ Bitcoin Core phiên bản 26 trở đi, kết nối v2 được bật mặc định cho các kết nối đi ra (outbound).
 
-### 2.2. BitVM và BitVM2: “compute anything” mà không đổi consensus
+### 2.2. BitVM và BitVM2: Tính toán tổng quát mà không thay đổi đồng thuận
 
-Robin Linus, *BitVM: Compute Anything on Bitcoin* (9 / 12 tháng 12 năm 2023, [bitvm.org/bitvm.pdf](https://bitvm.org/bitvm.pdf)) đề xuất mô hình lạc quan: prover cam kết một chương trình lớn trong cây Taproot; chỉ khi tranh chấp mới mở fraud proof trên chuỗi, giống optimistic rollup. Primitive là hashlock, timelock, và lá Taproot — đúng Script mà 01.00 đã dạy, xếp thành mạch bit.
+Bài báo *BitVM: Compute Anything on Bitcoin* của Robin Linus (tháng 12 năm 2023, [bitvm.org/bitvm.pdf](https://bitvm.org/bitvm.pdf)) đề xuất mô hình xác minh lạc quan: bên chứng minh (prover) cam kết một chương trình lớn trong cây Taproot và chỉ khi có tranh chấp mới kích hoạt bằng chứng gian lận (fraud proof) trên chuỗi, tương tự cách vận hành của optimistic rollup. Các thành phần sử dụng vẫn chỉ là hashlock, timelock và các lá Taproot — chính là Bitcoin Script của bài 01.00 được tổ hợp thành mạch logic bit.
 
-BitVM2 (Linus et al., 2024, [bitvm.org/bitvm_bridge.pdf](https://bitvm.org/bitvm_bridge.pdf)) giảm tranh chấp xuống khoảng ba giao dịch on-chain, cho phép *permissionless challenging*, và dùng script xác minh SNARK bị cắt nhỏ. Ứng dụng trưng bày là **BitVM Bridge**: giả định an toàn tiền gửi từ honest-majority \(t\)-of-\(n\) xuống *existential honesty* (1-of-\(n\)) lúc setup; liveness cần một operator hợp lý.
+BitVM2 (Linus et al., 2024, [bitvm.org/bitvm_bridge.pdf](https://bitvm.org/bitvm_bridge.pdf)) rút gọn quá trình giải quyết tranh chấp xuống còn khoảng ba giao dịch trên chuỗi, cho phép *bất kỳ ai cũng có thể phản biện (permissionless challenging)* và sử dụng các đoạn script xác minh SNARK được chia nhỏ. Ứng dụng tiêu biểu là **BitVM Bridge**, hạ giả định an toàn ký quỹ từ đa số trung thực (\(t\)-trên-\(n\)) xuống mức *tồn tại ít nhất một bên trung thực* (1-trên-\(n\)) tại khâu thiết lập, trong khi tính sống cần ít nhất một đơn vị vận hành (operator) hoạt động hợp lý.
 
-Bài học kiến trúc: Bitcoin không cần EVM để *xác minh* tính toán tùy ý; nó cần một giao thức challenge và một cam kết Taproot. Giá phải trả là giao tiếp off-chain và độ phức tạp setup — không phải throughput 7 TPS biến thành 7000.
+Bài học kiến trúc rút ra: Bitcoin không cần EVM để *xác minh* các phép tính tùy ý mà cần một giao thức phản biện kết hợp cam kết Taproot. Chi phí đánh đổi nằm ở lượng giao tiếp ngoài chuỗi và độ phức tạp thiết lập, chứ không làm tăng thông lượng 7 TPS của lớp nền lên 7.000 TPS.
 
-### 2.3. Inscriptions / Ordinals: witness như lớp xuất bản
+### 2.3. Inscriptions / Ordinals: Dùng witness làm lớp xuất bản dữ liệu
 
-Giao thức Ordinals (Casey Rodarmor, 2023) đánh số satoshi và “khắc” dữ liệu vào witness của giao dịch Taproot. Về mặt kỹ thuật đây là *hệ quả* của SegWit + Taproot: witness được giảm giá và không nằm trong `txid` gốc. Về mặt kinh tế, đây là cú sốc fee market mà bài 01.02 mô hình hóa: block space bỗng có demand phi-thanh-toán. Bitcoin Core không “cấm” inscriptions ở lớp consensus; chính sách mempool (`datacarrier`, kích thước witness) mới là chỗ tranh cãi.
+Giao thức Ordinals (Casey Rodarmor, 2023) đánh số từng satoshi và nhúng dữ liệu tùy ý vào phần witness của giao dịch Taproot. Về mặt kỹ thuật, đây là hệ quả trực tiếp của thiết kế SegWit kết hợp Taproot, khi dữ liệu witness được tính trọng số giảm giá và không nằm trong phần tính `txid`. Về mặt kinh tế, hiện tượng này tạo ra cú sốc nhu cầu cho thị trường phí mà bài 01.02 đã phân tích, khi không gian khối phát sinh thêm nhu cầu phi thanh toán. Bitcoin Core không chặn inscriptions ở tầng đồng thuận; các tranh luận chủ yếu xoay quanh chính sách mempool (như tham số `datacarrier` và giới hạn kích thước dữ liệu witness).
 
-Đừng biến bài này thành lịch sử NFT. Câu hỏi đúng: *UTXO + witness discount* đã tạo ra một thị trường dữ liệu mà whitepaper 2008 không thiết kế — và difficulty/fee game vẫn là thứ quyết định ai thắng đấu giá block.
+Điểm cốt lõi cần nắm không phải là câu chuyện NFT mà là cơ chế: sự kết hợp giữa *UTXO và ưu đãi trọng số witness* đã mở ra một thị trường lưu trữ dữ liệu ngoài dự kiến ban đầu của whitepaper năm 2008, trong khi trò chơi đấu giá phí và điều chỉnh độ khó vẫn là yếu tố quyết định giao dịch nào được đưa vào block.
 
-### 2.4. assumeUTXO và cluster mempool: node như hệ thống phân tán
+### 2.4. assumeUTXO và cluster mempool: Nút Bitcoin dưới góc nhìn hệ thống phân tán
 
-assumeUTXO (Bitcoin Core, triển khai dần 2023–2025) cho phép node mới tải một snapshot UTXO đã cam kết, rồi bắt kịp tip, *song song* với việc xác minh background về genesis. Đây là cùng ý “checkpoint có chủ đích” — không thay PoW, chỉ thay *thứ tự đồng bộ*. Cluster mempool (thiết kế 2023–2025, vào Core theo lộ trình) mô hình hóa mempool như đồ thị phụ thuộc ancestor/descendant để chọn gói phí tối ưu hơn ancestor-score cổ điển. Cả hai đều là *systems work* trên kiến trúc 01.00, không phải alt-consensus.
+Cơ chế **assumeUTXO** (triển khai dần trong Bitcoin Core giai đoạn 2023–2025) cho phép nút mới tải một bản chụp nhanh (snapshot) tập UTXO đã được cam kết để bắt kịp ngay đầu chuỗi hiện tại, *song song* với quá trình xác minh ngầm toàn bộ lịch sử từ khối nguyên thủy. Đây là cách tiếp cận tương tự điểm kiểm tra có chủ đích: không thay đổi cơ chế PoW mà chỉ thay đổi *trình tự đồng bộ hóa*.
 
-## 3. Insight triển khai
+Trong khi đó, **cluster mempool** (thiết kế giai đoạn 2023–2025 theo lộ trình tích hợp vào Bitcoin Core) mô hình hóa mempool thành các cụm đồ thị phụ thuộc cha — con (ancestor/descendant), giúp chọn gói giao dịch tối ưu phí tốt hơn so với thuật toán tính điểm tổ tiên truyền thống. Cả hai đều là cải tiến kỹ thuật hệ thống trên kiến trúc bài 01.00, không làm thay đổi cơ chế đồng thuận.
 
-Một bridge BitVM2 không “gửi BTC vào hợp đồng EVM”. Operator và committee pre-sign một tập giao dịch contest; user khóa UTXO vào script mà *bất kỳ ai* cũng có thể challenge nếu output root sai. On-chain footprint nhỏ khi mọi người thành thật — đúng câu “Script là verifier, không phải computer” của 01.00.
+## 3. Góc nhìn triển khai
+
+Một cầu nối BitVM2 không gửi BTC vào một hợp đồng kiểu EVM. Thay vào đó, đơn vị vận hành và ủy ban ký trước một tập giao dịch xử lý tranh chấp; người dùng khóa UTXO vào một script mà *bất kỳ ai* cũng có thể gửi bằng chứng phản biện nếu kết quả đầu ra sai lệch. Khi tất cả các bên hành xử trung thực, dấu vết trên chuỗi rất nhỏ — đúng với nguyên lý ở bài 01.00 rằng Bitcoin Script đóng vai trò bộ xác minh chứ không phải máy tính đa dụng.
 
 ```text
 [BTC locker script / Taproot]
@@ -61,39 +63,39 @@ Một bridge BitVM2 không “gửi BTC vào hợp đồng EVM”. Operator và 
 [SNARK verifier script slices] --> punish operator
 ```
 
-Với BIP-324, `bitcoin-cli getpeerinfo` hiện trường `transport_protocol_type` (`v2` / `v1`). Đó là cách kiểm tra bài học: encryption là peer service, không phải soft-fork.
+Với BIP-324, lệnh `bitcoin-cli getpeerinfo` hiển thị trường `transport_protocol_type` (`v2` hoặc `v1`). Điều này minh họa rõ rằng mã hóa kết nối là dịch vụ tầng mạng giữa các nút, không phải một bản soft-fork đồng thuận.
 
-## 4. Thách thức và trade-off
+## 4. Thách thức và đánh đổi
 
-BitVM setup nặng và giả định tồn tại ít nhất một verifier tỉnh táo. Inscriptions làm tăng bloat và tranh cãi văn hóa “Bitcoin là gì”. BIP-324 không chống active MITM có khả năng ép downgrade nếu peer không kiên quyết. assumeUTXO chuyển niềm tin sang *ai hash snapshot* — học viên phải đọc đúng giả định, không nhầm với SPV yếu.
+BitVM đòi hỏi khâu thiết lập nặng nề và giả định luôn tồn tại ít nhất một bên xác minh trung thực theo dõi liên tục. Inscriptions làm tăng dung lượng dữ liệu lưu trữ (bloat) và gây tranh luận sâu sắc về định hướng sử dụng không gian khối Bitcoin. BIP-324 không chống được kẻ tấn công xen giữa chủ động (active MITM) có khả năng ép hạ cấp xuống v1 nếu các nút không áp dụng chính sách buộc dùng v2. Còn với assumeUTXO, niềm tin tạm thời chuyển sang bên tạo mã băm bản chụp UTXO — người học cần phân biệt rõ giả định này và không nhầm lẫn với mô hình SPV yếu.
 
-## 5. Bài này bổ sung gì
+## 5. Giá trị bổ sung của bài học này
 
-Vẫn đọc 01.00–01.02 để hiểu UTXO, Script, PoW, halving, fee market. Bài tùy chọn chỉ nối chúng với BIP-324, BitVM/BitVM2, Ordinals, và assumeUTXO.
+Các bài 01.00–01.02 vẫn giữ vai trò nền tảng giải thích UTXO, Script, PoW, lịch halving và thị trường phí. Bài tùy chọn này chỉ nối tiếp các kiến thức đó tới BIP-324, BitVM/BitVM2, Ordinals và assumeUTXO.
 
 ## 6. Tài liệu gốc (2022–2026)
 
 | Nguồn | Năm | Đóng góp |
 | --- | --- | --- |
-| [BIP-324: Version 2 P2P Encrypted Transport](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawiki) | 2024 (Final) | Mã hóa P2P opportunistic |
-| [BitVM (Linus, Dec 2023)](https://bitvm.org/bitvm.pdf) | 2023 | Optimistic compute trên Taproot |
-| [BitVM2 / BitVM Bridge](https://bitvm.org/bitvm_bridge.pdf) | 2024 | Permissionless challenge; bridge 1-of-n |
-| [BIP-340/341/342 Taproot](https://github.com/bitcoin/bips) | 2021 | Điều kiện tiên quyết Schnorr + MAST |
-| [assumeUTXO design notes](https://github.com/bitcoin/bitcoin) / Bitcoin Core docs | 2023–2025 | IBD song song với snapshot UTXO |
-| Ordinals / inscriptions (Rodarmor) | 2023 | Witness as publication layer |
+| [BIP-324: Version 2 P2P Encrypted Transport](https://github.com/bitcoin/bips/blob/master/bip-0324.mediawiki) | 2024 (Final) | Mã hóa tầng truyền tải P2P cơ hội |
+| [BitVM (Linus, Dec 2023)](https://bitvm.org/bitvm.pdf) | 2023 | Tính toán lạc quan trên Taproot |
+| [BitVM2 / BitVM Bridge](https://bitvm.org/bitvm_bridge.pdf) | 2024 | Phản biện không cần cấp phép; cầu nối 1-trên-n |
+| [BIP-340/341/342 Taproot](https://github.com/bitcoin/bips) | 2021 | Điều kiện tiên quyết Schnorr và MAST |
+| [assumeUTXO design notes](https://github.com/bitcoin/bitcoin) / Bitcoin Core docs | 2023–2025 | Đồng bộ khối ban đầu song song với bản chụp UTXO |
+| Ordinals / inscriptions (Rodarmor) | 2023 | Sử dụng witness như lớp xuất bản dữ liệu |
 
 ## Video tham khảo
 
-- **Xem trước:** [BIP324: Improving #bitcoin ’s P2P Transport Protocol](https://www.youtube.com/watch?v=7J7EfqknVpM) — Bitcoin Developers, tiếng Anh. Bitcoin Developers trình bày BIP-324, transport P2P mã hóa; xem trước mục transport v2, không phải consensus mới.
-- [Ordinals Workshop with Casey Rodarmor](https://www.youtube.com/watch?v=MC_haVa6N3I) — PlebLab, tiếng Anh. Casey Rodarmor hướng dẫn Ordinals; xem để nối witness Taproot với lớp xuất bản dữ liệu trong bài.
-- [Robin Linus Presents BitVM3 | Bitcoin Amsterdam 2025](https://www.youtube.com/watch?v=_lYakucObZ0) — Bitcoin Magazine, tiếng Anh. Robin Linus trình bày BitVM3 tại Bitcoin Amsterdam; đối chiếu mô hình tính toán lạc quan trên Script mà bài mô tả.
+- **Xem trước:** [BIP324: Improving #bitcoin ’s P2P Transport Protocol](https://www.youtube.com/watch?v=7J7EfqknVpM) — Bitcoin Developers, tiếng Anh. Trình bày giao thức truyền tải P2P mã hóa BIP-324; nên xem trước mục giao thức v2.
+- [Ordinals Workshop with Casey Rodarmor](https://www.youtube.com/watch?v=MC_haVa6N3I) — PlebLab, tiếng Anh. Casey Rodarmor hướng dẫn Ordinals, giúp liên hệ witness Taproot với lớp xuất bản dữ liệu trong bài.
+- [Robin Linus Presents BitVM3 | Bitcoin Amsterdam 2025](https://www.youtube.com/watch?v=_lYakucObZ0) — Bitcoin Magazine, tiếng Anh. Robin Linus trình bày về BitVM3, phù hợp để đối chiếu với mô hình tính toán lạc quan trên Script trong bài.
 
 ## 7. Bài tập định hướng
 
-1. BIP-324 chống được lớp tấn công nào mà bài 01.00 (network architecture) đã nêu, và *không* chống được lớp nào?
-2. Viết bốn câu: BitVM *không* biến Bitcoin thành Ethereum. Câu nào trong whitepaper Satoshi vẫn đúng?
-3. Nếu inscriptions chiếm 50% trọng số block trong một tuần, mô hình fee của 01.02 dự đoán gì về confirmation time của thanh toán nhỏ?
+1. BIP-324 phòng chống được nhóm tấn công nào đã nêu trong bài 01.00 (kiến trúc mạng), và *không* phòng chống được nhóm tấn công nào?
+2. Viết bốn câu giải thích vì sao BitVM *không* biến Bitcoin thành Ethereum, và chỉ ra luận điểm nào trong whitepaper của Satoshi vẫn còn nguyên giá trị.
+3. Nếu inscriptions chiếm 50% trọng số block liên tục trong một tuần, mô hình thị trường phí ở bài 01.02 dự đoán điều gì sẽ xảy ra với thời gian xác nhận của các giao dịch thanh toán giá trị nhỏ?
 
 ---
-✅ **End of optional lesson**
+✅ **Kết thúc bài học tùy chọn**
 Next: [Lecture 02.00 — Proof of Stake]({{ site.baseurl }}/contents/vi/chapter02/)

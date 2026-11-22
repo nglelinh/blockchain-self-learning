@@ -10,51 +10,51 @@ categories:
 lesson_type: optional
 ---
 
-# Lecture (tùy chọn): Consensus production 2022–2026 — Merge, PBS, Pectra staking, CometBFT
+# Bài giảng (tùy chọn): Đồng thuận trong thực tế 2022–2026 — The Merge, PBS, Pectra staking, CometBFT
 
-> Bài này là **tùy chọn**. Nó **không** viết lại Casper FFG, LMD-GHOST, PBFT hay Tendermint. Nó chỉ chỉ các *triển khai và fork* đã xảy ra trên cùng các protocol mà Chapter 02 đã phân tích.
+> Bài học này là phần **tùy chọn**, **không** trình bày lại Casper FFG, LMD-GHOST, PBFT hay Tendermint. Nội dung chỉ điểm qua các *triển khai thực tế và bản nâng cấp* đã diễn ra trên chính những giao thức mà Chương 02 đã phân tích.
 
-## 1. Từ “Ethereum 2.0 trên slide” tới beacon chain production
+## 1. Từ “Ethereum 2.0 trên lý thuyết” tới Beacon Chain vận hành thực tế
 
-Bài 02.00 mô tả PoS, nothing-at-stake, slashing. Ngày 15 tháng 9 năm 2022, [The Merge](https://ethereum.org/roadmap/merge/) tắt PoW execution và gắn engine vào beacon chain: cùng state EVM, consensus đổi sang Gasper (FFG + LMD-GHOST). Đó không phải alt-chain mới; đó là *thay trái tim* của một state machine đã chạy từ 2015.
+Bài 02.00 đã trình bày PoS, vấn đề nothing-at-stake và cơ chế slashing. Ngày 15 tháng 9 năm 2022, [The Merge](https://ethereum.org/roadmap/merge/) ngừng cơ chế đào PoW và gắn tầng thực thi vào Beacon Chain: trạng thái EVM giữ nguyên, còn tầng đồng thuận chuyển sang Gasper (FFG + LMD-GHOST). Đây không phải việc tạo ra một chuỗi mới mà là thay đổi cơ chế đồng thuận của một máy trạng thái đã vận hành liên tục từ năm 2015.
 
-Sau Merge, nút thắt không còn “PoS có hoạt động không?” mà là: ai *xây* block (PBS / MEV-Boost), validator set có co giãn được không (EIP-7251), và exit có thể kích hoạt từ execution layer không (EIP-7002). Phía BFT cổ điển, Tendermint Core trở thành [CometBFT](https://docs.cometbft.com/) (2023) — cùng thuật toán, governance và stack Cosmos tách khỏi Informal Systems brand.
+Sau The Merge, trọng tâm kỹ thuật không còn là câu hỏi PoS có hoạt động hay không, mà chuyển sang các vấn đề: ai là người xây dựng khối (PBS / MEV-Boost), tập validator có thể mở rộng quy mô hiệu quả hay không (EIP-7251), và quá trình rút validator có thể kích hoạt từ tầng thực thi hay không (EIP-7002). Ở nhánh BFT cổ điển, Tendermint Core được kế thừa bởi [CometBFT](https://docs.cometbft.com/) (2023) — giữ nguyên thuật toán nền tảng nhưng tách riêng quản trị và hạ tầng cho hệ sinh thái Cosmos.
 
-![Chuỗi khối — cùng sổ cái, trái tim consensus đổi sau The Merge](https://upload.wikimedia.org/wikipedia/commons/9/98/Blockchain.svg)
+![Chuỗi khối — cùng sổ cái, cơ chế đồng thuận thay đổi sau The Merge](https://upload.wikimedia.org/wikipedia/commons/9/98/Blockchain.svg)
 *Nguồn: [Wikimedia Commons — Blockchain](https://commons.wikimedia.org/wiki/File:Blockchain.svg)*
 
-Xem thêm sơ đồ validator/attest tại [ethereum.org — Proof of Stake](https://ethereum.org/developers/docs/consensus-mechanisms/pos/).
+Xem thêm sơ đồ validator và attestation tại [ethereum.org — Proof of Stake](https://ethereum.org/developers/docs/consensus-mechanisms/pos/).
 
 ## 2. Các bước tiến then chốt
 
-### 2.1. The Merge như một bài toán distributed systems
+### 2.1. The Merge dưới góc độ hệ thống phân tán
 
-Merge đòi hỏi mọi execution client và consensus client đồng bộ một `Terminal Total Difficulty`, rồi chuyển sang slot/epoch. Đây là *coordinated hard fork* trên hai lớp — minh họa FLP/partial synchrony của 00.01: an toàn dựa trên đồng hồ slot 12 giây và committee vote, không dựa trên năng lượng. [Paris / Bellatrix specs](https://github.com/ethereum/consensus-specs) vẫn là tài liệu đọc sau khi đã hiểu Gasper trong 02.00.
+The Merge yêu cầu mọi client tầng thực thi (execution client) và tầng đồng thuận (consensus client) đồng bộ tại cùng một ngưỡng `Terminal Total Difficulty`, sau đó chuyển sang chu kỳ slot/epoch. Đây là một đợt *hard fork có phối hợp* trên hai tầng, minh họa cho bài toán FLP và tính đồng bộ từng phần ở bài 00.01: tính an toàn dựa trên đồng hồ slot 12 giây và biểu quyết của ủy ban thay vì năng lượng tính toán. [Paris / Bellatrix specs](https://github.com/ethereum/consensus-specs) là tài liệu tham khảo tiếp theo sau khi đã nắm vững Gasper trong bài 02.00.
 
-Hệ quả kinh tế: issuance PoW biến mất; staking yield và fee (kể cả MEV) trở thành incentive chính — nối thẳng bài 02.00 “validator selection / slashing” với production.
+Về mặt kinh tế, phần thưởng phát hành từ PoW chấm dứt; lợi suất staking và phí giao dịch (bao gồm cả MEV) trở thành động lực chính, nối trực tiếp phần lựa chọn validator và slashing của bài 02.00 với môi trường vận hành thực tế.
 
 ### 2.2. Proposer-Builder Separation và MEV-Boost
 
-Sau Merge, phần lớn block Ethereum được xây bởi *builder* chuyên biệt và đề xuất qua [MEV-Boost](https://github.com/flashbots/mev-boost) (Flashbots): proposer chọn header có bid cao nhất từ relay, không thấy nội dung đầy đủ cho đến khi nhận payload. Đây là PBS *out-of-protocol* — cùng ý BFT “ai đề xuất, ai vote”, nhưng thị trường MEV tách vai trò để giảm tích tụ quyền lực ở validator lớn.
+Sau The Merge, phần lớn khối trên Ethereum được xây dựng bởi các *builder* chuyên biệt và gửi tới proposer thông qua [MEV-Boost](https://github.com/flashbots/mev-boost) (Flashbots): proposer chọn block header có giá đặt cao nhất từ relay mà không thấy nội dung giao dịch cho tới khi nhận payload. Đây là cơ chế PBS *ngoài giao thức* (out-of-protocol), tách biệt vai trò tạo khối và đề xuất khối nhằm hạn chế sự tập trung lợi thế MEV vào các validator lớn.
 
-Hệ quả consensus: liveness phụ thuộc relay/builder trung thực; censorship (OFAC relays 2022) trở thành vấn đề *protocol-adjacent*. Nghiên cứu 2023–2026 đi tới ePBS (enshrined PBS) và inclusion lists — sẽ gặp lại ở Chapter 07. Ở Chapter 02, bài học là: **cơ chế đồng thuận production không chỉ là fork-choice**; nó là thị trường quyền đề xuất.
+Về mặt đồng thuận, tính sống của mạng phụ thuộc một phần vào độ tin cậy của relay và builder, đồng thời vấn đề kiểm duyệt giao dịch (như các relay tuân thủ OFAC năm 2022) trở thành thách thức gắn sát với giao thức. Các hướng nghiên cứu giai đoạn 2023–2026 hướng tới ePBS (enshrined PBS) và danh sách bắt buộc đưa vào khối (inclusion lists), sẽ được trình bày ở Chương 07. Điểm cần rút ra trong Chương 02 là **đồng thuận trong thực tế không chỉ dừng ở quy tắc chọn nhánh (fork-choice)**, mà còn liên quan trực tiếp đến thị trường quyền đề xuất khối.
 
-### 2.3. Pectra staking: EIP-7251 và EIP-7002
+### 2.3. Nâng cấp staking trong Pectra: EIP-7251 và EIP-7002
 
-[Pectra](https://blog.ethereum.org/2025/04/23/pectra-mainnet) kích hoạt 7 tháng 5 năm 2025 (epoch 364032). Hai EIP consensus quan trọng:
+Bản nâng cấp [Pectra](https://blog.ethereum.org/2025/04/23/pectra-mainnet) được kích hoạt ngày 7 tháng 5 năm 2025 (epoch 364032) với hai EIP đồng thuận đáng chú ý:
 
-- **[EIP-7251](https://eips.ethereum.org/EIPS/eip-7251)** tăng `MAX_EFFECTIVE_BALANCE` từ 32 ETH lên 2048 ETH (opt-in, withdrawal credential mới). Staker gộp validator, thưởng compound trên từng ETH trên mức tối thiểu. Đây là câu trả lời engineering cho “hàng triệu validator làm gossip và attestation set phình” — trade-off decentralization *số lượng khóa* lấy *số lượng thực thể*.
-- **[EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)** cho phép kích hoạt exit từ execution layer (smart contract / credential 0x01/0x02), không chỉ từ signing key consensus. Tách *custody* và *validator duty* — quan trọng cho staking pool.
+- **[EIP-7251](https://eips.ethereum.org/EIPS/eip-7251)** tăng `MAX_EFFECTIVE_BALANCE` từ 32 ETH lên 2048 ETH (tự chọn, áp dụng với withdrawal credential mới). Người đặt cọc có thể gộp nhiều validator và hưởng lãi kép trên phần số dư vượt mức tối thiểu. Đây là giải pháp kỹ thuật cho tình trạng hàng triệu validator làm phình to lưu lượng gossip và tập attestation, đánh đổi số lượng khóa độc lập để giảm tải mạng.
+- **[EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)** cho phép kích hoạt lệnh rút validator trực tiếp từ tầng thực thi (thông qua hợp đồng thông minh hoặc credential 0x01/0x02), thay vì chỉ phụ thuộc vào khóa ký ở tầng đồng thuận. Cơ chế này tách biệt quyền lưu ký tài sản (custody) với nhiệm vụ vận hành validator, đặc biệt hữu ích cho các staking pool.
 
-[EIP-6110](https://eips.ethereum.org/EIPS/eip-6110) đưa deposit lên EL; [EIP-7549](https://eips.ethereum.org/EIPS/eip-7549) dời committee index ra ngoài attestation để aggregation rẻ hơn. Cùng một Gasper, *đường ống* validator được tái cấu trúc.
+Ngoài ra, [EIP-6110](https://eips.ethereum.org/EIPS/eip-6110) đưa cơ chế xử lý tiền gửi (deposit) lên tầng thực thi và [EIP-7549](https://eips.ethereum.org/EIPS/eip-7549) tách chỉ số ủy ban ra khỏi cấu trúc attestation để việc tổng hợp chữ ký tiết kiệm tài nguyên hơn. Nền tảng Gasper vẫn giữ nguyên, nhưng quy trình vận hành validator được tối ưu hóa rõ rệt.
 
-### 2.4. CometBFT, HotStuff-2, và SSF research
+### 2.4. CometBFT, HotStuff-2 và nghiên cứu Single-Slot Finality
 
-Cosmos SDK mặc định chuyển sang CometBFT: cùng vòng đề xuất + prevote/precommit 2/3 như Tendermint trong 02.01, cộng ABCI 2.0 (vote extensions). HotStuff-2 (2023) và các biến thể Jolteon rút latency BFT. Ethereum research theo đuổi **single-slot finality** — FFG hiện finality theo epoch 32 slot; SSF muốn một slot ≈ một quyết định, đổi bandwidth lấy UX. Chưa phải production 2026 trên L1, nhưng đó là hướng đọc sau khi đã hiểu 02.00–02.01.
+Cosmos SDK chuyển sang sử dụng mặc định CometBFT: giữ nguyên chu trình đề xuất cùng hai vòng prevote/precommit 2/3 của Tendermint trong bài 02.01, đồng thời bổ sung ABCI 2.0 (với vote extensions). HotStuff-2 (2023) và các biến thể như Jolteon tiếp tục rút ngắn độ trễ của nhóm giao thức BFT. Trong khi đó, nhóm nghiên cứu Ethereum theo đuổi **hoàn tất trong một slot (Single-Slot Finality — SSF)**: thay vì hoàn tất theo từng epoch 32 slot như FFG hiện tại, SSF hướng tới hoàn tất ngay trong mỗi slot, đánh đổi bằng yêu cầu băng thông lớn hơn. Tính đến năm 2026, SSF chưa được triển khai trên L1 nhưng là hướng đọc tiếp theo phù hợp sau bài 02.00 và 02.01.
 
-## 3. Insight triển khai
+## 3. Góc nhìn triển khai
 
-Một validator hiện đại chạy cặp `geth`/`lighthouse` (hoặc tương đương), đăng ký MEV-Boost relay, và — sau Pectra — có thể cấu hình số dư hiệu dụng > 32 ETH. Slashing vẫn là điều kiện an toàn nothing-at-stake; PBS không thay slashing, nó thay *ai được viết giao dịch vào block*.
+Một validator Ethereum hiện đại thường vận hành cặp client như `geth`/`lighthouse` (hoặc tương đương), kết nối với MEV-Boost relay và sau bản nâng cấp Pectra có thể cấu hình số dư hiệu dụng lớn hơn 32 ETH. Slashing vẫn là điều kiện bảo đảm an toàn trước nothing-at-stake; PBS không thay thế slashing mà chỉ thay đổi chủ thể sắp xếp giao dịch vào khối.
 
 ```text
 [searchers] --> [builders] --> [relays] --> [proposer / beacon]
@@ -63,40 +63,40 @@ Một validator hiện đại chạy cặp `geth`/`lighthouse` (hoặc tương �
                                          (LMD-GHOST + FFG)
 ```
 
-CometBFT app gắn qua ABCI: `PrepareProposal` / `ProcessProposal` cho phép ứng dụng *thấy* đề xuất trước khi vote — đó là chỗ Cosmos nhúng vote extensions, không phải chỗ “BFT khác PBFT”.
+Ứng dụng trên CometBFT kết nối qua giao diện ABCI: các phương thức `PrepareProposal` và `ProcessProposal` cho phép tầng ứng dụng kiểm tra đề xuất trước khi bỏ phiếu — đây là nơi Cosmos tích hợp vote extensions, còn lõi đồng thuận BFT vẫn giữ nguyên nguyên lý.
 
-## 4. Thách thức và trade-off
+## 4. Thách thức và đánh đổi
 
-PBS out-of-protocol tạo điểm kiểm duyệt. MaxEB lớn giảm số validator object nhưng tăng trọng số mỗi khóa bị tấn công. EIP-7002 nếu triển khai ẩu có thể để smart contract ép exit. SSF tăng yêu cầu đồng bộ. CometBFT vẫn \(O(n^2)\) all-to-all trên committee — sharding / ICS không xóa bound ấy.
+PBS ngoài giao thức có thể tạo ra các điểm kiểm duyệt tập trung. Tăng mức số dư hiệu dụng tối đa (MaxEB) giúp giảm số đối tượng validator nhưng làm tăng trọng số rủi ro trên mỗi khóa nếu bị xâm nhập. EIP-7002 nếu triển khai thiếu chặt chẽ có thể để hợp đồng thông minh ép buộc validator thoát khỏi mạng. SSF làm tăng đáng kể yêu cầu về băng thông và đồng bộ. CometBFT vẫn có độ phức tạp truyền thông \(O(n^2)\) trong phạm vi ủy ban; các mở rộng như sharding hay ICS không loại bỏ giới hạn này.
 
-## 5. Bài này bổ sung gì
+## 5. Điểm bổ sung của bài học
 
-Vẫn chứng minh safety/liveness từ 02.00–02.02. Bài tùy chọn chỉ gắn chúng với Merge, MEV-Boost, Pectra staking EIPs, và CometBFT.
+Các chứng minh về tính an toàn và tính sống từ bài 02.00 đến 02.02 vẫn giữ nguyên giá trị. Bài học tùy chọn này chỉ kết nối phần lý thuyết đó với các hệ thống thực tế gồm The Merge, MEV-Boost, các EIP về staking trong Pectra và CometBFT.
 
 ## 6. Tài liệu gốc (2022–2026)
 
 | Nguồn | Năm | Đóng góp |
 | --- | --- | --- |
-| [The Merge (ethereum.org)](https://ethereum.org/roadmap/merge/) | 2022-09-15 | PoS production trên mainnet |
-| [MEV-Boost](https://github.com/flashbots/mev-boost) | 2022– | PBS out-of-protocol |
-| [EIP-7251](https://eips.ethereum.org/EIPS/eip-7251) | 2025 | Max effective balance 2048 ETH |
-| [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) | 2025 | EL-triggerable exits |
-| [Pectra announcement](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025-05-07 | Electra + Prague |
-| [CometBFT docs](https://docs.cometbft.com/) | 2023– | Tendermint successor |
-| [HotStuff-2 (arXiv:2302.07871)](https://arxiv.org/abs/2302.07871) | 2023 | BFT latency refinements |
+| [The Merge (ethereum.org)](https://ethereum.org/roadmap/merge/) | 2022-09-15 | Triển khai PoS thực tế trên mainnet |
+| [MEV-Boost](https://github.com/flashbots/mev-boost) | 2022– | PBS ngoài giao thức |
+| [EIP-7251](https://eips.ethereum.org/EIPS/eip-7251) | 2025 | Tăng số dư hiệu dụng tối đa lên 2048 ETH |
+| [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002) | 2025 | Kích hoạt rút validator từ tầng thực thi |
+| [Pectra announcement](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025-05-07 | Bản nâng cấp Electra + Prague |
+| [CometBFT docs](https://docs.cometbft.com/) | 2023– | Dự án kế thừa Tendermint |
+| [HotStuff-2 (arXiv:2302.07871)](https://arxiv.org/abs/2302.07871) | 2023 | Cải tiến độ trễ cho BFT |
 
 ## Video tham khảo
 
-- **Xem trước:** [Proof of Stake and The Merge: Why, What, How, Wen? - Ethereum Foundation](https://www.youtube.com/watch?v=2xhAGQsF-Ss) — ETHBarcelona, tiếng Anh. Cùng bài nói của Ethereum Foundation về vì sao Merge chuyển execution sang beacon chain; xem trước mục 15 tháng 9 năm 2022.
-- [A study of the transaction supply chain from CryptoKitties to MEV-Boost to PBS - Barnabé Monnot (EF)](https://www.youtube.com/watch?v=jQjBNbEv9Mg) — Flashbots, tiếng Anh. Barnabé Monnot (EF) đi từ MEV-Boost tới PBS; đúng chỗ proposer chọn bid và relay nằm ngoài protocol.
-- [CometBFT Explained Simply: ABCI and ABCI++](https://www.youtube.com/watch?v=IlepSxHQO_w) — redshiftzero, tiếng Anh. Giải thích CometBFT qua ABCI và ABCI++; dùng cho đoạn Tendermint đổi tên và vote extensions.
+- **Xem trước:** [Proof of Stake and The Merge: Why, What, How, Wen? - Ethereum Foundation](https://www.youtube.com/watch?v=2xhAGQsF-Ss) — ETHBarcelona, tiếng Anh. Bài trình bày của Ethereum Foundation giải thích lý do The Merge chuyển tầng thực thi sang Beacon Chain; nên xem trước mục sự kiện 15 tháng 9 năm 2022.
+- [A study of the transaction supply chain from CryptoKitties to MEV-Boost to PBS - Barnabé Monnot (EF)](https://www.youtube.com/watch?v=jQjBNbEv9Mg) — Flashbots, tiếng Anh. Barnabé Monnot (EF) phân tích chuỗi cung ứng giao dịch từ MEV-Boost đến PBS, đúng với cơ chế proposer chọn bid qua relay ngoài giao thức.
+- [CometBFT Explained Simply: ABCI and ABCI++](https://www.youtube.com/watch?v=IlepSxHQO_w) — redshiftzero, tiếng Anh. Giải thích CometBFT qua ABCI và ABCI++, hỗ trợ cho phần Tendermint chuyển sang CometBFT và vote extensions.
 
 ## 7. Bài tập định hướng
 
-1. Vẽ lại sơ đồ “proposer / attester” của 02.00 và đánh dấu chỗ MEV-Boost chèn vào. Safety của FFG có phụ thuộc relay không?
-2. EIP-7251 giảm số validator từ \(N\) xuống \(\approx N/64\) nếu mọi người gộp tối đa. Gossip attestation thay đổi thế nào?
-3. So sánh điều kiện exit: signing key (trước 7002) vs EL trigger. Ai thắng trong kịch bản pool bị tấn công?
+1. Vẽ lại sơ đồ “proposer / attester” của bài 02.00 và đánh dấu vị trí MEV-Boost can thiệp. Tính an toàn của FFG có phụ thuộc vào relay không?
+2. EIP-7251 giảm số validator từ \(N\) xuống khoảng \(N/64\) nếu mọi người gộp tối đa. Lưu lượng gossip attestation thay đổi như thế nào?
+3. So sánh cơ chế kích hoạt rút validator bằng signing key (trước EIP-7002) và kích hoạt từ tầng thực thi (EL trigger). Bên nào có lợi thế hơn khi staking pool gặp sự cố bảo mật?
 
 ---
-✅ **End of optional lesson**
-Next: [Lecture 03.00 — Ethereum Architecture]({{ site.baseurl }}/contents/vi/chapter03/)
+✅ **Kết thúc bài học tùy chọn**
+Tiếp theo: [Lecture 03.00 — Ethereum Architecture]({{ site.baseurl }}/contents/vi/chapter03/)

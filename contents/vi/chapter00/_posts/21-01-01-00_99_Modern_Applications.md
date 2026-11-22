@@ -10,61 +10,61 @@ categories:
 lesson_type: optional
 ---
 
-# Lecture (tùy chọn): Building blocks 2022–2026 — Verkle, blob DA, BLS, account abstraction
+# Lecture (tùy chọn): Các thành phần nền tảng 2022–2026 — Verkle, blob DA, BLS, account abstraction
 
-> Bài này là **tùy chọn**. Nó **không** thay các bài 00.00–00.03 về sổ cái phân tán, hash, Merkle tree, hay ECDSA. Nó chỉ chỉ ra chỗ các *đối tượng* ấy sống trong các hệ thống đã ship khoảng 2022–2026.
+> Bài này là **tùy chọn**, **không** thay thế các bài 00.00–00.03 về sổ cái phân tán, hàm băm, cây Merkle hay ECDSA. Nội dung dưới đây chỉ ra cách những thành phần nền tảng đó được triển khai trong các hệ thống thực tế giai đoạn 2022–2026.
 
-## 1. Vì sao chương nền tảng vẫn cần — và điều gì đã đổi
+## 1. Vì sao chương nền tảng vẫn cần thiết — và điều gì đã thay đổi
 
-Ba trụ cột của Chapter 00 — đồng thuận phân tán, hàm băm / cây Merkle, chữ ký số — không bị thay thế. Cái đổi là *hình dạng công nghiệp* của chúng. Một block Ethereum sau Dencun không chỉ là header + danh sách giao dịch + Merkle root; nó mang thêm **blob** (EIP-4844) mà node chỉ cam kết và lưu tạm. Một tài khoản không còn chỉ là cặp khóa ECDSA trên `secp256k1`; EIP-7702 cho phép EOA *ủy quyền tạm thời* cho mã hợp đồng. Một chứng thực validator không còn là một chữ ký ECDSA đơn lẻ: beacon chain dùng **BLS12-381** để gộp hàng nghìn attestation thành một đối tượng nhỏ.
+Ba trụ cột của Chapter 00 — đồng thuận phân tán, hàm băm/cây Merkle và chữ ký số — không hề bị thay thế; điều thay đổi là *hình thức triển khai thực tế* của chúng. Một block Ethereum sau nâng cấp Dencun không chỉ gồm phần đầu khối, danh sách giao dịch và Merkle root, mà còn mang theo **blob** (EIP-4844) để các nút cam kết và lưu trữ tạm thời. Một tài khoản cũng không còn chỉ là cặp khóa ECDSA trên `secp256k1`: EIP-7702 cho phép tài khoản sở hữu bên ngoài (EOA) *ủy quyền tạm thời* cho mã hợp đồng thông minh. Tương tự, chứng thực của trình xác thực (validator) không còn là từng chữ ký ECDSA riêng lẻ mà chuyển sang dùng **BLS12-381** trên beacon chain để gộp hàng nghìn chứng thực thành một chữ ký gọn nhẹ.
 
-Nếu Chapter 00 dạy “hash = dấu vân tay, Merkle = bằng chứng thành viên, chữ ký = ủy quyền”, bài này dạy ba biến thể production của cùng các ý đó: cam kết đa thức (Verkle / KZG), dữ liệu sẵn có tạm thời (blobs), và chữ ký có thể gộp (BLS).
+Nếu các bài cốt lõi của Chapter 00 giới thiệu hàm băm như dấu vân tay số, cây Merkle như bằng chứng thành viên và chữ ký số như cơ chế ủy quyền, thì bài học này trình bày ba biến thể sản xuất của chính các ý tưởng đó: cam kết đa thức (Verkle / KZG), tính sẵn có dữ liệu tạm thời (blobs) và chữ ký có thể gộp (BLS).
 
 ![Cấu trúc block Bitcoin — điểm xuất phát cho mọi “block” sau này](https://upload.wikimedia.org/wikipedia/commons/5/55/Bitcoin_Block_Data.svg)
 *Nguồn: [Wikimedia Commons — Bitcoin block data](https://commons.wikimedia.org/wiki/File:Bitcoin_Block_Data.svg)*
 
 ## 2. Các bước tiến then chốt
 
-### 2.1. Từ Merkle tree tới Verkle tree và KZG commitments
+### 2.1. Từ cây Merkle tới cây Verkle và cam kết KZG
 
-Cây Merkle trong bài 00.02 cho phép chứng minh “giao dịch \(T\) nằm trong block” bằng đường đi \(O(\log n)\) hash. Verkle tree (Kuszmaul 2018; Dankrad Feist / Ethereum research 2021–2024) thay hash dọc đường đi bằng **vector commitment** — trên thực tế là commitment KZG trên đa thức. Bằng chứng thành viên trở thành *hằng số* (một vài group element) thay vì \(\log n\) hash, đổi chi phí xác minh lấy khả năng nén witness khi state Ethereum vượt hàng trăm GB.
+Cây Merkle trong bài 00.02 cho phép chứng minh giao dịch \(T\) nằm trong block bằng một đường dẫn gồm \(O(\log n)\) giá trị băm. Cây Verkle (Kuszmaul 2018; Dankrad Feist và nhóm nghiên cứu Ethereum giai đoạn 2021–2024) thay thế các giá trị băm dọc đường đi bằng **cam kết vector (vector commitment)** — cụ thể trong thực tế là cam kết KZG trên đa thức. Nhờ đó, kích thước bằng chứng thành viên trở thành *hằng số* (chỉ vài phần tử nhóm toán học) thay vì tăng theo \(\log n\), đánh đổi thêm chi phí xác minh để nén đáng kể dữ liệu chứng minh (witness) khi trạng thái Ethereum vượt hàng trăm GB.
 
-Bạn không cần học lại định nghĩa hash. Điều cần thấy: *cùng bài toán membership*, primitive đổi từ
+Bạn không cần học lại định nghĩa hàm băm. Điểm cốt lõi là trong *cùng bài toán chứng minh thành viên*, đối tượng mật mã chuyển từ:
 
 \[
 \pi_{\text{Merkle}} = \big(h_1, h_2, \ldots, h_{\log n}\big)
 \]
 
-sang một opening
+sang một mở cam kết (opening):
 
 \[
-\pi_{\text{KZG}} = \big(C, y, \pi\big) \quad\text{sao that}\quad e\big(\pi, [s-z]G_2\big) = e\big(C - [y]G_1, G_2\big).
+\pi_{\text{KZG}} = \big(C, y, \pi\big) \quad\text{sao cho}\quad e\big(\pi, [s-z]G_2\big) = e\big(C - [y]G_1, G_2\big).
 \]
 
-KZG chính là primitive mà EIP-4844 dùng để cam kết blob: execution layer chỉ thấy *versioned hash* của commitment, consensus layer lưu blob khoảng 4096 epoch (~18 ngày) rồi prune. Đó là Merkle “tạm thời” — immutability của *cam kết* không đòi hỏi lưu mãi *dữ liệu*.
+KZG cũng chính là cơ chế mà EIP-4844 sử dụng để cam kết dữ liệu blob: lớp thực thi (execution layer) chỉ nhìn thấy *giá trị băm có phiên bản (versioned hash)* của cam kết, còn lớp đồng thuận (consensus layer) lưu trữ dữ liệu blob trong khoảng 4096 epoch (~18 ngày) rồi cắt tỉa (prune). Đây có thể xem là một dạng cam kết dữ liệu tạm thời: tính bất biến của *cam kết* không đòi hỏi phải lưu trữ vĩnh viễn toàn bộ *dữ liệu gốc*.
 
-Tài liệu: [Verkle Trees](https://vitalik.eth.limo/general/2021/06/18/verkle.html) (Buterin, 2021, roadmap vẫn active 2024–2026); [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844); [Dencun FAQ](https://ethereum.org/roadmap/dencun/) (kích hoạt 13-Mar-2024, epoch 269568).
+Tài liệu tham khảo: [Verkle Trees](https://vitalik.eth.limo/general/2021/06/18/verkle.html) (Buterin, 2021, lộ trình vẫn tiếp tục được phát triển giai đoạn 2024–2026); [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844); [Dencun FAQ](https://ethereum.org/roadmap/dencun/) (kích hoạt ngày 13/03/2024 tại epoch 269568).
 
-### 2.2. Blob là primitive dữ liệu mới, không phải “block nhỏ hơn”
+### 2.2. Blob là đơn vị dữ liệu mới, không phải “block nhỏ hơn”
 
-EIP-4844 thêm loại giao dịch mang blob 128 KiB. Blob **không** đi vào execution state và **không** tồn tại vĩnh viễn trên mọi full node. Rollup đăng batch lên “làn DA” rẻ; verifier chỉ cần KZG opening. Về mặt distributed systems, đây là tách *availability* khỏi *execution* — đúng bài toán CAP/replication của 00.01, nhưng với TTL.
+EIP-4844 bổ sung loại giao dịch mang theo blob dung lượng 128 KiB. Dữ liệu blob **không** đi vào trạng thái thực thi của EVM và **không** được lưu vĩnh viễn trên mọi nút đầy đủ. Các rollup đăng gói dữ liệu (batch) lên kênh sẵn có dữ liệu (DA) với chi phí thấp hơn, còn bên xác minh chỉ cần kiểm tra mở cam kết KZG. Dưới góc độ hệ thống phân tán, đây là bước tách bạch *tính sẵn có dữ liệu (availability)* khỏi *thực thi (execution)* — vẫn là bài toán CAP và nhân bản dữ liệu của bài 00.01 nhưng có bổ sung thời gian sống (TTL).
 
-Dencun (Cancun-Deneb) kích hoạt proto-danksharding trên mainnet ngày 13 tháng 3 năm 2024. Pectra (7 tháng 5 năm 2025) tăng thông lượng blob qua [EIP-7691](https://eips.ethereum.org/EIPS/eip-7691). Fusaka đưa [PeerDAS / EIP-7594](https://ethereum.org/roadmap/fusaka/peerdas/): mỗi node chỉ custody một phần cột của blob đã erasure-code, rồi lấy mẫu ngẫu nhiên — data availability sampling trở thành gossip protocol, không còn “mọi node tải hết”.
+Nâng cấp Dencun (Cancun-Deneb) đã kích hoạt proto-danksharding trên mạng chính ngày 13 tháng 3 năm 2024. Sau đó, nâng cấp Pectra (ngày 7 tháng 5 năm 2025) tăng thông lượng blob thông qua [EIP-7691](https://eips.ethereum.org/EIPS/eip-7691). Tiếp nối lộ trình này, Fusaka giới thiệu [PeerDAS / EIP-7594](https://ethereum.org/roadmap/fusaka/peerdas/): mỗi nút chỉ lưu giữ một phần các cột dữ liệu blob đã được mã hóa xóa (erasure-coded) rồi tiến hành lấy mẫu ngẫu nhiên; nhờ đó, việc lấy mẫu tính sẵn có dữ liệu (data availability sampling) trở thành một giao thức lan truyền mạng thay vì buộc mọi nút tải toàn bộ dữ liệu.
 
-### 2.3. Chữ ký: từ một ECDSA tới BLS aggregation và “account là chương trình”
+### 2.3. Chữ ký: từ ECDSA đơn lẻ tới gộp chữ ký BLS và mô hình tài khoản khả trình
 
-Bài 00.03 xây ECDSA trên `secp256k1`. Beacon chain Ethereum chọn BLS (BLS12-381) vì tính chất tuyến tính: \(n\) chữ ký trên cùng một message có thể gộp thành một chữ ký. [EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) (trong Pectra, tháng 5 năm 2025) thêm precompile BLS12-381 trên execution layer, để smart contract xác minh cùng đường cong mà consensus đã dùng.
+Bài 00.03 trình bày thuật toán ECDSA trên đường cong `secp256k1`. Beacon chain của Ethereum lựa chọn BLS (trên đường cong BLS12-381) nhờ tính tuyến tính: \(n\) chữ ký trên cùng một thông điệp có thể được gộp thành một chữ ký duy nhất. [EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) (trong nâng cấp Pectra tháng 5 năm 2025) bổ sung hàm tiền biên dịch (precompile) cho BLS12-381 trên lớp thực thi, giúp hợp đồng thông minh xác minh trực tiếp trên cùng đường cong mà lớp đồng thuận sử dụng.
 
-Song song, mô hình “tài khoản = cặp khóa” bị nới. [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) (EntryPoint canonical 2023) đưa UserOperation, bundler, paymaster vào *lớp ứng dụng*. [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) (Pectra) cho EOA ký một authorization để *set code tạm thời* — batching, sponsorship, social recovery — mà không đổi địa chỉ. Chữ ký vẫn chứng minh quyền kiểm soát; cái đổi là *đối tượng được ủy quyền* có thể là contract, không chỉ `ecrecover`.
+Song song với đó, mô hình truyền thống coi mỗi tài khoản chỉ là một cặp khóa cũng được mở rộng. [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) (hợp đồng EntryPoint chuẩn triển khai năm 2023) đưa các thành phần `UserOperation`, `bundler` và `paymaster` vào *tầng ứng dụng*. [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) (trong Pectra) cho phép EOA ký một thông điệp ủy quyền để *gắn mã hợp đồng tạm thời* — hỗ trợ gộp giao dịch, tài trợ phí gas và khôi phục tài khoản xã hội — mà không cần đổi địa chỉ ví. Chữ ký vẫn chứng minh quyền kiểm soát, nhưng *đối tượng được ủy quyền* nay có thể là hợp đồng thông minh thay vì chỉ dựa vào lệnh `ecrecover`.
 
 ![Cây hash / Merkle — primitive membership mà Verkle và KZG vẫn giải](https://upload.wikimedia.org/wikipedia/commons/9/95/Hash_Tree.svg)
 *Nguồn: [Wikimedia Commons — Hash Tree](https://commons.wikimedia.org/wiki/File:Hash_Tree.svg)*
 
-## 3. Insight triển khai
+## 3. Góc nhìn triển khai
 
-Khi một rollup đăng batch sau Dencun, wallet của user không “gửi calldata”. Sequencer tạo blob-carrying transaction; client execution chỉ thấy `blob_versioned_hashes`. Công thức phí tách làm hai thị trường: `gas` cho EVM và `blob_gas` (EIP-4844 §3.1, opcode `BLOBBASEFEE` / EIP-7516). Đó là cùng ý “resource metering” như gas trong Chapter 03, nhưng gắn vào primitive DA của Chapter 00.
+Khi một rollup gửi gói giao dịch sau nâng cấp Dencun, ví của người dùng không gửi dữ liệu trực tiếp qua `calldata`. Trình sắp xếp giao dịch (sequencer) tạo giao dịch mang blob, còn phần mềm lớp thực thi chỉ thấy trường `blob_versioned_hashes`. Cơ chế tính phí được tách thành hai thị trường độc lập: `gas` cho EVM và `blob_gas` (theo EIP-4844 mục 3.1, kết hợp opcode `BLOBBASEFEE` trong EIP-7516). Cách tiếp cận này kế thừa nguyên lý đo lường tài nguyên của cơ chế gas (Chapter 03), nhưng áp dụng riêng cho thành phần sẵn có dữ liệu của Chapter 00.
 
-Với EIP-7702, một ví phần cứng vẫn ký bằng ECDSA; payload là authorization tuple `(chain_id, address, nonce)`. Node set `account.code` cho đến khi authorization bị thay. Không có primitive mật mã mới — chỉ có *semantics* mới của chữ ký.
+Với EIP-7702, ví phần cứng vẫn tiếp tục ký bằng ECDSA; dữ liệu được ký là bộ ủy quyền `(chain_id, address, nonce)`. Các nút sẽ gán mã tương ứng vào `account.code` cho đến khi ủy quyền bị thay thế. Không có nguyên thủy mật mã mới nào được tạo ra — điểm thay đổi nằm ở *ngữ nghĩa thực thi* của chữ ký.
 
 ```text
 [user EOA] --(EIP-7702 auth)--> [delegated contract]
@@ -72,38 +72,38 @@ Với EIP-7702, một ví phần cứng vẫn ký bằng ECDSA; payload là auth
        +-- ECDSA như bài 00.03 --+    +-- batch / paymaster / 4337-style logic
 ```
 
-## 4. Thách thức và trade-off
+## 4. Thách thức và đánh đổi
 
-Verkle và PeerDAS tăng độ phức tạp client: phải hiểu đa thức, DAS, column subnet. Blob prune nghĩa là “full history” không còn miễn phí — explorer và rollup phải tự lưu. EIP-7702 mở mặt tấn công mới (malicious delegation, phishing authorization). BLS aggregation giả định đồng bộ committee; một fork hoặc equivocation vẫn cần slashing như bài 00.01 đã nói về Byzantine faults.
+Cây Verkle và PeerDAS làm tăng đáng kể độ phức tạp của phần mềm nút, đòi hỏi triển khai thêm các phép toán đa thức, cơ chế lấy mẫu sẵn có dữ liệu (DAS) và các mạng con theo cột (column subnet). Cơ chế cắt tỉa blob cũng khiến việc lưu trữ lịch sử đầy đủ không còn mặc định miễn phí, buộc các trình khám phá blockchain và bản thân các rollup phải tự đảm nhiệm khâu lưu trữ dài hạn. Trong khi đó, EIP-7702 mở ra bề mặt tấn công mới như ủy quyền nhầm mã độc hại hoặc lừa đảo ký ủy quyền (phishing authorization). Đối với gộp chữ ký BLS, cơ chế này dựa trên giả định đồng bộ của ủy ban xác thực; khi xảy ra phân nhánh hoặc ký mâu thuẫn (equivocation), hệ thống vẫn cần cơ chế cắt giảm tài sản đặt cược (slashing) như đã phân tích về lỗi Byzantine ở bài 00.01.
 
-## 5. Bài này bổ sung gì cho ghi chú cốt lõi
+## 5. Giá trị bổ sung của bài học này
 
-Vẫn dùng 00.00–00.03 để giải thích *tại sao* hash one-way, *tại sao* Merkle chống giả mạo, *tại sao* chữ ký không giả được. Bài tùy chọn chỉ nối các đối tượng ấy với EIP-4844, Verkle, EIP-2537, EIP-4337 và EIP-7702 — không chứng minh lại collision resistance.
+Các bài 00.00–00.03 vẫn là tài liệu cốt lõi giải thích *vì sao* hàm băm có tính một chiều, *vì sao* cây Merkle chống giả mạo và *vì sao* chữ ký số không thể làm giả. Bài học tùy chọn này chỉ kết nối những nền tảng đó với EIP-4844, Verkle, EIP-2537, EIP-4337 và EIP-7702 mà không chứng minh lại các tính chất mật mã cơ bản.
 
 ## 6. Tài liệu gốc (2022–2026)
 
 | Nguồn | Năm | Đóng góp |
 | --- | --- | --- |
-| [EIP-4844: Shard Blob Transactions](https://eips.ethereum.org/EIPS/eip-4844) | 2022–2024 | Proto-danksharding; blob + KZG |
-| [Dencun Mainnet Announcement](https://blog.ethereum.org/2024/02/27/dencun-mainnet-announcement) | 2024 | Kích hoạt 13-Mar-2024, epoch 269568 |
-| [Pectra Mainnet Announcement](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025 | EIP-7702, EIP-2537, EIP-7691; 07-May-2025 |
-| [EIP-7702: Set EOA account code](https://eips.ethereum.org/EIPS/eip-7702) | 2024–2025 | Authorization-based account abstraction tại protocol |
-| [EIP-4337: Account Abstraction Using Alt Mempool](https://eips.ethereum.org/EIPS/eip-4337) | 2021–2023 | UserOperation / EntryPoint (lớp ứng dụng) |
-| [PeerDAS](https://ethereum.org/roadmap/fusaka/peerdas/) / [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594) | 2025 | DAS cho blob columns |
-| [Verkle trees (Buterin)](https://vitalik.eth.limo/general/2021/06/18/verkle.html) | 2021+ | Vector commitment thay Merkle path |
+| [EIP-4844: Shard Blob Transactions](https://eips.ethereum.org/EIPS/eip-4844) | 2022–2024 | Proto-danksharding; cơ chế blob và cam kết KZG |
+| [Dencun Mainnet Announcement](https://blog.ethereum.org/2024/02/27/dencun-mainnet-announcement) | 2024 | Kích hoạt ngày 13/03/2024 tại epoch 269568 |
+| [Pectra Mainnet Announcement](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025 | Bao gồm EIP-7702, EIP-2537 và EIP-7691; kích hoạt ngày 07/05/2025 |
+| [EIP-7702: Set EOA account code](https://eips.ethereum.org/EIPS/eip-7702) | 2024–2025 | Trừu tượng hóa tài khoản dựa trên ủy quyền ở tầng giao thức |
+| [EIP-4337: Account Abstraction Using Alt Mempool](https://eips.ethereum.org/EIPS/eip-4337) | 2021–2023 | UserOperation và EntryPoint ở tầng ứng dụng |
+| [PeerDAS](https://ethereum.org/roadmap/fusaka/peerdas/) / [EIP-7594](https://eips.ethereum.org/EIPS/eip-7594) | 2025 | Lấy mẫu tính sẵn có dữ liệu (DAS) theo cột blob |
+| [Verkle trees (Buterin)](https://vitalik.eth.limo/general/2021/06/18/verkle.html) | 2021+ | Dùng cam kết vector thay thế đường dẫn Merkle |
 
 ## Video tham khảo
 
-- **Xem trước:** [Goodbye Merkle Trees? Verkle Trees & Multiproofs Demystified | Episode7 - Season 1 Finale](https://www.youtube.com/watch?v=3PyDkMYrzAs) — zkMarek, tiếng Anh. So sánh witness Merkle với Verkle multiproof; xem trước mục từ cây Merkle sang vector commitment.
-- [What is EIP-4844? | Blobs & Proto-danksharding](https://www.youtube.com/watch?v=LmQTRGqUL9s) — Patrick Collins, tiếng Anh. Patrick Collins giải thích blob và proto-danksharding, đúng đoạn EIP-4844 và cam kết KZG trên dữ liệu tạm.
-- [5. BLS aggregation by Vitalik Buterin and Justin Drake (Ethereum Foundation)](https://www.youtube.com/watch?v=DpV0Hh9YajU) — Ethereum Foundation, tiếng Anh. Vitalik Buterin và Justin Drake trình bày gộp chữ ký BLS, đúng phần beacon chain và EIP-2537.
+- **Xem trước:** [Goodbye Merkle Trees? Verkle Trees & Multiproofs Demystified | Episode7 - Season 1 Finale](https://www.youtube.com/watch?v=3PyDkMYrzAs) — zkMarek, tiếng Anh. So sánh kích thước bằng chứng Merkle với Verkle multiproof; nên xem trước mục chuyển từ cây Merkle sang cam kết vector.
+- [What is EIP-4844? | Blobs & Proto-danksharding](https://www.youtube.com/watch?v=LmQTRGqUL9s) — Patrick Collins, tiếng Anh. Giải thích cơ chế blob và proto-danksharding, khớp với phần EIP-4844 và cam kết KZG trên dữ liệu tạm.
+- [5. BLS aggregation by Vitalik Buterin and Justin Drake (Ethereum Foundation)](https://www.youtube.com/watch?v=DpV0Hh9YajU) — Ethereum Foundation, tiếng Anh. Vitalik Buterin và Justin Drake trình bày cơ chế gộp chữ ký BLS, tương ứng với phần beacon chain và EIP-2537.
 
 ## 7. Bài tập định hướng
 
-1. So sánh độ dài witness Merkle (state Ethereum ~\(2^{28}\) lá) với một KZG opening. Con số nào quan trọng cho *light client*?
-2. Đọc EIP-4844 § blob lifecycle. Vì sao ~18 ngày đủ cho cửa sổ rút optimistic rollup 7 ngày?
-3. Viết bốn câu phân biệt EIP-4337 và EIP-7702: cái nào đổi consensus, cái nào chỉ alt-mempool?
+1. So sánh độ dài bằng chứng Merkle (với trạng thái Ethereum khoảng \(2^{28}\) lá) với một mở cam kết KZG. Đại lượng nào quan trọng hơn đối với *nút nhẹ (light client)*?
+2. Đọc phần vòng đời blob trong EIP-4844. Vì sao thời gian lưu trữ khoảng 18 ngày là đủ cho cửa sổ rút tiền 7 ngày của optimistic rollup?
+3. Viết bốn câu phân biệt EIP-4337 và EIP-7702: đề xuất nào thay đổi tầng giao thức đồng thuận, đề xuất nào chỉ hoạt động qua mempool thay thế (alt-mempool)?
 
 ---
-✅ **End of optional lesson**
+✅ **Kết thúc bài học tùy chọn**
 Next: [Lecture 01.00 — Bitcoin Architecture]({{ site.baseurl }}/contents/vi/chapter01/)

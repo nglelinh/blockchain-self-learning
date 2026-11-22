@@ -9,23 +9,23 @@ categories:
 - blockchain-chapter03
 ---
 
-# Lecture: Ethereum Architecture - World Computer Platform
+# Bài giảng: Kiến trúc Ethereum — Nền tảng máy tính phi tập trung
 
 ## 1. Tổng quan về khái niệm
 
-**Ethereum** không chỉ là một cryptocurrency - nó là một **decentralized world computer**, một platform cho phép bất kỳ ai deploy và run **smart contracts** (chương trình tự động thực thi) trên một global network. Nếu Bitcoin là "digital gold" hay "peer-to-peer cash", thì Ethereum là "programmable money" và "decentralized application platform".
+**Ethereum** không chỉ là một đồng tiền mã hóa mà còn là một **máy tính phi tập trung toàn cầu (decentralized world computer)**, cho phép bất kỳ ai triển khai và vận hành **hợp đồng thông minh (smart contract)** — các chương trình tự động thực thi trên mạng lưới phân tán. Nếu Bitcoin thường được ví như "vàng kỹ thuật số" hay "tiền mặt ngang hàng", thì Ethereum hướng tới mô hình "tiền có thể lập trình" và nền tảng cho ứng dụng phi tập trung (dApp).
 
-**The Vision - Vitalik Buterin's Insight**:
+**Tầm nhìn của Vitalik Buterin**:
 
-Vào năm 2013, **Vitalik Buterin** - một programmer 19 tuổi involved trong Bitcoin community - nhận ra một limitation fundamental: Bitcoin's Script language quá limited. Nó có thể handle simple "if this then that" logic, nhưng không thể run complex computations. Vitalik đề xuất thêm Turing-complete programming language vào Bitcoin, nhưng proposal bị reject.
+Năm 2013, **Vitalik Buterin** — khi đó là một lập trình viên 19 tuổi tham gia cộng đồng Bitcoin — nhận thấy ngôn ngữ Script của Bitcoin có giới hạn rõ rệt: nó chỉ xử lý được các điều kiện đơn giản mà không hỗ trợ tính toán phức tạp. Đề xuất tích hợp một ngôn ngữ lập trình đầy đủ Turing (Turing-complete) vào Bitcoin không được chấp nhận.
 
-Vậy nên năm 2013, ông viết **Ethereum Whitepaper**: "A Next-Generation Smart Contract and Decentralized Application Platform". Key insight:
+Vì vậy, trong năm 2013, ông đã công bố **Sách trắng Ethereum (Ethereum Whitepaper)** với tiêu đề "A Next-Generation Smart Contract and Decentralized Application Platform". Ý tưởng cốt lõi là:
 
 > "What blockchain needs is a built-in Turing-complete programming language that allows anyone to write smart contracts and decentralized applications where they can create their own arbitrary rules for ownership, transaction formats and state transition functions."
 
-**Smart Contracts - The Core Innovation**:
+**Hợp đồng thông minh — Trọng tâm của Ethereum**:
 
-Term "smart contract" được đề xuất bởi **Nick Szabo** năm 1994, nhưng Ethereum là first platform successfully implement concept này at scale:
+Thuật ngữ "hợp đồng thông minh" (smart contract) được **Nick Szabo** đề xuất từ năm 1994, nhưng Ethereum là nền tảng đầu tiên triển khai rộng rãi mô hình này:
 
 ```
 Traditional Contract:
@@ -41,9 +41,9 @@ Smart Contract:
 - Instant, cheap, deterministic execution
 ```
 
-**Example - Vending Machine Analogy**:
+**Ví dụ minh họa — Máy bán hàng tự động**:
 
-Nick Szabo's famous analogy: Smart contract giống như vending machine:
+Phép so sánh quen thuộc của Nick Szabo ví hợp đồng thông minh như một máy bán hàng tự động:
 
 ```
 Traditional Purchase:
@@ -62,50 +62,50 @@ Vending Machine (Smart Contract):
 (No trust needed - machine enforces rules)
 ```
 
-Ethereum extends this: Bất kỳ programmable rule nào có thể become a "vending machine"!
+Ethereum mở rộng nguyên lý này: mọi quy tắc có thể biểu diễn bằng chương trình đều có thể được thực thi tự động theo cách tương tự.
 
-**Ethereum Timeline**:
+**Các mốc phát triển của Ethereum**:
 
-- **2013**: Whitepaper published
-- **2014**: Crowdsale raises 18 million USD (31,000 BTC)
-- **July 30, 2015**: Genesis block (Frontier launch)
-- **2016**: The DAO hack → Ethereum/Ethereum Classic split
-- **2017**: ICO boom (hundreds of projects launch on Ethereum)
-- **2020**: DeFi summer (Uniswap, Aave, Compound explode)
-- **2021**: NFT boom (CryptoPunks, Bored Apes)
-- **Sept 2022**: "The Merge" - transition từ PoW sang PoS
-- **2023-2024**: Layer 2 scaling (Arbitrum, Optimism, zkSync)
+- **2013**: Công bố Sách trắng Ethereum.
+- **2014**: Đợt gọi vốn cộng đồng huy động 18 triệu USD (tương đương 31.000 BTC).
+- **30/07/2015**: Khối khởi thủy (ra mắt phiên bản Frontier).
+- **2016**: Sự cố tấn công The DAO dẫn đến phân tách thành Ethereum và Ethereum Classic.
+- **2017**: Làn sóng gọi vốn ICO với hàng trăm dự án triển khai trên Ethereum.
+- **2020**: Giai đoạn tăng trưởng mạnh của DeFi (Uniswap, Aave, Compound).
+- **2021**: Làn sóng NFT (CryptoPunks, Bored Apes).
+- **09/2022**: "The Merge" — chuyển đổi cơ chế đồng thuận từ PoW sang PoS.
+- **2023–2024**: Phát triển các giải pháp mở rộng Layer 2 (Arbitrum, Optimism, zkSync).
 
-**Key Differences from Bitcoin**:
+**Điểm khác biệt chính so với Bitcoin**:
 
-| Aspect | Bitcoin | Ethereum |
+| Khía cạnh | Bitcoin | Ethereum |
 |--------|---------|----------|
-| **Purpose** | Digital currency | Programmable platform |
-| **Scripting** | Limited (Script) | Turing-complete (Solidity) |
-| **State** | UTXO model | Account model |
-| **Block time** | ~10 minutes | ~12 seconds |
-| **Consensus** | PoW (SHA-256) | PoS (Gasper) |
-| **Supply** | Fixed 21M | No hard cap (low inflation) |
-| **Use cases** | Store of value, payments | DeFi, NFTs, DAOs, dApps |
+| **Mục đích** | Tiền tệ kỹ thuật số | Nền tảng lập trình ứng dụng |
+| **Ngôn ngữ kịch bản** | Hạn chế (Script) | Đầy đủ Turing (Solidity) |
+| **Mô hình trạng thái** | Mô hình UTXO | Mô hình tài khoản (Account) |
+| **Thời gian tạo khối** | ~10 phút | ~12 giây |
+| **Cơ chế đồng thuận** | PoW (SHA-256) | PoS (Gasper) |
+| **Nguồn cung** | Giới hạn 21 triệu | Không có trần cứng (lạm phát thấp) |
+| **Ứng dụng chính** | Lưu trữ giá trị, thanh toán | DeFi, NFT, DAO, dApp |
 
-**Ethereum's Architecture Philosophy**:
+**Triết lý thiết kế kiến trúc Ethereum**:
 
-Ethereum được thiết kế với principles:
+Ethereum được thiết kế dựa trên sáu nguyên tắc:
 
-1. **Simplicity**: Protocol đơn giản nhất có thể
-2. **Universality**: Turing-complete language
-3. **Modularity**: Separate consensus from execution
-4. **Agility**: Protocol có thể upgrade
-5. **Non-discrimination**: No built-in applications
-6. **Non-censorship**: No transaction censorship
+1. **Đơn giản (Simplicity)**: Giữ giao thức nền tảng gọn nhất có thể.
+2. **Tổng quát (Universality)**: Cung cấp ngôn ngữ lập trình đầy đủ Turing.
+3. **Mô-đun hóa (Modularity)**: Tách biệt tầng đồng thuận với tầng thực thi.
+4. **Linh hoạt (Agility)**: Cho phép nâng cấp giao thức khi cần thiết.
+5. **Không thiên vị (Non-discrimination)**: Không gắn cứng ứng dụng cụ thể ở tầng giao thức.
+6. **Chống kiểm duyệt (Non-censorship)**: Không kiểm duyệt giao dịch hợp lệ.
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Ethereum như "World Computer"
+### 2.1. Ethereum như một "máy tính toàn cầu"
 
-Hãy tưởng tượng Ethereum như một **giant global computer**:
+Có thể hình dung Ethereum như một hệ thống máy tính dùng chung vận hành trên phạm vi toàn cầu:
 
 ```
 Traditional Cloud Computing:
@@ -121,7 +121,7 @@ Ethereum "World Computer":
 - Censorship-resistant
 ```
 
-**Components**:
+**Các thành phần tương đương**:
 ```
 Hardware: Thousands of Ethereum nodes (computers running client)
 CPU: EVM (Ethereum Virtual Machine) processes transactions
@@ -132,7 +132,7 @@ Programs: Smart contracts
 Users: External accounts sending transactions
 ```
 
-**Cost Model**:
+**Mô hình chi phí**:
 ```
 AWS: Pay per hour/month for resources
 Ethereum: Pay per computation (Gas fees)
@@ -143,9 +143,9 @@ Example:
 - Simple transfer: 21,000 gas (~$0.50)
 ```
 
-### 2.2. Account Model vs UTXO - Bank Account vs Cash
+### 2.2. Mô hình tài khoản so với UTXO — Tài khoản ngân hàng và tiền mặt
 
-**Bitcoin UTXO (Cash Model)**:
+**Mô hình UTXO của Bitcoin (tương tự tiền mặt)**:
 ```
 Alice has:
 - $50 bill
@@ -163,7 +163,7 @@ Advantages: Privacy, parallel processing
 Disadvantages: Complex to track "balance"
 ```
 
-**Ethereum Account (Bank Account Model)**:
+**Mô hình tài khoản của Ethereum (tương tự tài khoản ngân hàng)**:
 ```
 Alice's account: $80
 Bob's account: $40
@@ -177,9 +177,9 @@ Advantages: Simple, intuitive, easy to track balance
 Disadvantages: Less privacy, sequential processing
 ```
 
-### 2.3. Smart Contract như "Vending Machine Program"
+### 2.3. Hợp đồng thông minh minh họa qua chiến dịch gọi vốn
 
-**Simple Smart Contract Example** (conceptual):
+**Ví dụ khái niệm về hợp đồng thông minh**:
 
 ```
 Contract: CrowdfundingCampaign
@@ -206,7 +206,7 @@ No human intervention needed!
 Rules enforced by code!
 ```
 
-**Real-World Impact**:
+**So sánh với nền tảng truyền thống**:
 ```
 Traditional Crowdfunding (Kickstarter):
 - Platform takes 5% fee
@@ -221,11 +221,11 @@ Smart Contract Crowdfunding:
 - Global, permissionless
 ```
 
-### 2.4. Gas System - "Computational Postage Stamps"
+### 2.4. Hệ thống Gas — "Tem bưu chính" cho tính toán
 
-**Problem**: Nếu computation free, attackers có thể spam network với infinite loops!
+**Vấn đề**: Nếu tính toán trên mạng hoàn toàn miễn phí, kẻ tấn công có thể gửi các vòng lặp vô hạn để làm tắc nghẽn mạng lưới.
 
-**Solution: Gas** - pay per computation
+**Giải pháp — Gas**: Yêu cầu người gửi trả phí tương ứng với lượng tài nguyên tính toán tiêu thụ.
 
 ```
 Analogy: Postage stamps
@@ -249,7 +249,7 @@ User sets:
 Total Fee = Gas Used × Gas Price
 ```
 
-**Example Transaction**:
+**Ví dụ giao dịch**:
 ```
 Send 1 ETH to friend:
 - Gas used: 21,000
@@ -259,9 +259,9 @@ Send 1 ETH to friend:
 At $2,000/ETH: Fee = $2.10
 ```
 
-### 2.5. EVM - "Global Sandbox Computer"
+### 2.5. EVM — Môi trường thực thi cô lập
 
-**Ethereum Virtual Machine (EVM)** như một **giant sandboxed computer**:
+**Máy ảo Ethereum (Ethereum Virtual Machine — EVM)** hoạt động như một máy tính chạy trong hộp cát (sandbox) dùng chung trên toàn mạng:
 
 ```
 Sandbox Properties:
@@ -276,7 +276,7 @@ Why Sandbox?
 - Fairness: No one gets free computation
 ```
 
-**Stack Machine**:
+**Kiến trúc máy ngăn xếp (Stack Machine)**:
 ```
 EVM operates like calculator with stack:
 
@@ -296,11 +296,11 @@ Result: 14
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. Ethereum Account Model
+### 3.1. Mô hình tài khoản của Ethereum
 
-**Two Account Types**:
+**Hai loại tài khoản**:
 
-**1. Externally Owned Accounts (EOA)**:
+**1. Tài khoản sở hữu bên ngoài (Externally Owned Accounts — EOA)**:
 ```python
 class EOA:
     """User accounts controlled by private keys"""
@@ -313,7 +313,7 @@ class EOA:
         # No storage
 ```
 
-**2. Contract Accounts**:
+**2. Tài khoản hợp đồng (Contract Accounts)**:
 ```python
 class ContractAccount:
     """Smart contract accounts"""
@@ -325,7 +325,7 @@ class ContractAccount:
         self.storage = {}     # Persistent storage (key → value)
 ```
 
-**Account State Structure**:
+**Cấu trúc trạng thái tài khoản**:
 ```
 Account = {
     nonce: uint64,           // Transaction count (EOA) or 1 (contract)
@@ -335,9 +335,9 @@ Account = {
 }
 ```
 
-**State Trie**:
+**Cây trạng thái (State Trie)**:
 
-Ethereum uses **Patricia Merkle Trie** để store state:
+Ethereum sử dụng **Patricia Merkle Trie** để lưu trữ toàn bộ trạng thái tài khoản:
 
 ```
                     State Root
@@ -351,9 +351,9 @@ Ethereum uses **Patricia Merkle Trie** để store state:
    └─ codeHash: 0x...             └─ codeHash: 0x...
 ```
 
-**Address Derivation**:
+**Cách tạo địa chỉ**:
 
-**EOA Address** (from public key):
+**Địa chỉ EOA** (từ khóa công khai):
 ```python
 def derive_eoa_address(public_key):
     """Derive Ethereum address from public key"""
@@ -367,7 +367,7 @@ def derive_eoa_address(public_key):
     return to_checksum_address(address)
 ```
 
-**Contract Address** (deterministic):
+**Địa chỉ hợp đồng (CREATE)** (xác định từ người gửi và nonce):
 ```python
 def create_contract_address(sender, nonce):
     """Compute contract address from sender and nonce"""
@@ -381,7 +381,7 @@ def create_contract_address(sender, nonce):
     return hash_result[-20:]
 ```
 
-**CREATE2 Address** (deterministic từ salt):
+**Địa chỉ CREATE2** (xác định từ giá trị salt và mã khởi tạo):
 ```python
 def create2_address(sender, salt, init_code):
     """Compute CREATE2 contract address"""
@@ -392,9 +392,9 @@ def create2_address(sender, salt, init_code):
     return hash_result[-20:]
 ```
 
-### 3.2. Transaction Structure
+### 3.2. Cấu trúc giao dịch
 
-**Transaction Fields**:
+**Các trường trong giao dịch**:
 
 ```python
 class Transaction:
@@ -414,21 +414,21 @@ class Transaction:
         self.chain_id = 1                     # Network ID
 ```
 
-**Transaction Types**:
+**Các loại giao dịch**:
 
-**Type 0: Legacy**
+**Loại 0: Legacy**
 ```
 Fields: nonce, gasPrice, gasLimit, to, value, data, v, r, s
 Fee: gasPrice × gasUsed
 ```
 
-**Type 1: EIP-2930 (Access List)**
+**Loại 1: EIP-2930 (Access List)**
 ```
 Additional: accessList (pre-declare accessed addresses/storage)
 Benefit: Gas savings for known access patterns
 ```
 
-**Type 2: EIP-1559 (Dynamic Fee)**
+**Loại 2: EIP-1559 (Phí động — Dynamic Fee)**
 ```
 Instead of gasPrice:
 - maxFeePerGas: Maximum total willing to pay
@@ -437,7 +437,7 @@ Instead of gasPrice:
 Actual fee: baseFee + min(maxPriorityFee, maxFee - baseFee)
 ```
 
-**Transaction Lifecycle**:
+**Vòng đời xử lý giao dịch**:
 
 ```python
 def process_transaction(tx, state):
@@ -476,24 +476,24 @@ def process_transaction(tx, state):
     return result
 ```
 
-### 3.3. Gas Mechanism
+### 3.3. Cơ chế Gas
 
-**Gas Costs** (subset, pre-EIP-1559):
+**Chi phí gas của một số phép toán cơ bản** (minh họa trước EIP-1559):
 
-| Operation | Gas Cost | Description |
+| Thao tác | Chi phí gas | Mô tả |
 |-----------|----------|-------------|
-| ADD, SUB | 3 | Arithmetic operations |
-| MUL | 5 | Multiplication |
-| DIV, MOD | 5 | Division, modulo |
-| SHA3 | 30 + 6/word | Keccak-256 hash |
-| BALANCE | 400 | Get account balance |
-| SLOAD | 800 | Load from storage |
-| SSTORE | 20,000 / 5,000 | Store to storage (new/existing) |
-| CALL | 700 + | Call another contract |
-| CREATE | 32,000 | Create new contract |
-| SELFDESTRUCT | 5,000 | Delete contract |
+| ADD, SUB | 3 | Phép cộng, trừ |
+| MUL | 5 | Phép nhân |
+| DIV, MOD | 5 | Phép chia, chia lấy dư |
+| SHA3 | 30 + 6/word | Hàm băm Keccak-256 |
+| BALANCE | 400 | Đọc số dư tài khoản |
+| SLOAD | 800 | Đọc từ storage |
+| SSTORE | 20,000 / 5,000 | Ghi vào storage (ô mới / ô đã có giá trị) |
+| CALL | 700 + | Gọi hợp đồng khác |
+| CREATE | 32,000 | Tạo hợp đồng mới |
+| SELFDESTRUCT | 5,000 | Hủy hợp đồng |
 
-**EIP-1559 Fee Market**:
+**Thị trường phí EIP-1559**:
 
 ```python
 def calculate_eip1559_fee(block, tx):
@@ -525,7 +525,7 @@ def calculate_eip1559_fee(block, tx):
     }
 ```
 
-**Base Fee Adjustment**:
+**Cơ chế điều chỉnh phí cơ sở (Base Fee)**:
 
 ```python
 def update_base_fee(parent_block, current_block):
@@ -558,9 +558,9 @@ def update_base_fee(parent_block, current_block):
         return max(parent_base_fee - base_fee_delta, 0)
 ```
 
-### 3.4. Block Structure
+### 3.4. Cấu trúc khối
 
-**Ethereum Block**:
+**Cấu trúc khối Ethereum**:
 
 ```python
 class EthereumBlock:
@@ -589,7 +589,7 @@ class EthereumBlock:
         self.uncles = []            # Uncle headers (pre-Merge, max 2)
 ```
 
-**Block Validation**:
+**Xác thực khối**:
 
 ```python
 def validate_block(block, parent_block, state):
@@ -634,9 +634,9 @@ def validate_block(block, parent_block, state):
     return True, "Valid"
 ```
 
-### 3.5. State Transition Function
+### 3.5. Hàm chuyển đổi trạng thái
 
-**Core Function** - Heart of Ethereum:
+**Hàm cốt lõi của Ethereum**:
 
 ```python
 def apply_transaction(state, tx):
@@ -697,12 +697,8 @@ def apply_transaction(state, tx):
 
 ---
 
-Bài giảng đã đạt ~10,000 từ và covering core Ethereum architecture concepts. Tôi sẽ tiếp tục tạo các phần còn lại (sections 4-10) và các bài giảng tiếp theo về EVM, Solidity, và DeFi!
-
-Bạn muốn tôi tiếp tục không? 🚀
-
 ## Video tham khảo
 
-- **Xem trước:** [What is ETHEREUM? EXPLAINED For Beginners](https://www.youtube.com/watch?v=1Hu8lzoi0Tw) — CoinGecko, tiếng Anh. Bức tranh Ethereum như máy tính thế giới và smart contract; xem trước mục động lực so với Bitcoin.
-- [Account Based vs. UTxO - Understanding Ethereum](https://www.youtube.com/watch?v=5Mhvk0U6zqE) — Unbounded Capital, tiếng Anh. Đối chiếu sổ cái theo tài khoản với UTXO; đúng mô hình state mà bài lấy làm trục.
-- [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Hoạt hình EVM cho thấy giao dịch làm đổi state; cầu nối sang bài sau về bytecode và gas.
+- **Xem trước:** [What is ETHEREUM? EXPLAINED For Beginners](https://www.youtube.com/watch?v=1Hu8lzoi0Tw) — CoinGecko, tiếng Anh. Giới thiệu tổng quan về Ethereum như nền tảng máy tính toàn cầu và hợp đồng thông minh; nên xem trước mục so sánh với Bitcoin.
+- [Account Based vs. UTxO - Understanding Ethereum](https://www.youtube.com/watch?v=5Mhvk0U6zqE) — Unbounded Capital, tiếng Anh. So sánh mô hình sổ cái theo tài khoản với UTXO, tương ứng với phần mô hình trạng thái trong bài.
+- [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Minh họa trực quan cách EVM xử lý giao dịch và cập nhật trạng thái, làm bước đệm sang bài tiếp theo về bytecode và gas.
