@@ -211,11 +211,13 @@ Bitcoin assumes **weak synchrony**: network delays exist but blocks propagate re
 
 ### 4.1. Byzantine Fault Tolerance Bound
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: Trong một distributed system with \( n \) nodes, nếu có \( f \) nodes là Byzantine (malicious), consensus chỉ có thể đạt được nếu:
 
 \[
 n \geq 3f + 1
 \]
+</div>
 
 Hay nói cách khác:
 
@@ -287,9 +289,11 @@ P_{\text{catch-up}} = \left(\frac{q}{p}\right)^z = \left(\frac{q}{1-q}\right)^z
 
 ### 4.3. FLP Impossibility Result
 
+<div class="textbook-theorem" markdown="1">
 **Theorem** (Fisher, Lynch, Paterson, 1985):
 
 Trong một asynchronous distributed system, không tồn tại một deterministic consensus protocol có thể guarantee termination nếu ngay cả một process có thể fail (crash).
+</div>
 
 **Formal Statement**:
 

@@ -681,7 +681,9 @@ System: \( n \) processes, at most \( f = 1 \) can crash
 Network: Asynchronous (no timing bounds)
 Termination: Must eventually decide
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: No deterministic algorithm guarantees termination.
+</div>
 
 **Proof Sketch**:
 
@@ -701,7 +703,9 @@ BFT protocols circumvent FLP by:
 
 ### 4.2. Quorum Intersection Proof
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: Với \( n = 3f + 1 \) nodes và quorum size \( Q = 2f + 1 \), any two quorums intersect in at least \( f + 1 \) nodes.
+</div>
 
 **Proof**:
 
@@ -799,7 +803,9 @@ Contradiction → Safety holds.
 
 ### 4.5. HotStuff Linear Messages Proof
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: HotStuff achieves O(n) message complexity per view.
+</div>
 
 **Proof**:
 

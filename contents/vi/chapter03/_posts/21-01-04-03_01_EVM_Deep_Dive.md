@@ -818,7 +818,9 @@ Even at block gas limit (30M), finite computation!
 
 ### 4.4. Determinism Proof
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: EVM execution is deterministic.
+</div>
 
 **Proof Sketch**:
 
@@ -847,7 +849,9 @@ All honest nodes reach same state → Consensus achieved!
 
 **EVM Solution**: Gas ensures termination
 
+<div class="textbook-theorem" markdown="1">
 **Theorem**: Every EVM execution terminates.
+</div>
 
 **Proof**:
 
