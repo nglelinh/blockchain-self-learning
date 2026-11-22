@@ -13,105 +13,74 @@ categories:
 
 ## 1. Tổng quan về khái niệm
 
-Vào ngày 31 tháng 10 năm 2008, giữa cuộc khủng hoảng tài chính toàn cầu, một người (hoặc nhóm người) ẩn danh với bút danh **Satoshi Nakamoto** đã publish một whitepaper có tiêu đề "Bitcoin: A Peer-to-Peer Electronic Cash System" lên mailing list về mật mã học. Chín trang giấy này đã thay đổi lịch sử công nghệ và tài chính mãi mãi.
+Ngày 31 tháng 10 năm 2008, giữa bối cảnh khủng hoảng tài chính toàn cầu, một cá nhân hoặc nhóm tác giả ẩn danh lấy bút danh **Satoshi Nakamoto** đã công bố whitepaper *"Bitcoin: A Peer-to-Peer Electronic Cash System"* trên một diễn đàn thư điện tử về mật mã học. Tài liệu dài 9 trang này đặt nền móng cho sự ra đời của hệ thống tiền điện tử phi tập trung đầu tiên vận hành ổn định trong thực tế.
 
-Bitcoin không chỉ là một loại tiền điện tử - nó là **first successful implementation** của một hệ thống thanh toán điện tử phi tập trung, giải quyết vấn đề double-spending mà không cần bên thứ ba tin cậy. Trước Bitcoin, mọi nỗ lực tạo ra digital cash đều thất bại vì một trong hai lý do:
-1. Phụ thuộc vào central authority (e-gold, DigiCash) - có thể bị đóng cửa
-2. Không giải quyết được double-spending trong môi trường phân tán
+Bitcoin giải quyết bài toán chi tiêu gấp đôi (double-spending) mà không cần bên thứ ba tin cậy. Trước Bitcoin, các nỗ lực xây dựng tiền mặt số (digital cash) đều gặp một trong hai rào cản chính:
+1. Phụ thuộc vào một cơ quan vận hành tập trung (như e-gold, DigiCash) nên dễ bị đóng cửa hoặc kiểm soát.
+2. Không giải quyết được bài toán chi tiêu gấp đôi trong môi trường phân tán.
 
-Bitcoin elegant solution kết hợp nhiều công nghệ đã tồn tại (cryptographic hashing, digital signatures, peer-to-peer networks, consensus mechanisms) theo một cách hoàn toàn mới:
+Thiết kế của Bitcoin kết hợp nhiều thành phần kỹ thuật đã có sẵn — hàm băm mật mã, chữ ký số, mạng ngang hàng (peer-to-peer) và cơ chế đồng thuận — thành một kiến trúc thống nhất gọi là **đồng thuận Nakamoto (Nakamoto Consensus)**:
+- **Blockchain**: Sổ cái công khai lưu toàn bộ lịch sử giao dịch.
+- **Proof-of-Work**: Cơ chế chọn người đề xuất khối theo xác suất dựa trên năng lực tính toán nhằm thống nhất thứ tự giao dịch.
+- **Động lực kinh tế**: Thợ đào nhận thưởng bằng bitcoin mới phát hành cùng phí giao dịch.
+- **Bảo mật mật mã**: Chữ ký số đảm bảo chỉ chủ sở hữu hợp pháp mới có quyền chi tiêu số tiền tương ứng.
 
-**Core Innovation - Nakamoto Consensus**:
-Thay vì dựa vào một central server để prevent double-spending, Bitcoin sử dụng:
-- **Blockchain**: Một public ledger chứa toàn bộ transaction history
-- **Proof-of-Work**: Một lottery-based consensus mechanism đảm bảo nodes đồng ý về transaction order
-- **Economic Incentives**: Miners được reward bằng newly created bitcoin và transaction fees
-- **Cryptographic Security**: Digital signatures đảm bảo chỉ owner của coins mới có thể spend
+**Các mục tiêu thiết kế của Bitcoin** (theo whitepaper):
+1. **Ngang hàng (Peer-to-peer)**: Giao dịch trực tiếp không qua trung gian.
+2. **Phi tập trung (Decentralized)**: Không tồn tại điểm kiểm soát hay điểm lỗi đơn.
+3. **Không cần tin cậy (Trustless)**: Không yêu cầu người dùng đặt niềm tin vào một bên cụ thể.
+4. **Kháng kiểm duyệt (Censorship-resistant)**: Không một thực thể đơn lẻ nào có thể tùy ý chặn giao dịch hợp lệ.
+5. **Nguồn cung giới hạn (Limited supply)**: Tối đa 21 triệu BTC.
+6. **Giả danh (Pseudonymous)**: Giao dịch gắn với địa chỉ mật mã thay vì trực tiếp với danh tính thực.
 
-**Bitcoin's Design Goals** (theo whitepaper):
-1. **Peer-to-peer**: Direct transactions không cần intermediary
-2. **Decentralized**: Không có central point of control hoặc failure
-3. **Trustless**: Không cần trust bất kỳ party nào
-4. **Censorship-resistant**: Không ai có thể block transactions
-5. **Limited supply**: Tối đa 21 million bitcoins
-6. **Pseudonymous**: Transactions không trực tiếp linked với real-world identities
+**Bối cảnh lịch sử**:
 
-**Historical Context**:
+Bitcoin kế thừa nhiều thập kỷ nghiên cứu trước đó, đặc biệt từ **phong trào Cypherpunk** (thập niên 1990) gồm các nhà mật mã học và nhà nghiên cứu ủng hộ công nghệ bảo vệ quyền riêng tư như Adam Back, Nick Szabo và Hal Finney, cùng các hệ thống tiền thân:
+- **DigiCash (1990)**: Công ty của David Chaum, kiến trúc tập trung, ngừng hoạt động năm 1998.
+- **Hashcash (1997)**: Hệ thống Proof-of-Work của Adam Back, tiền đề trực tiếp cho cơ chế đào Bitcoin.
+- **b-money (1998)**: Đề xuất lý thuyết của Wei Dai về tiền điện tử phân tán.
+- **Bit Gold (2005)**: Đề xuất kiến trúc của Nick Szabo, chưa từng được triển khai thực tế.
 
-Bitcoin không xuất hiện trong chân không. Nó xây dựng trên decades of research:
-
-**Cypherpunk Movement** (1990s):
-- Nhóm cryptographers và activists ủng hộ privacy-enhancing technologies
-- Mailing list discussions về digital cash
-- Notable members: Adam Back, Nick Szabo, Hal Finney
-
-**Previous Digital Cash Attempts**:
-- **DigiCash (1990)**: David Chaum's company, centralized, failed 1998
-- **b-money (1998)**: Wei Dai's proposal, theoretical only
-- **Bit Gold (2005)**: Nick Szabo's proposal, never implemented
-- **Hashcash (1997)**: Adam Back's proof-of-work system (Bitcoin precursor)
-
-**Bitcoin Timeline**:
-- **Oct 31, 2008**: Whitepaper published
-- **Jan 3, 2009**: Genesis block mined (block 0)
-  - Embedded message: "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
-  - Comment on financial crisis và central banking
-- **Jan 12, 2009**: First transaction (Satoshi → Hal Finney, 10 BTC)
-- **May 22, 2010**: First real-world transaction (10,000 BTC for 2 pizzas, ~$41)
-- **Dec 2010**: Satoshi disappears from public
-- **2011-present**: Bitcoin ecosystem grows exponentially
-
-**Impact**:
-- Market cap: >$500 billion (2024)
-- Spawned thousands of altcoins
-- Catalyzed blockchain research
-- Influenced monetary policy discussions
-- Created entirely new industry
+**Các cột mốc chính của Bitcoin**:
+- **31/10/2008**: Công bố whitepaper Bitcoin.
+- **03/01/2009**: Khối nguyên thủy (Genesis Block — block 0) được đào, mang thông điệp nhúng: *"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"*, phản ánh bối cảnh khủng hoảng tài chính và hoạt động cứu trợ ngân hàng.
+- **12/01/2009**: Giao dịch đầu tiên trên mạng lưới (Satoshi gửi 10 BTC cho Hal Finney).
+- **22/05/2010**: Giao dịch mua bán hàng hóa thực tế đầu tiên (10.000 BTC đổi lấy 2 chiếc pizza, trị giá khoảng 41 USD lúc bấy giờ).
+- **12/2010**: Satoshi ngừng xuất hiện công khai.
+- **Từ 2011 đến nay**: Hệ sinh thái Bitcoin mở rộng mạnh mẽ, đạt vốn hóa trên 500 tỷ USD (tính đến năm 2024), thúc đẩy sự ra đời của hàng nghìn dự án tiền mã hóa khác cùng nhiều nghiên cứu về blockchain và chính sách tiền tệ số.
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Bitcoin như một "Digital Gold"
+### 2.1. Bitcoin và phép so sánh "Vàng kỹ thuật số"
 
-Bitcoin thường được gọi là "digital gold" - hãy so sánh:
+Bitcoin thường được so sánh với vàng vật chất qua các đặc tính tiền tệ:
 
-**Gold (Vàng)**:
-- Scarce: Khó tìm và khai thác
-- Durable: Không bị phá hủy theo thời gian
-- Divisible: Có thể chia nhỏ
-- Fungible: Mỗi gram vàng = mỗi gram vàng khác
-- Valuable: Được công nhận globally
-- Physical: Cần storage và transport
+**Vàng (Gold)**:
+- Khan hiếm: Khó khai thác và trữ lượng tự nhiên có hạn.
+- Bền vững: Không bị ăn mòn hay phân hủy theo thời gian.
+- Dễ chia nhỏ: Có thể cân đo theo nhiều đơn vị khối lượng.
+- Có tính thay thế (Fungible): Mỗi gam vàng nguyên chất có giá trị tương đương nhau.
+- Được công nhận rộng rãi trên toàn cầu.
+- Mang tính vật lý nên tốn chi phí lưu trữ và vận chuyển.
 
 **Bitcoin**:
-- Scarce: Chỉ 21 million coins, hard-coded
-- Durable: Tồn tại miễn blockchain còn tồn tại
-- Divisible: Chia được đến 8 decimal places (0.00000001 BTC = 1 satoshi)
-- Fungible: Mỗi BTC = mỗi BTC khác (về mặt kỹ thuật)
-- Valuable: Được công nhận bởi millions of users
-- Digital: Chỉ cần internet connection
+- Khan hiếm: Giới hạn cứng 21 triệu BTC trong mã giao thức.
+- Bền vững: Tồn tại chừng nào mạng lưới blockchain còn hoạt động.
+- Chia nhỏ linh hoạt: Chia tới 8 chữ số thập phân (\( 0.00000001 \) BTC = 1 satoshi).
+- Có tính thay thế về mặt kỹ thuật: Mỗi đơn vị BTC tuân theo cùng một quy tắc giao thức.
+- Được chấp nhận bởi hàng triệu người dùng trên thế giới.
+- Hoàn toàn kỹ thuật số: Chuyển giao qua Internet không phụ thuộc biên giới địa lý.
 
-### 2.2. How Bitcoin Works - Simple Analogy
+### 2.2. Cách Bitcoin hoạt động qua phép ví quảng trường công khai
 
-Tưởng tượng Bitcoin như một **public town square với một cuốn sổ khổng lồ**:
+Hãy hình dung mạng Bitcoin như một **quảng trường công cộng đặt một cuốn sổ cái khổng lồ ở chính giữa**:
 
-**The Ledger (Blockchain)**:
-- Một cuốn sổ công khai nằm ở giữa quảng trường
-- Ai cũng có thể đọc toàn bộ lịch sử
-- Mỗi trang (block) chứa ~2000 transactions
-- Mỗi trang được "seal" với special code (hash)
+- **Sổ cái (Blockchain)**: Ai cũng có thể đọc toàn bộ lịch sử. Mỗi trang (block) ghi khoảng 2.000 giao dịch và được niêm phong bằng một mã băm đặc biệt.
+- **Thợ đào (Miners)**: Hàng nghìn người đứng quanh quảng trường cùng cạnh tranh quyền viết trang tiếp theo bằng cách giải một bài toán mật mã khó (Proof-of-Work). Người giải được đầu tiên sẽ viết trang mới, nhận phần thưởng khối (6,25 BTC ở giai đoạn 2020–2024, sau đó giảm một nửa theo lịch halving) kèm phí giao dịch; toàn bộ những người khác kiểm tra và chấp nhận trang đó.
 
-**The Miners (Network Nodes)**:
-- Hàng nghìn người đứng xung quanh quảng trường
-- Họ compete để được viết trang tiếp theo vào sổ
-- Phải giải một puzzle toán học cực khó (Proof-of-Work)
-- Người đầu tiên giải được puzzle:
-  - Được viết trang mới
-  - Nhận reward (6.25 BTC hiện tại + fees)
-  - Everyone else verifies và accepts
-
-**Transactions (Chuyển tiền)**:
+**Luồng một giao dịch**:
 ```
 Alice muốn gửi 1 BTC cho Bob:
 
@@ -131,18 +100,14 @@ Alice muốn gửi 1 BTC cho Bob:
    - Bob có thể spend 1 BTC
 ```
 
-**Security Through Work**:
-- Để thay đổi history (cheat), attacker phải:
-  1. Rewrite block chứa transaction đó
-  2. Rewrite ALL blocks after đó (vì chúng linked)
-  3. Làm faster than toàn bộ honest network combined
-- Với hàng nghìn miners, virtually impossible!
+**Bảo mật dựa trên công sức tính toán**:
+Để gian lận sửa đổi lịch sử, kẻ tấn công phải viết lại block chứa giao dịch mục tiêu, viết lại toàn bộ các block đứng sau do chúng liên kết bằng hàm băm, và làm việc đó nhanh hơn tổng sức mạnh tính toán của toàn bộ mạng lưới trung thực. Với quy mô hàng nghìn thợ đào toàn cầu, kịch bản này gần như bất khả thi.
 
-### 2.3. UTXO Model - "Digital Cash Chips"
+### 2.3. Mô hình UTXO — "Các đồng phỉnh tiền mặt số"
 
-Bitcoin không dùng "account balances" như bank. Thay vào đó, dùng **UTXO (Unspent Transaction Output)** model - giống như cash chips:
+Bitcoin không lưu số dư theo kiểu "tài khoản ngân hàng" mà sử dụng mô hình **UTXO (Unspent Transaction Output — Đầu ra giao dịch chưa chi tiêu)**, tương tự việc sử dụng các tờ tiền mặt hoặc đồng phỉnh:
 
-**Bank Account Model** (NOT Bitcoin):
+**Mô hình tài khoản ngân hàng (KHÔNG phải Bitcoin)**:
 ```
 Alice's account: $100
 Transfer $30 to Bob
@@ -150,7 +115,7 @@ Alice's account: $70
 Bob's account: $30
 ```
 
-**UTXO Model** (Bitcoin):
+**Mô hình UTXO (Bitcoin)**:
 ```
 Alice có: [50 BTC chip] [30 BTC chip] [20 BTC chip]
 Total: 100 BTC
@@ -170,46 +135,37 @@ Alice có: [20 BTC] [19.99 BTC] = 39.99 BTC
 Bob có: [60 BTC] = 60 BTC
 ```
 
-**Advantages**:
-- Better privacy (không có single "account")
-- Parallel processing (different UTXOs processed independently)
-- Simpler to verify (each UTXO spent exactly once)
+**Ưu điểm của mô hình UTXO**:
+- Cải thiện quyền riêng tư do không gom toàn bộ tiền vào một tài khoản cố định duy nhất.
+- Dễ xử lý song song vì các UTXO độc lập nhau.
+- Xác minh đơn giản: mỗi UTXO chỉ có thể được tiêu đúng một lần.
 
 ---
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. Bitcoin Network Architecture
+### 3.1. Kiến trúc mạng Bitcoin
 
-Bitcoin là một **peer-to-peer network** với multiple types of nodes:
+Bitcoin vận hành trên một **mạng ngang hàng (P2P)** gồm nhiều loại nút có vai trò khác nhau:
 
-**Node Types**:
+1. **Nút đầy đủ (Full Nodes)** (~10.000–15.000 nút hoạt động):
+   - Lưu trữ toàn bộ lịch sử blockchain (~500 GB).
+   - Xác thực độc lập mọi giao dịch và block.
+   - Chuyển tiếp giao dịch và block cho các nút lân cận.
+   - Thực thi đầy đủ các quy tắc đồng thuận.
 
-1. **Full Nodes** (~10,000-15,000 active):
-   - Store complete blockchain (~500 GB)
-   - Validate all transactions và blocks
-   - Relay transactions và blocks
-   - Enforce consensus rules
-   - Can independently verify entire history
+2. **Nút đào (Mining Nodes)** (tập con của full nodes):
+   - Có đầy đủ chức năng của full node, đồng thời giải bài toán Proof-of-Work để tạo block mới và nhận phần thưởng khối.
 
-2. **Mining Nodes** (subset of full nodes):
-   - Full node capabilities +
-   - Solve Proof-of-Work puzzle
-   - Create new blocks
-   - Receive block rewards
+3. **Nút nhẹ (Light Nodes / SPV — Simplified Payment Verification)**:
+   - Chỉ lưu phần đầu khối (block headers, ~100 MB).
+   - Không tự xác thực toàn bộ sổ cái mà dựa vào các full node và bằng chứng Merkle.
+   - Phù hợp cho ví trên thiết bị di động.
 
-3. **Light Nodes (SPV - Simplified Payment Verification)**:
-   - Store only block headers (~100 MB)
-   - Cannot fully validate transactions
-   - Trust full nodes for validation
-   - Good for mobile wallets
+4. **Nút lưu trữ toàn phần (Archive Nodes)**:
+   - Lưu đầy đủ dữ liệu như full node kèm chỉ mục và lịch sử trạng thái chi tiết (dung lượng ~1 TB trở lên), thường dùng cho các trình khám phá blockchain (explorers).
 
-4. **Archive Nodes**:
-   - Full nodes + complete UTXO set history
-   - Required for blockchain explorers
-   - ~1 TB+ storage
-
-**Network Communication**:
+**Giao tiếp mạng (Gossip Protocol)**:
 
 ```
          Internet
@@ -227,15 +183,9 @@ Bitcoin là một **peer-to-peer network** với multiple types of nodes:
  Node D          Node E
 ```
 
-**Gossip Protocol**:
-- Mỗi node connect với 8-125 peers
-- New transactions broadcast đến all peers
-- Peers forward đến their peers
-- Exponential propagation (~7 seconds to reach 95% network)
+Mỗi nút thường kết nối với 8–125 nút ngang hàng (peers). Khi một giao dịch hoặc block mới xuất hiện, nó được lan truyền theo cơ chế tin đồn (gossip protocol) với tốc độ hàm mũ (khoảng 7 giây để tiếp cận 95% mạng lưới).
 
-### 3.2. Bitcoin Transaction Structure
-
-**Transaction Components**:
+### 3.2. Cấu trúc giao dịch Bitcoin
 
 ```
 Transaction
@@ -253,7 +203,7 @@ Transaction
 └── Locktime (4 bytes)
 ```
 
-**Example Transaction**:
+**Ví dụ một giao dịch ở định dạng JSON**:
 
 ```json
 {
@@ -286,19 +236,13 @@ Transaction
 }
 ```
 
-### 3.3. Bitcoin Script Language
+### 3.3. Ngôn ngữ Bitcoin Script
 
-Bitcoin sử dụng **Script** - một stack-based, non-Turing-complete programming language để define spending conditions.
+Bitcoin sử dụng **Script** — một ngôn ngữ lập trình dựa trên ngăn xếp (stack-based) và **không đầy đủ Turing (non-Turing-complete)** để quy định điều kiện chi tiêu của từng UTXO. Việc cố ý không hỗ trợ đầy đủ Turing giúp ngăn chặn vòng lặp vô hạn, đảm bảo chương trình luôn kết thúc và dễ ước lượng tài nguyên xác thực.
 
-**Why Non-Turing-Complete?**
-- Prevents infinite loops
-- Guarantees termination
-- Makes resource estimation possible
+**Các loại Script phổ biến**:
 
-**Common Script Types**:
-
-**1. Pay-to-Public-Key-Hash (P2PKH)** - Standard transaction:
-
+**1. Pay-to-Public-Key-Hash (P2PKH)** — Giao dịch chuẩn truyền thống:
 ```
 ScriptPubKey (Locking Script):
 OP_DUP OP_HASH160 <PubKeyHash> OP_EQUALVERIFY OP_CHECKSIG
@@ -310,7 +254,7 @@ Combined execution:
 <Signature> <PubKey> OP_DUP OP_HASH160 <PubKeyHash> OP_EQUALVERIFY OP_CHECKSIG
 ```
 
-**Execution Steps**:
+**Các bước thực thi trên ngăn xếp**:
 ```
 Stack:                  Operation:
 []                      <Signature> pushed
@@ -323,23 +267,19 @@ Stack:                  Operation:
 [1]                     Success!
 ```
 
-**2. Pay-to-Script-Hash (P2SH)** - Multi-signature:
-
+**2. Pay-to-Script-Hash (P2SH)** — Thường dùng cho đa chữ ký:
 ```
 ScriptPubKey: OP_HASH160 <RedeemScriptHash> OP_EQUAL
 ScriptSig: <Sig1> <Sig2> ... <RedeemScript>
 ```
 
-**3. Pay-to-Witness-Public-Key-Hash (P2WPKH)** - SegWit:
-
+**3. Pay-to-Witness-Public-Key-Hash (P2WPKH)** — Chuẩn SegWit:
 ```
 ScriptPubKey: OP_0 <PubKeyHash>
 Witness: <Signature> <PubKey>
 ```
 
-### 3.4. Block Structure
-
-**Block Components**:
+### 3.4. Cấu trúc Block
 
 ```
 Block
@@ -355,8 +295,7 @@ Block
     └── Transactions (variable)
 ```
 
-**Block Header Breakdown**:
-
+**Chi tiết các trường trong Block Header**:
 ```
 Version:           00000020 (hex) = 32 (decimal)
 Previous Hash:     000000000000000000041fe...
@@ -366,7 +305,7 @@ Bits (Difficulty): 171007ea
 Nonce:             282c7f00 (hex) = 673668864 (decimal)
 ```
 
-**Genesis Block** (Block 0):
+**Khối nguyên thủy (Genesis Block — Block 0)**:
 ```
 {
   "hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
@@ -377,12 +316,11 @@ Nonce:             282c7f00 (hex) = 673668864 (decimal)
 }
 ```
 
-### 3.5. UTXO Set
+### 3.5. Tập UTXO (UTXO Set)
 
-**Global State**:
-Bitcoin's state = set của tất cả unspent transaction outputs (UTXOs)
+Trạng thái toàn cục của Bitcoin chính là tập hợp tất cả các đầu ra giao dịch chưa được chi tiêu (UTXO set).
 
-**UTXO Entry**:
+**Cấu trúc một mục UTXO**:
 ```
 UTXO = {
   txid: transaction ID,
@@ -393,25 +331,19 @@ UTXO = {
 }
 ```
 
-**UTXO Set Statistics** (2024):
-- Total UTXOs: ~80-100 million
-- Total size: ~5-6 GB
-- Total value: ~19.5 million BTC
+**Thống kê tham khảo (năm 2024)**:
+- Tổng số UTXO: ~80–100 triệu.
+- Dung lượng tập UTXO: ~5–6 GB.
+- Tổng giá trị: ~19,5 triệu BTC.
 
-**Performance**:
-- Full nodes maintain UTXO set in memory (fast lookups)
-- Validating transaction = checking inputs exist in UTXO set
-- Adding block:
-  - Remove spent UTXOs (inputs)
-  - Add new UTXOs (outputs)
+**Hiệu năng xử lý**:
+Các nút đầy đủ thường lưu tập UTXO trong bộ nhớ đệm để tra cứu nhanh. Khi xác thực giao dịch, nút kiểm tra các đầu vào có tồn tại trong tập UTXO hay không; khi bổ sung một block mới, nút xóa các UTXO đã tiêu và thêm các UTXO mới tạo ra.
 
 ---
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. Bitcoin Address Generation
-
-**Full Process**:
+### 4.1. Quy trình sinh địa chỉ Bitcoin
 
 \[
 \begin{align}
@@ -429,7 +361,7 @@ UTXO = {
 \end{align}
 \]
 
-**Example**:
+**Ví dụ minh họa**:
 ```
 Private Key (hex):
   18e14a7b6a307f426a94f8114701e7c8e774e7f9a47e2c2035db29a206321725
@@ -445,28 +377,26 @@ Address (Base58Check):
   16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM
 ```
 
-### 4.2. Difficulty Adjustment
+### 4.2. Điều chỉnh độ khó (Difficulty Adjustment)
 
-Bitcoin adjusts mining difficulty mỗi 2016 blocks (~2 weeks) để maintain 10-minute block time.
-
-**Formula**:
+Bitcoin tự động điều chỉnh độ khó đào sau mỗi 2.016 block (khoảng 2 tuần) để giữ thời gian tạo block trung bình ở mức 10 phút:
 
 \[
 \text{New Difficulty} = \text{Old Difficulty} \times \frac{\text{2 weeks}}{\text{Actual Time}}
 \]
 
-More precisely:
+Chính xác hơn theo ngưỡng mục tiêu (target):
 
 \[
 \text{New Target} = \text{Old Target} \times \frac{\text{Actual Time (2016 blocks)}}{\text{Expected Time (20160 minutes)}}
 \]
 
-**Constraints**:
-- Maximum adjustment: 4x per period (up or down)
-- Minimum difficulty: 1 (genesis block)
-- Maximum target: 0x00000000FFFF0000000000000000000000000000000000000000000000000000
+**Các ràng buộc**:
+- Biên độ điều chỉnh tối đa trong một kỳ: không quá 4 lần (tăng tối đa 4x hoặc giảm xuống tối thiểu 1/4).
+- Độ khó tối thiểu: 1 (ở khối nguyên thủy).
+- Ngưỡng mục tiêu tối đa: `0x00000000FFFF0000000000000000000000000000000000000000000000000000`.
 
-**Example Calculation**:
+**Ví dụ tính toán**:
 ```
 Old Difficulty: 20,000,000,000,000
 2016 blocks took: 14 days = 20,160 minutes (exactly on target!)
@@ -477,34 +407,34 @@ If blocks came faster (12 days):
 New Difficulty = 20,000,000,000,000 × (20,160 / 17,280) = 23,333,333,333,333 (harder)
 ```
 
-### 4.3. Block Reward và Supply
+### 4.3. Phần thưởng khối và Tổng cung
 
-**Block Subsidy** (coinbase reward):
+**Trợ cấp khối (Block Subsidy)**:
 
 \[
 \text{Subsidy}(h) = \frac{50 \text{ BTC}}{2^{\lfloor h / 210000 \rfloor}}
 \]
 
-Where \( h \) = block height
+trong đó \( h \) là chiều cao khối (block height).
 
-**Halving Schedule**:
+**Lịch trình giảm một nửa (Halving Schedule)**:
 ```
 Blocks 0 - 209,999:        50 BTC per block
 Blocks 210,000 - 419,999:  25 BTC per block
 Blocks 420,000 - 629,999:  12.5 BTC per block
-Blocks 630,000 - 839,999:  6.25 BTC per block (current, 2024)
-Blocks 840,000 - 1,049,999: 3.125 BTC per block (next halving ~2024)
+Blocks 630,000 - 839,999:  6.25 BTC per block (2020–2024)
+Blocks 840,000 - 1,049,999: 3.125 BTC per block (từ halving 2024)
 ...
 After 64 halvings: 0 BTC (around year 2140)
 ```
 
-**Total Supply**:
+**Tổng cung tối đa**:
 
 \[
 \text{Total BTC} = \sum_{i=0}^{63} 210000 \times \frac{50}{2^i} = 21,000,000 \text{ BTC}
 \]
 
-**Derivation**:
+**Diễn giải bằng cấp số nhân**:
 \[
 \begin{align}
 S &= 210000 \times 50 \times \left(1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \cdots \right) \\
@@ -514,48 +444,37 @@ S &= 210000 \times 50 \times \left(1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} +
 \end{align}
 \]
 
-**Actual Supply** (slightly less):
-- Due to lost coins
-- Mining bugs (some miners didn't claim full reward)
-- Estimated circulating: ~19.5 million BTC (2024)
+Nguồn cung lưu hành thực tế thấp hơn một chút so với lý thuyết do coin bị thất lạc khóa và một số lỗi lịch sử khi thợ đào không nhận đủ trợ cấp khối (tính đến năm 2024 có khoảng 19,5 triệu BTC đã được đào).
 
-### 4.4. Transaction Fees
+### 4.4. Phí giao dịch
 
-**Fee Calculation**:
-
+**Công thức tính phí**:
 \[
 \text{Fee} = \sum \text{Inputs} - \sum \text{Outputs}
 \]
 
-**Fee Rate**:
-
+**Mức phí theo kích thước (Fee Rate)**:
 \[
 \text{Fee Rate} = \frac{\text{Fee}}{\text{Transaction Size (bytes)}} \quad (\text{sat/vByte})
 \]
 
-**SegWit Virtual Size**:
-
+**Kích thước ảo trong SegWit (Virtual Size)**:
 \[
 \text{vSize} = \frac{\text{Base Size} \times 3 + \text{Total Size}}{4}
 \]
 
-**Economic Model**:
-- Users bid fees để get prioritized
-- Miners select highest fee/byte transactions
-- Fee market emerges naturally
-- High congestion → high fees
-
-**Historical Fees**:
-- 2010-2016: ~0.0001 BTC (~$0.01)
-- 2017 peak: ~$50 per transaction
-- 2021 peak: ~$60 per transaction
-- 2024 average: ~$1-5 per transaction
+**Cơ chế thị trường phí**:
+Người dùng tự đặt mức phí để cạnh tranh độ ưu tiên; thợ đào ưu tiên chọn các giao dịch có tỷ lệ `sat/vByte` cao nhất. Khi mạng tắc nghẽn, mức phí tăng mạnh theo cơ chế đấu giá tự nhiên:
+- Giai đoạn 2010–2016: ~0,0001 BTC (~0,01 USD).
+- Đỉnh năm 2017: ~50 USD mỗi giao dịch.
+- Đỉnh năm 2021: ~60 USD mỗi giao dịch.
+- Trung bình năm 2024: ~1–5 USD mỗi giao dịch.
 
 ---
 
-## 5. Implementation Insight
+## 5. Minh họa triển khai
 
-### 5.1. Simple Bitcoin Transaction (Python)
+### 5.1. Tạo và ký giao dịch Bitcoin đơn giản (Python)
 
 ```python
 import hashlib
@@ -758,7 +677,7 @@ if __name__ == "__main__":
     print(f"Fee rate: {100000 / len(raw_tx):.2f} sat/byte")
 ```
 
-### 5.2. UTXO Set Management
+### 5.2. Quản lý tập UTXO
 
 ```python
 from typing import Dict, Set, Tuple
@@ -880,77 +799,47 @@ if __name__ == "__main__":
 
 ---
 
-*[Tiếp tục với phần 6-10 trong response tiếp theo do giới hạn độ dài]*
-
 ## 6. Các thách thức và đánh đổi thường gặp
 
-### 6.1. Scalability - The Biggest Challenge
+### 6.1. Khả năng mở rộng (Scalability)
 
-**Problem**: Bitcoin có thể process ~7 transactions/second (TPS)
+Thông lượng trên chuỗi chính của Bitcoin chỉ đạt khoảng 7 giao dịch/giây (TPS), thấp hơn nhiều so với các hệ thống thanh toán tập trung:
+- Visa: ~24.000 TPS.
+- Mastercard: ~5.000 TPS.
+- PayPal: ~193 TPS.
+- Ethereum: ~15 TPS.
+- Bitcoin: ~7 TPS.
 
-**Comparison**:
-- Visa: ~24,000 TPS
-- Mastercard: ~5,000 TPS  
-- PayPal: ~193 TPS
-- Bitcoin: ~7 TPS
-- Ethereum: ~15 TPS
+**Nguyên nhân giới hạn**:
+1. Giới hạn kích thước khối: 1 MB (truyền thống), tối đa ~4 MB trọng số (từ SegWit).
+2. Thời gian tạo khối trung bình: 10 phút.
+3. Chi phí lan truyền và xác thực đồng loạt trên toàn mạng.
 
-**Why So Slow?**
-1. **Block size limit**: 1 MB (legacy), ~4 MB (SegWit)
-2. **Block time**: 10 minutes average
-3. **Broadcast overhead**: All nodes must receive và validate
-
-**Calculation**:
+**Ước tính thông lượng**:
 \[
 \text{TPS} = \frac{\text{Block Size}}{\text{Avg TX Size} \times \text{Block Time}} = \frac{1 \text{ MB}}{250 \text{ bytes} \times 600 \text{ sec}} \approx 7 \text{ TPS}
 \]
 
-**Scaling Debates**:
-- **Big blocks**: Increase block size (Bitcoin Cash approach)
-  - Pro: More transactions per block
-  - Con: Centralization (fewer can run full nodes)
-  
-- **Layer 2**: Off-chain solutions (Lightning Network)
-  - Pro: Thousands of TPS, instant, low fees
-  - Con: Complexity, need to lock funds
+**Các hướng tiếp cận mở rộng**:
+- **Tăng kích thước khối (Big blocks — như Bitcoin Cash)**: Xử lý nhiều giao dịch hơn mỗi block nhưng làm tăng chi phí vận hành full node, dễ dẫn đến tập trung hóa.
+- **Mở rộng tầng 2 (Layer 2 — như Lightning Network)**: Đạt hàng nghìn TPS với phí thấp và xác nhận gần như tức thời, nhưng phức tạp hơn và yêu cầu khóa thanh khoản trong kênh.
+- **SegWit**: Tách dữ liệu chữ ký giúp tăng dung lượng hiệu dụng của block và khắc phục tính khả biến giao dịch.
 
-- **SegWit**: Separate signature data
-  - Pro: Effective block size increase, fix malleability
-  - Con: Not all wallets support
+### 6.2. Tiêu thụ năng lượng
 
-### 6.2. Energy Consumption
+**Số liệu tham khảo (2024)**:
+- Tổng điện năng tiêu thụ của mạng Bitcoin: ~150 TWh/năm (tương đương mức tiêu thụ điện của Argentina).
+- Ước tính bình quân mỗi giao dịch trên chuỗi: ~700 kWh.
+- Phát thải carbon ước tính: ~65 triệu tấn CO₂/năm.
 
-**Current Statistics** (2024):
-- Bitcoin network: ~150 TWh/year
-- Comparable to: Argentina's total energy consumption
-- Per transaction: ~700 kWh
-- Carbon footprint: ~65 Mt CO2/year
+**Quan điểm ủng hộ**: Bảo vệ mạng lưới giá trị trên 500 tỷ USD, tận dụng nguồn điện dư thừa hoặc năng lượng tái tạo giá rẻ (tỷ trọng năng lượng tái tạo ước tính đạt trên 50%) và có mức tiêu thụ có thể so sánh với hạ tầng ngân hàng truyền thống.
 
-**Arguments Pro**:
-- Secures $500B+ network
-- Incentivizes renewable energy (miners seek cheap power)
-- Much energy from stranded/wasted sources
-- Banking system uses more energy overall
+**Quan điểm phản đối**: Gây tác động môi trường, phát sinh rác thải điện tử từ máy đào ASIC lỗi thời và có thể thay thế bằng các cơ chế tiêu thụ ít điện hơn như PoS.
 
-**Arguments Con**:
-- Environmental impact
-- E-waste from obsolete ASICs
-- Could use more efficient consensus (PoS)
+### 6.3. Hạn chế về quyền riêng tư
 
-**Future**:
-- Shift to renewable energy (already ~50%+)
-- More efficient mining hardware
-- Layer 2 solutions reduce on-chain transactions
+Tính giả danh không đồng nghĩa với ẩn danh: toàn bộ giao dịch đều công khai. Các kỹ thuật gom cụm địa chỉ (address clustering), công ty phân tích dữ liệu chuỗi (Chainalysis, Elliptic) và dữ liệu định danh (KYC) tại sàn giao dịch cho phép truy vết dòng tiền liên kết về danh tính thực.
 
-### 6.3. Privacy Limitations
-
-**Pseudonymity ≠ Anonymity**:
-- All transactions public
-- Address clustering: Link multiple addresses to same entity
-- Chain analysis firms (Chainalysis, Elliptic)
-- Exchange KYC links addresses to real identities
-
-**Example Attack**:
 ```
 Alice withdraws from exchange (KYC'd address known)
   → Address A (identity linked)
@@ -961,66 +850,41 @@ Alice withdraws from exchange (KYC'd address known)
 Chain analysis can trace entire flow!
 ```
 
-**Privacy Improvements**:
-- **CoinJoin**: Multiple users combine transactions
-- **Lightning Network**: Off-chain, more private
-- **Taproot**: Makes different transaction types look similar
+**Các giải pháp tăng cường quyền riêng tư**:
+- **CoinJoin**: Nhiều người dùng gộp chung giao dịch để làm mờ liên kết đầu vào — đầu ra.
+- **Lightning Network**: Giao dịch ngoài chuỗi, hạn chế lộ lịch sử chi tiết trên chuỗi chính.
+- **Taproot**: Làm cho các loại giao dịch phức tạp trông tương đồng với giao dịch đơn giản.
 
-### 6.4. 51% Attack Resistance
+### 6.4. Khả năng chống tấn công 51%
 
-**Attack Cost** (2024):
-- Total network hash rate: ~600 EH/s
-- Cost to acquire 51%: ~$10-20 billion in hardware
-- Operating cost: ~$1 million/hour in electricity
+**Chi phí tấn công ước tính (2024)**:
+- Tổng sức mạnh băm toàn mạng: ~600 EH/s.
+- Chi phí đầu tư phần cứng chiếm 51%: ~10–20 tỷ USD.
+- Chi phí điện năng vận hành: ~1 triệu USD/giờ.
 
-**Why Attack Is Irrational**:
-1. Huge upfront cost
-2. Attack would crash BTC price → attacker loses money
-3. Can only double-spend own transactions (can't steal others' BTC)
-4. Community would hard fork away → hardware becomes worthless
+**Vì sao tấn công 51% thiếu hợp lý về mặt kinh tế**:
+1. Chi phí đầu tư ban đầu cực lớn.
+2. Cuộc tấn công làm sụp đổ niềm tin và giá BTC, khiến chính kẻ tấn công chịu thiệt hại nặng.
+3. Kẻ tấn công chỉ có thể chi tiêu gấp đôi giao dịch của chính mình, không thể giả chữ ký để lấy coin của người khác.
+4. Cộng đồng có thể phản ứng bằng hard fork đổi thuật toán, biến toàn bộ phần cứng ASIC của kẻ tấn công thành vô giá trị.
 
-**Historical Near-Misses**:
-- 2014: GHash.io mining pool briefly exceeded 50%
-- Community pressure → pool voluntarily reduced share
-- Now: Top 4 pools ~55%, but pools ≠ pool members
+*Ghi nhận lịch sử*: Năm 2014, pool GHash.io từng có thời điểm vượt ngưỡng 50% sức mạnh băm nhưng đã tự nguyện giảm thị phần dưới sức ép cộng đồng. Hiện 4 pool lớn nhất chiếm khoảng 55% hash rate, nhưng mỗi pool tập hợp từ nhiều thợ đào độc lập có thể chuyển đổi pool nhanh chóng.
 
-### 6.5. Lost Coins
+### 6.5. Bitcoin bị thất lạc
 
-**Estimated Lost**: 3-4 million BTC (~20% of supply)
+Ước tính khoảng 3–4 triệu BTC (~20% tổng cung) đã bị mất vĩnh viễn do thất lạc khóa bí mật, quên mật khẩu, chủ sở hữu qua đời không để lại bản sao lưu, gửi nhầm địa chỉ hoặc đốt coin có chủ ý (proof-of-burn).
 
-**Reasons**:
-- Lost private keys
-- Forgotten passwords
-- Dead owners without backup
-- Sending to wrong address (no undo!)
-- Intentional burning (proof-of-burn)
-
-**Famous Cases**:
-- **James Howells**: 7,500 BTC on hard drive in landfill (~$300M at peak)
-- **Stefan Thomas**: 7,002 BTC, forgot password, 2 guesses remaining
-- **Satoshi's coins**: ~1 million BTC, never moved
-
-**Economic Impact**:
-- Reduces effective supply
-- Increases scarcity
-- Deflation over time
+Một số trường hợp nổi tiếng gồm James Howells (7.500 BTC trong ổ cứng bị vứt ra bãi rác), Stefan Thomas (7.002 BTC bị khóa trong ổ cứng mã hóa chỉ còn 2 lần thử mật khẩu) và khoảng 1 triệu BTC gắn với các khối đầu tiên của Satoshi chưa từng di chuyển. Về mặt kinh tế, lượng coin mất vĩnh viễn làm giảm nguồn cung lưu hành thực tế và gia tăng độ khan hiếm.
 
 ---
 
 ## 7. Các khái niệm liên quan
 
-### 7.1. Bitcoin Forks
+### 7.1. Phân nhánh giao thức (Bitcoin Forks)
 
-**Soft Fork**: Backward-compatible protocol change
-- Old nodes accept blocks từ new nodes
-- Examples: SegWit, Taproot
+- **Soft Fork**: Thay đổi tương thích ngược; các nút chạy phiên bản cũ vẫn chấp nhận block do nút mới tạo ra (ví dụ: SegWit, Taproot).
+- **Hard Fork**: Thay đổi không tương thích ngược, đòi hỏi toàn bộ nút nâng cấp; nếu không đạt đồng thuận sẽ tách thành hai chuỗi riêng biệt (ví dụ: Bitcoin Cash, Bitcoin SV).
 
-**Hard Fork**: Non-backward-compatible change
-- Requires all nodes upgrade
-- Can split blockchain
-- Examples: Bitcoin Cash, Bitcoin SV
-
-**Major Forks**:
 ```
 Bitcoin (BTC)
     ├── Bitcoin Cash (BCH) - 2017, 8MB blocks
@@ -1029,11 +893,10 @@ Bitcoin (BTC)
     └── Bitcoin Diamond (BCD) - 2017, 8MB blocks
 ```
 
-### 7.2. Lightning Network (Layer 2)
+### 7.2. Mạng Lightning (Lightning Network — Layer 2)
 
-**Concept**: Off-chain payment channels
+Mạng Lightning xây dựng các **kênh thanh toán ngoài chuỗi (off-chain payment channels)**:
 
-**How It Works**:
 ```
 1. Alice và Bob open channel:
    - Both deposit funds in 2-of-2 multisig on-chain
@@ -1048,150 +911,110 @@ Bitcoin (BTC)
    - Both receive their final balances
 ```
 
-**Routing**:
-- Multi-hop payments through network
-- Alice → Bob → Charlie → David
-- Onion routing for privacy
+Nhờ cơ chế định tuyến nhiều chặng (multi-hop routing) kết hợp định tuyến củ hành (onion routing), người dùng có thể thanh toán xuyên mạng với tốc độ nhanh và phí rất thấp, nhưng phải đánh đổi bằng yêu cầu khóa thanh khoản, độ phức tạp kỹ thuật và đòi hỏi nút trực tuyến để theo dõi kênh.
 
-**Trade-offs**:
-- Pro: Fast, cheap, scalable
-- Con: Need to lock funds, complexity, must be online
+### 7.3. Nâng cấp Taproot (2021)
 
-### 7.3. Taproot Upgrade (2021)
+Taproot mang lại ba cải tiến chính:
+1. **Chữ ký Schnorr**: Bổ sung lựa chọn gọn nhẹ hơn ECDSA, hỗ trợ xác minh theo lô và gộp khóa.
+2. **MAST (Merklized Abstract Syntax Trees)**: Cho phép viết điều kiện chi tiêu phức tạp nhưng chỉ công bố nhánh thực sự được thực thi.
+3. **Cải thiện quyền riêng tư**: Giao dịch đa chữ ký và hợp đồng phức tạp khi chi tiêu hợp tác trông giống hệt giao dịch thông thường.
 
-**Improvements**:
-1. **Schnorr Signatures**: Replace ECDSA
-   - Smaller signatures
-   - Batch verification
-   - Key aggregation
+### 7.4. Colored Coins và Token trên Bitcoin
 
-2. **MAST** (Merklized Abstract Syntax Trees):
-   - Complex smart contracts
-   - Only reveal executed path
-   - Better privacy
+Một số giao thức cho phép biểu diễn tài sản khác trên mạng Bitcoin thông qua `OP_RETURN` (nhúng tối đa 80 byte dữ liệu), **RGB Protocol** (xác thực phía máy khách) hoặc **Taro** (tài sản dựa trên Taproot), phục vụ các bài toán như stablecoin, NFT, chứng khoán số và điểm thưởng.
 
-3. **Better Privacy**:
-   - Multi-sig looks like single-sig
-   - Complex scripts look like simple payments
+### 7.5. Các đề xuất cải tiến Bitcoin (BIPs)
 
-### 7.4. Colored Coins & Tokens
-
-**Concept**: Represent other assets on Bitcoin blockchain
-
-**Methods**:
-- **OP_RETURN**: Embed data in transactions (80 bytes)
-- **RGB Protocol**: Client-side validation
-- **Taro**: Taproot-based assets
-
-**Use Cases**:
-- Stablecoins
-- NFTs
-- Securities
-- Loyalty points
-
-### 7.5. BIPs (Bitcoin Improvement Proposals)
-
-**Important BIPs**:
-- **BIP 32**: HD Wallets (Hierarchical Deterministic)
-- **BIP 39**: Mnemonic seed phrases (12/24 words)
-- **BIP 44**: Multi-account HD wallet structure
-- **BIP 141**: SegWit
-- **BIP 340-342**: Taproot
+Một số BIP nền tảng:
+- **BIP 32**: Ví phân cấp tất định (HD Wallets).
+- **BIP 39**: Cụm từ ghi nhớ khôi phục ví (12/24 từ).
+- **BIP 44**: Cấu trúc đa tài khoản cho ví HD.
+- **BIP 141**: SegWit.
+- **BIP 340–342**: Taproot.
 
 ---
 
 ## 8. ⭐ Các bài báo và whitepaper nền tảng
 
-| Paper | Year | Author(s) | Contribution |
+| Bài báo | Năm | Tác giả | Đóng góp chính |
 |-------|------|-----------|--------------|
-| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Original whitepaper - foundation of Bitcoin |
-| **"Hashcash - A Denial of Service Counter-Measure"** | 2002 | Adam Back | Proof-of-work precursor |
-| **"B-Money"** | 1998 | Wei Dai | Conceptual cryptocurrency design |
-| **"Bit Gold"** | 2005 | Nick Szabo | Precursor to Bitcoin |
-| **"Enabling Blockchain Innovations with Pegged Sidechains"** | 2014 | Back et al. | Sidechain concept |
-| **"The Bitcoin Backbone Protocol"** | 2015 | Garay, Kiayias, Leonardos | Formal security analysis |
-| **"Analysis of the Blockchain Protocol in Asynchronous Networks"** | 2016 | Pass, Seeman, Shelat | Asynchronous security |
-| **"The Bitcoin Lightning Network"** | 2016 | Poon, Dryja | Layer 2 scaling |
-| **"Segregated Witness (BIP 141)"** | 2015 | Wuille et al. | SegWit specification |
-| **"Schnorr Signatures for secp256k1 (BIP 340)"** | 2020 | Wuille, Nick, Ruffing | Taproot foundation |
+| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Whitepaper gốc đặt nền móng cho Bitcoin |
+| **"Hashcash - A Denial of Service Counter-Measure"** | 2002 | Adam Back | Cơ chế Proof-of-Work tiền thân |
+| **"B-Money"** | 1998 | Wei Dai | Thiết kế khái niệm tiền mã hóa phân tán |
+| **"Bit Gold"** | 2005 | Nick Szabo | Ý tưởng tiền thân của Bitcoin |
+| **"Enabling Blockchain Innovations with Pegged Sidechains"** | 2014 | Back et al. | Khái niệm chuỗi song song neo giá trị (sidechain) |
+| **"The Bitcoin Backbone Protocol"** | 2015 | Garay, Kiayias, Leonardos | Phân tích bảo mật hình thức cho giao thức Bitcoin |
+| **"Analysis of the Blockchain Protocol in Asynchronous Networks"** | 2016 | Pass, Seeman, Shelat | Phân tích an toàn trong mạng bất đồng bộ |
+| **"The Bitcoin Lightning Network"** | 2016 | Poon, Dryja | Giải pháp mở rộng Layer 2 cho Bitcoin |
+| **"Segregated Witness (BIP 141)"** | 2015 | Wuille et al. | Đặc tả kỹ thuật của SegWit |
+| **"Schnorr Signatures for secp256k1 (BIP 340)"** | 2020 | Wuille, Nick, Ruffing | Nền tảng chữ ký Schnorr cho nâng cấp Taproot |
 
-**Essential Reading Order**:
-1. Bitcoin whitepaper (must-read, 9 pages)
-2. Hashcash paper (understand PoW origins)
-3. Bitcoin Backbone Protocol (formal security)
-4. Lightning Network paper (understand Layer 2)
-5. BIP 141, 340-342 (modern improvements)
+**Thứ tự đọc gợi ý**:
+1. Whitepaper Bitcoin (9 trang, tài liệu nền tảng).
+2. Bài báo Hashcash (hiểu nguồn gốc PoW).
+3. *The Bitcoin Backbone Protocol* (chứng minh bảo mật hình thức).
+4. Whitepaper Lightning Network (hiểu mở rộng Layer 2).
+5. BIP 141 và BIP 340–342 (các nâng cấp quan trọng của Bitcoin hiện đại).
 
 ---
 
 ## 9. 🎨 Minh họa và tham khảo hình ảnh
 
-| Description | Source | Notes |
+| Mô tả | Nguồn | Ghi chú |
 |-------------|--------|-------|
-| **Bitcoin transaction flow** | [Bitcoin.org Developer Guide](https://bitcoin.org/en/developer-guide) | Official documentation |
-| **Block structure diagram** | [Mastering Bitcoin Ch9](https://github.com/bitcoinbook/bitcoinbook) | Andreas Antonopoulos's book |
-| **UTXO model visualization** | [Bitcoin Stack Exchange](https://bitcoin.stackexchange.com/questions/49853) | Community explanations |
-| **Mining process** | [Anders Brownworth Demo](https://andersbrownworth.com/blockchain/blockchain) | Interactive visualization |
-| **Network topology** | [Bitnodes](https://bitnodes.io/) | Live network map |
-| **Mempool visualization** | [Mempool.space](https://mempool.space/) | Real-time mempool |
-| **Blockchain explorer** | [Blockchain.com](https://www.blockchain.com/explorer) | Explore transactions |
-| **Lightning Network** | [1ML.com](https://1ml.com/) | LN network stats |
+| **Luồng giao dịch Bitcoin** | [Bitcoin.org Developer Guide](https://bitcoin.org/en/developer-guide) | Tài liệu kỹ thuật chính thức |
+| **Sơ đồ cấu trúc block** | [Mastering Bitcoin Ch9](https://github.com/bitcoinbook/bitcoinbook) | Sách của Andreas Antonopoulos |
+| **Minh họa mô hình UTXO** | [Bitcoin Stack Exchange](https://bitcoin.stackexchange.com/questions/49853) | Giải thích chi tiết từ cộng đồng |
+| **Quy trình đào block** | [Anders Brownworth Demo](https://andersbrownworth.com/blockchain/blockchain) | Minh họa tương tác |
+| **Bản đồ mạng lưới nút** | [Bitnodes](https://bitnodes.io/) | Dữ liệu mạng lưới theo thời gian thực |
+| **Trực quan hóa Mempool** | [Mempool.space](https://mempool.space/) | Theo dõi hàng đợi giao dịch trực tiếp |
+| **Trình khám phá blockchain** | [Blockchain.com](https://www.blockchain.com/explorer) | Tra cứu giao dịch và block |
+| **Thống kê Lightning Network** | [1ML.com](https://1ml.com/) | Số liệu kênh và nút Lightning |
 
-**Interactive Tools**:
-- [Bitcoin Demo](https://andersbrownworth.com/blockchain/) - Best visual learning tool
-- [Bitcoin Script Simulator](https://siminchen.github.io/bitcoinIDE/build/editor.html) - Script execution
-- [Transaction Decoder](https://live.blockcypher.com/btc/decodetx/) - Decode raw transactions
+**Công cụ tương tác**:
+- [Bitcoin Demo](https://andersbrownworth.com/blockchain/) — Công cụ trực quan hóa cơ chế blockchain.
+- [Bitcoin Script Simulator](https://siminchen.github.io/bitcoinIDE/build/editor.html) — Mô phỏng thực thi Bitcoin Script.
+- [Transaction Decoder](https://live.blockcypher.com/btc/decodetx/) — Giải mã dữ liệu giao dịch thô.
 
 ---
 
 ## 10. Tóm tắt và điểm chính
 
-**Core Concepts**:
-1. Bitcoin là first successful decentralized digital currency
-2. Giải quyết double-spending không cần trusted third party
-3. Sử dụng Proof-of-Work consensus và economic incentives
-4. UTXO model thay vì account balances
+**Khái niệm cốt lõi**:
+1. Bitcoin là hệ thống tiền điện tử phi tập trung đầu tiên vận hành thành công trong thực tế.
+2. Giải quyết bài toán chi tiêu gấp đôi mà không cần bên trung gian tin cậy.
+3. Kết hợp đồng thuận Proof-of-Work với cơ chế khuyến khích kinh tế.
+4. Quản lý trạng thái theo mô hình UTXO thay vì mô hình số dư tài khoản.
 
-**Architecture Components**:
-- **P2P Network**: Gossip protocol, ~15,000 nodes
-- **Blockchain**: Append-only ledger, ~500 GB
-- **Transactions**: Digital signatures, Script language
-- **Mining**: Proof-of-Work, difficulty adjustment
-- **Consensus**: Longest chain rule, economic security
+**Các thành phần kiến trúc**:
+- **Mạng P2P**: Giao thức lan truyền gossip, khoảng 10.000–15.000 nút đầy đủ hoạt động.
+- **Blockchain**: Sổ cái chỉ ghi thêm, dung lượng khoảng 500 GB.
+- **Giao dịch**: Sử dụng chữ ký số và ngôn ngữ Script.
+- **Đào (Mining)**: Proof-of-Work với cơ chế tự điều chỉnh độ khó sau mỗi 2.016 block.
+- **Đồng thuận**: Quy tắc chuỗi dài nhất (tích lũy nhiều công sức nhất) gắn với bảo mật kinh tế.
 
-**Key Innovations**:
-- Nakamoto consensus: PoW + longest chain + incentives
-- UTXO model: Parallel transaction processing
-- Script: Programmable spending conditions
-- Difficulty adjustment: Self-regulating security
+**Hạn chế và hướng phát triển**:
+- Khả năng mở rộng (~7 TPS) đang được bổ trợ bằng Layer 2 (Lightning Network).
+- Tiêu thụ năng lượng (~150 TWh/năm) có xu hướng dịch chuyển sang năng lượng tái tạo.
+- Quyền riêng tư ở mức giả danh đang được cải thiện qua Taproot và các giao thức ngoài chuỗi.
+- Tính chung cuộc theo xác suất (thông lệ chờ 6 xác nhận cho giao dịch lớn).
 
-**Limitations**:
-- Scalability: ~7 TPS (being addressed via Layer 2)
-- Energy: ~150 TWh/year (shift to renewables)
-- Privacy: Pseudonymous not anonymous
-- Finality: Probabilistic (6 confirmations standard)
-
-**Future Developments**:
-- Lightning Network: Off-chain scaling
-- Taproot: Better privacy và smart contracts
-- Quantum resistance: Long-term consideration
-- Layer 2 innovations: Continuous improvement
-
-**Key Takeaway**: Bitcoin proved that decentralized digital money is possible through cryptography, game theory, và distributed systems - creating a new asset class và inspiring thousands of blockchain projects.
+**Điểm chốt**: Bitcoin chứng minh rằng tiền kỹ thuật số phi tập trung hoàn toàn khả thi nhờ sự kết hợp giữa mật mã học, lý thuyết trò chơi và hệ thống phân tán.
 
 ---
 
-✅ **End of Lecture 01.00**
+✅ **Kết thúc Lecture 01.00**
 
-**Next**: Lecture 01.01 - Proof-of-Work Deep Dive: Mining, Security, và Economics
+**Bài tiếp theo**: Lecture 01.01 - Proof-of-Work chuyên sâu: Đào, Bảo mật và Kinh tế học
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** ["How Bitcoin Protocol Works" - Andreas Antonopoulos](https://www.youtube.com/watch?v=yorRGbp54tM) — Bitcoin TV, tiếng Anh. Antonopoulos đi qua giao dịch, block và quy tắc xác thực; xem trước trước khi đọc cấu trúc mạng và block.
-- [Bitcoin UTXOs Explained](https://www.youtube.com/watch?v=ZX5UOPRPQhc) — Bitcoin Briefly, tiếng Anh. Giải thích UTXO như đầu ra chưa tiêu, đúng mô hình số dư mà bài đối lập với tài khoản.
-- [Andreas M. Antonopoulos: Advanced Bitcoin Scripting](https://www.youtube.com/watch?v=yU3Sr07Qnxg) — SF Bitcoin Developers, tiếng Anh. Buổi SF Bitcoin Developers về Bitcoin Script; dùng khi đọc opcode và điều kiện mở khóa trong bài.
+- **Xem trước:** ["How Bitcoin Protocol Works" - Andreas Antonopoulos](https://www.youtube.com/watch?v=yorRGbp54tM) — Bitcoin TV, tiếng Anh. Antonopoulos đi qua giao dịch, block và quy tắc xác thực; nên xem trước khi đọc cấu trúc mạng và block.
+- [Bitcoin UTXOs Explained](https://www.youtube.com/watch?v=ZX5UOPRPQhc) — Bitcoin Briefly, tiếng Anh. Giải thích UTXO như các đầu ra chưa chi tiêu, khớp với phần đối chiếu mô hình UTXO và tài khoản trong bài.
+- [Andreas M. Antonopoulos: Advanced Bitcoin Scripting](https://www.youtube.com/watch?v=yU3Sr07Qnxg) — SF Bitcoin Developers, tiếng Anh. Buổi trình bày về Bitcoin Script, phù hợp khi đọc các opcode và điều kiện mở khóa trong bài.
 
 ## References
 
@@ -1201,4 +1024,3 @@ Bitcoin (BTC)
 4. Garay, J., Kiayias, A., & Leonardos, N. (2015). *The bitcoin backbone protocol*. EUROCRYPT 2015.
 5. Poon, J., & Dryja, T. (2016). *The Bitcoin Lightning Network*. White paper.
 6. Bitcoin Developer Documentation: https://developer.bitcoin.org/
-

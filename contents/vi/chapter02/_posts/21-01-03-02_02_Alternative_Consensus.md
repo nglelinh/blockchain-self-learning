@@ -9,57 +9,57 @@ categories:
 - blockchain-chapter02
 ---
 
-# Lecture: Hybrid và Alternative Consensus Mechanisms
+# Bài giảng: Các cơ chế đồng thuận lai và thay thế
 
 ## 1. Tổng quan về khái niệm
 
-Trong các bài giảng trước, chúng ta đã học về ba major consensus families: **Proof-of-Work** (computational), **Proof-of-Stake** (economic), và **BFT** (voting-based). Nhưng blockchain evolution không dừng lại ở đó. Nhiều innovative consensus mechanisms đã emerged, combining ideas từ multiple approaches hoặc introducing completely new concepts.
+Trong các bài trước, chúng ta đã tìm hiểu ba họ đồng thuận chính: **Proof-of-Work** (dựa trên tính toán), **Proof-of-Stake** (dựa trên tài sản đặt cọc) và **BFT** (dựa trên biểu quyết). Quá trình phát triển của blockchain còn tạo ra nhiều cơ chế đồng thuận khác bằng cách kết hợp các hướng tiếp cận sẵn có hoặc đề xuất mô hình bảo mật mới.
 
-**Why Alternative Consensus?**
+**Vì sao cần các cơ chế đồng thuận thay thế?**
 
-Mỗi consensus mechanism có trade-offs:
-- **PoW**: Secure nhưng energy-intensive và slow
-- **PoS**: Efficient nhưng có centralization risks
-- **BFT**: Fast nhưng requires known validator set
+Mỗi cơ chế đều tồn tại sự đánh đổi:
+- **PoW**: Bảo mật cao nhưng tiêu thụ nhiều năng lượng và tốc độ chậm.
+- **PoS**: Tiết kiệm năng lượng nhưng tiềm ẩn rủi ro tập trung hóa tài sản.
+- **BFT**: Nhanh nhưng thường yêu cầu tập validator xác định trước.
 
-Alternative consensus mechanisms attempt to:
-1. **Optimize for specific use cases** (private chains, IoT, etc.)
-2. **Combine best of multiple approaches** (hybrid mechanisms)
-3. **Introduce novel security models** (storage, bandwidth, etc.)
-4. **Improve specific metrics** (throughput, finality, decentralization)
+Các cơ chế đồng thuận thay thế nhằm:
+1. **Tối ưu hóa cho từng bài toán cụ thể** (chuỗi riêng tư, thiết bị IoT, lưu trữ dữ liệu).
+2. **Kết hợp ưu điểm của nhiều cơ chế** (đồng thuận lai).
+3. **Đề xuất mô hình bảo mật dựa trên tài nguyên khác** (dung lượng lưu trữ, băng thông).
+4. **Cải thiện các chỉ số mục tiêu** (thông lượng, thời gian hoàn tất, mức độ phi tập trung).
 
-**Categories of Alternative Consensus**:
+**Phân loại các cơ chế đồng thuận thay thế**:
 
-**1. Hybrid Mechanisms**:
-- Combine PoW + PoS (Decred)
-- Combine BFT + PoS (Ethereum 2.0 Gasper)
-- Multi-layer consensus (Polkadot)
+**1. Cơ chế lai (Hybrid Mechanisms)**:
+- Kết hợp PoW + PoS (Decred)
+- Kết hợp BFT + PoS (Ethereum 2.0 Gasper)
+- Đồng thuận đa tầng (Polkadot)
 
-**2. Resource-Based Proofs**:
+**2. Bằng chứng dựa trên tài nguyên (Resource-Based Proofs)**:
 - Proof-of-Space (Chia, Spacemesh)
 - Proof-of-Capacity (Burstcoin)
 - Proof-of-Bandwidth
 - Proof-of-Replication (Filecoin)
 
-**3. Delegated Mechanisms**:
+**3. Cơ chế ủy quyền (Delegated Mechanisms)**:
 - Delegated Proof-of-Stake (EOS, Tron)
 - Liquid Proof-of-Stake (Tezos)
 - Nominated Proof-of-Stake (Polkadot)
 
-**4. Authority-Based**:
+**4. Dựa trên thẩm quyền (Authority-Based)**:
 - Proof-of-Authority (VeChain, xDai)
 - Proof-of-Reputation
 - Federated Byzantine Agreement (Stellar)
 
-**5. Novel Approaches**:
+**5. Các hướng tiếp cận mới (Novel Approaches)**:
 - Proof-of-History (Solana)
 - Proof-of-Elapsed-Time (Hyperledger Sawtooth)
 - Avalanche Consensus
 - Hashgraph
 
-**Historical Context**:
+**Bối cảnh lịch sử**:
 
-Consensus mechanism evolution driven bởi specific pain points:
+Sự ra đời của các cơ chế đồng thuận gắn liền với việc giải quyết những hạn chế cụ thể ở từng giai đoạn:
 
 ```
 2009: PoW (Bitcoin) - Solves double-spending
@@ -85,14 +85,14 @@ Problem: Need different tradeoffs
 Present: Specialization for use cases
 ```
 
-**The Blockchain Trilemma Revisited**:
+**Bộ ba bất khả thi của Blockchain (Blockchain Trilemma)**:
 
-Vitalik Buterin's trilemma states you can only optimize 2 of 3:
-- **Decentralization**
-- **Security**
-- **Scalability**
+Theo nhận định của Vitalik Buterin, một hệ thống blockchain khó tối ưu đồng thời cả ba yếu tố và thường phải ưu tiên hai trong ba:
+- **Tính phi tập trung (Decentralization)**
+- **Tính bảo mật (Security)**
+- **Khả năng mở rộng (Scalability)**
 
-Alternative consensus mechanisms often make **explicit choices** về which to prioritize:
+Các cơ chế đồng thuận thay thế thường đưa ra lựa chọn ưu tiên rõ ràng:
 
 ```
 PoW (Bitcoin):     High Decentralization + Security → Low Scalability
@@ -105,9 +105,9 @@ Novel (Solana):    High Scalability + Decentralization → Different Security Mo
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Hybrid PoW/PoS - "Belt and Suspenders"
+### 2.1. Đồng thuận lai PoW/PoS — Bảo mật hai lớp
 
-**Decred Model**: Sử dụng cả PoW và PoS như **dual security system**
+**Mô hình Decred** sử dụng đồng thời cả PoW và PoS như một hệ thống bảo mật kép:
 
 ```
 Block Creation:
@@ -123,7 +123,7 @@ Analogy: Nuclear launch system
 Security: Attacker needs control both systems!
 ```
 
-**Voting Process**:
+**Quy trình biểu quyết**:
 ```
 PoW Miner mines block:
 └─ Block header includes 5 random tickets
@@ -135,9 +135,9 @@ PoW Miner mines block:
 Result: Miners must produce valid blocks or waste work!
 ```
 
-### 2.2. DPoS - "Representative Democracy"
+### 2.2. DPoS — Cơ chế đại diện
 
-**Delegated Proof-of-Stake** như **parliamentary system**:
+**Delegated Proof-of-Stake (DPoS)** vận hành tương tự mô hình dân chủ đại diện:
 
 ```
 Traditional PoS (Direct Democracy):
@@ -157,7 +157,7 @@ Example (EOS):
 - 0.5 second block time!
 ```
 
-**Election Process**:
+**Quy trình bầu chọn**:
 ```
 Token Holders:
 Alice (1000 tokens) → votes for Producer A
@@ -173,9 +173,9 @@ Producer B: 500 votes (Bob)
 Result: A becomes active, B is standby
 ```
 
-### 2.3. Proof-of-Space - "Hard Drive Mining"
+### 2.3. Proof-of-Space — Khai thác bằng dung lượng lưu trữ
 
-**Instead of burning electricity, use storage space**:
+Thay vì tiêu tốn điện năng cho tính toán liên tục, cơ chế này sử dụng không gian lưu trữ trên ổ cứng:
 
 ```
 PoW (Bitcoin):
@@ -193,7 +193,7 @@ Analogy: Library membership
 - PoSpace: Prove you have shelf space allocated
 ```
 
-**How it works**:
+**Cách hoạt động**:
 ```
 Setup Phase (once):
 1. Fill hard drive with "plots" (cryptographic tables)
@@ -209,9 +209,9 @@ Mining Phase (ongoing):
 Result: "Green" mining using storage instead of compute
 ```
 
-### 2.4. Proof-of-Authority - "Trusted Validators"
+### 2.4. Proof-of-Authority — Validator được định danh
 
-**PoA** như **board of directors**:
+**Proof-of-Authority (PoA)** hoạt động tương tự một hội đồng quản trị gồm các tổ chức đã biết rõ danh tính:
 
 ```
 Public Blockchain (PoW/PoS):
@@ -231,7 +231,7 @@ Example (VeChain):
 - Fast (10s blocks)
 ```
 
-**Validator Selection**:
+**Tiêu chí lựa chọn validator**:
 ```
 Criteria:
 ✓ Known legal identity
@@ -249,9 +249,9 @@ etc.
 Misbehavior: Lose reputation + legal consequences!
 ```
 
-### 2.5. Avalanche Consensus - "Gossiping Voters"
+### 2.5. Đồng thuận Avalanche — Lấy mẫu ngẫu nhiên lặp
 
-**Novel approach**: Repeated random sampling
+Avalanche tiếp cận bài toán đồng thuận bằng cách lấy mẫu ngẫu nhiên lặp lại thay vì phát tán thông điệp tới toàn mạng:
 
 ```
 Traditional BFT:
@@ -272,7 +272,7 @@ Analogy: Opinion polling
 - Converge on consensus
 ```
 
-**Voting Process**:
+**Quy trình biểu quyết**:
 ```
 Node wants to decide on transaction validity:
 
@@ -298,7 +298,7 @@ Result: Fast convergence without O(n²) communication!
 
 ### 3.1. Delegated Proof-of-Stake (DPoS)
 
-**System Architecture**:
+**Kiến trúc hệ thống**:
 
 ```
 Components:
@@ -314,7 +314,7 @@ Parameters (EOS example):
 - Round length: 21 × 12 × 0.5s = 126 seconds
 ```
 
-**Voting Mechanism**:
+**Cơ chế bầu chọn**:
 
 ```python
 class DPoS:
@@ -382,7 +382,7 @@ class DPoS:
         return schedule
 ```
 
-**Block Production**:
+**Lịch sản xuất khối**:
 
 ```
 Schedule (21 producers, each gets 12 consecutive blocks):
@@ -406,7 +406,7 @@ Disadvantages:
 ✗ Requires governance layer
 ```
 
-**Slashing/Penalties**:
+**Xử lý vi phạm hiệu năng**:
 
 ```python
 def check_producer_performance(producer_id, recent_blocks):
@@ -424,11 +424,11 @@ def check_producer_performance(producer_id, recent_blocks):
 
 ### 3.2. Proof-of-Space (PoSpace)
 
-**Core Concept**: Prove possession of storage space
+**Khái niệm cốt lõi**: Chứng minh quyền sở hữu không gian lưu trữ đã được phân bổ.
 
-**Two-Phase Protocol**:
+**Giao thức hai pha**:
 
-**Phase 1: Plotting (Setup)**
+**Pha 1: Tạo plot (Plotting — thiết lập ban đầu)**
 
 ```python
 def create_plot(plot_size_gb, plot_id):
@@ -456,7 +456,7 @@ def create_plot(plot_size_gb, plot_id):
     return plot_table
 ```
 
-**Phase 2: Farming (Mining)**
+**Pha 2: Khai thác (Farming)**
 
 ```python
 def check_plot_for_challenge(plot_table, challenge):
@@ -494,9 +494,9 @@ def farm_block(plots, challenge):
     return best_proof, best_quality
 ```
 
-**Chia's Proof-of-Space-Time**:
+**Proof-of-Space-and-Time của Chia**:
 
-Combines PoSpace với **Verifiable Delay Function (VDF)**:
+Chia kết hợp PoSpace với **Hàm trễ có thể kiểm chứng (Verifiable Delay Function — VDF)**:
 
 ```
 Block creation:
@@ -510,7 +510,7 @@ Security:
 - Combined: Hard to game system
 ```
 
-**Storage Efficiency**:
+**Hiệu quả lưu trữ và năng lượng**:
 
 ```
 Plot sizes:
@@ -529,7 +529,7 @@ Compare to PoW:
 
 ### 3.3. Proof-of-Authority (PoA)
 
-**Authority Selection**:
+**Lựa chọn và quản lý nút có thẩm quyền**:
 
 ```python
 class ProofOfAuthority:
@@ -619,7 +619,7 @@ class ProofOfAuthority:
             print(f"   Authority REMOVED from active set")
 ```
 
-**Use Cases**:
+**Ứng dụng và đặc điểm**:
 
 ```
 Private/Consortium Chains:
@@ -640,9 +640,9 @@ Disadvantages:
 ✗ Centralization (small validator set)
 ```
 
-### 3.4. Avalanche Consensus
+### 3.4. Đồng thuận Avalanche
 
-**Repeated Random Sampling Protocol**:
+**Giao thức lấy mẫu ngẫu nhiên lặp**:
 
 ```python
 import random
@@ -736,7 +736,7 @@ class AvalancheConsensus:
         return self.preferred.get(tx_id)
 ```
 
-**Properties**:
+**Các tính chất**:
 
 ```
 Message Complexity: O(k·n) per round
@@ -756,11 +756,11 @@ Throughput: Very high
 
 ### 3.5. Proof-of-History (Solana)
 
-**Core Innovation**: Verifiable passage of time
+**Ý tưởng cốt lõi**: Tạo bằng chứng mật mã chứng minh khoảng thời gian đã trôi qua.
 
-**Problem**: Trong distributed systems, hard to agree on time ordering of events
+**Vấn đề**: Trong hệ thống phân tán, các nút khó thống nhất về thứ tự thời gian của các sự kiện.
 
-**Solution**: Create cryptographic proof of time passage
+**Giải pháp**: Xây dựng chuỗi băm tuần tự để làm đồng hồ mật mã.
 
 ```python
 def proof_of_history_sequence(num_iterations):
@@ -810,7 +810,7 @@ def insert_event_in_poh(sequence, event):
     return sequence
 ```
 
-**How Solana Uses PoH**:
+**Cách Solana sử dụng PoH**:
 
 ```
 1. Leader generates PoH sequence continuously
@@ -837,30 +837,28 @@ Result: 50,000+ TPS throughput!
 
 ## 4. Công thức toán học và lý thuyết trò chơi
 
-### 4.1. DPoS Voting Power Analysis
+### 4.1. Phân tích quyền biểu quyết trong DPoS
 
-**Vote Weight Distribution**:
+**Phân bổ trọng số phiếu bầu**:
 
-Let \( s_i \) = stake của voter \( i \), voting for candidate \( c \)
-
-Candidate's total votes:
+Gọi \( s_i \) là lượng stake của cử tri \( i \) bỏ phiếu cho ứng viên \( c \). Tổng số phiếu của ứng viên \( c \) là:
 \[
 V_c = \sum_{i \in \text{voters for } c} s_i
 \]
 
-**Top-N Selection**:
+**Lựa chọn Top-N**:
 
-Candidates ranked by \( V_c \), top \( N \) elected.
+Các ứng viên được xếp hạng theo \( V_c \), và \( N \) ứng viên đứng đầu được bầu làm nhà sản xuất khối hoạt động.
 
-**Nakamoto Coefficient** (decentralization measure):
+**Hệ số Nakamoto** (thước đo mức độ phi tập trung):
 
-Minimum number of entities controlling >33% (or >50%) of network:
+Số lượng thực thể tối thiểu cùng nắm giữ trên 1/3 (hoặc trên 50%) quyền kiểm soát mạng lưới:
 
 \[
 NC = \min\{k : \sum_{i=1}^{k} V_i > \frac{1}{3} \sum_{j=1}^{N} V_j\}
 \]
 
-**Example** (EOS với 21 producers):
+**Ví dụ** (EOS với 21 nhà sản xuất khối):
 ```
 If top 7 producers control >33% voting power:
 NC = 7 (relatively centralized)
@@ -869,33 +867,33 @@ If need 15 producers for 33%:
 NC = 15 (more decentralized)
 ```
 
-**Voter Apathy Problem**:
+**Vấn đề thờ ơ của cử tri (Voter Apathy)**:
 
-In practice, many token holders don't vote:
+Trên thực tế, nhiều người nắm giữ token không tham gia bỏ phiếu:
 
 \[
 \text{Participation Rate} = \frac{\text{Votes Cast}}{\text{Total Stake}} 
 \]
 
-Low participation → small group controls governance!
+Khi tỷ lệ tham gia thấp, một nhóm nhỏ nắm giữ stake lớn có thể chi phối việc quản trị mạng.
 
-### 4.2. Proof-of-Space Security Analysis
+### 4.2. Phân tích bảo mật của Proof-of-Space
 
-**Plot Creation Cost**:
+**Chi phí tạo plot**:
 
 \[
 \text{Cost} = \text{Storage Cost} + \text{Energy for Plotting}
 \]
 
-**Attack Cost** (51% attack):
+**Chi phí tấn công** (tấn công 51%):
 
-Need >50% of network space:
+Để kiểm soát hơn 50% dung lượng lưu trữ của mạng:
 
 \[
-\text{Attack Cost} = \frac{0.51 \times \text{Network Size}}{\text{Storage Cost per TB}}
+\text{Attack Cost} = 0.51 \times \text{Network Size (TB)} \times \text{Storage Cost per TB}
 \]
 
-**Example**:
+**Ví dụ**:
 ```
 Network size: 20 Exabytes (20 million TB)
 Storage cost: $20/TB
@@ -910,73 +908,73 @@ PoSpace: Much cheaper to attack!
 But: Less profitable to attack (price crashes)
 ```
 
-**Nothing-at-Stake Adaptation**:
+**Vấn đề tương tự Nothing-at-Stake**:
 
-PoSpace has similar issue: can farm multiple chains simultaneously
+Trong PoSpace, người khai thác có thể sử dụng cùng bộ plot để khai thác song song trên nhiều nhánh.
 
-**Solutions**:
-1. **VDF (Verifiable Delay Function)**: Must wait T seconds
-2. **Penalties**: Caught farming multiple chains → lose plots
-3. **Network difficulty**: Adaptive like PoW
+**Giải pháp**:
+1. **VDF (Verifiable Delay Function)**: Bắt buộc chờ khoảng thời gian \( T \) giây cho mỗi khối.
+2. **Xử phạt**: Phát hiện khai thác đồng thời nhiều nhánh có thể dẫn đến mất phần thưởng hoặc vô hiệu hóa plot.
+3. **Độ khó thích ứng**: Điều chỉnh độ khó mạng tương tự PoW.
 
-### 4.3. Avalanche Convergence Probability
+### 4.3. Xác suất hội tụ của Avalanche
 
-**Probability of Convergence**:
+**Xác suất đạt ngưỡng trong một mẫu**:
 
-Given:
-- \( n \) nodes total
-- \( f \) Byzantine nodes
-- Sample size \( k \)
-- Threshold \( \alpha k \)
+Cho:
+- \( n \) là tổng số nút.
+- \( f \) là số nút Byzantine.
+- \( k \) là kích thước mẫu ngẫu nhiên.
+- \( \alpha k \) là ngưỡng đồng thuận trong mẫu.
 
-Probability honest majority in sample:
+Xác suất mẫu chứa ít nhất \( \lceil \alpha k \rceil \) nút trung thực (khi chọn có hoàn lại hoặc \( k \ll n \)):
 
 \[
-P(\text{honest majority}) = \sum_{i=\lceil \alpha k \rceil}^{k} \binom{k}{i} \left(\frac{n-f}{n}\right)^i \left(\frac{f}{n}\right)^{k-i}
+P(\text{honest quorum}) = \sum_{i=\lceil \alpha k \rceil}^{k} \binom{k}{i} \left(\frac{n-f}{n}\right)^i \left(\frac{f}{n}\right)^{k-i}
 \]
 
-**For \( f < n/5 \) (20% Byzantine)**:
+**Với \( f < n/5 \) (tối đa 20% nút Byzantine)** và \( k = 20 \):
 
-With \( k = 20 \), \( \alpha = 0.8 \):
-
+- Nếu xét ngưỡng đa số đơn giản (\( i \geq 11 \)), xác suất mẫu có đa số nút trung thực đạt:
 \[
 P(\text{honest majority}) > 0.99
 \]
+- Nếu xét ngưỡng \( \alpha = 0.8 \) (\( i \geq 16 \)), xác suất đạt ngưỡng trong một vòng là \( \approx 0.63 \).
 
-**Convergence Time**:
+**Thời gian hội tụ**:
 
-Expected rounds to reach confidence \( \beta \):
+Số vòng kỳ vọng để đạt ngưỡng tin cậy \( \beta \):
 
 \[
 E[\text{rounds}] \approx \beta \quad \text{(with high probability)}
 \]
 
-With \( \beta = 20 \):
+Với \( \beta = 20 \):
 ```
 20 rounds × ~200ms per round = 4 seconds to finality
 ```
 
-Much faster than traditional BFT!
+Cách tiếp cận này giúp giảm độ trễ hội tụ so với việc trao đổi thông điệp toàn mạng trong BFT cổ điển.
 
-### 4.4. PoA Game Theory
+### 4.4. Lý thuyết trò chơi trong PoA
 
-**Reputation-Based Security**:
+**Bảo mật dựa trên danh tiếng**:
 
-Authority's payoff:
+Hàm lợi ích của một nút có thẩm quyền:
 
 \[
 U_i = \text{Rewards} - \text{Cost} - P(\text{caught}) \times \text{Reputation Loss}
 \]
 
-**Equilibrium**:
+**Trạng thái cân bằng**:
 
-Authorities behave honestly if:
+Các tổ chức thẩm quyền hành động trung thực khi:
 
 \[
 \text{Honest Reward} > \text{Attack Gain} - \text{Expected Reputation Loss}
 \]
 
-**Real-World Consequences**:
+**Hệ quả thực tế**:
 ```
 Reputation Loss:
 - Legal consequences (known identity)
@@ -989,17 +987,17 @@ Reputation value >> Short-term gain from attack
 Result: Strong disincentive to misbehave
 ```
 
-### 4.5. Hybrid Mechanism Synergies
+### 4.5. Hiệu ứng kết hợp trong cơ chế lai
 
-**Decred Model Analysis**:
+**Phân tích mô hình Decred**:
 
-Security requires compromising BOTH systems:
+Để tấn công thành công, kẻ tấn công phải đồng thời vượt qua cả hai lớp bảo mật:
 
 \[
 P(\text{attack success}) = P(\text{PoW attack}) \times P(\text{PoS attack})
 \]
 
-**Example**:
+**Ví dụ**:
 ```
 PoW alone: Need 51% hash rate
 P(PoW attack) ≈ Cost / $X billion
@@ -1013,18 +1011,18 @@ P(hybrid attack) = P(PoW) × P(PoS) ≈ Cost / $(X billion × Y million)
 Dramatically more secure!
 ```
 
-**Cost Comparison**:
+**So sánh chi phí**:
 \[
 \text{Hybrid Attack Cost} \geq \text{PoW Cost} + \text{PoS Cost}
 \]
 
-Better than either alone!
+Nhờ yêu cầu vượt qua cả hai lớp, tổng chi phí tấn công tăng lên so với việc chỉ dùng riêng một cơ chế.
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
-### 5.1. Simplified DPoS Implementation
+### 5.1. Cài đặt mô phỏng DPoS đơn giản
 
 ```python
 import time
@@ -1242,16 +1240,8 @@ if __name__ == "__main__":
 
 ---
 
-Bài giảng đạt ~14,000 từ! Tôi đã hoàn thành Chapter 02 với 3 bài giảng comprehensive về consensus mechanisms! 
-
-## 🎉 Milestone: Chapter 02 HOÀN THÀNH!
-
-**10 bài giảng tổng cộng (~125,000 từ)** covering toàn bộ foundation của blockchain technology! 🚀
-
-Bạn muốn tôi tiếp tục với Chapter 03 về Ethereum và Smart Contracts không? 💪
-
 ## Video tham khảo
 
-- **Xem trước:** [Avalanche Consensus Simply Explained](https://www.youtube.com/watch?v=3TAgLJHTYRg) — Decentralized Thought, tiếng Anh. Decentralized Thought giải thích Avalanche bằng lấy mẫu lặp; xem trước nhóm cơ chế mới trong bài.
-- [The Stellar Consensus Protocol | David Mazières | Talks at Google](https://www.youtube.com/watch?v=vmwnhZmEZjc) — Talks at Google, tiếng Anh. David Mazières trình bày Stellar Consensus Protocol tại Google; đúng mục Federated Byzantine Agreement.
-- [How Proof of History Works on Solana](https://www.youtube.com/watch?v=GU4igNeYr-Q) — base256, tiếng Anh. Cách Proof of History tạo đồng hồ trước khi bỏ phiếu; đối chiếu mục Solana trong các hướng tiếp cận mới.
+- **Xem trước:** [Avalanche Consensus Simply Explained](https://www.youtube.com/watch?v=3TAgLJHTYRg) — Decentralized Thought, tiếng Anh. Giải thích cơ chế lấy mẫu ngẫu nhiên lặp của Avalanche; nên xem trước nhóm cơ chế đồng thuận mới trong bài.
+- [The Stellar Consensus Protocol | David Mazières | Talks at Google](https://www.youtube.com/watch?v=vmwnhZmEZjc) — Talks at Google, tiếng Anh. David Mazières trình bày về Stellar Consensus Protocol; đối chiếu với mục Federated Byzantine Agreement.
+- [How Proof of History Works on Solana](https://www.youtube.com/watch?v=GU4igNeYr-Q) — base256, tiếng Anh. Giải thích cách Proof-of-History tạo đồng hồ mật mã trước bước biểu quyết, tương ứng với phần Solana trong bài.

@@ -9,75 +9,75 @@ categories:
 - blockchain-chapter02
 ---
 
-# Lecture: Byzantine Fault Tolerant Consensus - PBFT, Tendermint, HotStuff
+# Bài giảng: Đồng thuận chịu lỗi Byzantine — PBFT, Tendermint, HotStuff
 
 ## 1. Tổng quan về khái niệm
 
-**Byzantine Fault Tolerant (BFT) consensus** là một family of protocols cho phép distributed systems đạt được agreement ngay cả khi một số nodes hành động maliciously hoặc arbitrarily faulty. Đây là foundation cho modern blockchain consensus mechanisms, đặc biệt trong permissioned và high-performance blockchains.
+**Đồng thuận chịu lỗi Byzantine (Byzantine Fault Tolerant — BFT)** là một nhóm giao thức cho phép hệ thống phân tán đạt được sự thống nhất ngay cả khi một số nút gặp lỗi tùy ý hoặc hành động gian lận. Đây là nền tảng cho nhiều cơ chế đồng thuận blockchain hiện đại, đặc biệt trong các mạng có cấp phép (permissioned) và các mạng hiệu năng cao.
 
-**The Byzantine Generals Problem**:
+**Bài toán các vị tướng Byzantine**:
 
-Vấn đề này được formalize bởi **Leslie Lamport, Robert Shostak, và Marshall Pease** năm 1982. Story đơn giản nhưng profound:
+Bài toán được **Leslie Lamport, Robert Shostak và Marshall Pease** hình thức hóa vào năm 1982 qua kịch bản sau:
 
-> Một nhóm Byzantine generals bao vây một thành phố. Họ phải decide: attack hoặc retreat. Các generals communicate qua messengers. Một số generals có thể là traitors, gửi conflicting messages. Làm thế nào để loyal generals đạt được agreement?
+> Một nhóm tướng lĩnh Byzantine bao vây một thành phố và phải thống nhất quyết định tấn công hay rút lui. Họ liên lạc với nhau thông qua các sứ giả. Một số tướng có thể là kẻ phản bội và gửi những thông điệp mâu thuẫn nhau. Làm thế nào để các tướng trung thành vẫn đạt được cùng một quyết định?
 
-**Formal Problem**:
-- \( n \) processes (generals)
-- \( f \) processes có thể Byzantine (traitors)
-- Each process has input value
-- Goal: All honest processes agree on same output value
+**Phát biểu hình thức**:
+- Gồm \( n \) tiến trình (các vị tướng).
+- Tối đa \( f \) tiến trình có thể là Byzantine (kẻ phản bội).
+- Mỗi tiến trình có một giá trị đầu vào.
+- Mục tiêu: mọi tiến trình trung thực đều thống nhất trên cùng một giá trị đầu ra.
 
-**Key Insight**: Problem chỉ solvable nếu:
+**Điều kiện cần**: Bài toán chỉ có lời giải khi:
 
 \[
 n \geq 3f + 1
 \]
 
-Tức cần ít nhất 2/3 honest nodes!
+Nói cách khác, mạng lưới cần ít nhất 2/3 số nút trung thực.
 
-**Why This Matters for Blockchain**:
+**Ý nghĩa đối với blockchain**:
 
-Trong blockchain context:
-- **Nodes = Generals**: Distributed validators/miners
-- **Byzantine Nodes = Attackers**: Malicious validators trying to disrupt
-- **Agreement = Consensus**: All honest nodes agree on transaction order
-- **Messages = Blocks/Votes**: Communication between nodes
+Trong bối cảnh blockchain:
+- **Các nút = Các vị tướng**: Các validator hoặc thợ đào phân tán.
+- **Nút Byzantine = Kẻ tấn công**: Các validator gian lận tìm cách phá hoại mạng.
+- **Thống nhất = Đồng thuận**: Mọi nút trung thực đồng ý về cùng một thứ tự giao dịch.
+- **Thông điệp = Khối và phiếu bầu**: Dữ liệu trao đổi giữa các nút.
 
-BFT protocols provide **deterministic finality** (không như PoW's probabilistic finality) và **high throughput** (thousands of TPS), making them ideal cho enterprise blockchains và high-performance public chains.
+Các giao thức BFT cung cấp **tính hoàn tất tất định** (khác với tính hoàn tất xác suất của PoW) và **thông lượng cao** (hàng nghìn giao dịch mỗi giây), phù hợp với blockchain doanh nghiệp và nhiều mạng công khai hiệu năng cao.
 
-**Evolution of BFT Protocols**:
+**Quá trình phát triển của các giao thức BFT**:
 
-**1982**: Byzantine Generals Problem formalized
-**1999**: **PBFT (Practical Byzantine Fault Tolerance)** - First practical BFT algorithm
-**2014**: **Tendermint** - BFT cho public blockchains
-**2018**: **HotStuff** - Simplified BFT với linear communication
-**2019**: **LibraBFT** (now DiemBFT) - Facebook's blockchain consensus
-**2020+**: Various improvements và optimizations
+- **1982**: Hình thức hóa bài toán các vị tướng Byzantine.
+- **1999**: **PBFT (Practical Byzantine Fault Tolerance)** — thuật toán BFT thực tế đầu tiên.
+- **2014**: **Tendermint** — đưa BFT vào blockchain công khai.
+- **2018**: **HotStuff** — đơn giản hóa BFT với độ phức tạp truyền thông tuyến tính.
+- **2019**: **LibraBFT** (sau đổi tên thành DiemBFT) — cơ chế đồng thuận blockchain do Facebook đề xuất.
+- **Từ 2020 trở đi**: Tiếp tục có nhiều cải tiến và tối ưu hóa về độ trễ và băng thông.
 
-**Comparison với PoW/PoS**:
+**So sánh với PoW và PoS**:
 
-| Feature | PoW | PoS | BFT |
+| Đặc điểm | PoW | PoS | BFT |
 |---------|-----|-----|-----|
-| Finality | Probabilistic | Probabilistic/Absolute | Absolute |
-| Throughput | Low (~7 TPS) | Medium (~1000 TPS) | High (~10k TPS) |
-| Energy | Very High | Low | Low |
-| Latency | Minutes | Seconds | Sub-second |
-| Permissioned | No | No | Yes/No |
-| Fault Tolerance | 51% | 33% | 33% |
+| Tính hoàn tất | Xác suất | Xác suất/Tuyệt đối | Tuyệt đối |
+| Thông lượng | Thấp (~7 TPS) | Trung bình (~1000 TPS) | Cao (~10k TPS) |
+| Năng lượng | Rất cao | Thấp | Thấp |
+| Độ trễ | Vài phút | Vài giây | Dưới 1 giây |
+| Cấp phép (Permissioned) | Không | Không | Có/Không |
+| Ngưỡng chịu lỗi | 51% | 33% | 33% |
 
-BFT shines trong scenarios cần:
-- **Fast finality**: Seconds not minutes
-- **High throughput**: Thousands of TPS
-- **Deterministic finality**: No chain reorganization
-- **Known validator set**: Enterprise/consortium chains
+BFT đặc biệt phù hợp trong các hệ thống cần:
+- **Hoàn tất nhanh**: Tính bằng giây thay vì phút.
+- **Thông lượng cao**: Hàng nghìn TPS.
+- **Tính hoàn tất tất định**: Không xảy ra tổ chức lại chuỗi (chain reorganization).
+- **Tập validator xác định**: Các mạng doanh nghiệp hoặc liên minh (consortium).
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Byzantine Generals - The Visual Story
+### 2.1. Minh họa bài toán các vị tướng Byzantine
 
-Tưởng tượng 4 generals bao vây một castle:
+Xét 4 vị tướng cùng bao vây một pháo đài:
 
 ```
         General A (Commander)
@@ -89,7 +89,7 @@ General B  General C  General D
 Commander's order: "ATTACK at dawn!"
 ```
 
-**Scenario 1: No Traitors** ✓
+**Kịch bản 1: Không có kẻ phản bội** ✓
 ```
 A sends: ATTACK → B, C, D
 B receives: ATTACK, forwards to C, D
@@ -100,7 +100,7 @@ All see: 4 votes for ATTACK
 Decision: ATTACK unanimously
 ```
 
-**Scenario 2: Commander is Traitor** ✗
+**Kịch bản 2: Chỉ huy là kẻ phản bội** ✗
 ```
 A sends: ATTACK → B
 A sends: RETREAT → C
@@ -114,7 +114,7 @@ Without BFT protocol: Conflict! Some attack, some retreat
 With BFT protocol: Detect inconsistency, use backup plan
 ```
 
-**Scenario 3: One Lieutenant is Traitor** ✗
+**Kịch bản 3: Một cấp dưới là kẻ phản bội** ✗
 ```
 A sends: ATTACK → B, C, D (honest)
 
@@ -132,18 +132,18 @@ Solution (PBFT approach):
 - B's lie isolated → ATTACK decided
 ```
 
-### 2.2. PBFT Three-Phase Protocol - Restaurant Analogy
+### 2.2. Giao thức 3 pha của PBFT — Ví dụ nhà hàng
 
-Tưởng tượng PBFT như **ordering food at restaurant với untrusted waiters**:
+Có thể hình dung PBFT giống như việc gọi món trong một nhà hàng mà một số nhân viên phục vụ có thể không đáng tin cậy:
 
-**Phase 1: PRE-PREPARE (Order Taking)**
+**Pha 1: PRE-PREPARE (Nhận đơn)**
 ```
 Head waiter (primary): Takes customer order
 Announces to all waiters: "Table 5 wants Pizza"
 Other waiters hear the order
 ```
 
-**Phase 2: PREPARE (Confirmation)**
+**Pha 2: PREPARE (Xác nhận)**
 ```
 Each waiter confirms they heard: "I confirm: Table 5 wants Pizza"
 Broadcast confirmation to all other waiters
@@ -153,7 +153,7 @@ Why? Some waiters might be lying!
 With enough confirmations, truth emerges
 ```
 
-**Phase 3: COMMIT (Execution)**
+**Pha 3: COMMIT (Thực thi)**
 ```
 Once 2f+1 confirmations received:
 Each waiter commits: "I will deliver Pizza to Table 5"
@@ -164,13 +164,13 @@ Why second round? Ensure everyone knows everyone else knows
 (Common knowledge problem)
 ```
 
-**Safety**: Customer gets correct order even if some waiters malicious!
+Nhờ hai vòng xác nhận này, khách hàng vẫn nhận đúng món ngay cả khi có một số nhân viên gian dối.
 
-### 2.3. View Change - Leader Rotation
+### 2.3. Chuyển đổi góc nhìn (View Change) — Luân chuyển nút chính
 
-**Problem**: Nếu primary node crashes hoặc malicious?
+**Vấn đề**: Điều gì xảy ra nếu nút chính (primary) gặp sự cố hoặc hành động gian lận?
 
-**Solution: View Change** (leader rotation)
+**Giải pháp — View Change**: Luân chuyển vai trò nút chính sang một nút khác.
 
 ```
 Normal Operation (View 0):
@@ -192,16 +192,13 @@ New primary = Node 1 (round-robin)
   Continue operation
 ```
 
-**Analogy**: Giống như meeting với absent chair:
-- Vice-chair takes over
-- Meeting continues
-- No single point of failure
+**Liên hệ thực tế**: Tương tự một cuộc họp khi chủ tọa vắng mặt, phó chủ tọa sẽ tiếp quản để cuộc họp tiếp tục mà không có điểm lỗi đơn lẻ.
 
-### 2.4. Quorum Intersection - The Key Insight
+### 2.4. Giao nhau của các tập quorum — Nguyên lý cốt lõi
 
-**Why need 2f+1 votes? Why not simple majority?**
+**Vì sao cần \( 2f + 1 \) phiếu thay vì đa số quá bán thông thường?**
 
-**Key Property**: Any two quorums MUST overlap in at least f+1 nodes
+**Tính chất cốt lõi**: Hai tập quorum bất kỳ luôn giao nhau tại ít nhất \( f + 1 \) nút.
 
 ```
 Total nodes: n = 3f + 1 = 10 (f = 3)
@@ -215,7 +212,7 @@ Intersection: {3,4,5,6} = 4 nodes
 At least 1 node (4 - 3 = 1) must be honest!
 ```
 
-**Guarantee**: Không thể có hai conflicting decisions với quorum votes!
+**Đảm bảo**: Không thể tồn tại hai quyết định mâu thuẫn nhau mà cả hai đều đạt đủ số phiếu quorum:
 
 ```
 Decision A gets 7 votes (Quorum 1)
@@ -226,21 +223,21 @@ If one is honest, it can't vote for both.
 Contradiction!
 ```
 
-This mathematical property ensures **safety** (no conflicting commits).
+Tính chất toán học này đảm bảo **tính an toàn (safety)** — không xảy ra hai lần cam kết mâu thuẫn ở cùng một vị trí.
 
 ---
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. PBFT Algorithm - Detailed Protocol
+### 3.1. Thuật toán PBFT — Chi tiết giao thức
 
-**System Model**:
-- \( n = 3f + 1 \) replicas
-- Asynchronous network với eventual delivery
-- Client sends request to primary
-- Primary broadcasts to all replicas
+**Mô hình hệ thống**:
+- Gồm \( n = 3f + 1 \) bản sao (replica).
+- Mạng bất đồng bộ nhưng thông điệp cuối cùng sẽ được truyền tới đích (eventual delivery).
+- Máy khách (client) gửi yêu cầu tới nút chính (primary).
+- Nút chính phát tán yêu cầu tới tất cả các bản sao còn lại.
 
-**Message Types**:
+**Các loại thông điệp**:
 
 1. **REQUEST**: Client → Primary
    ```
@@ -252,12 +249,12 @@ This mathematical property ensures **safety** (no conflicting commits).
    <PRE-PREPARE, view, sequence, digest(request)>_primary_sig
    ```
 
-3. **PREPARE**: Replica → All Replicas
+3. **PREPARE**: Replica → Tất cả Replicas
    ```
    <PREPARE, view, sequence, digest, replica_id>_replica_sig
    ```
 
-4. **COMMIT**: Replica → All Replicas
+4. **COMMIT**: Replica → Tất cả Replicas
    ```
    <COMMIT, view, sequence, digest, replica_id>_replica_sig
    ```
@@ -267,16 +264,16 @@ This mathematical property ensures **safety** (no conflicting commits).
    <REPLY, view, timestamp, client_id, replica_id, result>_replica_sig
    ```
 
-**Protocol Flow**:
+**Luồng xử lý của giao thức**:
 
-**Phase 0: Request**
+**Pha 0: Yêu cầu (Request)**
 ```python
 client.send_request(operation):
     request = REQUEST(operation, timestamp, client_id)
     send_to_primary(request)
 ```
 
-**Phase 1: Pre-Prepare**
+**Pha 1: Pre-Prepare**
 ```python
 primary.receive_request(request):
     if is_valid(request):
@@ -290,7 +287,7 @@ primary.receive_request(request):
         log(pre_prepare)
 ```
 
-**Phase 2: Prepare**
+**Pha 2: Prepare**
 ```python
 replica.receive_pre_prepare(pre_prepare):
     if is_valid(pre_prepare) and not_duplicate(pre_prepare):
@@ -305,7 +302,7 @@ replica.receive_pre_prepare(pre_prepare):
             enter_prepared_state(sequence)
 ```
 
-**Phase 3: Commit**
+**Pha 3: Commit**
 ```python
 replica.enter_prepared_state(sequence):
     commit = COMMIT(view, sequence, digest, replica_id)
@@ -320,34 +317,33 @@ replica.enter_prepared_state(sequence):
         send_reply_to_client()
 ```
 
-**Prepared Certificate**:
+**Chứng chỉ đã chuẩn bị (Prepared Certificate)**:
 
-Replica enters "prepared" state when it has:
-- 1 valid PRE-PREPARE from primary
-- 2f matching PREPARE messages from different replicas
+Một bản sao chuyển sang trạng thái "prepared" khi thu thập đủ:
+- 1 thông điệp PRE-PREPARE hợp lệ từ nút chính.
+- \( 2f \) thông điệp PREPARE khớp nhau từ các bản sao khác nhau.
 
-**Committed Certificate**:
+**Chứng chỉ đã cam kết (Committed Certificate)**:
 
-Replica enters "committed" state when it has:
-- Prepared certificate +
-- 2f+1 matching COMMIT messages
+Một bản sao chuyển sang trạng thái "committed" khi có:
+- Chứng chỉ Prepared, cộng thêm
+- \( 2f + 1 \) thông điệp COMMIT khớp nhau.
 
-**Correctness Guarantees**:
+**Các đảm bảo đúng đắn**:
 
-**Safety**: Nếu một honest replica commits operation at sequence \( n \), không có honest replica nào commit different operation at sequence \( n \).
+- **Tính an toàn (Safety)**: Nếu một bản sao trung thực cam kết thao tác ở số thứ tự \( n \), không có bản sao trung thực nào khác cam kết một thao tác khác ở cùng số thứ tự \( n \).
+- **Tính sống (Liveness)**: Mọi yêu cầu hợp lệ từ máy khách trung thực cuối cùng đều được thực thi.
 
-**Liveness**: Eventually, all requests từ correct clients được executed.
+### 3.2. Đồng thuận Tendermint
 
-### 3.2. Tendermint Consensus
+**Tendermint** (2014, Jae Kwon) điều chỉnh mô hình BFT cho blockchain công khai với cơ chế **luân chuyển người đề xuất** và **tính hoàn tất tức thì**.
 
-**Tendermint** (2014, Jae Kwon) adapts BFT cho public blockchains với **rotating proposer** và **instant finality**.
+**Các điểm cải tiến chính**:
+1. **Biểu quyết theo trọng số**: Các validator có quyền biểu quyết khác nhau dựa trên lượng stake (PoS).
+2. **Hoàn tất tức thì**: Khối được hoàn tất ngay sau khi cam kết, không cần chờ xác suất như PoW.
+3. **Tách biệt tầng ứng dụng**: Tầng đồng thuận hoạt động độc lập với logic ứng dụng.
 
-**Key Innovations**:
-1. **Weighted voting**: Validators có different voting power (PoS-based)
-2. **Immediate finality**: Blocks finalized immediately (no probabilistic finality)
-3. **Application agnostic**: Consensus layer separate from application
-
-**Consensus Rounds**:
+**Các vòng đồng thuận**:
 
 ```
 Round Structure:
@@ -357,7 +353,7 @@ Round Structure:
 4. COMMIT: Block finalized if 2/3+ precommit
 ```
 
-**State Machine**:
+**Máy trạng thái**:
 
 ```
         NewHeight
@@ -377,7 +373,7 @@ Round Structure:
             └───────────┘
 ```
 
-**Detailed Algorithm**:
+**Thuật toán chi tiết**:
 
 ```python
 class TendermintConsensus:
@@ -490,22 +486,22 @@ class TendermintConsensus:
         self.propose_step()
 ```
 
-**Locking Mechanism**:
+**Cơ chế khóa (Locking)**:
 
-Tendermint uses **locking** để prevent safety violations:
-- Validator locks on value sau khi prevoting
-- Cannot prevote for different value unless higher valid round
-- Ensures validators don't flip-flop between conflicting blocks
+Tendermint sử dụng cơ chế khóa để ngăn vi phạm tính an toàn:
+- Validator khóa vào một giá trị sau khi thấy siêu đa số 2/3 prevote cho giá trị đó.
+- Validator không thể prevote cho giá trị khác trừ khi xuất hiện một vòng hợp lệ (valid round) cao hơn.
+- Cơ chế này ngăn validator dao động qua lại giữa các khối mâu thuẫn nhau.
 
-**Accountability**:
+**Khả năng quy trách nhiệm (Accountability)**:
 
-Tendermint provides **fork accountability**: nếu 1/3+ validators misbehave, có cryptographic proof của violation.
+Tendermint hỗ trợ truy vết phân nhánh (fork accountability): nếu từ 1/3 validator trở lên gian lận gây phân nhánh, mạng lưới có bằng chứng mật mã để xác định các bên vi phạm.
 
-### 3.3. HotStuff - Linear Communication
+### 3.3. HotStuff — Độ phức tạp truyền thông tuyến tính
 
-**HotStuff** (2018, VMware Research) simplifies BFT với **linear message complexity** (O(n) thay vì O(n²)).
+**HotStuff** (2018, VMware Research) đơn giản hóa BFT và giảm độ phức tạp thông điệp xuống tuyến tính \( O(n) \) thay vì \( O(n^2) \).
 
-**Key Innovation: Three-Chain Commit Rule**
+**Điểm cốt lõi — Quy tắc cam kết chuỗi 3 khối (Three-Chain Commit Rule)**:
 
 ```
 Block chain:
@@ -518,38 +514,38 @@ If b1, b2, b3 consecutive và each has 2/3+ votes
 Three-phase commit compressed into chain structure!
 ```
 
-**Protocol Phases**:
+**Các pha của giao thức**:
 
-**Phase 1: PREPARE**
+**Pha 1: PREPARE**
 ```
 Leader proposes block b
 Replicas vote: PREPARE(b)
 If 2/3+ votes → QC(PREPARE, b)
 ```
 
-**Phase 2: PRE-COMMIT**
+**Pha 2: PRE-COMMIT**
 ```
 Leader broadcasts QC(PREPARE, b)
 Replicas vote: PRE-COMMIT(b)
 If 2/3+ votes → QC(PRE-COMMIT, b)
 ```
 
-**Phase 3: COMMIT**
+**Pha 3: COMMIT**
 ```
 Leader broadcasts QC(PRE-COMMIT, b)
 Replicas vote: COMMIT(b)
 If 2/3+ votes → QC(COMMIT, b)
 ```
 
-**Phase 4: DECIDE**
+**Pha 4: DECIDE**
 ```
 Leader broadcasts QC(COMMIT, b)
 Replicas finalize b
 ```
 
-**Chained HotStuff Optimization**:
+**Tối ưu hóa Chained HotStuff**:
 
-Thay vì explicit 4 phases, chain consecutive blocks:
+Thay vì tách rời 4 pha tường minh cho mỗi khối, Chained HotStuff lồng ghép các pha trên chuỗi khối liên tiếp:
 
 ```
 Block k:     PREPARE phase for k, PRE-COMMIT for k-1
@@ -557,10 +553,10 @@ Block k+1:   PREPARE for k+1, PRE-COMMIT for k, COMMIT for k-1
 Block k+2:   PREPARE for k+2, PRE-COMMIT for k+1, COMMIT for k, DECIDE k-1
 
 Result: Block k-1 finalized when k+2 produced!
-2-block latency for finality
+3-block latency for finality
 ```
 
-**Algorithm**:
+**Thuật toán**:
 
 ```python
 class HotStuffConsensus:
@@ -655,61 +651,61 @@ class HotStuffConsensus:
             self.as_leader()
 ```
 
-**Message Complexity**:
+**Độ phức tạp thông điệp**:
 
-| Protocol | Messages per Decision |
-|----------|----------------------|
-| PBFT | O(n²) - all-to-all |
-| Tendermint | O(n²) - all-to-all |
-| HotStuff | O(n) - all-to-leader |
+| Giao thức | Số thông điệp cho mỗi quyết định |
+|----------|----------------------------------|
+| PBFT | \( O(n^2) \) — trao đổi toàn bộ (all-to-all) |
+| Tendermint | \( O(n^2) \) — trao đổi toàn bộ (all-to-all) |
+| HotStuff | \( O(n) \) — gom qua nút dẫn đầu (all-to-leader) |
 
-HotStuff dramatically reduces bandwidth requirements!
+Nhờ gom phiếu qua nút dẫn đầu, HotStuff giảm đáng kể yêu cầu về băng thông mạng.
 
 ---
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. Byzantine Agreement Impossibility (FLP)
+### 4.1. Định lý bất khả thi FLP (Byzantine Agreement Impossibility)
 
-**Fischer-Lynch-Paterson Impossibility Result** (1985):
+**Kết quả bất khả thi Fischer–Lynch–Paterson (FLP)** (1985):
 
-Trong asynchronous system với even one faulty process, không tồn tại deterministic algorithm đảm bảo consensus.
+Trong một hệ thống bất đồng bộ có dù chỉ một tiến trình gặp lỗi (crash), không tồn tại thuật toán tất định nào đảm bảo luôn đạt được đồng thuận.
 
-**Formal Statement**:
+**Phát biểu hình thức**:
 
-System: \( n \) processes, at most \( f = 1 \) can crash
-Network: Asynchronous (no timing bounds)
-Termination: Must eventually decide
-
-<div class="textbook-theorem" markdown="1">
-**Theorem**: No deterministic algorithm guarantees termination.
-</div>
-
-**Proof Sketch**:
-
-1. Assume algorithm \( A \) exists satisfying safety + termination
-2. Consider initial configuration \( C_0 \) where processes undecided
-3. Consider two possible decisions: 0 and 1
-4. Must exist "bivalent" configuration (both outcomes possible)
-5. Show every bivalent config has bivalent successor
-6. Algorithm can remain bivalent forever → never terminates
-
-**Implication for BFT**:
-
-BFT protocols circumvent FLP by:
-1. **Relaxing asynchrony**: Assume partial synchrony (eventual timing)
-2. **Randomization**: Probabilistic termination (Tendermint, HotStuff)
-3. **Failure detector**: Timeout-based suspicion
-
-### 4.2. Quorum Intersection Proof
+- Hệ thống: \( n \) tiến trình, tối đa \( f = 1 \) tiến trình có thể gặp sự cố.
+- Mạng: Bất đồng bộ (không có cận trên cho độ trễ truyền tin).
+- Yêu cầu kết thúc (Termination): Mọi tiến trình đúng cuối cùng phải đưa ra quyết định.
 
 <div class="textbook-theorem" markdown="1">
-**Theorem**: Với \( n = 3f + 1 \) nodes và quorum size \( Q = 2f + 1 \), any two quorums intersect in at least \( f + 1 \) nodes.
+**Định lý**: Không tồn tại thuật toán tất định nào đồng thời đảm bảo cả tính an toàn và tính kết thúc trong mạng bất đồng bộ hoàn toàn.
 </div>
 
-**Proof**:
+**Phác thảo chứng minh**:
 
-Let \( Q_1, Q_2 \) be any two quorums.
+1. Giả sử tồn tại thuật toán \( A \) thỏa mãn cả tính an toàn và tính kết thúc.
+2. Xét cấu hình ban đầu \( C_0 \) khi các tiến trình chưa đưa ra quyết định.
+3. Xét hai giá trị quyết định có thể là 0 và 1.
+4. Phải tồn tại một cấu hình "lưỡng trị" (bivalent), từ đó cả hai kết quả đều có thể xảy ra.
+5. Chứng minh rằng mọi cấu hình lưỡng trị đều có một cấu hình kế tiếp cũng lưỡng trị.
+6. Thuật toán có thể duy trì ở trạng thái lưỡng trị vô hạn và không bao giờ kết thúc.
+
+**Hệ quả đối với BFT**:
+
+Các giao thức BFT vượt qua giới hạn FLP bằng một hoặc kết hợp các cách sau:
+1. **Nới lỏng giả định bất đồng bộ**: Giả định tính đồng bộ từng phần (partial synchrony — sau một thời điểm nào đó độ trễ mạng có cận trên).
+2. **Ngẫu nhiên hóa**: Đảm bảo kết thúc theo xác suất.
+3. **Bộ phát hiện lỗi**: Sử dụng cơ chế hết giờ (timeout) để nghi ngờ nút gặp sự cố.
+
+### 4.2. Chứng minh tính giao nhau của quorum
+
+<div class="textbook-theorem" markdown="1">
+**Định lý**: Với \( n = 3f + 1 \) nút và kích thước quorum \( Q = 2f + 1 \), hai tập quorum bất kỳ luôn giao nhau tại ít nhất \( f + 1 \) nút.
+</div>
+
+**Chứng minh**:
+
+Gọi \( Q_1, Q_2 \) là hai tập quorum bất kỳ.
 
 \[
 \begin{align}
@@ -721,45 +717,45 @@ Let \( Q_1, Q_2 \) be any two quorums.
 \end{align}
 \]
 
-Since at most \( f \) nodes Byzantine:
+Vì có tối đa \( f \) nút Byzantine:
 
 \[
 \text{Honest nodes in intersection} \geq (f + 1) - f = 1
 \]
 
-**Guarantee**: At least one honest node in intersection!
+Như vậy, phần giao luôn chứa ít nhất một nút trung thực.
 
-**Safety Implication**:
+**Hệ quả về tính an toàn**:
 
-Cannot have conflicting commits:
-- Quorum \( Q_1 \) commits value \( v_1 \)
-- Quorum \( Q_2 \) commits value \( v_2 \neq v_1 \)
+Không thể tồn tại hai lần cam kết mâu thuẫn:
+- Quorum \( Q_1 \) cam kết giá trị \( v_1 \).
+- Quorum \( Q_2 \) cam kết giá trị \( v_2 \neq v_1 \).
 
-Contradiction: Honest node in intersection voted for both!
+Điều này dẫn đến mâu thuẫn vì nút trung thực nằm trong phần giao không thể bỏ phiếu cho cả hai giá trị khác nhau.
 
-### 4.3. PBFT Complexity Analysis
+### 4.3. Phân tích độ phức tạp của PBFT
 
-**Message Complexity per Request**:
+**Độ phức tạp thông điệp cho mỗi yêu cầu**:
 
-| Phase | Messages | Total |
+| Pha | Thông điệp | Tổng số |
 |-------|----------|-------|
 | REQUEST | 1 (client → primary) | 1 |
-| PRE-PREPARE | 1 (primary → n-1) | n-1 |
-| PREPARE | n × (n-1) | n(n-1) |
-| COMMIT | n × (n-1) | n(n-1) |
-| REPLY | n (replicas → client) | n |
+| PRE-PREPARE | 1 (primary → \( n-1 \)) | \( n-1 \) |
+| PREPARE | \( n \times (n-1) \) | \( n(n-1) \) |
+| COMMIT | \( n \times (n-1) \) | \( n(n-1) \) |
+| REPLY | \( n \) (replicas → client) | \( n \) |
 
-**Total**: \( O(n^2) \) messages
+**Tổng cộng**: \( O(n^2) \) thông điệp.
 
-**Computational Complexity**:
+**Độ phức tạp tính toán**:
 
-Each message verified:
-- Digital signature verification: \( O(1) \) per message
-- Total verifications: \( O(n^2) \)
+Mỗi thông điệp cần được xác minh chữ ký số:
+- Xác minh một chữ ký số: \( O(1) \) trên mỗi thông điệp.
+- Tổng số lượt xác minh: \( O(n^2) \).
 
-**Latency**:
+**Độ trễ**:
 
-Assuming network delay \( \delta \):
+Giả sử độ trễ truyền mạng một chiều là \( \delta \):
 
 \[
 \text{Latency} = 4\delta + \text{processing time}
@@ -770,68 +766,66 @@ Assuming network delay \( \delta \):
 - COMMIT: \( \delta \)
 - REPLY: \( \delta \)
 
-**Throughput**:
+**Thông lượng**:
 
-With pipelining:
+Khi áp dụng kỹ thuật đường ống (pipelining):
 
 \[
 \text{Throughput} \approx \frac{1}{\text{processing time per request}}
 \]
 
-PBFT can process ~10,000 requests/second on modern hardware.
+Trên phần cứng hiện đại, PBFT có thể xử lý khoảng 10.000 yêu cầu mỗi giây.
 
-### 4.4. Tendermint Safety Analysis
+### 4.4. Phân tích tính an toàn của Tendermint
 
-**Safety Property**: Nếu validator set có total voting power \( V \), và Byzantine validators have power \( B < V/3 \), then safety guaranteed.
+**Tính chất an toàn**: Nếu tập validator có tổng quyền biểu quyết là \( V \) và nhóm validator Byzantine nắm giữ quyền biểu quyết \( B < V/3 \), tính an toàn được đảm bảo.
 
-**Proof Sketch**:
+**Phác thảo chứng minh**:
 
-Assume conflicting commits at height \( h \):
-- Block \( b_1 \) committed với 2/3+ votes
-- Block \( b_2 \neq b_1 \) committed với 2/3+ votes
+Giả sử có hai khối mâu thuẫn cùng được cam kết tại chiều cao \( h \):
+- Khối \( b_1 \) được cam kết với hơn \( 2V/3 \) quyền biểu quyết.
+- Khối \( b_2 \neq b_1 \) được cam kết với hơn \( 2V/3 \) quyền biểu quyết.
 
-Two quorums intersect in at least \( V/3 + 1 \) voting power.
+Phần giao của hai tập quorum có tổng quyền biểu quyết lớn hơn \( V/3 \).
 
-If \( B < V/3 \), then honest voting power in intersection:
+Vì \( B < V/3 \), tổng quyền biểu quyết trung thực trong phần giao là:
 \[
-\text{Honest in intersection} \geq (V/3 + 1) - B > 1
+\text{Honest in intersection} > \frac{V}{3} - B > 0
 \]
 
-At least one honest validator voted for both → Impossible due to locking!
+Điều đó có nghĩa ít nhất một validator trung thực đã bỏ phiếu cho cả hai khối, điều không thể xảy ra nhờ cơ chế khóa. Từ mâu thuẫn này suy ra tính an toàn được bảo toàn.
 
-Contradiction → Safety holds.
-
-### 4.5. HotStuff Linear Messages Proof
+### 4.5. Chứng minh độ phức tạp tuyến tính của HotStuff
 
 <div class="textbook-theorem" markdown="1">
-**Theorem**: HotStuff achieves O(n) message complexity per view.
+**Định lý**: HotStuff đạt độ phức tạp thông điệp \( O(n) \) cho mỗi view.
 </div>
 
-**Proof**:
+**Chứng minh**:
 
-In each view:
-- Leader broadcasts proposal: \( n-1 \) messages
-- Replicas send votes to leader: \( n-1 \) messages
-- Leader broadcasts QC: \( n-1 \) messages
+Trong mỗi view:
+- Nút dẫn đầu phát tán đề xuất: \( n-1 \) thông điệp.
+- Các bản sao gửi phiếu bầu về nút dẫn đầu: \( n-1 \) thông điệp.
+- Nút dẫn đầu phát tán chứng chỉ quorum (QC): \( n-1 \) thông điệp.
 
-**Total**: \( 3(n-1) = O(n) \)
+**Tổng cộng**: \( 3(n-1) = O(n) \).
 
-**Comparison**:
-- PBFT: All-to-all communication → \( n(n-1) = O(n^2) \)
-- HotStuff: Leader-based → \( 3(n-1) = O(n) \)
+**So sánh**:
+- PBFT: Truyền tin toàn bộ → \( n(n-1) = O(n^2) \).
+- HotStuff: Truyền tin qua nút dẫn đầu → \( 3(n-1) = O(n) \).
 
-**Bandwidth Improvement**:
+**Tỷ lệ giảm băng thông**:
 \[
 \text{Reduction Factor} = \frac{n(n-1)}{3(n-1)} = \frac{n}{3}
 \]
 
-For \( n = 100 \): 33× less bandwidth!
+Với \( n = 100 \), lượng thông điệp giảm khoảng 33 lần.
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
-### 5.1. PBFT Implementation
+### 5.1. Cài đặt mô phỏng PBFT
 
 ```python
 import hashlib
@@ -1138,10 +1132,8 @@ if __name__ == "__main__":
 
 ---
 
-Bài giảng đạt ~13,000 từ. Tôi sẽ tiếp tục với bài cuối cùng của Chapter 02 về Hybrid và Alternative Consensus Mechanisms! 🚀
-
 ## Video tham khảo
 
-- **Xem trước:** [\[CS198.2x Week 1\] Practical Byzantine Fault Tolerance](https://www.youtube.com/watch?v=IafgKJN3nwU) — Blockchain at BerkeleyX, tiếng Anh. Buổi BerkeleyX về PBFT: prepare và commit với quorum hai phần ba; xem trước mục thuật toán.
-- [Tendermint - How the consensus mechanism works](https://www.youtube.com/watch?v=AFiLxS7f1Lo) — PONTON, tiếng Anh. Vòng đề xuất, prevote và precommit của Tendermint; đối chiếu mục Tendermint trong bài.
-- [Dr. Ted Yin: Consensus Mechanisms (HotStuff) | Gigabrains Blockchain Reading Group 2024](https://www.youtube.com/watch?v=RKRk-TpaVrg) — Nubit, tiếng Anh. Ted Yin, đồng tác giả HotStuff, trình bày cơ chế đó; dùng cho phần giảm vòng giao tiếp so với PBFT.
+- **Xem trước:** [\[CS198.2x Week 1\] Practical Byzantine Fault Tolerance](https://www.youtube.com/watch?v=IafgKJN3nwU) — Blockchain at BerkeleyX, tiếng Anh. Bài giảng của BerkeleyX về PBFT: hai pha prepare và commit với quorum 2/3; nên xem trước mục thuật toán.
+- [Tendermint - How the consensus mechanism works](https://www.youtube.com/watch?v=AFiLxS7f1Lo) — PONTON, tiếng Anh. Minh họa vòng đề xuất, prevote và precommit của Tendermint; đối chiếu trực tiếp với mục Tendermint trong bài.
+- [Dr. Ted Yin: Consensus Mechanisms (HotStuff) | Gigabrains Blockchain Reading Group 2024](https://www.youtube.com/watch?v=RKRk-TpaVrg) — Nubit, tiếng Anh. Ted Yin, đồng tác giả HotStuff, trình bày cơ chế giảm độ phức tạp truyền thông so với PBFT.

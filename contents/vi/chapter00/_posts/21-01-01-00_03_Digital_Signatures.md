@@ -13,50 +13,47 @@ categories:
 
 ## 1. Tổng quan về khái niệm
 
-Trong bài giảng trước, chúng ta đã học về hash functions - công cụ để verify integrity của data. Nhưng hash functions alone không thể chứng minh **authenticity** - làm thế nào để biết ai đã tạo ra message đó? Đây là lúc **digital signatures** xuất hiện.
+Ở bài giảng trước, chúng ta đã tìm hiểu hàm băm — công cụ giúp kiểm tra tính toàn vẹn của dữ liệu. Tuy nhiên, riêng hàm băm không thể chứng minh **tính xác thực nguồn gốc (authenticity)**: làm thế nào biết chắc ai là người tạo ra thông điệp đó? **Chữ ký số (digital signatures)** ra đời để giải quyết bài toán này.
 
-Digital signatures trong blockchain đóng vai trò tương tự như chữ ký tay trong thế giới vật lý, nhưng với nhiều tính năng vượt trội:
+Trong blockchain, chữ ký số đóng vai trò tương tự chữ ký tay ngoài đời thực nhưng vượt trội hơn về tính bảo mật và khả năng tự động hóa:
 
-**Chữ ký tay (Analog)**:
-- Dễ giả mạo (với kỹ năng)
-- Có thể copy từ tài liệu này sang tài liệu khác
-- Không thể verify automatically
-- Cùng một chữ ký cho mọi document
+**Chữ ký tay truyền thống**:
+- Có thể bị làm giả nếu người khác tập bắt chước.
+- Có thể sao chép hình ảnh chữ ký từ tài liệu này sang tài liệu khác.
+- Không thể xác minh tự động bằng toán học.
+- Hình dạng chữ ký gần như giống nhau trên mọi văn bản.
 
-**Digital Signature**:
-- Cực kỳ khó giả mạo (computationally infeasible)
-- Unique cho mỗi message (không thể copy sang message khác)
-- Có thể verify tự động bởi bất kỳ ai
-- Based on mathematical guarantees
+**Chữ ký số (Digital Signature)**:
+- Bất khả thi về mặt tính toán để giả mạo nếu không có khóa bí mật.
+- Gắn chặt và duy nhất với từng thông điệp (không thể cắt dán sang thông điệp khác).
+- Bất kỳ ai cũng có thể xác minh tự động bằng khóa công khai.
+- Dựa trên các chứng minh toán học chặt chẽ.
 
-Digital signatures trong blockchain giải quyết ba vấn đề cơ bản:
+Chữ ký số trong blockchain đảm bảo ba tính chất cơ bản:
+1. **Xác thực (Authentication)**: Chứng minh thông điệp do chính chủ sở hữu khóa bí mật tương ứng tạo ra.
+2. **Không thể chối bỏ (Non-repudiation)**: Người ký không thể phủ nhận việc mình đã ký vào thông điệp.
+3. **Toàn vẹn (Integrity)**: Đảm bảo thông điệp không bị chỉnh sửa sau thời điểm ký.
 
-**1. Authentication (Xác thực)**: Chứng minh rằng message được tạo bởi người sở hữu private key tương ứng
+Trong Bitcoin và phần lớn các mạng blockchain, chữ ký số được dùng để:
+- **Ủy quyền giao dịch**: Chứng minh người gửi có quyền chi tiêu số tiền tương ứng.
+- **Chứng minh quyền sở hữu**: Địa chỉ ví được sinh ra từ khóa công khai.
+- **Ngăn chặn chi tiêu trái phép**: Mỗi giao dịch hợp lệ gắn với chữ ký riêng biệt cho từng đầu vào.
+- **Kích hoạt hợp đồng thông minh**: Chữ ký xác nhận lệnh gọi thực thi hợp đồng.
 
-**2. Non-repudiation (Không thể chối bỏ)**: Người ký không thể deny rằng họ đã ký message
+Nền tảng của chữ ký số là **mật mã khóa công khai (public-key cryptography)** hay **mật mã bất đối xứng (asymmetric cryptography)**, do Whitfield Diffie và Martin Hellman giới thiệu năm 1976, tạo ra bước ngoặt cho bài toán truyền tin an toàn qua kênh không tin cậy.
 
-**3. Integrity (Toàn vẹn)**: Message không bị thay đổi sau khi được ký
-
-Trong Bitcoin và hầu hết blockchains, digital signatures được sử dụng để:
-- **Authorize transactions**: Chứng minh bạn có quyền spend coins
-- **Prove ownership**: Address derives từ public key
-- **Prevent double-spending**: Mỗi transaction có unique signature
-- **Enable smart contracts**: Signatures trigger contract execution
-
-Blockchain sử dụng **public-key cryptography** (hay asymmetric cryptography) - một trong những phát minh vĩ đại nhất của cryptography hiện đại. Được giới thiệu bởi Whitfield Diffie và Martin Hellman năm 1976, công nghệ này revolutionized secure communication.
-
-**Symmetric Cryptography** (cũ):
-- Cùng một key để encrypt và decrypt
-- Vấn đề: Làm sao share key securely?
+**Mật mã đối xứng (Symmetric Cryptography)**:
+- Dùng chung một khóa để mã hóa và giải mã.
+- Hạn chế lớn: khó trao đổi khóa dùng chung một cách an toàn qua mạng công cộng.
 
 ```
 Alice ─────[shared key]────► Encrypt ────► Internet ────► Decrypt ─────[shared key]────► Bob
 ```
 
-**Asymmetric Cryptography** (mới):
-- Two keys: Public key (ai cũng biết) và Private key (chỉ mình biết)
-- Encrypt với public key, decrypt với private key
-- Sign với private key, verify với public key
+**Mật mã bất đối xứng (Asymmetric Cryptography)**:
+- Gồm cặp hai khóa: khóa công khai (public key — có thể chia sẻ rộng rãi) và khóa bí mật (private key — giữ tuyệt đối kín).
+- Trong mã hóa: mã hóa bằng khóa công khai, giải mã bằng khóa bí mật.
+- Trong chữ ký số: ký bằng khóa bí mật, xác minh bằng khóa công khai.
 
 ```
 Alice                                                                     Bob
@@ -72,35 +69,27 @@ Alice                                                                     Bob
                                               ✓ Authentic!
 ```
 
-Bitcoin primarily sử dụng **ECDSA** (Elliptic Curve Digital Signature Algorithm) trên curve **secp256k1**. Ethereum cũng sử dụng ECDSA nhưng với một số modifications. Các blockchain mới hơn exploring alternatives như Schnorr signatures (Bitcoin Taproot) và EdDSA (Ed25519 trong Cardano, Polkadot).
+Bitcoin chủ yếu sử dụng thuật toán **ECDSA** (Elliptic Curve Digital Signature Algorithm) trên đường cong **secp256k1**, và Ethereum cũng áp dụng ECDSA với một số điều chỉnh kỹ thuật. Các giao thức mới hơn mở rộng sang **chữ ký Schnorr** (trong bản nâng cấp Taproot của Bitcoin) và **EdDSA** (đường cong Ed25519 trong Cardano, Polkadot).
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. The Key Pair Analogy
+### 2.1. Phép ví về cặp khóa
 
-Hãy tưởng tượng public/private key pair như một **mailbox với unique mechanism**:
+Có thể hình dung cặp khóa công khai — khóa bí mật giống như một **hòm thư có khe thả thư**:
 
-**Public Key = Địa chỉ nhà và khe thả thư**:
-- Ai cũng có thể biết địa chỉ của bạn
-- Ai cũng có thể gửi thư cho bạn (qua khe thả thư)
-- Nhưng họ không thể lấy thư ra từ mailbox
+- **Khóa công khai = Địa chỉ nhà và khe thả thư**: Ai cũng có thể biết địa chỉ và thả thư vào bên trong, nhưng không thể lấy thư ra.
+- **Khóa bí mật = Chìa khóa mở hòm thư**: Chỉ riêng bạn giữ chìa khóa để mở hòm và đọc thư; nếu mất chìa khóa, bạn mất quyền truy cập vĩnh viễn.
 
-**Private Key = Chìa khóa duy nhất mở mailbox**:
-- Chỉ bạn có chìa khóa này
-- Chỉ bạn có thể mở mailbox và đọc thư
-- Mất chìa khóa = mất access to all mail forever
+Tương tự, **chữ ký số** giống như **con dấu sáp mang gia huy riêng**:
+- Thời trung cổ, các bức thư quan trọng được niêm phong bằng sáp và đóng con dấu riêng.
+- Ai cũng có thể kiểm tra hình dấu để xác nhận nguồn gốc (xác minh công khai), nhưng chỉ chủ nhân mới có con dấu để đóng (ký bí mật).
+- Mọi hành vi mở hoặc sửa nội dung thư đều làm hỏng niêm phong.
 
-**Digital Signature = Wax seal với coat of arms duy nhất của bạn**:
-- Trong thời trung cổ, letters quan trọng được seal với wax và stamped với coat of arms
-- Ai cũng có thể verify seal (public verification)
-- Nhưng chỉ bạn có thể tạo ra authentic seal (private signing)
-- Tampering với letter sẽ break the seal
+### 2.2. Quy trình ký và xác minh (rút gọn)
 
-### 2.2. How Digital Signatures Work (Simplified)
-
-**Signing Process**:
+**Quá trình ký (Signing)**:
 ```
 Message: "Alice sends 10 BTC to Bob"
                     ↓
@@ -113,30 +102,30 @@ Message: "Alice sends 10 BTC to Bob"
               Digital Signature
 ```
 
-**Verification Process**:
+**Quá trình xác minh (Verification)** (minh họa trực giác theo cơ chế đối chiếu bản băm; với ECDSA thực tế, bước xác minh kiểm tra một đẳng thức toán học trên đường cong elliptic dùng khóa công khai, chữ ký và bản băm):
 ```
 Message + Signature
         ↓
 [Hash the Message] ──────────► Digest 1
         
-Signature
+Signature + Alice's Public Key
         ↓
-[Decrypt with Alice's Public Key] ──► Digest 2
+[Verify with Alice's Public Key] ──► Valid / Invalid
         
-Compare: Digest 1 == Digest 2?
+Check consistency with Digest 1:
     ✓ Yes → Signature valid, message authentic
     ✗ No  → Signature invalid or message tampered
 ```
 
-**Key Insight**: Bạn sign the hash, không phải entire message. Tại sao?
-1. **Efficiency**: Signature size không phụ thuộc vào message size
-2. **Security**: Hash provides fixed-size input cho signature algorithm
+**Điểm quan trọng**: Ta luôn ký trên *giá trị băm* thay vì toàn bộ thông điệp gốc, vì:
+1. **Hiệu quả**: Kích thước chữ ký cố định, không phụ thuộc độ dài thông điệp.
+2. **Bảo mật**: Hàm băm chuẩn hóa đầu vào về độ dài cố định cho thuật toán ký.
 
-### 2.3. Bitcoin Transaction Analogy
+### 2.3. Phép ví với giao dịch Bitcoin
 
-Hãy nghĩ về Bitcoin transaction như một **séc (check)**:
+Một giao dịch Bitcoin có thể so sánh với **tờ séc (check)**:
 
-**Paper Check**:
+**Séc giấy**:
 ```
 Pay to: Bob
 Amount: $100
@@ -144,72 +133,61 @@ From: Alice
 Signature: [Alice's handwritten signature]
 ```
 
-**Bitcoin Transaction**:
+**Giao dịch Bitcoin**:
 ```
 Pay to: Bob's address (derived from his public key)
 Amount: 10 BTC
 From: UTXO controlled by Alice's address
-Signature: Digital signature created với Alice's private key
+Signature: Digital signature created with Alice's private key
 ```
 
-**Differences**:
-- Paper check: Bank verifies signature bằng so sánh với signature on file
-- Bitcoin: Any node có thể verify signature bằng toán học (public key)
-- Paper check: Có thể cash same check nhiều lần (if lucky)
-- Bitcoin: Double-spend impossible (transaction includes reference to specific UTXO)
+**Điểm khác biệt**:
+- Với séc giấy, ngân hàng đối chiếu chữ ký bằng mắt với mẫu chữ ký đã lưu; với Bitcoin, mọi nút mạng đều xác minh được bằng toán học thông qua khóa công khai.
+- Séc giấy có thể bị lợi dụng để rút nhiều lần nếu kiểm soát kém; trong Bitcoin, mỗi giao dịch tham chiếu đến một đầu ra chưa tiêu (UTXO) cụ thể nên ngăn chặn việc chi tiêu lặp.
 
 ---
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. Public-Key Cryptography Fundamentals
+### 3.1. Cơ sở của mật mã khóa công khai
 
-**Key Generation**:
-Tạo một cặp keys (public, private) sao cho:
-1. Không thể derive private key từ public key (one-way function)
-2. Hai keys có mathematical relationship
+Quá trình sinh khóa tạo ra cặp `(khóa công khai, khóa bí mật)` sao cho hai khóa có quan hệ toán học chặt chẽ nhưng không thể suy ngược khóa bí mật từ khóa công khai.
 
-**Mathematical Foundation**:
+Nền tảng của thiết kế này là **hàm cửa sập (trapdoor functions)** — các hàm dễ tính theo chiều xuôi nhưng rất khó đảo ngược trừ khi nắm thông tin bí mật ("cửa sập").
 
-Dựa trên **trapdoor functions** - functions dễ compute một chiều, nhưng cực khó reverse trừ khi biết "trapdoor" (secret info).
+- **Ví dụ cửa sập RSA**:
+  - Dễ: Nhân hai số nguyên tố lớn \( N = p \times q \).
+  - Khó: Phân tích \( N \) ngược lại thành thừa số nguyên tố \( p \) và \( q \).
+  - Thông tin bí mật: Biết trước \( p \) và \( q \).
 
-**Example: RSA Trapdoor**:
-- Easy: Nhân hai số nguyên tố lớn: \( N = p \times q \)
-- Hard: Factorize \( N \) thành \( p \) và \( q \) (if N is large)
-- Trapdoor: Knowing \( p \) and \( q \)
+- **Ví dụ cửa sập đường cong Elliptic**:
+  - Dễ: Phép nhân vô hướng \( Q = k \times G \) (với \( Q \) là điểm kết quả, \( k \) là số nguyên, \( G \) là điểm sinh).
+  - Khó: Bài toán logarit rời rạc trên đường cong elliptic (ECDLP) — cho biết \( Q \) và \( G \), tìm \( k \).
+  - Thông tin bí mật: Giá trị \( k \) (khóa bí mật).
 
-**Example: Elliptic Curve Trapdoor**:
-- Easy: Scalar multiplication: \( Q = k \times G \) (Q = point, k = scalar, G = generator)
-- Hard: Discrete logarithm: Given \( Q \) and \( G \), find \( k \)
-- Trapdoor: Knowing \( k \) (private key)
+### 3.2. Mật mã đường cong Elliptic (ECC)
 
-### 3.2. Elliptic Curve Cryptography (ECC)
+Bitcoin và Ethereum dùng **ECDSA** thay vì RSA nhờ kích thước khóa ngắn hơn ở cùng mức độ an toàn, tính toán nhanh hơn và tiết kiệm băng thông lưu trữ.
 
-Bitcoin và Ethereum sử dụng **Elliptic Curve Digital Signature Algorithm (ECDSA)**.
+**So sánh độ dài khóa ở cùng mức bảo mật**:
 
-**Why Elliptic Curves?**
-- Shorter keys cho cùng security level vs RSA
-- Faster computation
-- Less bandwidth
-
-**Security Comparison**:
-| Symmetric | RSA | ECC | Security Level |
+| Mật mã đối xứng | RSA | ECC | Mức bảo mật |
 |-----------|-----|-----|----------------|
-| 80 bits | 1024 bits | 160 bits | Weak (broken) |
-| 128 bits | 3072 bits | 256 bits | Strong |
-| 256 bits | 15360 bits | 512 bits | Very Strong |
+| 80 bit | 1024 bit | 160 bit | Yếu (đã lỗi thời) |
+| 128 bit | 3072 bit | 256 bit | Mạnh |
+| 256 bit | 15360 bit | 512 bit | Rất mạnh |
 
-**Elliptic Curve Definition**:
+**Định nghĩa đường cong Elliptic**:
 
-Một elliptic curve over finite field \( \mathbb{F}_p \) có dạng:
+Một đường cong elliptic trên trường hữu hạn \( \mathbb{F}_p \) có phương trình:
 
 \[
 y^2 \equiv x^3 + ax + b \pmod{p}
 \]
 
-Với điều kiện: \( 4a^3 + 27b^2 \not\equiv 0 \pmod{p} \) (non-singular)
+với điều kiện không suy biến \( 4a^3 + 27b^2 \not\equiv 0 \pmod{p} \).
 
-**Bitcoin's secp256k1 Parameters**:
+**Tham số đường cong `secp256k1` của Bitcoin**:
 ```
 Equation: y² = x³ + 7  (a=0, b=7)
 Prime: p = 2²⁵⁶ - 2³² - 2⁹ - 2⁸ - 2⁷ - 2⁶ - 2⁴ - 1
@@ -227,13 +205,10 @@ Order (number of points):
       BAAEDCE6 AF48A03B BFD25E8C D0364141
 ```
 
-**Point Addition** (Geometric):
-
-Trên elliptic curve, chúng ta có thể "add" points:
-- Given points P and Q
-- Draw line through P and Q
-- Line intersects curve tại third point R'
-- Reflect R' across x-axis → R = P + Q
+**Phép cộng điểm (góc nhìn hình học)**:
+- Cho hai điểm \( P \) và \( Q \) trên đường cong.
+- Vẽ đường thẳng đi qua \( P \) và \( Q \), cắt đường cong tại điểm thứ ba \( R' \).
+- Lấy đối xứng \( R' \) qua trục hoành \( x \) để thu được điểm tổng \( R = P + Q \).
 
 ```
        y
@@ -251,15 +226,13 @@ Trên elliptic curve, chúng ta có thể "add" points:
        │    R (reflected)
 ```
 
-**Scalar Multiplication**:
-
+**Phép nhân vô hướng (Scalar Multiplication)**:
 \[
 Q = k \times G = \underbrace{G + G + \cdots + G}_{k \text{ times}}
 \]
 
-Efficient algorithm: **Double-and-add** (similar to binary exponentiation)
+Trong thực tế, phép tính này dùng thuật toán **nhân đôi và cộng (double-and-add)** (tương tự lũy thừa nhị phân) để đạt độ phức tạp \( O(\log k) \):
 
-**Example** (toy numbers):
 ```
 Private key: k = 7
 Public key:  Q = 7×G = G + G + G + G + G + G + G
@@ -269,36 +242,36 @@ Using double-and-add:
 Q = 2²×G + 2¹×G + 2⁰×G = 4G + 2G + G
 ```
 
-### 3.3. ECDSA Signature Scheme
+### 3.3. Lược đồ chữ ký ECDSA
 
-**Key Generation**:
-1. Choose random private key: \( d_A \in [1, n-1] \)
-2. Compute public key: \( Q_A = d_A \times G \)
+**Sinh khóa (Key Generation)**:
+1. Chọn ngẫu nhiên khóa bí mật \( d_A \in [1, n-1] \).
+2. Tính khóa công khai \( Q_A = d_A \times G \).
 
-**Signing** (message \( m \)):
-1. Compute message hash: \( e = \text{HASH}(m) \)
-2. Choose random nonce: \( k \in [1, n-1] \) (MUST be unique per signature!)
-3. Compute point: \( (x_1, y_1) = k \times G \)
-4. Compute \( r = x_1 \mod n \). If \( r = 0 \), goto step 2
-5. Compute \( s = k^{-1}(e + rd_A) \mod n \). If \( s = 0 \), goto step 2
-6. Signature: \( (r, s) \)
+**Ký thông điệp \( m \) (Signing)**:
+1. Tính giá trị băm \( e = \text{HASH}(m) \).
+2. Chọn số ngẫu nhiên \( k \in [1, n-1] \) (**bắt buộc phải duy nhất cho mỗi lần ký**).
+3. Tính điểm \( (x_1, y_1) = k \times G \).
+4. Tính \( r = x_1 \mod n \). Nếu \( r = 0 \), quay lại bước 2.
+5. Tính \( s = k^{-1}(e + rd_A) \mod n \). Nếu \( s = 0 \), quay lại bước 2.
+6. Chữ ký là cặp \( (r, s) \).
 
-**Verification** (message \( m \), signature \( (r,s) \), public key \( Q_A \)):
-1. Verify \( r, s \in [1, n-1] \)
-2. Compute message hash: \( e = \text{HASH}(m) \)
-3. Compute \( w = s^{-1} \mod n \)
-4. Compute \( u_1 = ew \mod n \) and \( u_2 = rw \mod n \)
-5. Compute point: \( (x_1, y_1) = u_1 \times G + u_2 \times Q_A \)
-6. Valid if \( r \equiv x_1 \pmod{n} \)
+**Xác minh (Verification)** với thông điệp \( m \), chữ ký \( (r, s) \) và khóa công khai \( Q_A \):
+1. Kiểm tra \( r, s \in [1, n-1] \).
+2. Tính giá trị băm \( e = \text{HASH}(m) \).
+3. Tính \( w = s^{-1} \mod n \).
+4. Tính \( u_1 = ew \mod n \) và \( u_2 = rw \mod n \).
+5. Tính điểm \( (x_1, y_1) = u_1 \times G + u_2 \times Q_A \).
+6. Chữ ký hợp lệ nếu \( r \equiv x_1 \pmod{n} \).
 
-**Why This Works** (mathematical proof sketch):
+**Chứng minh tính đúng đắn**:
 
-From signing:
+Từ bước ký:
 \[
 s = k^{-1}(e + rd_A) \implies k = s^{-1}(e + rd_A)
 \]
 
-From verification:
+Thay vào biểu thức xác minh:
 \[
 \begin{align}
 u_1 \times G + u_2 \times Q_A &= ew \times G + rw \times Q_A \\
@@ -308,13 +281,12 @@ u_1 \times G + u_2 \times Q_A &= ew \times G + rw \times Q_A \\
 \end{align}
 \]
 
-Since \( k \times G = (x_1, y_1) \) (from signing), và verification computes cùng point, nên \( r = x_1 \) ✓
+Do \( k \times G = (x_1, y_1) \) từ lúc ký, bước xác minh thu lại đúng cùng một điểm, do đó \( r \equiv x_1 \pmod{n} \) ✓.
 
-### 3.4. Bitcoin Address Generation
+### 3.4. Quy trình sinh địa chỉ Bitcoin
 
-Bitcoin address không phải là public key directly, mà derived từ public key:
+Địa chỉ Bitcoin không dùng trực tiếp khóa công khai thô mà được tạo qua chuỗi băm và mã hóa:
 
-**Process**:
 ```
 Private Key (256 bits random)
       ↓
@@ -337,7 +309,7 @@ Public Key Hash (20 bytes)
 Bitcoin Address (starts with '1' for P2PKH)
 ```
 
-**Example**:
+**Ví dụ**:
 ```
 Private Key: 
   18e14a7b6a307f426a94f8114701e7c8e774e7f9a47e2c2035db29a206321725
@@ -353,48 +325,41 @@ Bitcoin Address:
   16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM
 ```
 
-**Why hashing public key?**
-1. **Shorter addresses**: 160 bits vs 256 bits
-2. **Quantum resistance**: Even if ECDSA broken, attacker needs to break hash too
-3. **Flexibility**: Can use different signature schemes với same address format
+**Lý do băm khóa công khai trước khi tạo địa chỉ**:
+1. **Địa chỉ ngắn gọn hơn**: 160 bit thay vì 256–512 bit.
+2. **Tăng lớp phòng vệ hậu lượng tử**: Khóa công khai chỉ lộ ra khi chi tiêu lần đầu; trước đó kẻ tấn công chỉ thấy giá trị băm.
+3. **Linh hoạt về nâng cấp**: Dễ dàng hỗ trợ các lược đồ chữ ký khác nhau.
 
 ---
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. ECDSA Security Analysis
+### 4.1. Phân tích bảo mật của ECDSA
 
-**Discrete Logarithm Problem (DLP)**:
+Độ an toàn của ECDSA dựa vào độ khó của **bài toán logarit rời rạc (DLP)**: cho \( Q = k \times G \), tìm \( k \).
 
-Given \( Q = k \times G \), find \( k \).
-
-**Best Known Attacks**:
-- **Pollard's rho**: \( O(\sqrt{n}) \) operations
-- For 256-bit curve: \( O(2^{128}) \) operations
-
-**Security Level**: 
-Bitcoin's secp256k1 provides ~128 bits security (half of key size due to birthday paradox).
+Thuật toán tấn công cổ điển tốt nhất hiện biết là **Pollard's rho** với độ phức tạp \( O(\sqrt{n}) \), tức \( O(2^{128}) \) phép tính đối với đường cong 256 bit. Do đó, `secp256k1` cung cấp mức bảo mật tương đương 128 bit:
 
 \[
 \text{Security bits} = \frac{\text{Key size}}{2} = \frac{256}{2} = 128
 \]
 
-**Comparison**:
-- AES-128: 128-bit security
-- RSA-2048: ~112-bit security
-- Secp256k1: ~128-bit security
+So sánh nhanh:
+- AES-128: mức bảo mật 128 bit.
+- RSA-2048: mức bảo mật ~112 bit.
+- secp256k1: mức bảo mật ~128 bit.
 
-### 4.2. Nonce Reuse Attack
+### 4.2. Tấn công tái sử dụng Nonce (Nonce Reuse Attack)
 
-**Critical Security Rule**: NEVER reuse nonce \( k \)!
+**Quy tắc an toàn tuyệt đối**: KHÔNG BAO GIỜ dùng lại cùng một giá trị `nonce` \( k \) cho hai chữ ký khác nhau.
 
-**Attack Scenario**:
+**Kịch bản tấn công**:
 
-Suppose attacker has two signatures với same \( k \):
-- Signature 1: \( (r, s_1) \) for message \( m_1 \)
-- Signature 2: \( (r, s_2) \) for message \( m_2 \) (same \( r \) means same \( k \)!)
+Giả sử kẻ tấn công thu được hai chữ ký tạo từ cùng một `nonce` \( k \):
+- Chữ ký 1: \( (r, s_1) \) cho thông điệp \( m_1 \).
+- Chữ ký 2: \( (r, s_2) \) cho thông điệp \( m_2 \) (cùng giá trị \( r \) là dấu hiệu rõ ràng cho thấy \( k \) đã bị dùng lại).
 
-From signature equations:
+Từ phương trình ký:
 \[
 \begin{align}
 s_1 &= k^{-1}(e_1 + rd_A) \mod n \\
@@ -402,97 +367,66 @@ s_2 &= k^{-1}(e_2 + rd_A) \mod n
 \end{align}
 \]
 
-Subtract:
+Trừ vế theo vế:
 \[
 s_1 - s_2 = k^{-1}(e_1 - e_2) \mod n
 \]
 
-Solve for \( k \):
+Suy ra ngay \( k \):
 \[
 k = \frac{e_1 - e_2}{s_1 - s_2} \mod n
 \]
 
-Once attacker knows \( k \), họ có thể recover private key:
+Khi đã biết \( k \), kẻ tấn công khôi phục trực tiếp khóa bí mật \( d_A \):
 \[
 d_A = \frac{sk - e}{r} \mod n
 \]
 
-**Real-World Example**: Sony PlayStation 3 hack (2010)
-- Sony reused same \( k \) for all PS3 firmware signatures
-- Hackers recovered Sony's private key
-- Could sign arbitrary code → complete security breach
+**Sự cố thực tế**: Vụ lộ khóa Sony PlayStation 3 năm 2010 xảy ra do Sony dùng cố định một giá trị \( k \) cho nhiều chữ ký firmware, khiến tin tặc khôi phục được khóa bí mật và ký được mã tùy ý.
 
-**Bitcoin Protection**:
-- Deterministic nonces (RFC 6979): \( k = \text{HMAC-SHA256}(d_A, e) \)
-- Ensures \( k \) is unique per message, but deterministic (no randomness failure)
+**Biện pháp bảo vệ trong Bitcoin**:
+Sử dụng `nonce` tất định theo chuẩn **RFC 6979**: \( k = \text{HMAC-SHA256}(d_A, e) \) (về nguyên lý), đảm bảo \( k \) vừa duy nhất cho từng thông điệp vừa không phụ thuộc vào bộ sinh số ngẫu nhiên yếu.
 
-### 4.3. Signature Malleability
+### 4.3. Tính khả biến của chữ ký (Signature Malleability)
 
-ECDSA signatures có property: Cho valid signature \( (r, s) \), signature \( (r, -s \mod n) \) cũng valid!
+ECDSA có đặc tính: nếu \( (r, s) \) là chữ ký hợp lệ thì \( (r, -s \mod n) \) cũng là một chữ ký hợp lệ cho cùng thông điệp.
 
-**Why?**
+**Nguyên nhân**:
+Bước xác minh chỉ kiểm tra hoành độ \( r \stackrel{?}{=} x_1 \) với \( (x_1, y_1) = u_1 G + u_2 Q_A \). Vì đường cong elliptic đối xứng qua trục \( x \), hai điểm \( (x, y) \) và \( (x, -y) \) có cùng hoành độ \( x \).
 
-Verification checks:
-\[
-r \stackrel{?}{=} x_1 \text{ where } (x_1, y_1) = u_1 G + u_2 Q_A
-\]
+**Hệ quả**:
+- Cùng một giao dịch có thể tạo ra các mã định danh giao dịch (TXID) khác nhau nếu có bên thứ ba thay \( s \) bằng \( n - s \).
+- Dù không cho phép đánh cắp tiền trực tiếp, hiện tượng này từng gây lỗi theo dõi giao dịch ở nhiều ví và sàn giao dịch.
 
-Since elliptic curves symmetric về x-axis:
-- Point \( (x, y) \) and \( (x, -y) \) cả hai đều on curve
-- Both give same \( x \)-coordinate
+**Giải pháp của Bitcoin (BIP 62, BIP 66)**:
+Yêu cầu sử dụng giá trị \( s \) thấp (\( s \leq n/2 \)) và từ chối chữ ký có \( s \) cao nhằm chuẩn hóa chữ ký duy nhất.
 
-**Problem**:
-- Same transaction có thể have different transaction IDs (TXID = hash of transaction)
-- Attacker có thể modify signature → change TXID
-- Not theft, but can confuse wallets
+**Cải tiến triệt để hơn — Chữ ký Schnorr (Bitcoin Taproot)**:
+Không bị khả biến, kích thước nhỏ gọn, hỗ trợ xác minh theo lô (batch verification) và cải thiện quyền riêng tư.
 
-**Bitcoin's Solution (BIP 62, BIP 66)**:
-- Require "low S" values: \( s \leq n/2 \)
-- Reject high S signatures
-- Ensures canonical signature
+### 4.4. Nguy cơ máy tính lượng tử đối với ECDSA
 
-**Better Solution: Schnorr Signatures** (Bitcoin Taproot):
-- Not malleable
-- Smaller signatures
-- Batch verification
-- More privacy
-
-### 4.4. Quantum Computing Threat to ECDSA
-
-**Shor's Algorithm**: Quantum algorithm có thể solve discrete logarithm in polynomial time.
+**Thuật toán Shor** trên máy tính lượng tử có thể giải bài toán logarit rời rạc trong thời gian đa thức:
 
 \[
 \text{Classical: } O(\sqrt{n}) \quad \text{vs} \quad \text{Quantum: } O((\log n)^3)
 \]
 
-**Implications**:
-- Sufficiently large quantum computer có thể break ECDSA
-- Can derive private key từ public key
+Nếu máy tính lượng tử quy mô lớn xuất hiện, nó có thể suy ngược khóa bí mật từ khóa công khai. Các máy tính lượng tử hiện nay mới dừng ở mức khoảng hàng trăm qubit vật lý, trong khi phá vỡ ECDSA 256 bit ước tính cần khoảng 1.500–3.000 qubit logic (tương đương hàng triệu qubit vật lý), với mốc thời gian dự báo thường khoảng 10–30 năm.
 
-**Timeline**:
-- Current quantum computers: ~100 qubits
-- Needed to break 256-bit ECDSA: ~1500-3000 logical qubits (millions of physical qubits)
-- Estimate: 10-30 years until practical threat
+**Lớp bảo vệ một phần của Bitcoin**:
+Nếu một địa chỉ chưa từng chi tiêu, khóa công khai chưa lộ trên chuỗi — kẻ tấn công chỉ có giá trị băm khóa công khai (RIPEMD-160 của SHA-256).
 
-**Bitcoin's Partial Protection**:
-- Public keys không reveal until first spend
-- If never spent from address: public key không known
-- Attacker chỉ có public key hash (RIPEMD-160)
-- Must break hash function first, then ECDSA
+**Các phương án mật mã hậu lượng tử**:
+- **Dựa trên hàm băm**: SPHINCS+, XMSS.
+- **Dựa trên mạng tinh thể (Lattice-based)**: Dilithium, Falcon.
+- **Dựa trên mã sửa lỗi (Code-based)**: Classic McEliece.
 
-**Post-Quantum Alternatives**:
-- **Hash-based signatures**: SPHINCS+, XMSS
-- **Lattice-based**: Dilithium, Falcon
-- **Code-based**: Classic McEliece
+### 4.5. Chữ ký ngưỡng và Đa chữ ký
 
-### 4.5. Threshold Signatures và Multi-Signatures
+**Đa chữ ký (Multi-Signature — MultiSig)**:
+Yêu cầu \( m \) trên tổng số \( n \) chữ ký hợp lệ (ví dụ: 2-trên-3).
 
-**Multi-Signature (MultiSig)**:
-
-Require \( m \)-of-\( n \) signatures:
-- Example: 2-of-3 multisig (2 out of 3 people must sign)
-
-**Bitcoin Implementation**:
 ```
 OP_2                           // Require 2 signatures
 <PubKey1> <PubKey2> <PubKey3>  // 3 public keys
@@ -500,38 +434,22 @@ OP_3                           // From 3 total
 OP_CHECKMULTISIG               // Verify
 ```
 
-**Drawbacks**:
-- Large transaction size (multiple signatures + public keys)
-- High fees
-- Privacy leak (reveals m-of-n structure)
+Nhược điểm của MultiSig truyền thống là kích thước giao dịch lớn (chứa nhiều chữ ký và khóa công khai), phí cao và làm lộ cấu trúc \( m \)-trên-\( n \) trên chuỗi.
 
-**Threshold Signatures (TSS)**:
+**Chữ ký ngưỡng (Threshold Signatures — TSS)**:
+Các bên chạy một giao thức mật mã tương tác để tạo ra **một chữ ký đơn duy nhất** từ \( m \)-trên-\( n \) thành viên. Kết quả trông giống hệt giao dịch đơn chữ ký, giúp giảm kích thước và bảo vệ quyền riêng tư tốt hơn, dù giao thức thiết lập phức tạp hơn.
 
-Cryptographic protocol tạo single signature from \( m \)-of-\( n \) parties:
-- Output looks like normal single signature
-- Smaller size
-- Better privacy
-- More complex protocol
-
-**Example: Schnorr Threshold Signature**:
-
-Parties jointly compute:
+**Ví dụ: Chữ ký ngưỡng Schnorr**:
 \[
 s = k + H(R, P, m) \cdot x
 \]
-
-Where:
-- \( k \): Aggregate nonce (from all parties)
-- \( P \): Aggregate public key
-- \( x \): Aggregate private key (no single party knows this!)
-
-Verifier sees normal signature, không biết it's threshold!
+Trong đó \( k \) là `nonce` tổng hợp, \( P \) là khóa công khai tổng hợp và \( x \) là khóa bí mật tổng hợp (không một cá nhân nào nắm toàn bộ \( x \)). Bên xác minh chỉ nhìn thấy một chữ ký thông thường.
 
 ---
 
-## 5. Implementation Insight
+## 5. Minh họa triển khai
 
-### 5.1. ECDSA Implementation (Python)
+### 5.1. Cài đặt ECDSA (Python)
 
 ```python
 import hashlib
@@ -722,7 +640,7 @@ if __name__ == "__main__":
     print(f"Compression: Can compress public key to 33 bytes")
 ```
 
-### 5.2. Bitcoin Transaction Signing
+### 5.2. Ký giao dịch Bitcoin
 
 ```python
 import hashlib
@@ -888,21 +806,17 @@ if __name__ == "__main__":
 
 ## 6. Các thách thức và đánh đổi thường gặp
 
-### 6.1. Key Management Challenges
+### 6.1. Thách thức quản lý khóa
 
-**Problem**: Losing private key = losing all funds forever
+Trong hệ thống phi tập trung, mất khóa bí mật đồng nghĩa với mất quyền truy cập tài sản vĩnh viễn. Ước tính khoảng 3–4 triệu BTC (~20% tổng cung) đã bị thất lạc vĩnh viễn, phần lớn do mất khóa bí mật.
 
-**Statistics**:
-- Estimated 3-4 million BTC lost forever (20% of total supply)
-- Mostly from lost private keys
+**Các giải pháp quản lý khóa**:
+- **Ví phần cứng (Hardware wallets)**: Thiết bị chuyên dụng cô lập khóa bí mật như Ledger, Trezor.
+- **Ví đa chữ ký (Multi-signature wallets)**: Phân tán quyền ký qua nhiều thiết bị hoặc nhiều người giữ khóa.
+- **Khôi phục xã hội (Social recovery)**: Cho phép nhóm người tin cậy hỗ trợ khôi phục ví (như ví Argent).
+- **Chia sẻ bí mật Shamir (Shamir's Secret Sharing)**: Chia khóa thành \( n \) mảnh, chỉ cần \( k \) mảnh để tái tạo lại khóa gốc.
 
-**Solutions**:
-- **Hardware wallets**: Ledger, Trezor - dedicated secure devices
-- **Multi-signature wallets**: Require multiple keys (family members, devices)
-- **Social recovery**: Trusted contacts can help recover (Argent wallet)
-- **Shamir's Secret Sharing**: Split key into n shares, need k to recover
-
-**Trade-offs**:
+**Đánh đổi giữa bảo mật và tiện lợi**:
 ```
 Security ←────────────────────────────────────► Convenience
 
@@ -910,92 +824,57 @@ Hardware wallet        Software wallet        Exchange custodial
 (Most secure)         (Medium)               (Least secure, most convenient)
 ```
 
-### 6.2. Signature Schemes Comparison
+### 6.2. So sánh các lược đồ chữ ký
 
-| Scheme | Signature Size | Verification | Batch Verify | Linearity | Status |
+| Lược đồ | Kích thước chữ ký | Tốc độ xác minh | Xác minh theo lô | Tính tuyến tính | Trạng thái ứng dụng |
 |--------|---------------|--------------|--------------|-----------|--------|
-| ECDSA | 64 bytes | Medium | No | No | Bitcoin (current) |
-| Schnorr | 64 bytes | Fast | Yes | Yes | Bitcoin Taproot |
-| EdDSA | 64 bytes | Fast | Yes | No | Ed25519 (other chains) |
-| BLS | 48 bytes (G1) | Slow | Yes | Yes | Ethereum 2.0 |
-| Aggregate | ~48-64 bytes for all | Fast | Built-in | Yes | Future |
+| ECDSA | 64 byte | Trung bình | Không | Không | Bitcoin (truyền thống) |
+| Schnorr | 64 byte | Nhanh | Có | Có | Bitcoin Taproot |
+| EdDSA | 64 byte | Nhanh | Có | Không | Ed25519 (nhiều chuỗi khác) |
+| BLS | 48 byte (G1) | Chậm | Có | Có | Ethereum 2.0 |
+| Chữ ký gộp | ~48–64 byte cho cả nhóm | Nhanh | Tích hợp sẵn | Có | Hướng phát triển tiếp theo |
 
-**ECDSA Limitations**:
-- Malleable signatures
-- No batch verification
-- Large multisig transactions
+**Hạn chế của ECDSA**: chữ ký có tính khả biến, không hỗ trợ xác minh theo lô và làm giao dịch đa chữ ký cồng kềnh.
 
-**Schnorr Advantages** (Bitcoin Taproot upgrade):
-- Non-malleable
-- Batch verification (verify multiple signatures at once)
-- Key aggregation (n keys → 1 aggregate key)
-- Better privacy (multisig looks like single-sig)
+**Ưu điểm của Schnorr (nâng cấp Taproot trên Bitcoin)**: không khả biến, hỗ trợ xác minh theo lô, cho phép gộp khóa (\( n \) khóa thành 1 khóa tổng hợp) và tăng quyền riêng tư khi giao dịch đa chữ ký trông giống giao dịch đơn chữ ký.
 
-### 6.3. Side-Channel Attacks
+### 6.3. Tấn công kênh kề (Side-Channel Attacks)
 
-**Timing Attacks**:
-- Measure time taken for signature generation
-- Can leak information about private key
-- **Mitigation**: Constant-time implementations
+- **Tấn công thời gian (Timing Attacks)**: Đo thời gian thực thi phép ký để suy đoán thông tin về khóa bí mật. **Khắc phục**: cài đặt thuật toán có thời gian chạy hằng số (constant-time).
+- **Phân tích tiêu thụ điện năng (Power Analysis)**: Đo biến thiên dòng điện trên thiết bị phần cứng trong lúc ký để trích xuất khóa. **Khắc phục**: ngẫu nhiên hóa phép tính và che chắn vật lý.
+- **Tấn công gây lỗi phần cứng (Fault Attacks)**: Tạo nhiễu điện áp hoặc xung nhịp trong quá trình ký để làm lộ thông tin khóa bí mật. **Khắc phục**: kiểm tra lại kết quả chữ ký trước khi xuất ra và bổ sung cảm biến phát hiện nhiễu phần cứng.
 
-**Power Analysis**:
-- Measure power consumption during signing
-- Can extract private key from hardware wallets
-- **Mitigation**: Randomized algorithms, physical shielding
+### 6.4. Lỗi sinh Nonce yếu
 
-**Fault Attacks**:
-- Induce hardware faults during signing (voltage glitching)
-- Can reveal private key
-- **Real example**: PS3 hack used fault to extract signing key
+Năm 2013, một số ví Bitcoin trên Android sử dụng bộ sinh số ngẫu nhiên bị lỗi, tạo ra các `nonce` có thể dự đoán hoặc trùng lặp, dẫn đến lộ khóa bí mật và mất tiền.
 
-### 6.4. Nonce Generation Failures
-
-**Biased Nonces**:
-Android Bitcoin wallets (2013) used weak random number generation:
-- Predictable nonces
-- Private keys extracted
-- Funds stolen
-
-**Solution**: Deterministic nonces (RFC 6979)
+**Giải pháp**: Dùng `nonce` tất định theo chuẩn **RFC 6979**:
 ```
 k = HMAC-SHA256(private_key, message_hash)
 ```
+Cách làm này loại bỏ rủi ro từ nguồn sinh số ngẫu nhiên kém và đảm bảo tính lặp lại, dù phụ thuộc vào độ an toàn của hàm băm nền tảng.
 
-Pro: No randomness needed, reproducible
-Con: If hash function broken, could be problematic
+### 6.5. Tính khả biến giao dịch (Vấn đề lịch sử)
 
-### 6.5. Transaction Malleability (Historical Issue)
+Một phần nguyên nhân dẫn đến sự cố sàn giao dịch Mt. Gox bắt nguồn từ việc kẻ tấn công sửa chữ ký giao dịch để làm thay đổi TXID, khiến phần mềm của sàn hiểu nhầm giao dịch trước thất bại và gửi trùng tiền.
 
-**Mt. Gox Incident** (partial cause):
-- Attackers modified transaction signatures
-- Changed transaction IDs
-- Exchange software confused, thought transactions failed
-- Sent funds again → double payment
-
-**Fix**: SegWit (Segregated Witness)
-- Separates signature data from transaction data
-- TXID computed without signatures
-- Malleability no longer affects TXID
+**Cách khắc phục**: Bản nâng cấp **SegWit (Segregated Witness)** tách dữ liệu chữ ký (witness) ra khỏi phần dữ liệu dùng để tính TXID, loại bỏ hoàn toàn ảnh hưởng của tính khả biến chữ ký lên mã định danh giao dịch.
 
 ---
 
 ## 7. Các khái niệm liên quan
 
-### 7.1. Zero-Knowledge Proofs
+### 7.1. Bằng chứng không tiết lộ kiến thức (Zero-Knowledge Proofs)
 
-Extension of digital signatures concept:
+Mở rộng ý tưởng của chữ ký số:
+- **Chữ ký số**: Chứng minh "tôi sở hữu khóa bí mật" gắn với một thông điệp cụ thể.
+- **Bằng chứng không tiết lộ kiến thức**: Chứng minh "tôi biết một bí mật \( X \)" mà không tiết lộ bất kỳ thông tin nào về \( X \).
 
-**Digital Signature**: Prove "I know private key" + message
-**Zero-Knowledge Proof**: Prove "I know secret X" without revealing X
+Ví dụ, **zk-SNARKs** (ứng dụng trong Zcash) dùng cặp song tuyến trên đường cong elliptic để chứng minh giao dịch hợp lệ mà không lộ số tiền hay địa chỉ, với độ phức tạp toán học cao hơn nhiều so với ECDSA.
 
-**Example: zk-SNARKs** (Zcash):
-- Prove transaction valid without revealing amounts/addresses
-- Uses elliptic curve pairings
-- Much more complex than ECDSA
+### 7.2. Chữ ký vòng (Ring Signatures — Monero)
 
-### 7.2. Ring Signatures (Monero)
-
-**Concept**: Signature could be from any member of a "ring" of public keys
+Chữ ký vòng chứng minh chữ ký được tạo bởi một trong các thành viên thuộc một nhóm ("vòng") khóa công khai mà không tiết lộ chính xác ai là người ký:
 
 ```
 Ring: [Alice's key, Bob's key, Charlie's key]
@@ -1003,35 +882,24 @@ Signature proves: "One of these three people signed"
 But doesn't reveal which one!
 ```
 
-**Privacy benefit**: Sender anonymity
+Cơ chế này bảo vệ tính ẩn danh của người gửi nhưng đánh đổi bằng kích thước chữ ký lớn hơn.
 
-**Trade-off**: Larger signatures (multiple keys)
+### 7.3. Chữ ký mù (Blind Signatures)
 
-### 7.3. Blind Signatures
+Cho phép người ký ký vào một thông điệp mà không nhìn thấy nội dung bên trong:
+1. Alice làm mù thông điệp: \( m' = \text{blind}(m, r) \).
+2. Người ký tạo chữ ký: \( \sigma' = \text{sign}(m') \).
+3. Alice gỡ lớp làm mù: \( \sigma = \text{unblind}(\sigma', r) \).
+4. \( \sigma \) trở thành chữ ký hợp lệ cho thông điệp gốc \( m \).
 
-Signer signs message without seeing its content:
+Kỹ thuật này từng được ứng dụng trong các hệ thống tiền điện tử ẩn danh (e-cash).
 
-**Process**:
-1. Alice blinds message: \( m' = \text{blind}(m, r) \)
-2. Signer signs: \( \sigma' = \text{sign}(m') \)
-3. Alice unblinds: \( \sigma = \text{unblind}(\sigma', r) \)
-4. \( \sigma \) is valid signature on \( m \)!
+### 7.4. So sánh Chữ ký ngưỡng và Đa chữ ký
 
-**Application**: E-cash (anonymous digital money)
+- **Đa chữ ký (Multi-Signature)**: Mỗi bên ký độc lập và ghép toàn bộ chữ ký vào giao dịch; kích thước tăng tuyến tính \( O(n) \).
+- **Chữ ký ngưỡng (Threshold Signature)**: Các bên phối hợp qua giao thức tương tác để xuất ra một chữ ký duy nhất; kích thước hằng số \( O(1) \).
 
-### 7.4. Threshold Signatures vs Multi-Signatures
-
-**Multi-Signature**:
-- Each party signs independently
-- Combine n signatures
-- Size: \( O(n) \)
-
-**Threshold Signature**:
-- Parties run interactive protocol
-- Generate single signature
-- Size: \( O(1) \)
-
-**Example**:
+**Ví dụ so sánh**:
 ```
 3-of-5 MultiSig: 3 full signatures + 5 public keys ≈ 450 bytes
 3-of-5 Threshold: 1 signature + 1 aggregate public key ≈ 96 bytes
@@ -1041,91 +909,91 @@ Signer signs message without seeing its content:
 
 ## 8. ⭐ Các bài báo và whitepaper nền tảng
 
-| Paper | Year | Author(s) | Contribution |
+| Bài báo | Năm | Tác giả | Đóng góp chính |
 |-------|------|-----------|--------------|
-| **"New Directions in Cryptography"** | 1976 | Diffie, Hellman | Invented public-key cryptography concept |
-| **"A Method for Obtaining Digital Signatures"** | 1978 | Rivest, Shamir, Adelman | RSA algorithm - first practical PKC |
-| **"A Digital Signature Based on a Conventional Encryption Function"** | 1987 | Ralph Merkle | Merkle signature scheme |
-| **"Elliptic Curve Cryptosystems"** | 1985 | Neal Koblitz | ECC foundation |
-| **"Elliptic Curve Discrete Logarithm Problem"** | 1985 | Victor Miller | ECC foundation |
-| **"Digital Signature Standard (DSS)"** | 1994 | NIST FIPS 186 | ECDSA standardization |
-| **"SEC 2: Recommended Elliptic Curve Domain Parameters"** | 2010 | SECG | secp256k1 specification (Bitcoin) |
-| **"Deterministic Usage of DSA and ECDSA"** | 2013 | RFC 6979 | Deterministic nonce generation |
-| **"Schnorr Signatures for Bitcoin"** | 2018 | Pieter Wuille (BIP 340) | Schnorr in Bitcoin |
-| **"Compact Multi-Signatures for Smaller Blockchains"** | 2018 | Boneh et al. | BLS signatures |
+| **"New Directions in Cryptography"** | 1976 | Diffie, Hellman | Khởi xướng khái niệm mật mã khóa công khai |
+| **"A Method for Obtaining Digital Signatures"** | 1978 | Rivest, Shamir, Adleman | Thuật toán RSA — hệ mật khóa công khai thực tiễn đầu tiên |
+| **"A Digital Signature Based on a Conventional Encryption Function"** | 1987 | Ralph Merkle | Lược đồ chữ ký Merkle |
+| **"Elliptic Curve Cryptosystems"** | 1985 | Neal Koblitz | Đặt nền móng cho mật mã đường cong elliptic (ECC) |
+| **"Elliptic Curve Discrete Logarithm Problem"** | 1985 | Victor Miller | Đặt nền móng cho mật mã đường cong elliptic (ECC) |
+| **"Digital Signature Standard (DSS)"** | 1994 | NIST FIPS 186 | Chuẩn hóa thuật toán DSA và ECDSA |
+| **"SEC 2: Recommended Elliptic Curve Domain Parameters"** | 2010 | SECG | Đặc tả tham số đường cong `secp256k1` dùng trong Bitcoin |
+| **"Deterministic Usage of DSA and ECDSA"** | 2013 | RFC 6979 | Chuẩn sinh `nonce` tất định an toàn |
+| **"Schnorr Signatures for Bitcoin"** | 2018 | Pieter Wuille (BIP 340) | Đề xuất tích hợp chữ ký Schnorr vào Bitcoin |
+| **"Compact Multi-Signatures for Smaller Blockchains"** | 2018 | Boneh et al. | Phân tích chữ ký gộp BLS |
 
-**Essential Reading**:
-1. Diffie-Hellman paper: Revolutionary PKC concept
-2. NIST FIPS 186-4: Authoritative ECDSA spec
-3. RFC 6979: How to safely generate nonces
-4. BIP 340: Bitcoin's Schnorr implementation
+**Tài liệu nên ưu tiên đọc**:
+1. Bài báo Diffie–Hellman: Khái niệm nền tảng về mật mã khóa công khai.
+2. NIST FIPS 186-4: Đặc tả chuẩn của ECDSA.
+3. RFC 6979: Phương pháp sinh `nonce` an toàn.
+4. BIP 340: Triển khai chữ ký Schnorr trong Bitcoin.
 
 ---
 
 ## 9. 🎨 Minh họa và tham khảo hình ảnh
 
-| Description | Source | Notes |
+| Mô tả | Nguồn | Ghi chú |
 |-------------|--------|-------|
-| **Elliptic curve visualization** | [Andrea Corbellini's ECC Series](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/) | Best visual introduction to ECC |
-| **ECDSA algorithm flow** | [Bitcoin Developer Guide](https://developer.bitcoin.org/devguide/transactions.html) | Practical implementation |
-| **Key generation process** | [Mastering Bitcoin Ch4](https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04.asciidoc) | From private key to address |
-| **Digital signature process** | [Practical Cryptography](http://www.crypto-it.net/eng/theory/digital-signature.html) | Step-by-step visualization |
-| **secp256k1 curve plot** | [Desmos secp256k1](https://www.desmos.com/calculator/ialhd71we3) | Interactive curve exploration |
+| **Minh họa đường cong Elliptic** | [Andrea Corbellini's ECC Series](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/) | Chuỗi bài trực quan và dễ tiếp cận về ECC |
+| **Luồng thuật toán ECDSA** | [Bitcoin Developer Guide](https://developer.bitcoin.org/devguide/transactions.html) | Hướng dẫn triển khai thực tế |
+| **Quy trình sinh khóa và địa chỉ** | [Mastering Bitcoin Ch4](https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04.asciidoc) | Đi từ khóa bí mật tới địa chỉ Bitcoin |
+| **Quy trình chữ ký số** | [Practical Cryptography](http://www.crypto-it.net/eng/theory/digital-signature.html) | Minh họa từng bước |
+| **Đồ thị đường cong secp256k1** | [Desmos secp256k1](https://www.desmos.com/calculator/ialhd71we3) | Công cụ khám phá đường cong tương tác |
 
-**Interactive Tools**:
-- [Anders Brownworth - Public/Private Keys](https://andersbrownworth.com/blockchain/public-private-keys) - Visual demo
-- [Bitcoin Address Generator](https://www.bitaddress.org) - See key generation live (USE OFFLINE!)
-- [ECC Point Calculator](https://www.desmos.com/calculator/ialhd71we3) - Play with elliptic curves
+**Công cụ tương tác**:
+- [Anders Brownworth - Public/Private Keys](https://andersbrownworth.com/blockchain/public-private-keys) — Minh họa trực quan cặp khóa và chữ ký.
+- [Bitcoin Address Generator](https://www.bitaddress.org) — Quan sát quy trình sinh khóa (chỉ nên dùng ở chế độ ngoại tuyến nếu thử nghiệm thực tế).
+- [ECC Point Calculator](https://www.desmos.com/calculator/ialhd71we3) — Thực hành phép toán trên đường cong elliptic.
 
 ---
 
 ## 10. Tóm tắt và điểm chính
 
-**Core Concepts**:
-1. Digital signatures provide authentication, non-repudiation, và integrity
-2. Based on public-key cryptography với key pairs (public, private)
-3. ECDSA on secp256k1 is Bitcoin's signature scheme
-4. Security relies on hardness of elliptic curve discrete logarithm problem
+**Khái niệm cốt lõi**:
+1. Chữ ký số đảm bảo tính xác thực, không thể chối bỏ và toàn vẹn dữ liệu.
+2. Hoạt động dựa trên mật mã khóa công khai với cặp `(khóa công khai, khóa bí mật)`.
+3. Bitcoin sử dụng ECDSA trên đường cong `secp256k1` (và mở rộng sang Schnorr từ Taproot).
+4. Độ an toàn dựa trên độ khó của bài toán logarit rời rạc trên đường cong elliptic.
 
-**Technical Foundation**:
-- Key generation: Private key (random), Public key = private × G
-- Signing: \( (r, s) \) where \( s = k^{-1}(e + rd_A) \mod n \)
-- Verification: Check \( r \stackrel{?}{=} (u_1 G + u_2 Q_A).x \mod n \)
-- ~128-bit security level (256-bit keys)
+**Nền tảng kỹ thuật**:
+- Sinh khóa: khóa bí mật chọn ngẫu nhiên, khóa công khai tính bằng `khóa bí mật × G`.
+- Ký: cặp \( (r, s) \) với \( s = k^{-1}(e + rd_A) \mod n \).
+- Xác minh: kiểm tra \( r \stackrel{?}{=} (u_1 G + u_2 Q_A).x \mod n \).
+- Mức bảo mật: ~128 bit (với khóa dài 256 bit).
 
-**Blockchain Applications**:
-- Transaction authorization: Prove you own coins
-- Address generation: Hash of public key
-- Smart contract interaction: Signatures trigger execution
-- Multi-signature wallets: Multiple keys control funds
+**Ứng dụng trong blockchain**:
+- Ủy quyền chi tiêu trong giao dịch.
+- Tạo địa chỉ ví từ giá trị băm của khóa công khai.
+- Kích hoạt thực thi hợp đồng thông minh.
+- Quản lý tài sản bằng ví đa chữ ký.
 
-**Security Considerations**:
-- NEVER reuse nonces (k) - leads to private key exposure
-- Quantum computing threat (Shor's algorithm) - timeline: 10-30 years
-- Key management critical - loss = permanent fund loss
-- Side-channel attacks on hardware implementations
+**Lưu ý bảo mật**:
+- Không bao giờ tái sử dụng `nonce` \( k \) vì sẽ làm lộ trực tiếp khóa bí mật.
+- Máy tính lượng tử (thuật toán Shor) là rủi ro dài hạn (ước tính 10–30 năm).
+- Quản lý khóa có tính quyết định vì mất khóa đồng nghĩa mất tài sản vĩnh viễn.
+- Cần phòng chống tấn công kênh kề ở các cài đặt phần cứng.
 
-**Modern Improvements**:
-- Schnorr signatures (Bitcoin Taproot): Better privacy, batch verification
-- Deterministic nonces (RFC 6979): No randomness failures
-- Threshold signatures: n-of-m without revealing structure
-- BLS signatures (Ethereum 2.0): Signature aggregation
+**Các cải tiến hiện đại**:
+- Chữ ký Schnorr (Bitcoin Taproot): tăng quyền riêng tư và hỗ trợ xác minh theo lô.
+- Sinh `nonce` tất định (RFC 6979): tránh lỗi từ bộ sinh số ngẫu nhiên yếu.
+- Chữ ký ngưỡng: triển khai mô hình \( m \)-trên-\( n \) mà không lộ cấu trúc đa chữ ký.
+- Chữ ký BLS (Ethereum 2.0): cho phép gộp nhiều chữ ký thành một.
 
-**Key Takeaway**: Digital signatures are the cryptographic primitive that enables decentralized ownership and control in blockchain - transforming "possession of private key" into "control of digital assets" through mathematical proofs.
+**Điểm chốt**: Chữ ký số là thành phần mật mã cốt lõi tạo nên quyền sở hữu phi tập trung trong blockchain, chuyển đổi việc nắm giữ khóa bí mật thành quyền kiểm soát tài sản số thông qua chứng minh toán học.
 
 ---
 
-✅ **End of Lecture 00.03**
+✅ **Kết thúc Lecture 00.03**
 
-**Next**: Chapter 01 - Bitcoin: Architecture và Proof-of-Work
+**Chương tiếp theo**: Chapter 01 - Bitcoin: Kiến trúc và Proof-of-Work
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [What are Digital Signatures? - Computerphile](https://www.youtube.com/watch?v=s22eJ1eVLTU) — Computerphile, tiếng Anh. Computerphile tách người ký và người xác minh, rồi ký trên hash của thông điệp; xem trước mục authenticity.
-- [Elliptic Curves - Computerphile](https://www.youtube.com/watch?v=NF1pwjL9-DE) — Computerphile, tiếng Anh. Đường cong elliptic và bài toán logarit rời rạc; nền cho ECDSA trên secp256k1 ở phần toán.
-- [Public Key Cryptography - Computerphile](https://www.youtube.com/watch?v=GSIDS_lvRv4) — Computerphile, tiếng Anh. Cặp khóa công khai và bí mật, đúng bước sinh khóa trước khi bài đi vào công thức ký và xác minh.
+- **Xem trước:** [What are Digital Signatures? - Computerphile](https://www.youtube.com/watch?v=s22eJ1eVLTU) — Computerphile, tiếng Anh. Tách rõ vai trò người ký, người xác minh và bước ký trên giá trị băm của thông điệp; nên xem trước mục tính xác thực.
+- [Elliptic Curves - Computerphile](https://www.youtube.com/watch?v=NF1pwjL9-DE) — Computerphile, tiếng Anh. Giới thiệu đường cong elliptic và bài toán logarit rời rạc, làm nền cho ECDSA trên `secp256k1` ở phần toán học.
+- [Public Key Cryptography - Computerphile](https://www.youtube.com/watch?v=GSIDS_lvRv4) — Computerphile, tiếng Anh. Trình bày cặp khóa công khai — bí mật trước khi đi vào công thức ký và xác minh.
 
 ## References
 
@@ -1135,4 +1003,3 @@ Signer signs message without seeing its content:
 4. Pornin, T. (2013). *RFC 6979: Deterministic usage of the digital signature algorithm (DSA) and elliptic curve digital signature algorithm (ECDSA)*.
 5. Wuille, P., Nick, J., & Ruffing, T. (2020). *BIP 340: Schnorr signatures for secp256k1*.
 6. Nakamoto, S. (2008). *Bitcoin: A peer-to-peer electronic cash system*.
-

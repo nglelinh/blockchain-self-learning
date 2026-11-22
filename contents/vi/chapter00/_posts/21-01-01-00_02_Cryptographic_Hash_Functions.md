@@ -13,88 +13,75 @@ categories:
 
 ## 1. Tổng quan về khái niệm
 
-Nếu blockchain là một tòa nhà, thì **cryptographic hash functions** chính là những viên gạch cơ bản nhất xây nên nền móng của nó. Mọi aspect của blockchain - từ linking blocks lại với nhau, đến verifying transactions, đến mining new blocks - đều dựa trên hash functions.
+Nếu xem blockchain như một công trình xây dựng, thì **hàm băm mật mã (cryptographic hash functions)** chính là những viên gạch cơ bản tạo nên phần móng. Mọi cơ chế cốt lõi của blockchain — từ liên kết các block với nhau, xác minh giao dịch cho đến quá trình đào block mới — đều dựa trên hàm băm.
 
-Một **hash function** là một thuật toán toán học nhận input có độ dài bất kỳ và tạo ra output có độ dài cố định, được gọi là **hash**, **digest**, hoặc **fingerprint**. Ví dụ, SHA-256 (Secure Hash Algorithm 256-bit) - hash function được Bitcoin sử dụng - luôn tạo ra output 256 bits (32 bytes), bất kể input là 1 byte hay 1 gigabyte.
+Một **hàm băm (hash function)** là thuật toán toán học nhận đầu vào có độ dài bất kỳ và trả về đầu ra có độ dài cố định, gọi là **giá trị băm (hash)**, **bản tóm tắt (digest)** hoặc **dấu vân tay số (fingerprint)**. Chẳng hạn, SHA-256 (Secure Hash Algorithm 256-bit) — thuật toán băm được Bitcoin sử dụng — luôn cho ra kết quả dài 256 bit (32 byte), bất kể đầu vào chỉ dài 1 byte hay 1 gigabyte.
 
-Tuy nhiên, không phải hash function nào cũng là **cryptographic** hash function. Để được coi là cryptographic, một hash function phải thỏa mãn ba tính chất bảo mật quan trọng:
+Tuy nhiên, không phải mọi hàm băm đều là **hàm băm mật mã**. Để đáp ứng yêu cầu bảo mật mật mã học, một hàm băm phải thỏa mãn ba tính chất then chốt:
 
-**1. Pre-image Resistance (One-wayness)**:
-Cho hash value \( h \), cực kỳ khó (computational infeasible) tìm ra bất kỳ message \( m \) nào sao cho \( H(m) = h \).
+**1. Kháng tiền ảnh (Pre-image Resistance / Tính một chiều)**:
+Cho trước một giá trị băm \( h \), việc tìm ra bất kỳ thông điệp \( m \) nào sao cho \( H(m) = h \) là bất khả thi về mặt tính toán. Tính chất "một chiều" này giống như việc pha cà phê sữa: thao tác trộn hai thành phần rất dễ dàng, nhưng tách ngược lại thành cà phê và sữa riêng biệt sau khi đã trộn gần như không thể thực hiện.
 
-Đây là tính chất "một chiều" - dễ dàng tính hash từ message, nhưng không thể reverse để tìm message từ hash. Giống như việc pha một cốc cà phê sữa - dễ pha, nhưng không thể tách riêng cà phê và sữa ra sau khi đã trộn.
+**2. Kháng tiền ảnh thứ hai (Second Pre-image Resistance / Kháng va chạm yếu)**:
+Cho trước một thông điệp \( m_1 \), cực kỳ khó tìm ra một thông điệp khác \( m_2 \neq m_1 \) sao cho \( H(m_1) = H(m_2) \). Tính chất này ngăn chặn việc tạo ra một tài liệu giả mạo có cùng giá trị băm với tài liệu gốc.
 
-**2. Second Pre-image Resistance (Weak Collision Resistance)**:
-Cho một message \( m_1 \), cực kỳ khó tìm một message khác \( m_2 \neq m_1 \) sao cho \( H(m_1) = H(m_2) \).
+**3. Kháng va chạm (Collision Resistance / Kháng va chạm mạnh)**:
+Cực kỳ khó tìm ra bất kỳ cặp thông điệp khác nhau \( m_1 \neq m_2 \) nào sao cho \( H(m_1) = H(m_2) \). Điều kiện này chặt hơn kháng tiền ảnh thứ hai vì kẻ tấn công được tự do chọn cả hai đầu vào.
 
-Điều này đảm bảo rằng không ai có thể tạo ra một document giả mạo có cùng hash với document gốc.
+Vai trò của các tính chất này trong blockchain:
+- **Tính toàn vẹn (Integrity)**: Kháng tiền ảnh cho phép dùng giá trị băm làm cam kết (commitment); một khi giá trị băm đã công bố, mọi thay đổi trên dữ liệu gốc đều bị phát hiện.
+- **Tính duy nhất (Uniqueness)**: Kháng va chạm đảm bảo mỗi block có một dấu vân tay số riêng biệt.
+- **Liên kết chuỗi (Chain Linking)**: Mỗi block lưu giá trị băm của block liền trước; sửa đổi bất kỳ block nào sẽ làm đổi giá trị băm của nó và phá vỡ chuỗi liên kết phía sau.
+- **Proof-of-Work**: Quá trình đào yêu cầu tìm đầu vào sao cho giá trị băm đầu ra thỏa mãn điều kiện ngưỡng (ví dụ: bắt đầu bằng một số lượng bit 0 nhất định).
 
-**3. Collision Resistance (Strong Collision Resistance)**:
-Cực kỳ khó tìm bất kỳ hai messages khác nhau \( m_1 \neq m_2 \) nào sao cho \( H(m_1) = H(m_2) \).
+**Lịch sử phát triển của các họ hàm băm**:
+- **MD5** (1991): Đầu ra 128 bit, đã bị phá vỡ — có thể tạo va chạm chỉ trong vài giây.
+- **SHA-1** (1995): Đầu ra 160 bit, đã ngừng khuyến nghị sử dụng sau khi xuất hiện tấn công va chạm thực tế năm 2017.
+- **Họ SHA-2** (2001): Gồm SHA-224, SHA-256, SHA-384, SHA-512 — hiện vẫn được sử dụng rộng rãi.
+- **SHA-3** (2015): Dựa trên kiến trúc Keccak, được thiết kế như phương án dự phòng độc lập với SHA-2 (không phải vì SHA-2 đã bị phá vỡ).
+- **BLAKE2, BLAKE3**: Các hàm băm hiện đại có tốc độ xử lý cao hơn.
 
-Điều này mạnh hơn second pre-image resistance vì attacker có quyền chọn cả hai messages.
-
-Tại sao những tính chất này quan trọng cho blockchain?
-
-- **Integrity**: Pre-image resistance đảm bảo hash có thể được dùng làm commitment - một khi hash được publish, bạn không thể thay đổi data mà không bị phát hiện
-
-- **Uniqueness**: Collision resistance đảm bảo mỗi block có một "digital fingerprint" duy nhất
-
-- **Chain Linking**: Mỗi block chứa hash của block trước nó. Thay đổi bất kỳ block nào sẽ thay đổi hash của nó, phá vỡ chain
-
-- **Proof-of-Work**: Mining process yêu cầu tìm input sao cho hash output thỏa mãn điều kiện nhất định (ví dụ: bắt đầu với N số 0)
-
-**Lịch sử và Evolution**:
-
-Hash functions đã evolve qua nhiều thế hệ:
-
-- **MD5** (1991): 128-bit output, bị broken - collisions được tìm ra trong vài giây
-- **SHA-1** (1995): 160-bit output, deprecated - collision attack thực tế từ 2017
-- **SHA-2 family** (2001): SHA-224, SHA-256, SHA-384, SHA-512 - hiện tại được sử dụng rộng rãi
-- **SHA-3** (2015): Based on Keccak, alternative to SHA-2 (không phải vì SHA-2 broken)
-- **BLAKE2, BLAKE3**: Modern, faster alternatives
-
-Bitcoin sử dụng **SHA-256**, Ethereum ban đầu dùng **Keccak-256** (variant của SHA-3) cho hầu hết operations, và **Ethash** (memory-hard function based on Keccak) cho mining.
+Bitcoin sử dụng **SHA-256**, trong khi Ethereum dùng **Keccak-256** (biến thể gần với SHA-3) cho phần lớn thao tác và trước đây từng dùng **Ethash** (hàm đòi hỏi nhiều bộ nhớ dựa trên Keccak) cho cơ chế đào PoW.
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. Hash như "Digital Fingerprint"
+### 2.1. Hàm băm như "Dấu vân tay số"
 
-Hãy tưởng tượng hash function như một cỗ máy magic:
+Có thể hình dung hàm băm như một bộ xử lý chuẩn hóa đầu ra:
 
 ```
 Input (any size)          Hash Function         Output (fixed size)
 ================         ==============        ===================
-"Hello"          ──────►   SHA-256    ──────►  2cf24dba5fb0a30e...
-"Hello!"         ──────►   SHA-256    ──────►  8cd02f4e3e55da54...
+"Hello"          ──────►   SHA-256    ──────►  185f8db32271fe25...
+"Hello!"         ──────►   SHA-256    ──────►  334d016f755cd6dc...
 [Entire Harry    ──────►   SHA-256    ──────►  a7b38c29e4f15c83...
  Potter book]
 ```
 
-Quan sát:
-1. Output luôn có độ dài 256 bits (64 ký tự hex), bất kể input
-2. Thay đổi một ký tự trong input → output thay đổi hoàn toàn (avalanche effect)
-3. Không thể đoán input từ output
+Ba nhận xét chính:
+1. Đầu ra luôn có độ dài cố định 256 bit (64 ký tự hệ thập lục phân), không phụ thuộc kích thước đầu vào.
+2. Chỉ cần thêm hoặc đổi một ký tự ở đầu vào, đầu ra thay đổi hoàn toàn (hiệu ứng tuyết lở).
+3. Không thể suy ngược nội dung đầu vào từ giá trị băm đầu ra.
 
-### 2.2. Avalanche Effect
+### 2.2. Hiệu ứng tuyết lở (Avalanche Effect)
 
-Đây là property quan trọng nhất của cryptographic hash functions - một thay đổi nhỏ trong input gây ra thay đổi lớn, không predictable trong output:
+Hiệu ứng tuyết lở là đặc tính quan trọng của hàm băm mật mã: một thay đổi cực nhỏ ở đầu vào tạo ra thay đổi lớn và không thể dự đoán ở đầu ra:
 
 ```
 Input:  "The quick brown fox jumps over the lazy dog"
 SHA256: d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592
 
 Input:  "The quick brown fox jumps over the lazy dag"  (dog → dag)
-SHA256: 78fb6e83e84ca651a75de8e17c3e0f8afffe3dc71a7fe0dd8e5bff7f4b2f8e29
+SHA256: 559cc2cb0e1998182b4b6343e38611b3757e8a6279d43e9914d74dfb7e7089e6
 ```
 
-Chỉ thay đổi 1 chữ cái, nhưng hash hoàn toàn khác! Không có pattern nào giữa hai hashes.
+Chỉ thay đổi đúng một chữ cái nhưng hai chuỗi băm hoàn toàn khác nhau và không thể hiện bất kỳ quy luật tương quan nào.
 
-### 2.3. One-Way Street Analogy
+### 2.3. Phép ví như đường một chiều
 
-Hash function giống như một **one-way street**:
+Hàm băm hoạt động như một **con đường một chiều**:
 
 ```
 Message ─────[Hash Function]────► Hash Value
@@ -106,52 +93,49 @@ Message ◄────[Reverse?????]────── Hash Value
             Impossible this way
 ```
 
-Với SHA-256, để "reverse" một hash, bạn phải thử trung bình \( 2^{256} \) messages khác nhau. Con số này lớn đến mức:
+Với SHA-256, để tìm ngược tiền ảnh bằng cách thử vét cạn, cần duyệt trung bình cỡ \( 2^{255} \) đến \( 2^{256} \) thông điệp khác nhau. Con số \( 2^{256} \) lớn tới mức:
 
 \[
 2^{256} \approx 10^{77}
 \]
 
-So sánh:
-- Số nguyên tử trong observable universe: \( \approx 10^{80} \)
-- Số giây kể từ Big Bang: \( \approx 4.3 \times 10^{17} \)
+Để dễ hình dung:
+- Số nguyên tử trong vũ trụ quan sát được: \( \approx 10^{80} \).
+- Số giây trôi qua kể từ vụ nổ Big Bang: \( \approx 4.3 \times 10^{17} \).
 
-Ngay cả khi bạn có tất cả computers trên Trái Đất, mất hàng tỷ năm cũng không thể brute-force một SHA-256 hash.
+Ngay cả khi huy động toàn bộ máy tính trên Trái Đất, việc dò vét cạn một giá trị băm SHA-256 vẫn bất khả thi trong nhiều tỷ năm.
 
-### 2.4. Pigeonhole Principle và Collisions
+### 2.4. Nguyên lý chuồng bồ câu và sự tồn tại của va chạm
 
-Về mặt lý thuyết, collisions **must exist**. Tại sao?
+Về mặt toán học, va chạm (collision) **chắc chắn tồn tại**. Theo **Nguyên lý chuồng bồ câu (Pigeonhole Principle)**, nếu số lượng phần tử đầu vào lớn hơn số lượng ngăn chứa đầu ra, chắc chắn có ít nhất hai phần tử rơi vào cùng một ngăn:
+- Không gian đầu vào: vô hạn (thông điệp có độ dài tùy ý).
+- Không gian đầu ra: hữu hạn, gồm \( 2^{256} \) giá trị có thể.
+- Vì vô hạn lớn hơn \( 2^{256} \), va chạm tất yếu phải tồn tại.
 
-**Pigeonhole Principle**: Nếu bạn có nhiều items hơn số containers, ít nhất một container phải chứa nhiều hơn một item.
-
-- Input space: infinite (messages có thể có bất kỳ độ dài nào)
-- Output space: \( 2^{256} \) possible hashes
-- Infinite > \( 2^{256} \) → must have collisions!
-
-Nhưng tìm ra một collision trong practice là cực kỳ khó. Theo **Birthday Paradox**, cần khoảng \( 2^{128} \) random hashes trước khi có 50% chance tìm ra collision cho SHA-256.
+Tuy nhiên, việc *tìm ra* một va chạm trong thực tế lại cực kỳ khó. Theo **Nghịch lý ngày sinh (Birthday Paradox)**, cần khoảng \( 2^{128} \) phép thử băm ngẫu nhiên để xác suất tìm được va chạm của SHA-256 đạt mức 50%:
 
 \[
 2^{128} \approx 3.4 \times 10^{38}
 \]
 
-Với current computing power, điều này vẫn là impossible.
+Với năng lực tính toán hiện nay, con số này vẫn nằm ngoài khả năng thực thi.
 
 ---
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. SHA-256 Algorithm Structure
+### 3.1. Cấu trúc thuật toán SHA-256
 
-SHA-256 thuộc **Merkle-Damgård construction**, work theo các bước:
+SHA-256 được xây dựng theo **cấu trúc Merkle–Damgård** và thực hiện qua bốn bước:
 
-**Step 1: Preprocessing (Padding)**
+**Bước 1: Tiền xử lý — Đệm dữ liệu (Padding)**
 
-Message được pad để độ dài chia hết cho 512 bits:
-- Append bit '1'
-- Append k bits '0' where \( k \) thỏa mãn: \( (\text{message length} + 1 + k) \equiv 448 \pmod{512} \)
-- Append 64-bit representation của original message length
+Thông điệp được đệm thêm bit sao cho tổng độ dài chia hết cho 512 bit:
+- Thêm 1 bit `'1'` vào cuối thông điệp.
+- Thêm \( k \) bit `'0'` sao cho \( (\text{message length} + 1 + k) \equiv 448 \pmod{512} \).
+- Thêm chuỗi 64 bit biểu diễn độ dài ban đầu của thông điệp gốc.
 
-**Example**:
+**Ví dụ**:
 ```
 Original message: "abc" = 01100001 01100010 01100011 (24 bits)
 
@@ -163,9 +147,9 @@ After padding:
 Total: 512 bits (one block)
 ```
 
-**Step 2: Initialize Hash Values**
+**Bước 2: Khởi tạo các giá trị băm ban đầu**
 
-SHA-256 sử dụng 8 initial hash values (H₀ - H₇), each 32 bits:
+SHA-256 sử dụng 8 hằng số khởi tạo 32-bit (\( H_0 \) đến \( H_7 \)):
 ```
 H₀ = 0x6a09e667    (first 32 bits of fractional parts of √2)
 H₁ = 0xbb67ae85    (√3)
@@ -174,26 +158,25 @@ H₂ = 0x3c6ef372    (√5)
 H₇ = 0x5be0cd19    (√19)
 ```
 
-Những số này không random - chúng là fractional parts của square roots của first 8 primes, để prove không có backdoors.
+Các hằng số này được lấy từ 32 bit đầu phần thập phân của căn bậc hai 8 số nguyên tố đầu tiên, nhằm đảm bảo tính minh bạch và tránh nghi ngờ về cửa hậu (backdoor).
 
-**Step 3: Process Message in 512-bit Blocks**
+**Bước 3: Xử lý từng khối 512-bit qua 64 vòng nén**
 
-Mỗi block đi qua 64 rounds của operations:
+Mỗi khối 512-bit đi qua 64 vòng tính toán với các hàm thành phần sau:
 
-**Round Function Components**:
-1. **Ch(x,y,z)**: Choose function
+1. **Hàm chọn `Ch(x, y, z)`**:
    \[
    \text{Ch}(x, y, z) = (x \land y) \oplus (\neg x \land z)
    \]
-   "If x then y else z"
+   (nếu bit của \( x \) là 1 thì chọn bit của \( y \), ngược lại chọn bit của \( z \)).
 
-2. **Maj(x,y,z)**: Majority function
+2. **Hàm đa số `Maj(x, y, z)`**:
    \[
    \text{Maj}(x, y, z) = (x \land y) \oplus (x \land z) \oplus (y \land z)
    \]
-   "Majority vote of three bits"
+   (trả về giá trị xuất hiện nhiều hơn trong ba bit đầu vào).
 
-3. **Σ₀(x), Σ₁(x)**: Rotation functions
+3. **Các hàm xoay bit `Σ₀(x)`, `Σ₁(x)`**:
    \[
    \begin{align}
    \Sigma_0(x) &= \text{ROTR}^2(x) \oplus \text{ROTR}^{13}(x) \oplus \text{ROTR}^{22}(x) \\
@@ -201,7 +184,7 @@ Mỗi block đi qua 64 rounds của operations:
    \end{align}
    \]
 
-4. **σ₀(x), σ₁(x)**: Shift and rotation
+4. **Các hàm dịch và xoay bit `σ₀(x)`, `σ₁(x)`**:
    \[
    \begin{align}
    \sigma_0(x) &= \text{ROTR}^7(x) \oplus \text{ROTR}^{18}(x) \oplus \text{SHR}^3(x) \\
@@ -209,7 +192,7 @@ Mỗi block đi qua 64 rounds của operations:
    \end{align}
    \]
 
-**Main Loop** (64 rounds):
+**Vòng lặp chính (64 vòng)**:
 ```
 For t = 0 to 63:
     T₁ = h + Σ₁(e) + Ch(e,f,g) + Kₜ + Wₜ
@@ -224,18 +207,18 @@ For t = 0 to 63:
     a = T₁ + T₂
 ```
 
-Where:
-- a, b, c, d, e, f, g, h: Eight 32-bit working variables
-- Kₜ: Round constants (first 32 bits of fractional parts of cube roots of first 64 primes)
-- Wₜ: Message schedule (derived from input block)
+Trong đó:
+- `a, b, c, d, e, f, g, h`: 8 biến làm việc 32-bit.
+- `Kₜ`: 64 hằng số vòng (32 bit đầu phần thập phân của căn bậc ba 64 số nguyên tố đầu tiên).
+- `Wₜ`: Lịch trình thông điệp (message schedule) được mở rộng từ khối đầu vào.
 
-**Step 4: Output**
+**Bước 4: Tạo đầu ra cuối cùng**
 
-Final hash = concatenation of H₀ + H₁ + ... + H₇ (256 bits total)
+Sau khi xử lý hết mọi khối, kết quả cuối cùng là chuỗi ghép 8 thanh ghi 32-bit \( H_0 || H_1 || \dots || H_7 \) tạo thành giá trị băm 256-bit.
 
-### 3.2. Message Schedule (W Array)
+### 3.2. Lịch trình thông điệp (Mảng W)
 
-W array được tạo từ 512-bit block:
+Mảng `W` gồm 64 từ 32-bit được xây dựng từ khối 512-bit đầu vào:
 
 ```python
 # First 16 words: directly from message block
@@ -246,29 +229,27 @@ for t in range(16, 64):
     W[t] = σ₁(W[t-2]) + W[t-7] + σ₀(W[t-15]) + W[t-16]
 ```
 
-Việc này ensures rằng mỗi bit của input ảnh hưởng đến nhiều bits của output (diffusion).
+Quá trình mở rộng này đảm bảo mỗi bit của dữ liệu đầu vào khuếch tán ảnh hưởng tới nhiều bit của đầu ra (tính khuếch tán — diffusion).
 
-### 3.3. Properties Analysis
+### 3.3. Phân tích các tính chất thống kê
 
-**Deterministic**:
+**Tính tất định (Deterministic)**:
 \[
 \forall m: H(m) \text{ always produces same output}
 \]
 
-**Uniform Distribution**:
-Cho random input, mỗi bit trong output có probability ≈ 0.5 là 0 hoặc 1.
+**Phân phối đều (Uniform Distribution)**:
+Với đầu vào ngẫu nhiên, mỗi bit trong đầu ra có xác suất xấp xỉ 0,5 nhận giá trị 0 hoặc 1.
 
-**Avalanche Effect** (strict avalanche criterion):
-Flip one input bit → on average 50% output bits flip.
-
-Đo lường:
+**Hiệu ứng tuyết lở (Strict Avalanche Criterion)**:
+Đảo 1 bit bất kỳ ở đầu vào sẽ làm đảo trung bình 50% số bit ở đầu ra:
 \[
 \text{Avalanche} = \frac{\text{Number of flipped bits in output}}{256} \times 100\%
 \]
 
-For good hash: Avalanche ≈ 50% ± small variance
+Với một hàm băm tốt, chỉ số này xấp xỉ 50% với phương sai rất nhỏ.
 
-**Compression**:
+**Tính nén (Compression)**:
 \[
 |H(m)| = 256 \text{ bits, regardless of } |m|
 \]
@@ -277,139 +258,122 @@ For good hash: Avalanche ≈ 50% ± small variance
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. Collision Resistance - Mathematical Analysis
+### 4.1. Phân tích toán học về kháng va chạm
 
-**Birthday Paradox** application:
-
-Trong một set có \( N \) possible values, probability của finding collision sau \( k \) random samples:
+Áp dụng **Nghịch lý ngày sinh** cho tập đầu ra có \( N \) giá trị khả dĩ, xác suất xuất hiện ít nhất một va chạm sau \( k \) mẫu ngẫu nhiên là:
 
 \[
 P(\text{collision}) \approx 1 - e^{-k(k-1)/(2N)}
 \]
 
-For 50% probability:
+Để xác suất va chạm đạt 50%:
 \[
-k \approx \sqrt{\frac{N \cdot \ln 2}{2}} \approx 1.17\sqrt{N}
+k \approx \sqrt{2 N \ln 2} \approx 1.177\sqrt{N}
 \]
 
-For SHA-256 with \( N = 2^{256} \):
+Với SHA-256 (\( N = 2^{256} \)):
 \[
-k \approx 1.17 \times 2^{128} \approx 3.99 \times 10^{38}
+k \approx 1.177 \times 2^{128} \approx 4.01 \times 10^{38}
 \]
 
-**Time to find collision** (brute force):
+**Ước tính thời gian tìm va chạm bằng vét cạn**:
 
-Giả sử computational power: \( C \) hashes/second
-
+Giả sử năng lực tính toán là \( C \) phép băm/giây:
 \[
 \text{Time} = \frac{k}{C}
 \]
 
-**Example calculation**:
-- Assume entire Bitcoin network: \( C \approx 600 \times 10^{18} \) hashes/sec (600 EH/s)
-- Time to 50% collision probability:
+**Ví dụ minh họa**:
+- Giả sử huy động toàn bộ mạng Bitcoin với tốc độ \( C \approx 600 \times 10^{18} \) hash/giây (600 EH/s).
+- Thời gian để đạt xác suất va chạm 50%:
   \[
-  T = \frac{3.99 \times 10^{38}}{600 \times 10^{18}} \approx 6.65 \times 10^{17} \text{ seconds}
+  T = \frac{4.01 \times 10^{38}}{600 \times 10^{18}} \approx 6.68 \times 10^{17} \text{ seconds}
   \]
   \[
   T \approx 2.1 \times 10^{10} \text{ years} = 21 \text{ billion years}
   \]
 
-Universe age: ~13.8 billion years. Even with entire Bitcoin network, would take longer than universe age!
+Tuổi của vũ trụ hiện ước tính khoảng 13,8 tỷ năm. Ngay cả khi dùng toàn bộ sức mạnh tính toán của mạng Bitcoin, thời gian kỳ vọng vẫn lớn hơn tuổi của vũ trụ.
 
-### 4.2. Pre-image Resistance
+### 4.2. Kháng tiền ảnh và giới hạn nhiệt động lực học
 
-Probability của finding pre-image (brute force):
-
-For hash output \( h \), try random inputs until finding \( m \) where \( H(m) = h \).
-
-Average attempts needed:
+Để tìm tiền ảnh của một giá trị băm \( h \) bằng phương pháp vét cạn, số phép thử kỳ vọng là:
 \[
 E[\text{attempts}] = \frac{2^{256}}{2} = 2^{255}
 \]
 
-**Comparison with physical processes**:
+**So sánh với giới hạn vật lý**:
 
-Landauer's principle: minimum energy to flip one bit at temperature T:
+Theo nguyên lý Landauer, năng lượng tối thiểu để xóa hoặc đảo 1 bit ở nhiệt độ \( T \) là:
 \[
 E_{\text{min}} = kT \ln 2
 \]
 
-At T = 300K (room temperature):
+Ở nhiệt độ phòng \( T = 300\text{ K} \):
 \[
 E_{\text{min}} \approx 2.87 \times 10^{-21} \text{ joules}
 \]
 
-Energy to compute \( 2^{256} \) hashes:
+Nếu mỗi phép băm chỉ tiêu tốn tối thiểu tương đương 1 thao tác bit lý tưởng, năng lượng để thực hiện \( 2^{256} \) phép tính là:
 \[
 E_{\text{total}} = 2^{256} \times 2.87 \times 10^{-21} \approx 3.3 \times 10^{56} \text{ joules}
 \]
 
-**Mass-energy equivalence** (\( E = mc^2 \)):
+Quy đổi theo hệ thức tương đương khối lượng — năng lượng (\( E = mc^2 \)):
 \[
 m = \frac{E}{c^2} \approx \frac{3.3 \times 10^{56}}{9 \times 10^{16}} \approx 3.7 \times 10^{39} \text{ kg}
 \]
 
-For comparison:
-- Mass of Earth: \( 5.97 \times 10^{24} \) kg
-- Mass of Sun: \( 1.99 \times 10^{30} \) kg
-- Our number: \( 3.7 \times 10^{39} \) kg ≈ 1.8 billion suns!
+So sánh tham khảo:
+- Khối lượng Trái Đất: \( 5.97 \times 10^{24} \) kg.
+- Khối lượng Mặt Trời: \( 1.99 \times 10^{30} \) kg.
+- Giá trị trên tương đương khoảng 1,8 tỷ lần khối lượng Mặt Trời.
 
-Breaking SHA-256 by brute force would require converting mass equivalent to 1.8 billion suns into energy - **thermodynamically impossible**.
+Điều này cho thấy việc phá vỡ SHA-256 bằng phương pháp vét cạn hoàn toàn bất khả thi về mặt vật lý.
 
-### 4.3. Second Pre-image Resistance
+### 4.3. Kháng tiền ảnh thứ hai
 
-Harder to break than collision resistance:
-
-Given \( m_1 \), find \( m_2 \neq m_1 \) where \( H(m_1) = H(m_2) \).
-
-Cannot use birthday attack (requires choosing both messages).
-
-Must brute-force search:
+Với bài toán tìm \( m_2 \neq m_1 \) sao cho \( H(m_1) = H(m_2) \) khi \( m_1 \) đã cho trước, kẻ tấn công không thể dùng tấn công ngày sinh mà phải tìm kiếm vét cạn:
 \[
 \text{Expected attempts} = 2^{256}
 \]
 
-**Generic attack complexity**:
-- Collision resistance: \( O(2^{n/2}) \) where n = hash length
-- Pre-image resistance: \( O(2^n) \)
-- Second pre-image resistance: \( O(2^n) \)
+**Độ phức tạp tấn công tổng quát (với độ dài băm \( n \) bit)**:
+- Kháng va chạm: \( O(2^{n/2}) \).
+- Kháng tiền ảnh: \( O(2^n) \).
+- Kháng tiền ảnh thứ hai: \( O(2^n) \).
 
-For SHA-256 (n=256):
-- Finding collision: \( 2^{128} \) operations (still infeasible)
-- Finding pre-image: \( 2^{256} \) operations (absolutely infeasible)
+Với SHA-256 (\( n = 256 \)), tìm va chạm cần cỡ \( 2^{128} \) phép tính và tìm tiền ảnh cần cỡ \( 2^{256} \) phép tính.
 
-### 4.4. Length Extension Attack (và cách SHA-256 vulnerable)
+### 4.4. Tấn công mở rộng độ dài (Length Extension Attack)
 
-SHA-256 (và SHA-1, MD5) sử dụng Merkle-Damgård construction, vulnerable to length extension:
+Do sử dụng cấu trúc Merkle–Damgård, các hàm như MD5, SHA-1 và SHA-256 dễ bị ảnh hưởng bởi tấn công mở rộng độ dài: chỉ cần biết \( H(m) \) và độ dài của \( m \) (không cần biết nội dung \( m \)), kẻ tấn công có thể tính được \( H(m || \text{padding}(m) || m') \).
 
-Cho \( H(m) \), attacker có thể tính \( H(m || m') \) mà không biết \( m \), chỉ biết \( H(m) \) và length của \( m \).
+**Nguyên nhân**:
+Giá trị băm đầu ra của Merkle–Damgård chính là trạng thái nội bộ cuối cùng của thuật toán. Kẻ tấn công có thể:
+1. Khởi tạo trạng thái băm bằng đúng \( H(m) \).
+2. Tiếp tục nén thêm phần dữ liệu \( m' \).
+3. Thu được giá trị băm hợp lệ của \( m || \text{padding}(m) || m' \).
 
-**Why?**
-Final hash value IS the internal state. Attacker có thể:
-1. Initialize hash state với \( H(m) \)
-2. Continue hashing with \( m' \)
-3. Get \( H(m || \text{padding}(m) || m') \)
-
-**Example attack scenario**:
+**Kịch bản tấn công minh họa**:
 ```
-Legitimate: secret || message → HMAC
+Legitimate: secret || message → H(secret || message)
 Attacker sees: H(secret || message)
 Attacker computes: H(secret || message || padding || malicious_data)
 ```
 
-**Mitigation**:
-- Use HMAC (Hash-based Message Authentication Code):
+**Biện pháp phòng chống**:
+- Sử dụng **HMAC** (Hash-based Message Authentication Code) thay vì ghép trực tiếp khóa bí mật với thông điệp:
   \[
   \text{HMAC}(K, m) = H((K \oplus \text{opad}) || H((K \oplus \text{ipad}) || m))
   \]
-- Use SHA-3 (not vulnerable - uses sponge construction)
+- Hoặc sử dụng **SHA-3** (dựa trên cấu trúc bọt biển — sponge construction, không dễ bị tấn công mở rộng độ dài).
 
 ---
 
-## 5. Implementation Insight
+## 5. Minh họa triển khai
 
-### 5.1. Pure Python Implementation của SHA-256
+### 5.1. Cài đặt SHA-256 bằng Python thuần
 
 ```python
 import struct
@@ -551,9 +515,9 @@ if __name__ == "__main__":
         print(f"  Expect: {expected}\n")
 ```
 
-### 5.2. Bitcoin's Double SHA-256
+### 5.2. Băm kép SHA-256 trong Bitcoin (Double SHA-256)
 
-Bitcoin sử dụng **double hashing** để thêm security layer:
+Bitcoin áp dụng **băm kép (double hashing)** nhằm tăng biên độ bảo mật và ngăn tấn công mở rộng độ dài:
 
 ```python
 import hashlib
@@ -582,12 +546,12 @@ print(f"Bitcoin Block Hash: {block_hash}")
 # This is Bitcoin's Genesis Block!
 ```
 
-**Why double hashing?**
-1. Protection against length extension attacks
-2. Extra security margin (paranoia)
-3. Makes certain theoretical attacks harder
+**Lý do dùng băm kép**:
+1. Ngăn chặn tấn công mở rộng độ dài (length extension attack).
+2. Bổ sung biên độ bảo mật thận trọng.
+3. Gây khó khăn hơn cho một số dạng phân tích mật mã lý thuyết.
 
-### 5.3. Merkle Tree Implementation
+### 5.3. Cài đặt cây Merkle
 
 ```python
 from typing import List
@@ -727,154 +691,127 @@ if __name__ == "__main__":
 
 ## 6. Các thách thức và đánh đổi thường gặp
 
-### 6.1. Hash Collisions in Practice
+### 6.1. Va chạm hàm băm trong thực tế
 
-Mặc dù collision resistance là mạnh về lý thuyết, đã có trường hợp hash functions bị break:
+Dù tính kháng va chạm rất quan trọng, lịch sử đã ghi nhận nhiều hàm băm phổ biến bị phá vỡ:
 
-**MD5 Collision (2004)**:
+**Va chạm MD5 (2004)**:
 ```
 Message 1: [binary data A]
 Message 2: [binary data B] (different from A)
 MD5(Message 1) = MD5(Message 2) = 79054025255fb1a26e4bc422aef54eb4
 ```
+Kẻ tấn công có thể tạo hai tệp thực thi hoặc hai tệp PDF khác nhau nhưng có cùng giá trị băm MD5.
 
-Attackers có thể tạo:
-- Hai executables khác nhau với cùng MD5
-- Hai PDF documents khác nhau với cùng MD5
+**Va chạm SHA-1 (2017 — SHAttered)**:
+Nhóm nghiên cứu tại Google và CWI Amsterdam đã tạo thành công hai tệp PDF khác nhau có cùng giá trị băm SHA-1 với chi phí tính toán ước tính khoảng 110.000 USD (khoảng 9 tỷ tỷ phép tính).
 
-**SHA-1 Collision (2017 - SHAttered)**:
-Google researchers tạo ra hai different PDF files với cùng SHA-1 hash:
-- Cost: ~$110,000 in computation
-- 9 quintillion computations
+**Hệ quả đối với blockchain**:
+- SHA-256 của Bitcoin hiện vẫn an toàn và chưa có tấn công thực tế nào.
+- Nếu SHA-256 bị phá vỡ nghiêm trọng, kẻ tấn công có thể làm giả cấu trúc khối hoặc khai thác chi tiêu gấp đôi, buộc toàn mạng phải di chuyển sang thuật toán mới.
 
-**Implications for Blockchain**:
-- Bitcoin (SHA-256): Still secure, no practical attacks
-- If SHA-256 broken: catastrophic failure
-  - Could create fake blocks
-  - Could spend same coins multiple times
-  - Entire blockchain would need migration
+**Chiến lược chuyển đổi (nếu SHA-256 suy yếu)**:
+1. Thực hiện hard fork để chuyển sang hàm băm mới (như SHA-3 hoặc BLAKE3).
+2. Nâng cấp toàn bộ các nút mạng.
+3. Các block mới áp dụng thuật toán băm mới.
+4. Các block lịch sử cũ vẫn được giữ nguyên theo mốc chuyển tiếp.
 
-**Migration Strategy** (nếu SHA-256 compromised):
-1. Hard fork to new hash function (SHA-3, BLAKE3)
-2. All nodes upgrade
-3. New blocks use new hash
-4. Old blocks grandfathered in
+### 6.2. Nguy cơ từ máy tính lượng tử
 
-### 6.2. Quantum Computing Threat
+**Thuật toán Grover** cho phép tìm kiếm trong không gian chưa sắp xếp có kích thước \( N \) với độ phức tạp \( O(\sqrt{N}) \).
 
-**Grover's Algorithm**: Quantum algorithm có thể search unsorted database in \( O(\sqrt{N}) \) time.
+Đối với bài toán tìm ngược tiền ảnh của SHA-256:
+- Máy tính cổ điển: \( O(2^{256}) \) phép tính.
+- Máy tính lượng tử (Grover): \( O(2^{128}) \) phép tính.
 
-For hash inversion:
-- Classical: \( O(2^{256}) \) operations
-- Quantum (Grover): \( O(2^{128}) \) operations
+Tuy nhiên, \( 2^{128} \approx 3.4 \times 10^{38} \) vẫn là con số cực kỳ lớn, nên SHA-256 vẫn được đánh giá an toàn trước tấn công tìm tiền ảnh bằng máy tính lượng tử.
 
-**Analysis**:
-\( 2^{128} \) vẫn là extremely large:
-- \( 2^{128} \approx 3.4 \times 10^{38} \)
-- Even with quantum computer, still infeasible
+Đối với bài toán tìm va chạm, thuật toán lượng tử BHT (Brassard–Høyer–Tapp) có thể giảm độ phức tạp từ \( O(2^{n/2}) = O(2^{128}) \) xuống \( O(2^{n/3}) \approx O(2^{85.3}) \) (đòi hỏi đồng thời lượng bộ nhớ lượng tử tương ứng), nên chưa tạo thành mối đe dọa thực tiễn trong ngắn hạn.
 
-**Conclusion**: SHA-256 considered quantum-resistant for pre-image và second pre-image resistance.
+**Hướng dự phòng dài hạn**:
+- Sử dụng SHA-512 để tăng biên độ bảo mật hậu lượng tử.
+- Tiếp tục nghiên cứu các hàm băm tối ưu cho kỷ nguyên hậu lượng tử.
 
-Collision resistance bị reduced từ \( 2^{128} \) xuống \( 2^{64} \) - marginally concerning nhưng chưa practical threat.
+### 6.3. Tập trung hóa sức mạnh băm (trong bối cảnh đào PoW)
 
-**Future-proofing**:
-- SHA-512: Even more quantum-resistant
-- Post-quantum hash functions: Research ongoing
+Cơ chế PoW đòi hỏi tốc độ tính băm rất lớn, kéo theo sự chuyển dịch phần cứng đào Bitcoin qua các giai đoạn:
+- **2009**: Đào bằng CPU (~10 MH/s mỗi máy).
+- **2010**: Đào bằng GPU (~100 MH/s).
+- **2013**: Đào bằng ASIC (~1.000 GH/s).
+- **2024**: Máy đào ASIC hiện đại (~100 TH/s).
 
-### 6.3. Hash Rate Centralization (Mining Context)
+**Các lo ngại về tập trung hóa**:
+- 4 nhóm đào (mining pool) lớn nhất kiểm soát hơn 50% tổng sức mạnh băm.
+- Tập trung theo khu vực địa lý (trước đây tập trung mạnh ở Trung Quốc, nay dịch chuyển nhiều sang Mỹ và Kazakhstan).
+- Các nhà sản xuất chip ASIC có lợi thế tiếp cận phần cứng sớm.
 
-Trong PoW, finding valid block hash requires enormous hash rate:
+**Đánh đổi thiết kế**:
+- **Ưu điểm của SHA-256**: Được kiểm chứng lâu dài, xác minh rất nhanh.
+- **Nhược điểm của SHA-256**: Dễ tối ưu bằng mạch ASIC, dẫn đến xu hướng tập trung hóa phần cứng.
+- **Giải pháp thay thế**: Các hàm đòi hỏi nhiều bộ nhớ (memory-hard) như Ethash hoặc RandomX nhằm hạn chế lợi thế của ASIC.
 
-**Bitcoin Mining Evolution**:
-- 2009: CPU mining (~10 MH/s per computer)
-- 2010: GPU mining (~100 MH/s)
-- 2013: ASIC mining (~1000 GH/s)
-- 2024: Modern ASICs (~100 TH/s)
+### 6.4. Đánh đổi giữa hiệu năng và bảo mật
 
-**Centralization Concerns**:
-- Top 4 mining pools control >50% hash rate
-- Geographic concentration (China historically, now US/Kazakhstan)
-- ASIC manufacturers have early access
-
-**Trade-offs**:
-- **SHA-256 pro**: Well-studied, fast verification
-- **SHA-256 con**: ASIC-friendly, leads to centralization
-- **Alternatives**: Memory-hard functions (Ethash, RandomX) - more ASIC-resistant
-
-### 6.4. Performance vs Security
-
-Different hash functions offer different trade-offs:
-
-| Hash Function | Output Size | Speed (cycles/byte) | Security Level | Notes |
+| Hàm băm | Độ dài đầu ra | Tốc độ (chu kỳ/byte) | Mức độ an toàn | Ghi chú |
 |---------------|-------------|---------------------|----------------|-------|
-| MD5 | 128 bit | 4-5 | ⚠️ Broken | Collision found |
-| SHA-1 | 160 bit | 6-7 | ⚠️ Deprecated | Collision found (SHAttered) |
-| SHA-256 | 256 bit | 7-8 | ✅ Secure | Bitcoin standard |
-| SHA-512 | 512 bit | 6-7 | ✅ Secure | Faster on 64-bit systems |
-| SHA-3 (Keccak-256) | 256 bit | 9-10 | ✅ Secure | Ethereum, different construction |
-| BLAKE2b | 512 bit | 3-4 | ✅ Secure | Faster than SHA-3 |
-| BLAKE3 | 256 bit | 2-3 | ✅ Secure | Fastest, parallelizable |
+| MD5 | 128 bit | 4–5 | ⚠️ Đã bị phá vỡ | Đã tìm thấy va chạm |
+| SHA-1 | 160 bit | 6–7 | ⚠️ Ngừng khuyến nghị | Đã tìm thấy va chạm (SHAttered) |
+| SHA-256 | 256 bit | 7–8 | ✅ An toàn | Chuẩn của Bitcoin |
+| SHA-512 | 512 bit | 6–7 | ✅ An toàn | Nhanh hơn trên kiến trúc 64-bit |
+| SHA-3 (Keccak-256) | 256 bit | 9–10 | ✅ An toàn | Dùng trong Ethereum, cấu trúc khác SHA-2 |
+| BLAKE2b | 512 bit | 3–4 | ✅ An toàn | Nhanh hơn SHA-3 |
+| BLAKE3 | 256 bit | 2–3 | ✅ An toàn | Rất nhanh, hỗ trợ song song hóa |
 
-**For Blockchain**:
-- Verification speed matters (every node verifies)
-- Security is paramount
-- SHA-256: Good balance, mature, trusted
+Đối với blockchain, tốc độ xác minh rất quan trọng vì mọi nút đều phải kiểm tra dữ liệu, nhưng bảo mật luôn là ưu tiên hàng đầu. SHA-256 đạt được sự cân bằng tốt và đã qua thời gian kiểm chứng dài.
 
-### 6.5. Merkle Tree Depth Trade-off
+### 6.5. Đánh đổi về độ sâu cây Merkle
 
-Merkle proof size grows with tree depth:
+Kích thước bằng chứng Merkle tăng theo hàm logarit của số giao dịch \( n \):
+- Độ sâu cây: \( \log_2 n \).
+- Kích thước bằng chứng: \( \log_2 n \times 32 \) byte (mỗi giá trị băm dài 32 byte).
 
-For \( n \) transactions:
-- Tree depth: \( \log_2 n \)
-- Proof size: \( \log_2 n \times 32 \) bytes (32 bytes per hash)
+**Ví dụ**:
+- 1.000 giao dịch: ~10 giá trị băm (320 byte).
+- 10.000 giao dịch: ~14 giá trị băm (448 byte).
+- 1.000.000 giao dịch: ~20 giá trị băm (640 byte).
 
-**Examples**:
-- 1,000 transactions: ~10 hashes (320 bytes)
-- 10,000 transactions: ~14 hashes (448 bytes)
-- 1,000,000 transactions: ~20 hashes (640 bytes)
-
-**Trade-off**:
-- More transactions per block → longer proofs
-- Affects SPV (Simplified Payment Verification) clients
-- Bitcoin: ~2,000-3,000 tx/block → ~12 hashes per proof
+Càng nhiều giao dịch trong một block thì đường dẫn bằng chứng càng dài, ảnh hưởng nhẹ đến băng thông của các nút nhẹ SPV. Trên mạng Bitcoin, mỗi block chứa khoảng 2.000–3.000 giao dịch, tương ứng khoảng 12 giá trị băm cho mỗi bằng chứng Merkle.
 
 ---
 
 ## 7. Các khái niệm liên quan
 
-### 7.1. Hash Functions vs Encryption
+### 7.1. Hàm băm và Mã hóa (Encryption)
 
-Common confusion - they are different!
+Hai khái niệm này thường bị nhầm lẫn nhưng có mục đích và cơ chế hoàn toàn khác nhau:
 
-| Feature | Hash Function | Encryption |
+| Đặc điểm | Hàm băm (Hash Function) | Mã hóa (Encryption) |
 |---------|--------------|------------|
-| Direction | One-way | Two-way (encrypt/decrypt) |
-| Key | No key | Requires key |
-| Output | Fixed size | Variable size |
-| Purpose | Integrity, fingerprint | Confidentiality |
-| Reversible | No | Yes (with key) |
+| Chiều biến đổi | Một chiều | Hai chiều (mã hóa và giải mã) |
+| Khóa | Không dùng khóa | Yêu cầu khóa |
+| Kích thước đầu ra | Cố định | Thay đổi theo đầu vào |
+| Mục đích chính | Kiểm tra toàn vẹn, tạo dấu vân tay | Bảo mật nội dung (Confidentiality) |
+| Khả năng khôi phục | Không | Có (khi có khóa hợp lệ) |
 
-**Example**:
+**Ví dụ**:
 ```
-Hash:      "password" → SHA256 → 5e88...9abc (can't reverse)
-Encrypt:   "password" + key → AES → gH3k...2xYz (can decrypt với key)
+Hash:      "password" → SHA256 → 5e88...9abc (không thể đảo ngược)
+Encrypt:   "password" + key → AES → gH3k...2xYz (có thể giải mã bằng khóa)
 ```
 
-### 7.2. Cryptographic Hash Functions vs Checksums
+### 7.2. Hàm băm mật mã và Mã kiểm tra tổng (Checksums)
 
-**Checksums** (CRC, Adler-32):
-- Purpose: Detect accidental errors (corruption, transmission errors)
-- Not cryptographically secure
-- Faster
-- Smaller output
+**Mã kiểm tra tổng (Checksums)** (như CRC, Adler-32):
+- Mục đích: Phát hiện lỗi ngẫu nhiên do hỏng dữ liệu hoặc nhiễu đường truyền.
+- Không an toàn về mặt mật mã.
+- Tính toán nhanh hơn và đầu ra ngắn hơn.
 
-**Cryptographic Hashes**:
-- Purpose: Detect intentional tampering
-- Resist deliberate collision attacks
-- Slower
-- Larger output
+**Hàm băm mật mã (Cryptographic Hashes)**:
+- Mục đích: Phát hiện hành vi sửa đổi có chủ ý.
+- Chống lại các cuộc tấn công tạo va chạm có chủ đích.
+- Tốc độ chậm hơn và đầu ra dài hơn.
 
-**Example**:
+**Ví dụ**:
 ```
 CRC-32("data") = 0x12345678 (32 bits)
 SHA-256("data") = 3a6eb079... (256 bits)
@@ -885,136 +822,131 @@ Attacker cannot find different message with same SHA-256.
 
 ### 7.3. HMAC (Hash-based Message Authentication Code)
 
-Combining hash with secret key for authentication:
+HMAC kết hợp hàm băm với một khóa bí mật dùng chung để xác thực thông điệp:
 
 \[
 \text{HMAC}(K, m) = H((K \oplus \text{opad}) || H((K \oplus \text{ipad}) || m))
 \]
 
-Where:
-- \( K \): Secret key
-- \( m \): Message
-- \( \text{ipad} \): Inner padding (0x36 repeated)
-- \( \text{opad} \): Outer padding (0x5c repeated)
-- \( || \): Concatenation
+Trong đó:
+- \( K \): Khóa bí mật.
+- \( m \): Thông điệp.
+- \( \text{ipad} \): Chuỗi đệm trong (lặp byte `0x36`).
+- \( \text{opad} \): Chuỗi đệm ngoài (lặp byte `0x5c`).
+- \( || \): Phép nối chuỗi.
 
-**Properties**:
-- Provides authenticity AND integrity
-- Requires shared secret key
-- Resistant to length extension attack
+**Tính chất**:
+- Đảm bảo đồng thời tính xác thực và tính toàn vẹn.
+- Yêu cầu hai bên chia sẻ chung khóa bí mật.
+- Chống được tấn công mở rộng độ dài.
 
-**Blockchain Use**:
-- API authentication
-- Wallet security
-- Not directly in consensus (uses digital signatures instead)
+**Ứng dụng liên quan đến blockchain**:
+- Xác thực API và bảo mật ví (chẳng hạn sinh khóa tất định), nhưng không dùng trực tiếp trong lớp đồng thuận (nơi cần chữ ký số bất đối xứng).
 
-### 7.4. Commitment Schemes
+### 7.4. Lược đồ cam kết (Commitment Schemes)
 
-Hash functions enable **commitment schemes** - commit to a value without revealing it:
+Hàm băm cho phép xây dựng **lược đồ cam kết** — khóa chặt một giá trị mà chưa cần tiết lộ nội dung:
 
-**Protocol**:
-1. Alice commits: sends \( c = H(m || r) \) (m = message, r = random nonce)
-2. Later, Alice reveals: sends \( m \) and \( r \)
-3. Bob verifies: checks \( H(m || r) = c \)
+**Quy trình**:
+1. Alice cam kết: gửi \( c = H(m || r) \) (với \( m \) là thông điệp và \( r \) là số ngẫu nhiên nonce).
+2. Sau đó Alice mở cam kết: công bố \( m \) và \( r \).
+3. Bob xác minh: kiểm tra lại \( H(m || r) = c \).
 
-**Properties**:
-- **Hiding**: Cannot learn \( m \) from \( c \) (pre-image resistance)
-- **Binding**: Cannot change \( m \) after committing (collision resistance)
+**Hai tính chất cơ bản**:
+- **Tính ẩn (Hiding)**: Không thể suy ra \( m \) từ \( c \) (nhờ tính kháng tiền ảnh và số ngẫu nhiên \( r \)).
+- **Tính ràng buộc (Binding)**: Không thể thay đổi \( m \) sau khi đã công bố \( c \) (nhờ tính kháng va chạm).
 
-**Blockchain Applications**:
-- Commit-reveal voting
-- Fair lotteries
-- Atomic swaps
+**Ứng dụng trong blockchain**:
+- Bỏ phiếu theo cơ chế cam kết — tiết lộ (commit–reveal voting).
+- Xổ số công bằng trên chuỗi.
+- Hoán đổi nguyên tử (atomic swaps).
 
 ---
 
 ## 8. ⭐ Các bài báo và whitepaper nền tảng
 
-| Paper | Year | Author(s) | Contribution |
+| Bài báo | Năm | Tác giả | Đóng góp chính |
 |-------|------|-----------|--------------|
-| **"New Directions in Cryptography"** | 1976 | Diffie, Hellman | Foundational work in cryptography |
-| **"A Method for Obtaining Digital Signatures and Public-Key Cryptosystems"** | 1978 | Rivest, Shamir, Adleman | RSA algorithm |
-| **"One-Way Hash Functions"** | 1989 | Ralph Merkle | Formalized hash function properties |
-| **"The MD5 Message-Digest Algorithm"** | 1992 | Ronald Rivest | MD5 specification (now broken) |
-| **"Secure Hash Standard (SHS)"** | 2015 | NIST FIPS 180-4 | Official SHA-2 specification |
-| **"The Keccak SHA-3 Submission"** | 2011 | Bertoni et al. | SHA-3 (Keccak) algorithm |
-| **"BLAKE: A Hash Function"** | 2008 | Aumasson et al. | BLAKE hash family |
-| **"Collisions for Hash Functions MD4, MD5, HAVAL-128 and RIPEMD"** | 2004 | Xiaoyun Wang et al. | First practical MD5 collision |
-| **"The first collision for full SHA-1"** | 2017 | Stevens et al. | SHAttered attack |
-| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Hash functions in blockchain |
+| **"New Directions in Cryptography"** | 1976 | Diffie, Hellman | Công trình nền tảng mở ra mật mã học hiện đại |
+| **"A Method for Obtaining Digital Signatures and Public-Key Cryptosystems"** | 1978 | Rivest, Shamir, Adleman | Đề xuất thuật toán RSA |
+| **"One-Way Hash Functions"** | 1989 | Ralph Merkle | Hình thức hóa các tính chất của hàm băm một chiều |
+| **"The MD5 Message-Digest Algorithm"** | 1992 | Ronald Rivest | Đặc tả thuật toán MD5 (nay đã bị phá vỡ) |
+| **"Secure Hash Standard (SHS)"** | 2015 | NIST FIPS 180-4 | Đặc tả chuẩn chính thức của họ SHA-2 |
+| **"The Keccak SHA-3 Submission"** | 2011 | Bertoni et al. | Thuật toán SHA-3 (Keccak) |
+| **"BLAKE: A Hash Function"** | 2008 | Aumasson et al. | Họ hàm băm BLAKE |
+| **"Collisions for Hash Functions MD4, MD5, HAVAL-128 and RIPEMD"** | 2004 | Xiaoyun Wang et al. | Công bố va chạm thực tế đầu tiên của MD5 |
+| **"The first collision for full SHA-1"** | 2017 | Stevens et al. | Tấn công va chạm thực tế SHAttered trên SHA-1 |
+| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Ứng dụng hàm băm và cây Merkle trong blockchain |
 
-**Essential Reading**:
-1. NIST FIPS 180-4: Authoritative SHA-2 specification
-2. Keccak specification: Understand SHA-3 construction
-3. SHAttered paper: See how hash functions are attacked
-4. Bitcoin whitepaper Section 4-5: Merkle trees in practice
+**Tài liệu nên ưu tiên đọc**:
+1. NIST FIPS 180-4: Đặc tả chuẩn cho họ SHA-2.
+2. Đặc tả Keccak: Hiểu cấu trúc bọt biển của SHA-3.
+3. Bài báo SHAttered: Tìm hiểu cách các hàm băm yếu bị tấn công trong thực tế.
+4. Mục 4–5 của Whitepaper Bitcoin: Cách ứng dụng cây Merkle trong thực tiễn.
 
 ---
 
 ## 9. 🎨 Minh họa và tham khảo hình ảnh
 
-| Description | Source | Notes |
+| Mô tả | Nguồn | Ghi chú |
 |-------------|--------|-------|
-| **SHA-256 algorithm diagram** | [NIST FIPS 180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) | Official specification with diagrams |
-| **Avalanche effect visualization** | [Interactive SHA-256](https://sha256algorithm.com/) | See how one bit changes output |
-| **Merkle tree structure** | [Bitcoin Developer Guide](https://developer.bitcoin.org/devguide/block_chain.html) | Real Bitcoin implementation |
-| **Hash function comparison** | [Crypto++ Benchmarks](https://www.cryptopp.com/benchmarks.html) | Performance comparison |
-| **Collision attack visualization** | [SHAttered.io](https://shattered.io/) | SHA-1 collision demonstration |
-| **Birthday paradox** | [Better Explained - Birthday Paradox](https://betterexplained.com/articles/understanding-the-birthday-paradox/) | Intuitive explanation |
+| **Sơ đồ thuật toán SHA-256** | [NIST FIPS 180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) | Tài liệu chuẩn kèm sơ đồ chi tiết |
+| **Minh họa hiệu ứng tuyết lở** | [Interactive SHA-256](https://sha256algorithm.com/) | Quan sát tác động khi đổi 1 bit đầu vào |
+| **Cấu trúc cây Merkle** | [Bitcoin Developer Guide](https://developer.bitcoin.org/devguide/block_chain.html) | Minh họa theo cài đặt thực tế của Bitcoin |
+| **So sánh hiệu năng hàm băm** | [Crypto++ Benchmarks](https://www.cryptopp.com/benchmarks.html) | Bảng đo tốc độ thực tế |
+| **Minh họa tấn công va chạm** | [SHAttered.io](https://shattered.io/) | Trình diễn va chạm SHA-1 trên hai tệp PDF |
+| **Nghịch lý ngày sinh** | [Better Explained - Birthday Paradox](https://betterexplained.com/articles/understanding-the-birthday-paradox/) | Diễn giải trực quan, dễ hiểu |
 
-**Interactive Tools**:
-- [Anders Brownworth - Hash Demo](https://andersbrownworth.com/blockchain/hash) - See SHA-256 in action
-- [SHA-256 Visualizer](https://sha256algorithm.com/) - Step-by-step SHA-256
-- [Merkle Tree Visualizer](https://blockchain-academy.hs-mittweida.de/merkle-tree/) - Interactive Merkle tree builder
+**Công cụ tương tác**:
+- [Anders Brownworth - Hash Demo](https://andersbrownworth.com/blockchain/hash) — Thử nghiệm SHA-256 trực tiếp.
+- [SHA-256 Visualizer](https://sha256algorithm.com/) — Minh họa từng bước của thuật toán SHA-256.
+- [Merkle Tree Visualizer](https://blockchain-academy.hs-mittweida.de/merkle-tree/) — Công cụ dựng cây Merkle tương tác.
 
 ---
 
 ## 10. Tóm tắt và điểm chính
 
-**Core Concepts**:
-1. Hash functions là one-way transformations: easy to compute, impossible to reverse
-2. Cryptographic hash functions thỏa mãn: pre-image resistance, collision resistance, avalanche effect
-3. SHA-256 là backbone của Bitcoin và nhiều blockchains
+**Khái niệm cốt lõi**:
+1. Hàm băm là phép biến đổi một chiều: tính xuôi rất nhanh nhưng tính ngược bất khả thi.
+2. Hàm băm mật mã cần thỏa mãn ba tính chất: kháng tiền ảnh, kháng va chạm và hiệu ứng tuyết lở.
+3. SHA-256 là thành phần cốt lõi trong Bitcoin và nhiều hệ thống blockchain khác.
 
-**Technical Foundation**:
-- SHA-256: Merkle-Damgård construction, 64 rounds, 256-bit output
-- Collision resistance: Birthday paradox → need \( 2^{128} \) attempts
-- Pre-image resistance: Need \( 2^{256} \) attempts → thermodynamically impossible
-- Merkle trees: Efficient verification với \( O(\log n) \) proof size
+**Nền tảng kỹ thuật**:
+- SHA-256: kiến trúc Merkle–Damgård, 64 vòng nén, đầu ra 256 bit.
+- Kháng va chạm: theo nghịch lý ngày sinh cần khoảng \( 2^{128} \) phép thử.
+- Kháng tiền ảnh: cần cỡ \( 2^{255} \)–\( 2^{256} \) phép thử, vượt xa giới hạn nhiệt động lực học.
+- Cây Merkle: xác minh giao dịch với kích thước bằng chứng \( O(\log n) \).
 
-**Blockchain Applications**:
-- Block linking: Each block contains hash of previous block
-- Transaction verification: Merkle trees enable SPV
-- Proof-of-Work: Mining finds nonce such that hash < target
-- Commitment schemes: Commit-reveal protocols
+**Ứng dụng trong blockchain**:
+- Liên kết khối: mỗi block chứa giá trị băm của block liền trước.
+- Xác minh giao dịch: cây Merkle hỗ trợ các nút nhẹ SPV.
+- Proof-of-Work: quá trình đào tìm `nonce` sao cho giá trị băm nhỏ hơn ngưỡng `target`.
+- Lược đồ cam kết: hỗ trợ các giao thức cam kết — tiết lộ.
 
-**Security Considerations**:
-- SHA-256 remains secure despite attacks on MD5, SHA-1
-- Quantum computing reduces security but doesn't break SHA-256
-- Double hashing (Bitcoin) adds extra security margin
-- Length extension attacks mitigated by proper construction
+**Lưu ý bảo mật**:
+- SHA-256 vẫn an toàn dù MD5 và SHA-1 đã bị phá vỡ.
+- Máy tính lượng tử làm giảm biên độ bảo mật nhưng chưa phá vỡ SHA-256.
+- Cơ chế băm kép của Bitcoin giúp phòng chống tấn công mở rộng độ dài.
 
-**Implementation Insights**:
-- Pure software implementation possible (~7-8 cycles/byte)
-- Hardware acceleration available (SHA extensions in modern CPUs)
-- Merkle proofs enable light clients
-- Performance vs security trade-offs in choice of hash function
+**Góc nhìn triển khai**:
+- Có thể cài đặt thuần phần mềm (~7–8 chu kỳ CPU/byte) và tăng tốc bằng tập lệnh phần cứng SHA trên CPU hiện đại.
+- Lựa chọn hàm băm luôn là sự cân bằng giữa tốc độ xử lý, mức độ an toàn và tính kháng ASIC.
 
-**Key Takeaway**: Cryptographic hash functions are the "digital glue" that makes blockchain possible - providing integrity, immutability, and efficient verification in a trustless environment.
+**Điểm chốt**: Hàm băm mật mã đóng vai trò "chất kết dính số" giúp blockchain duy trì tính toàn vẹn, tính bất biến và khả năng xác minh hiệu quả trong môi trường không tin cậy lẫn nhau.
 
 ---
 
-✅ **End of Lecture 00.02**
+✅ **Kết thúc Lecture 00.02**
 
-**Next**: Lecture 00.03 - Digital Signatures và Public-Key Cryptography
+**Bài tiếp theo**: Lecture 00.03 - Chữ ký số và Mật mã khóa công khai
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [SHA: Secure Hashing Algorithm - Computerphile](https://www.youtube.com/watch?v=DMtFhACPnTY) — Computerphile, tiếng Anh. Computerphile tách hàm nén và cấu trúc Merkle–Damgård; xem trước khi đọc SHA-256 trong phần nền tảng kỹ thuật.
-- [How secure is 256 bit security?](https://www.youtube.com/watch?v=S9JGmA5_unY) — 3Blue1Brown, tiếng Anh. 3Blue1Brown cho cảm giác về 2^256 và vì sao preimage của SHA-256 nằm ngoài tầm tìm kiếm, đúng mục kháng va chạm.
-- [Merkle Tree | Merkle Root | Blockchain](https://www.youtube.com/watch?v=fB41w3JcR7U) — Telusko, tiếng Anh. Dựng Merkle root từ các lá giao dịch; đối chiếu với Merkle tree và light client trong bài.
+- **Xem trước:** [SHA: Secure Hashing Algorithm - Computerphile](https://www.youtube.com/watch?v=DMtFhACPnTY) — Computerphile, tiếng Anh. Phân tích hàm nén và cấu trúc Merkle–Damgård; nên xem trước khi đọc chi tiết SHA-256 ở phần nền tảng kỹ thuật.
+- [How secure is 256 bit security?](https://www.youtube.com/watch?v=S9JGmA5_unY) — 3Blue1Brown, tiếng Anh. Minh họa trực quan độ lớn của \( 2^{256} \) và lý do không thể dò ngược tiền ảnh SHA-256.
+- [Merkle Tree | Merkle Root | Blockchain](https://www.youtube.com/watch?v=fB41w3JcR7U) — Telusko, tiếng Anh. Cách dựng Merkle root từ các lá giao dịch, phù hợp để đối chiếu với phần cây Merkle và nút nhẹ trong bài.
 
 ## References
 
@@ -1024,4 +956,3 @@ Hash functions enable **commitment schemes** - commit to a value without reveali
 4. Merkle, R. C. (1989). *One way hash functions and DES*. CRYPTO'89.
 5. Aumasson, J. P., Henzen, L., Meier, W., & Phan, R. C. W. (2008). *SHA-3 proposal BLAKE*. Submission to NIST.
 6. Nakamoto, S. (2008). *Bitcoin: A peer-to-peer electronic cash system*.
-

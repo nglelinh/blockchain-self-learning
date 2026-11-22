@@ -10,48 +10,47 @@ categories:
 lesson_type: optional
 ---
 
-# Lecture (tùy chọn): Advanced apps 2022–2026 — restaking, ERC-6551, ePBS, ML-KEM
+# Bài giảng tùy chọn 07.99: Ứng dụng nâng cao giai đoạn 2022–2026 — Restaking, ERC-6551, ePBS và ML-KEM
 
-> Bài này là **tùy chọn**. Nó **không** viết lại Governor/DAO, ERC-721, IPFS, định nghĩa MEV, hay toán lattice. Nó chỉ chỉ các *ứng dụng và EIP* đã định hình chương “nâng cao” sau 2022.
+> Bài giảng này mang tính **tùy chọn**. Nội dung **không** lặp lại hợp đồng Governor/DAO, chuẩn ERC-721, IPFS, định nghĩa MEV hay toán học mạng lưới, mà điểm qua các *ứng dụng và đề xuất EIP* nổi bật đã định hình các chủ đề nâng cao sau năm 2022.
 
-## 1. Cùng các chủ đề 07.00–07.05 — lớp sản phẩm mới
+## 1. Lớp sản phẩm mới trên nền tảng các bài 07.00–07.05
 
-Chapter 07 phủ DAO, NFT, Web3 infra, MEV, quantum, tương lai. 2022–2026 thêm bốn lớp sản phẩm: **restaking** (EigenLayer và họ hàng) biến stake Ethereum thành dịch vụ AVS; **token-bound accounts** ([ERC-6551](https://eips.ethereum.org/EIPS/eip-6551)) biến NFT thành ví; **MEV in-protocol** (inclusion lists, ePBS research) sau MEV-Boost; **PQC chuẩn hóa** (FIPS 203) cho lộ trình migrate. Superchain / Orbit biến “một L2” thành *fleet governance* — DAO 07.00 gặp infra 07.02.
+Chương 07 bao phủ DAO, NFT, hạ tầng Web3, MEV, kháng lượng tử và định hướng tương lai. Trong giai đoạn 2022–2026, hệ sinh thái bổ sung bốn hướng phát triển nổi bật: **restaking** (EigenLayer và các giao thức tương tự) biến tài sản ETH đặt cọc thành lớp bảo mật cho các dịch vụ AVS; **tài khoản gắn với token** ([ERC-6551](https://eips.ethereum.org/EIPS/eip-6551)) biến mỗi NFT thành một ví hợp đồng thông minh; các nghiên cứu **xử lý MEV ngay trong giao thức** (inclusion lists, ePBS) nối tiếp MEV-Boost; và **chuẩn hóa mật mã hậu lượng tử** (FIPS 203) làm mốc tham chiếu cho lộ trình chuyển đổi. Song song đó, các mô hình như Superchain hay Orbit đưa bài toán quản trị từ "một L2 đơn lẻ" sang *quản trị cả đội chuỗi (fleet governance)* — nơi DAO (07.00) giao thoa trực tiếp với hạ tầng (07.02).
 
 ![Chuỗi khối — thứ tự giao dịch trong block là sân khấu MEV / PBS](https://upload.wikimedia.org/wikipedia/commons/9/98/Blockchain.svg)
 *Nguồn: [Wikimedia Commons — Blockchain](https://commons.wikimedia.org/wiki/File:Blockchain.svg). Lộ trình PBS: [ethereum.org/roadmap/pbs](https://ethereum.org/roadmap/pbs/).*
 
 ## 2. Các bước tiến then chốt
 
-### 2.1. Restaking: bảo mật như hàng hóa
+### 2.1. Restaking: Bảo mật như một dịch vụ
 
-EigenLayer (whitepaper 2023; mainnet 2024–2025) cho validator / LST *restake* ETH để bảo đảm AVS (oracle, DA, coprocessor, fast finality). Ý kinh tế: tái sử dụng vốn slashable. Ý hệ thống: slashing condition *mới* chồng lên slashing beacon — rủi ro tương quan. Đây là “DAO + staking + oracle” của 07.00/07.02, không phải consensus L1 mới (Chapter 02 vẫn là Gasper).
+EigenLayer (sách trắng 2023; mạng chính 2024–2025) cho phép trình xác thực hoặc người nắm giữ LST *tái đặt cọc (restake)* ETH để bảo đảm an ninh cho các dịch vụ xác thực chủ động (AVS — như oracle, lớp sẵn sàng dữ liệu, coprocessor hay lớp hoàn tất nhanh). Về kinh tế, cơ chế này tái sử dụng nguồn vốn có thể bị cắt phạt (slashable capital); về hệ thống, nó chồng thêm các điều kiện cắt phạt *mới* lên trên điều kiện cắt phạt của Beacon Chain, tạo ra rủi ro tương quan. Đây là sự kết hợp giữa DAO, staking và oracle (07.00/07.02), chứ không thay đổi cơ chế đồng thuận L1 (vẫn là Gasper như Chương 02).
 
-Học viên nên đọc giả định: AVS bug → slashing lan; governance AVS tập trung; liquid restaking token thêm một lớp deleveraging (sự kiện 2024–2025 trên các LRT).
+Những giả định rủi ro cần lưu ý gồm: lỗi ở một AVS có thể kích hoạt cắt phạt lan truyền, quản trị AVS còn tập trung, và các token tái đặt cọc thanh khoản (LRT) bổ sung thêm một lớp rủi ro giải chấp đòn bẩy (như các biến động trên nhóm LRT giai đoạn 2024–2025).
 
-### 2.2. ERC-6551: NFT như account
+### 2.2. ERC-6551: Biến NFT thành tài khoản thông minh
 
-[ERC-6551](https://eips.ethereum.org/EIPS/eip-6551) (2023, adoption 2023–2026): registry tạo địa chỉ smart account *xác định* cho mỗi `(chainId, tokenContract, tokenId)`. NFT giữ được asset, ký được (qua implementation), compose được. ERC-721 trong 07.01 không đổi; *ownership* mở rộng từ “token trong ví” sang “ví trong token”. Kết hợp 7702/4337 (03.99): character game, on-chain identity, bundle quyền.
+[ERC-6551](https://eips.ethereum.org/EIPS/eip-6551) (ra đời năm 2023 và mở rộng ứng dụng giai đoạn 2023–2026) dùng một hợp đồng đăng ký để tạo địa chỉ tài khoản thông minh *xác định trước* cho từng bộ ba `(chainId, tokenContract, tokenId)`. Nhờ đó, bản thân NFT có thể nắm giữ tài sản, ký giao dịch (thông qua hợp đồng cài đặt) và tương tác trực tiếp với các giao thức khác. Chuẩn ERC-721 ở bài 07.01 giữ nguyên, nhưng khái niệm sở hữu mở rộng từ "token nằm trong ví" sang "ví nằm trong token". Khi kết hợp với EIP-7702 hoặc ERC-4337 (03.99), mô hình này hỗ trợ nhân vật trò chơi, danh tính trên chuỗi và đóng gói nhiều quyền sử dụng trong một tài sản duy nhất.
 
-### 2.3. MEV sau 07.03: từ Flashbots auction tới inclusion lists
+### 2.3. MEV sau bài 07.03: Từ đấu giá Flashbots tới Inclusion Lists và ePBS
 
-Bài 07.03 mô tả MEV. Production 2022–2026: MEV-Boost chiếm đa số block (Chapter 02.99). Tiếp theo:
+Bài 07.03 đã giới thiệu khái niệm MEV. Trong thực tế vận hành giai đoạn 2022–2026, MEV-Boost chiếm phần lớn số khối được tạo ra trên Ethereum (xem bài 02.99). Các hướng phát triển tiếp theo tập trung vào:
+- **Inclusion lists / FOCIL**: Cho phép người đề xuất khối (proposer) buộc một tập giao dịch hợp lệ phải được đưa vào khối, giảm khả năng kiểm duyệt từ các relay.
+- **ePBS (Enshrined Proposer-Builder Separation)**: Tích hợp cơ chế tách biệt proposer–builder trực tiếp vào giao thức lõi để loại bỏ sự phụ thuộc vào relay tập trung.
+- **Tập trung hóa builder và đấu giá luồng lệnh (order-flow auctions)**: Cho thấy MEV giai đoạn 2023–2025 đã mở rộng thành bài toán cấu trúc thị trường và kinh tế chính trị, vượt xa phạm vi tấn công kẹp bánh mì đơn thuần.
 
-- **Inclusion lists / FOCIL** research: proposer ép một tập tx phải vào block, giảm kiểm duyệt relay.
-- **ePBS**: đưa PBS vào protocol, bỏ relay tập trung.
-- **Builder concentration** và order-flow auctions (2023–2025) là bài chính trị-kinh tế, không chỉ “sandwich”.
+Bản nâng cấp Pectra không "xóa bỏ MEV", nhưng thay đổi kinh tế trình xác thực (EIP-7251) và nguồn cung blob (EIP-7691), qua đó làm thay đổi bối cảnh cạnh tranh MEV.
 
-Pectra không “giải MEV”; nó đổi validator economics (7251) và blob supply (7691), tức *đổi sân* MEV.
+### 2.4. Kháng lượng tử: Từ cảnh báo lý thuyết tới mã chuẩn FIPS
 
-### 2.4. Quantum: từ “sẽ xảy ra” tới số FIPS
+Việc NIST ban hành [FIPS 203 (ML-KEM)](https://csrc.nist.gov/pubs/fips/203/final), FIPS 204 (ML-DSA) và FIPS 205 (SLH-DSA) vào ngày 13/8/2024 mang lại cột mốc chuẩn hóa cụ thể cho bài 07.04. Tuy vậy, Ethereum và Bitcoin hiện vẫn đang dùng ECDSA/BLS; các đề xuất về chữ ký kép, địa chỉ băm chống chiến thuật "thu thập trước, giải mã sau" (harvest-now-decrypt-later) và tối ưu kích thước nhân chứng vẫn đang trong giai đoạn thảo luận — không nên đánh đồng việc ban hành chuẩn FIPS với việc mạng chính đã hoàn tất chuyển đổi.
 
-[FIPS 203 ML-KEM](https://csrc.nist.gov/pubs/fips/203/final), 204 ML-DSA, 205 SLH-DSA (13-Aug-2024) cho 07.04 một mốc: thuật toán *có tên chuẩn*. Ethereum / Bitcoin vẫn ECDSA/BLS. Lộ trình thảo luận: dual-sign, address hash chống harvest-now-decrypt-later, kích thước witness. Đừng nhầm “FIPS published” với “mainnet migrated”.
+Ở mảng hạ tầng Web3, các giải pháp sẵn sàng dữ liệu (DA) như EIP-4844, PeerDAS, EigenDA và Celestia phục vụ riêng cho thị trường rollup (bài 04.99), tách biệt với vai trò lưu trữ nội dung của IPFS/Filecoin trong bài 07.02.
 
-Web3 infra: EIP-4844 DA, PeerDAS, EigenDA, Celestia — 07.02 “IPFS/Filecoin” vẫn đúng cho *nội dung*; DA cho rollup là thị trường *khác* (04.99).
+## 3. Góc nhìn triển khai
 
-## 3. Insight triển khai
-
-Một NFT 6551 sở hữu USDC và một session key 4337; restaked AVS cung cấp oracle giá; block chứa swap bị builder sắp xếp — cùng một user story đi qua 07.01, 07.02, 07.03. Governance Superchain (OP Collective) vote fault-proof upgrade (04.99) là DAO *điều khiển infra*, không chỉ treasury.
+Một kịch bản thực tế có thể kết nối trực tiếp nhiều bài học trong chương: một NFT theo chuẩn ERC-6551 nắm giữ USDC cùng khóa phiên (session key) theo ERC-4337; một dịch vụ AVS được bảo đảm bằng restaking cung cấp nguồn giá oracle; và giao dịch hoán đổi trong khối được các builder sắp xếp trước khi đấu giá cho proposer. Ở tầng quản trị, Optimism Collective (DAO quản trị Superchain) bỏ phiếu cho các nâng cấp bằng chứng lỗi (bài 04.99), cho thấy DAO đã mở rộng sang điều hành hạ tầng kỹ thuật chứ không chỉ quản lý ngân quỹ:
 
 ```text
 [ERC-721] --6551--> [TBA account] --holds--> assets / session keys
@@ -59,37 +58,37 @@ Một NFT 6551 sở hữu USDC và một session key 4337; restaked AVS cung c�
 [user tx] --public mempool / OF--> [builder] --bid--> [proposer]
 ```
 
-## 4. Thách thức và trade-off
+## 4. Thách thức và sự đánh đổi
 
-Restaking: systemic risk, slashing overlay. 6551: implementation registry bị upgrade độc hại; phishing “ký cho TBA”. ePBS tăng độ phức tạp consensus. PQC làm tx nặng — L2 có thể migrate trước L1. DAO fleet (nhiều chain một governor) tạo surface capture lớn hơn DAO đơn.
+Restaking làm tăng rủi ro hệ thống do các tầng cắt phạt chồng chéo. Với ERC-6551, rủi ro đến từ hợp đồng cài đặt bị nâng cấp độc hại hoặc lừa đảo ký giao dịch cho tài khoản gắn token (TBA). ePBS làm tăng độ phức tạp của lớp đồng thuận. Mật mã hậu lượng tử khiến kích thước giao dịch tăng mạnh nên nhiều khả năng các mạng Layer 2 sẽ thử nghiệm chuyển đổi trước Layer 1. Cuối cùng, mô hình một DAO quản trị đồng thời nhiều chuỗi (DAO fleet) làm mở rộng đáng kể phạm vi ảnh hưởng nếu xảy ra thâu tóm quản trị.
 
-## 5. Bài này bổ sung gì
+## 5. Phạm vi bổ sung của bài giảng
 
-Vẫn đọc 07.00–07.05 cho DAO, NFT standards, Web3 stack, MEV basics, PQC theory, tương lai. Bài tùy chọn gắn chúng với EigenLayer, ERC-6551, inclusion lists/ePBS, FIPS 203, Superchain governance.
+Người học vẫn cần nắm vững các bài 07.00–07.05 về DAO, chuẩn NFT, hạ tầng Web3, cơ chế MEV, lý thuyết PQC và định hướng tương lai. Bài tùy chọn này bổ sung góc nhìn cập nhật gắn với EigenLayer, ERC-6551, inclusion lists/ePBS, chuẩn FIPS 203 và quản trị Superchain.
 
 ## 6. Tài liệu gốc (2022–2026)
 
 | Nguồn | Năm | Đóng góp |
 | --- | --- | --- |
-| [EigenLayer whitepaper](https://docs.eigenlayer.xyz/) | 2023– | Restaking / AVS |
-| [ERC-6551](https://eips.ethereum.org/EIPS/eip-6551) | 2023 | Token-bound accounts |
-| [MEV-Boost](https://github.com/flashbots/mev-boost) | 2022– | Out-of-protocol PBS |
-| [ethereum.org PBS](https://ethereum.org/roadmap/pbs/) | 2023– | Enshrined PBS roadmap |
-| [FIPS 203](https://csrc.nist.gov/pubs/fips/203/final) | 2024-08-13 | ML-KEM |
-| [Pectra](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025 | Validator + blob + 7702 |
-| [OP Superchain / Stage 1](https://optimism.io/blog/permissionless-fault-proofs-and-stage-1-arrive-to-the-op-stack) | 2024 | Fleet governance + proofs |
+| [EigenLayer whitepaper](https://docs.eigenlayer.xyz/) | 2023– | Mô hình restaking và dịch vụ AVS |
+| [ERC-6551](https://eips.ethereum.org/EIPS/eip-6551) | 2023 | Tài khoản gắn với token (Token-bound accounts) |
+| [MEV-Boost](https://github.com/flashbots/mev-boost) | 2022– | Tách biệt proposer–builder ngoài giao thức |
+| [ethereum.org PBS](https://ethereum.org/roadmap/pbs/) | 2023– | Lộ trình tích hợp PBS vào giao thức lõi (ePBS) |
+| [FIPS 203](https://csrc.nist.gov/pubs/fips/203/final) | 2024-08-13 | Chuẩn hóa ML-KEM |
+| [Pectra](https://blog.ethereum.org/2025/04/23/pectra-mainnet) | 2025 | Nâng cấp trình xác thực, blob và EIP-7702 |
+| [OP Superchain / Stage 1](https://optimism.io/blog/permissionless-fault-proofs-and-stage-1-arrive-to-the-op-stack) | 2024 | Quản trị đa chuỗi và bằng chứng lỗi |
 
 ## Video tham khảo
 
-- **Xem trước:** [Ethereum Inclusion Lists Explained | Censorship Resistance & EIP-7547](https://www.youtube.com/watch?v=n2P_ZUqP6Fs) — Wolfgang Vitale, tiếng Anh. Wolfgang Vitale giải thích inclusion list và EIP-7547; xem trước thuộc tính chống kiểm duyệt so với PBS thuần.
-- [Axelar Tech Talks With Sreeram Kannan of EigenLayer](https://www.youtube.com/watch?v=yuIlzgValaA) — Axelar Network, tiếng Anh. Sreeram Kannan nói về EigenLayer trong một tech talk; dùng cho mục restaking và điều kiện slashing thêm.
-- [ERC 6551: Token Bound Accounts Explained](https://www.youtube.com/watch?v=8N8OdTyFmd8) — The Web3 IP Lawyer, tiếng Anh. Giải thích ERC-6551 token bound account; đối chiếu chỗ bài gắn tài khoản với chính token NFT.
+- **Xem trước:** [Ethereum Inclusion Lists Explained | Censorship Resistance & EIP-7547](https://www.youtube.com/watch?v=n2P_ZUqP6Fs) — Wolfgang Vitale, tiếng Anh. Giải thích inclusion lists và EIP-7547; nên xem trước thuộc tính chống kiểm duyệt so với PBS thuần túy.
+- [Axelar Tech Talks With Sreeram Kannan of EigenLayer](https://www.youtube.com/watch?v=yuIlzgValaA) — Axelar Network, tiếng Anh. Sreeram Kannan trình bày về EigenLayer, phù hợp cho mục restaking và điều kiện cắt phạt bổ sung.
+- [ERC 6551: Token Bound Accounts Explained](https://www.youtube.com/watch?v=8N8OdTyFmd8) — The Web3 IP Lawyer, tiếng Anh. Giải thích tài khoản gắn với token theo ERC-6551, đối chiếu với phần mở rộng khả năng của NFT trong bài.
 
 ## 7. Bài tập định hướng
 
-1. Restaking: viết điều kiện slashing *thứ hai* (AVS) và giải thích vì sao tương quan với slashing beacon là rủi ro hệ thống.
-2. ERC-6551 vs EIP-7702: cái nào gắn *token*, cái nào gắn *EOA*? Khi nào dùng cả hai?
-3. Đọc trang PBS trên ethereum.org và chỉ ra *một* thuộc tính kiểm duyệt mà inclusion list muốn phục hồi so với MEV-Boost thuần.
+1. Với mô hình restaking, hãy mô tả một điều kiện cắt phạt *thứ hai* ở cấp AVS và giải thích vì sao sự tương quan với cắt phạt trên Beacon Chain tạo ra rủi ro hệ thống.
+2. So sánh ERC-6551 và EIP-7702: tiêu chuẩn nào gắn tài khoản thông minh với *token*, tiêu chuẩn nào gắn với *EOA*, và trong tình huống nào có thể kết hợp cả hai?
+3. Tham khảo trang lộ trình PBS trên ethereum.org và chỉ ra *một* thuộc tính chống kiểm duyệt mà inclusion lists hướng tới khôi phục so với mô hình MEV-Boost thuần túy.
 
 ---
 ✅ **End of optional lesson**

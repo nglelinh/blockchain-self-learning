@@ -9,47 +9,44 @@ categories:
 - blockchain-chapter06
 ---
 
-# Lecture: Cross-Chain Communication - Kết nối các Blockchain
+# Bài giảng 06.00: Giao tiếp xuyên chuỗi — Kết nối các Blockchain
 
-## 1. Concept Overview
+## 1. Tổng quan về khái niệm
 
-Blockchain interoperability, hay khả năng các blockchain khác nhau communicate và exchange value với nhau, represents một trong những challenges quan trọng nhất trong blockchain ecosystem evolution. Hiện tại, landscape bao gồm hàng trăm blockchains độc lập - Bitcoin, Ethereum, Binance Smart Chain, Solana, Polkadot, Cosmos, và countless others - mỗi cái operating như isolated island với own consensus, token standards, và application ecosystems. Situation này tạo ra fragmentation harmful cho user experience và capital efficiency.
+**Khả năng tương tác xuyên chuỗi (blockchain interoperability)** — tức khả năng các blockchain khác nhau giao tiếp và trao đổi giá trị với nhau — là một trong những thách thức quan trọng nhất trong quá trình phát triển của hệ sinh thái blockchain. Hiện nay có hàng trăm blockchain hoạt động độc lập như Bitcoin, Ethereum, Binance Smart Chain, Solana, Polkadot hay Cosmos; mỗi mạng lưới vận hành như một "hòn đảo" tách biệt với cơ chế đồng thuận, chuẩn token và hệ sinh thái ứng dụng riêng. Sự phân mảnh này làm suy giảm trải nghiệm người dùng và hiệu quả sử dụng vốn.
 
-Historical context của interoperability problem bắt nguồn từ early days của blockchain. Ban đầu, Bitcoin existed alone, và interoperability không phải concern. Khi Ethereum launched năm 2015, bringing smart contracts và token standards mới, nhu cầu move value giữa Bitcoin và Ethereum emerged. Users muốn use Bitcoin's liquidity trên Ethereum's DeFi platforms, nhưng không có native mechanism cho cross-chain transfers. Early solutions crude và centralized - exchanges acting như intermediaries, custodial bridges requiring trust.
+Bối cảnh lịch sử của bài toán tương tác bắt đầu từ giai đoạn sơ khai của blockchain. Khi Bitcoin còn tồn tại đơn độc, vấn đề liên kết chuỗi chưa xuất hiện. Đến năm 2015, sự ra đời của Ethereum cùng hợp đồng thông minh và các chuẩn token mới đã tạo ra nhu cầu chuyển dịch giá trị giữa Bitcoin và Ethereum — người dùng muốn đưa thanh khoản Bitcoin vào các nền tảng DeFi trên Ethereum nhưng chưa có cơ chế bản địa nào hỗ trợ. Các giải pháp ban đầu còn thô sơ và tập trung, chủ yếu dựa vào sàn giao dịch trung gian hoặc cầu nối lưu ký (custodial bridges) đòi hỏi niềm tin vào bên thứ ba.
 
-Năm 2017-2018, **atomic swaps** emerged như first trustless cross-chain solution. Concept introduced bởi **Tier Nolan** năm 2013 nhưng implemented thực sự sau. Atomic swaps sử dụng **Hash Time-Locked Contracts (HTLCs)** để enable peer-to-peer exchanges across chains without intermediaries. Alice trên Bitcoin có thể swap với Bob trên Litecoin một cách trustless, guaranteed rằng either both transfers complete hoặc neither does. Innovation này showed cryptographic protocols có thể replace trusted third parties trong cross-chain scenarios.
+Giai đoạn 2017–2018 đánh dấu sự xuất hiện của **hoán đổi nguyên tử (atomic swaps)** như giải pháp xuyên chuỗi không cần tin cậy đầu tiên. Khái niệm này do **Tier Nolan** giới thiệu năm 2013 và được triển khai thực tế sau đó. Atomic swap sử dụng **Hợp đồng khóa băm theo thời gian (Hash Time-Locked Contracts — HTLCs)** để cho phép trao đổi ngang hàng giữa các chuỗi mà không cần trung gian: Alice trên Bitcoin có thể hoán đổi trực tiếp với Bob trên Litecoin với đảm bảo rằng hoặc cả hai giao dịch cùng thành công, hoặc cả hai cùng được hoàn tiền.
 
-Năm 2018-2020, bridge protocols proliferated. **Wrapped Bitcoin (WBTC)** launched năm 2019, becoming successful cross-chain asset. WBTC là ERC-20 token trên Ethereum backed one-to-one bởi Bitcoin locked trong custody. Despite centralization concerns về custodians, WBTC enabled billions of dollars Bitcoin participate trong Ethereum DeFi, demonstrating massive demand cho interoperability. Other wrapped assets followed - renBTC, tBTC, WETH - each với different trust models và mechanisms.
+Từ năm 2018 đến 2020, các giao thức cầu nối (bridge) phát triển mạnh. **Wrapped Bitcoin (WBTC)** ra mắt năm 2019 và nhanh chóng trở thành tài sản xuyên chuỗi phổ biến — đây là token ERC-20 trên Ethereum được bảo chứng 1:1 bởi Bitcoin khóa trong hệ thống lưu ký. Dù tồn tại lo ngại về tính tập trung của đơn vị lưu ký, WBTC đã đưa hàng tỷ USD Bitcoin vào DeFi trên Ethereum, kéo theo nhiều tài sản bọc (wrapped assets) khác như renBTC, tBTC hay WETH với các mô hình tin cậy khác nhau.
 
-**Polkadot** và **Cosmos**, launched 2020, represented architectural approaches khác. Instead of bridging existing chains, they designed ecosystems from ground up for interoperability. Polkadot's **parachain** model enables specialized blockchains share security của relay chain trong khi communicating seamlessly. Cosmos's **IBC (Inter-Blockchain Communication)** protocol defines standard cho independent chains communicate, creating "internet of blockchains." These approaches showed interoperability could be fundamental design principle rather than afterthought.
+Năm 2020, **Polkadot** và **Cosmos** mang đến hướng tiếp cận kiến trúc hoàn toàn khác: thiết kế khả năng tương tác ngay từ nền tảng thay vì bắc cầu cho các chuỗi có sẵn. Mô hình **parachain** của Polkadot cho phép các blockchain chuyên biệt dùng chung lớp bảo mật của relay chain và giao tiếp liền mạch, trong khi giao thức **IBC (Inter-Blockchain Communication)** của Cosmos định nghĩa chuẩn giao tiếp cho các chuỗi độc lập nhằm hình thành một "mạng internet của các blockchain".
 
-Năm 2021-2024 witnessed explosion của bridge protocols và devastating security breaches. Ronin bridge hack ($625M), Poly Network ($611M), Wormhole ($325M), và numerous others demonstrated bridges là honey pots for attackers. Total losses from bridge hacks exceeded $2 billion, making interoperability not just technical challenge but critical security concern. This drove research into more secure bridge designs, formal verification, và alternative approaches như **cross-chain messaging protocols** và **shared security models**.
-
----
-
-## 2. Intuitive Understanding
-
-Để hiểu interoperability challenge deeply, hãy imagine blockchain ecosystems như countries với own currencies, laws, và languages. Bitcoin như United States với Dollar, Ethereum như European Union với Euro, Solana như Japan với Yen. Mỗi country self-sovereign, với own rules và systems. Citizen của một country muốn trade với citizen của country khác faces numerous frictions: currency exchange rates, incompatible legal systems, communication barriers.
-
-Traditional solution trong international trade là intermediaries - banks facilitate currency conversion, shipping companies handle logistics, customs agents verify compliance. Blockchain bridges serve similar role - acting như intermediaries facilitating asset transfers và message passing giữa incompatible blockchains. However, introducing intermediaries contradicts blockchain's trustless philosophy, creating tension fundamental.
-
-Hãy visualize problem này qua analogy cụ thể. Alice owns Bitcoin và muốn participate trong Ethereum DeFi protocol Uniswap. Bitcoin blockchain và Ethereum blockchain completely separate - they don't share validators, don't read each other's state, don't have common language. Alice cannot simply "send" Bitcoin đến Ethereum address - fundamentally incompatible. She needs mechanism để represent Bitcoin value on Ethereum.
-
-Simple approach: Alice sends Bitcoin đến custodian (ví dụ BitGo), custodian mints equivalent WBTC on Ethereum, Alice receives WBTC trong Ethereum wallet. Now she có thể use WBTC trên Uniswap. When done, reverse process: burn WBTC, custodian releases Bitcoin. This works nhưng requires trusting custodian - single point of failure. If custodian malicious hoặc compromised, funds at risk. Không truly decentralized.
-
-Trustless alternative: **Hash Time-Locked Contracts (HTLCs)** enable atomic swaps. Think of HTLCs như coordinated safe deposit boxes với time locks. Alice và Bob each lock funds trong boxes với same secret key hash. Alice sets: "My box opens với secret OR after 48 hours refund me." Bob sets: "My box opens với same secret OR after 24 hours refund me." Alice reveals secret to claim Bob's funds, automatically enabling Bob claim Alice's funds với same secret. If either party fails cooperate, time locks ensure refunds. No trust needed - cryptography và time locks guarantee fairness.
-
-Modern bridges extend HTLCs concept với sophisticated protocols. **Light clients** allow one blockchain verify state của another blockchain without running full node. Ethereum contract có thể verify Bitcoin transaction occurred bằng cách checking merkle proof against Bitcoin block header. This enables trustless verification, but implementation complexity high và gas costs substantial. Trade-off between security (full verification) và practicality (cost, complexity) persists.
-
-Shared security models như Polkadot's parachains offer different approach. Instead of independent blockchains bridging afterward, start với shared security layer. All parachains protected by same validator set, making communication trustless by design. Analogy: European Union với shared laws và institutions. Member states specialized nhưng operate under common framework, enabling seamless interaction. Trade-off: less sovereignty (parachains must follow relay chain rules) for better interoperability.
+Giai đoạn 2021–2024 chứng kiến sự bùng nổ của các cầu nối đi kèm hàng loạt sự cố bảo mật nghiêm trọng như Ronin (625 triệu USD), Poly Network (611 triệu USD) và Wormhole (325 triệu USD), với tổng thiệt hại vượt mốc 2 tỷ USD. Thực tế này thúc đẩy cộng đồng chuyển hướng nghiên cứu sang thiết kế cầu nối an toàn hơn, xác minh hình thức, các giao thức truyền thông điệp xuyên chuỗi và mô hình bảo mật chia sẻ.
 
 ---
 
-## 3. Technical Foundation
+## 2. Hiểu biết trực quan
 
-Cross-chain communication protocols build on several technical primitives requiring deep understanding. **Hash Time-Locked Contracts (HTLCs)** form foundation của many approaches. HTLC construction involves two linked contracts - one on each blockchain - using cryptographic hash function và time-based conditions để coordinate atomic execution. Contract structure includes hashlock (reveals preimage to claim funds) và timelock (refund if deadline passes). Mathematical guarantee ensures atomicity: either both parties receive funds OR both get refunded.
+Để hình dung rõ thách thức tương tác xuyên chuỗi, có thể xem các hệ sinh thái blockchain như những quốc gia độc lập có đồng tiền, luật pháp và ngôn ngữ riêng: Bitcoin như Hoa Kỳ dùng đồng USD, Ethereum như Liên minh châu Âu dùng đồng Euro, Solana như Nhật Bản dùng đồng Yên. Khi công dân của hai quốc gia muốn giao dịch với nhau, họ gặp nhiều rào cản về tỷ giá, quy định pháp lý và giao tiếp.
 
-Bitcoin implements HTLCs through Script opcodes specifically. Script sequence typically includes `OP_IF` checking whether timeout passed, `OP_SHA256` verifying hash preimage, và `OP_CHECKSIG` validating signatures. Complete HTLC script trên Bitcoin:
+Trong thương mại quốc tế truyền thống, các bên trung gian như ngân hàng, đơn vị vận tải và hải quan đảm nhận vai trò kết nối. Cầu nối blockchain đóng vai trò tương tự cho việc chuyển tài sản và thông điệp giữa các chuỗi không tương thích. Tuy nhiên, việc đưa thêm bên trung gian lại mâu thuẫn với triết lý không cần tin cậy (trustless) của blockchain.
+
+Xét tình huống cụ thể: Alice sở hữu Bitcoin và muốn tham gia giao thức DeFi Uniswap trên Ethereum. Hai mạng lưới này hoàn toàn tách biệt — không dùng chung trình xác thực, không đọc được trạng thái của nhau và không dùng chung ngôn ngữ thực thi. Alice không thể gửi trực tiếp Bitcoin sang địa chỉ Ethereum mà cần một cơ chế đại diện giá trị Bitcoin trên Ethereum.
+
+- **Cách tiếp cận lưu ký**: Alice gửi Bitcoin tới một đơn vị lưu ký (chẳng hạn BitGo), đơn vị này đúc lượng WBTC tương ứng trên Ethereum cho Alice sử dụng trên Uniswap; khi rút, Alice đốt WBTC để nhận lại Bitcoin. Cách này đơn giản nhưng tạo ra điểm lỗi duy nhất (single point of failure) nếu bên lưu ký gian lận hoặc bị tấn công.
+- **Cách tiếp cận không cần tin cậy (HTLC)**: Có thể hình dung HTLC như hai két an toàn có khóa thời gian. Alice và Bob cùng khóa tài sản vào hai két dùng chung một mã băm bí mật: két của Alice mở khi có bí mật hoặc tự hoàn tiền sau 48 giờ, còn két của Bob mở khi có cùng bí mật hoặc tự hoàn tiền sau 24 giờ. Khi Alice công bố bí mật để mở két của Bob, Bob lập tức nhìn thấy bí mật đó để mở két của Alice; nếu một bên không hợp tác, khóa thời gian sẽ hoàn tiền cho cả hai.
+- **Khách nhẹ (Light clients)**: Cho phép hợp đồng trên chuỗi đích xác minh trạng thái của chuỗi nguồn mà không cần chạy nút đầy đủ — ví dụ hợp đồng Ethereum kiểm tra bằng chứng Merkle của giao dịch Bitcoin đối chiếu với tiêu đề khối (block header) Bitcoin. Phương pháp này không cần tin cậy bên thứ ba nhưng phức tạp và tốn chi phí gas.
+- **Bảo mật chia sẻ (Shared security)**: Như mô hình parachain của Polkadot, có thể ví với Liên minh châu Âu có khung pháp lý và thể chế chung. Các chuỗi thành viên chuyên môn hóa theo từng ứng dụng nhưng được bảo vệ bởi cùng một tập trình xác thực, giúp giao tiếp xuyên chuỗi trở nên an toàn ngay từ thiết kế, đổi lại là giảm một phần quyền tự chủ của từng chuỗi.
+
+---
+
+## 3. Nền tảng kỹ thuật
+
+Các giao thức giao tiếp xuyên chuỗi dựa trên một số thành phần kỹ thuật nền tảng. **Hợp đồng khóa băm theo thời gian (HTLC)** gồm hai hợp đồng liên kết trên hai blockchain khác nhau, kết hợp **khóa băm (hashlock)** (yêu cầu tiết lộ tiền ảnh bí mật để nhận tiền) và **khóa thời gian (timelock)** (hoàn tiền cho người gửi nếu quá hạn).
+
+Trên Bitcoin, HTLC được cài đặt bằng ngôn ngữ Bitcoin Script với các mã lệnh như `OP_IF`, `OP_SHA256`, `OP_CHECKLOCKTIMEVERIFY` và `OP_CHECKSIG`:
 
 ```
 OP_IF
@@ -59,7 +56,7 @@ OP_ELSE
 OP_ENDIF
 ```
 
-Ethereum HTLCs implemented through Solidity smart contracts với more flexibility. Contract maintains state mapping tracking pending swaps, timeouts, và completions. Sender initiates swap by calling `initiate()` với hash, amount, timeout, và recipient. Recipient claims calling `claim()` with preimage. If timeout expires before claim, sender calls `refund()` to retrieve funds. All operations atomic within respective blockchains, và hash linkage ensures atomicity across chains.
+Trên Ethereum, HTLC được cài đặt linh hoạt hơn bằng hợp đồng thông minh Solidity với ba hàm chính: `initiate()` (khóa tài sản kèm mã băm và thời hạn), `claim()` (nhận tài sản bằng cách cung cấp tiền ảnh bí mật) và `refund()` (hoàn tiền sau khi hết hạn):
 
 ```solidity
 contract HTLC {
@@ -116,21 +113,21 @@ contract HTLC {
 }
 ```
 
-**Light client verification** enables one blockchain read state của another trustlessly. Light client stores only block headers (approximately 80 bytes per block cho Bitcoin), verifying headers chain correctly via proof-of-work. To verify transaction included, client requests merkle proof từ full node, verifies against header's merkle root. This allows Ethereum contract verify Bitcoin transaction với minimal storage và computation. Implementation challenge: keeping headers updated costs gas. Solutions include incentivized relayers submitting headers periodically, và only updating when verification needed.
+**Xác minh bằng khách nhẹ (Light client verification)** cho phép một blockchain kiểm chứng trạng thái của chuỗi khác mà không cần lưu toàn bộ dữ liệu. Khách nhẹ chỉ lưu tiêu đề khối (khoảng 80 byte mỗi khối với Bitcoin), xác minh chuỗi tiêu đề thông qua bằng chứng công việc (PoW) hoặc chữ ký đồng thuận, rồi kiểm tra bằng chứng Merkle của giao dịch đối chiếu với gốc Merkle trong tiêu đề. Thách thức lớn nhất là chi phí gas để cập nhật tiêu đề liên tục, thường được giảm nhẹ nhờ các bên chuyển tiếp (relayer) hoặc cơ chế cập nhật theo yêu cầu.
 
-**Relay chains** approach problem differently. Instead of direct chain-to-chain communication, introduce intermediary chain coordinating multiple blockchains. Polkadot's relay chain validates parachain blocks, ensuring correctness globally. Parachains submit block candidates, relay chain validators verify, finalize valid blocks. Cross-chain messages routed through relay chain, which guarantees delivery và ordering. Security model relies on relay chain's validator set protecting all parachains simultaneously - shared security preventing individual chain compromises.
+**Chuỗi chuyển tiếp (Relay chains)** như trong Polkadot đưa vào một chuỗi trung tâm điều phối và xác thực các khối ứng viên của parachain. Thông điệp xuyên chuỗi được định tuyến qua relay chain để đảm bảo thứ tự và tính toàn vẹn, kế thừa an ninh chung từ tập trình xác thực của relay chain.
 
-Inter-Blockchain Communication (IBC) protocol developed by Cosmos takes modular approach. IBC defines standard for sovereign blockchains communicate while maintaining independence. Protocol operates in layers: **transport layer** (reliable packet delivery), **authentication layer** (verify sender), và **ordering layer** (guarantee message sequence). Each blockchain runs IBC module implementing these layers, enabling message passing without shared security. Trust model assumes each chain properly securing itself, với IBC providing communication infrastructure.
+**Giao thức IBC (Inter-Blockchain Communication)** của Cosmos áp dụng kiến trúc mô-đun cho các chuỗi có chủ quyền hoàn toàn. IBC tổ chức theo các lớp gồm lớp vận chuyển (gửi gói tin tin cậy), lớp xác thực (xác minh nguồn gửi) và lớp thứ tự (đảm bảo trình tự thông điệp). Mỗi chuỗi tự bảo vệ đồng thuận của mình, còn IBC cung cấp hạ tầng truyền tải và xác minh chéo bằng khách nhẹ.
 
-State verification across chains requires cryptographic proofs robust. Merkle proofs insufficient alone - need prove block headers valid according to source chain's consensus rules. For PoW chains, proving header valid means showing sufficient work done. For PoS chains, requires proving validator signatures correct và validators properly staked. For BFT chains, proving quorum signatures valid. Each consensus mechanism requires different verification logic, adding complexity to bridge implementations.
+Việc xác minh trạng thái xuyên chuỗi đòi hỏi bằng chứng mật mã chặt chẽ: bằng chứng Merkle đơn thuần là chưa đủ mà còn phải chứng minh tiêu đề khối hợp lệ theo đúng quy tắc đồng thuận của chuỗi nguồn (chứng minh công việc với PoW, chứng minh chữ ký và tài sản đặt cọc của trình xác thực với PoS, hoặc chứng minh chữ ký đạt ngưỡng đa số với BFT).
 
 ---
 
-## 4. Mathematical / Cryptographic Formulation
+## 4. Công thức toán học và mật mã học
 
-Atomic swap security analysis reveals cryptographic guarantees ensuring fairness. Consider Alice on Bitcoin wanting swap với Bob on Ethereum. Protocol uses secret \(s\), hash \(h = H(s)\), và timeouts \(t_A, t_B\) where \(t_B < t_A\).
+Xét phân tích bảo mật của hoán đổi nguyên tử giữa Alice (trên Bitcoin) và Bob (trên Ethereum). Alice tạo bí mật \(s\), tính mã băm \(h = H(s)\), và hai bên thiết lập thời hạn \(t_A, t_B\) sao cho \(t_B < t_A\).
 
-**Alice's Contract** (Bitcoin, timeout \(t_A\)):
+**Hợp đồng của Alice** (trên Bitcoin, thời hạn \(t_A\)):
 \[
 \text{Locked} \to \begin{cases}
 \text{Bob} & \text{if } \text{reveals } s: H(s) = h \\
@@ -138,7 +135,7 @@ Atomic swap security analysis reveals cryptographic guarantees ensuring fairness
 \end{cases}
 \]
 
-**Bob's Contract** (Ethereum, timeout \(t_B\)):
+**Hợp đồng của Bob** (trên Ethereum, thời hạn \(t_B\)):
 \[
 \text{Locked} \to \begin{cases}
 \text{Alice} & \text{if } \text{reveals } s: H(s) = h \\
@@ -146,88 +143,58 @@ Atomic swap security analysis reveals cryptographic guarantees ensuring fairness
 \end{cases}
 \]
 
-**Atomicity Proof**:
+**Chứng minh tính nguyên tử (Atomicity)**:
 
-**Case 1**: Bob claims Alice's Bitcoin before \(t_B\)
-- Bob must reveal \(s\)
-- Alice observes \(s\), claims Bob's ETH before \(t_B\)
-- Both transfers succeed ✓
+- **Trường hợp 1**: Alice nhận ETH của Bob trước thời điểm \(t_B\). Khi đó Alice buộc phải công khai \(s\) trên chuỗi Ethereum. Bob quan sát được \(s\) và sử dụng nó để nhận BTC của Alice trước thời điểm \(t_A\) (vì \(t_B < t_A\)). Cả hai giao dịch đều thành công.
+- **Trường hợp 2**: Alice không nhận ETH trước thời điểm \(t_B\). Hạn của Bob hết trước (\(t_B < t_A\)), nên Bob rút lại được ETH. Khi hạn \(t_A\) kết thúc, Alice cũng rút lại được BTC. Cả hai bên đều được hoàn tiền.
+- **Trường hợp 3**: Alice cố gắng nhận ETH sau thời điểm \(t_B\). Điều này bất khả thi vì hợp đồng cưỡng chế điều kiện thời hạn \(t_B\).
 
-**Case 2**: Bob doesn't claim before \(t_B\)
-- Bob's timeout expires first (\(t_B < t_A\))
-- Bob refunded
-- Alice sees Bob refunded, doesn't reveal \(s\)
-- Alice's timeout expires, Alice refunded
-- Both refunded ✓
+Kết quả: không tồn tại kịch bản một bên mất tiền trong khi bên kia chiếm được cả hai khoản tài sản.
 
-**Case 3**: Bob tries claim after timeout
-- Impossible (contract enforces \(t_B\))
-
-**Result**: No scenario where one party loses funds while other gains. Either both succeed or both refunded.
-
-**Security Parameter**:
+**Điều kiện tham số an toàn**:
 \[
 t_A - t_B > \text{Max block time difference} + \text{Network latency}
 \]
 
-Ensures Alice has time to claim after Bob reveals secret.
+Khoảng chênh lệch \(t_A - t_B\) đảm bảo Bob luôn có đủ thời gian để rút BTC sau khi Alice công khai bí mật \(s\) để rút ETH.
 
-**Light client verification complexity**:
+**Độ phức tạp lưu trữ của khách nhẹ**:
 
-For blockchain với headers \(H_1, H_2, ..., H_n\), storing all headers requires:
+Với một blockchain có các tiêu đề khối \(H_1, H_2, \dots, H_n\), dung lượng lưu trữ toàn bộ tiêu đề là:
 \[
 \text{Storage} = n \times |H| \text{ bytes}
 \]
 
-Bitcoin header: 80 bytes
-Current height: ~850,000 blocks
-Total: 68 MB
+Với Bitcoin (tiêu đề 80 byte và khoảng 850.000 khối), tổng dung lượng vào khoảng 68 MB — quá tốn kém nếu lưu trực tiếp trên Ethereum. Các giải pháp thực tế gồm: chỉ lưu các tiêu đề gần đây, lưu điểm kiểm tra (checkpoint) kèm bằng chứng, hoặc dùng dịch vụ chuyển tiếp.
 
-On Ethereum (expensive storage), cost prohibitive. Solutions:
-1. Store only recent headers
-2. Store checkpoints + proofs
-3. Use relay services
+**Xác minh bằng chứng Merkle** cho giao dịch \(T_x\) trong khối \(B_k\):
 
-**Merkle proof verification** for transaction \(T_x\) in block \(B_k\):
-
-Verifier needs:
-- Block header \(H_k\) (80 bytes)
-- Merkle proof path \(P\) (\(\log_2 n\) hashes where \(n\) = transactions in block)
-
-Verification computes:
+Người xác minh cần tiêu đề khối \(H_k\) (80 byte) và đường dẫn Merkle \(P\) gồm \(\log_2 n\) giá trị băm (với \(n\) là số giao dịch trong khối), sau đó tính:
 \[
 \text{root} = \text{MerkleCompute}(T_x, P)
 \]
-
-Checks:
+và kiểm tra:
 \[
 \text{root} \stackrel{?}{=} H_k.\text{merkleRoot}
 \]
 
-Cost: \(O(\log n)\) hash operations, constant storage.
+Chi phí xác minh là \(O(\log n)\) phép băm với bộ nhớ hằng số.
 
-**IBC packet verification** requires proving packet committed on source chain. For packet \(p\) với commitment \(c\):
-
-Source chain stores:
+**Xác minh gói tin IBC**: Chuỗi nguồn lưu cam kết gói tin \(p\):
 \[
 c = H(p.\text{sequence}, p.\text{data}, p.\text{timeout})
 \]
 
-Destination verifies:
-1. Commitment exists in source state
-2. Source state valid (via consensus proof)
-3. Packet not timed out
-
-Verification equation:
+Chuỗi đích kiểm tra ba điều kiện: cam kết tồn tại trong trạng thái chuỗi nguồn, trạng thái chuỗi nguồn hợp lệ theo bằng chứng đồng thuận, và gói tin chưa quá hạn:
 \[
 \text{Verify}(\text{stateProof}, \text{commitment}) \land \text{time} < p.\text{timeout}
 \]
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
-Implementation của cross-chain protocols requires careful handling của multiple blockchain states simultaneously. HTLC atomic swap implementation demonstrates coordination pattern fundamental to interoperability solutions.
+Cài đặt mô phỏng hoán đổi nguyên tử HTLC minh họa quy trình phối hợp trạng thái giữa hai blockchain độc lập:
 
 ```python
 import hashlib
@@ -441,69 +408,58 @@ if __name__ == "__main__":
     )
 ```
 
-**Relay chain architecture** trong Polkadot involves sophisticated state verification mechanisms. Validators assigned to parachains attest to block validity. These attestations aggregated và included trong relay chain blocks. Cross-chain messages stored trong relay chain state, enabling recipient parachains retrieve và process messages trustlessly. Security derives từ relay chain's validator set economically secured through staking.
+Trong kiến trúc **relay chain của Polkadot**, các trình xác thực được phân công cho từng parachain sẽ chứng thực tính hợp lệ của khối ứng viên, sau đó tổng hợp chứng thực đưa vào khối relay chain. Các thông điệp xuyên chuỗi lưu trực tiếp trong trạng thái relay chain để parachain đích đọc và xử lý không cần tin cậy.
 
-Cosmos IBC implementation requires both chains run Tendermint consensus hoặc compatible BFT. IBC relayer (off-chain process) monitors both chains, submitting headers và proofs to counterparty. When chain A sends packet to chain B, relayer submits proof to chain B showing packet committed on chain A. Chain B verifies proof using chain A's validator signatures stored trong client state. Verification equation:
+Trong **Cosmos IBC**, hai chuỗi thường chạy đồng thuận Tendermint hoặc BFT tương thích. Một tiến trình ngoài chuỗi (IBC relayer) theo dõi cả hai chuỗi, chuyển tiêu đề khối và bằng chứng sang chuỗi đối tác. Khi chuỗi A gửi gói tin tới chuỗi B, chuỗi B kiểm tra chữ ký của tập trình xác thực chuỗi A dựa trên trạng thái khách nhẹ đã lưu:
 
 \[
 \text{Verify}_{\text{ClientState}_A}(\text{signature}_{\text{validators}}, \text{packet\_commitment})
 \]
 
-Only if verification succeeds, packet processed.
+Gói tin chỉ được xử lý khi bước xác minh này thành công.
 
 ---
 
-## 6. Common Challenges / Attacks / Trade-offs
+## 6. Thách thức, tấn công và sự đánh đổi
 
-Bridge security remains paramount concern following numerous high-profile hacks exceeding $2 billion total losses. **Ronin bridge attack** (March 2022, $625M) showcased validator compromise vulnerability. Ronin used nine validators, requiring five signatures for withdrawals. Attackers compromised five validator private keys through social engineering và infrastructure vulnerabilities, enabling them mint arbitrary amounts và drain bridge. Attack demonstrated concentration risk - too few validators creates single point of failure despite multisig.
-
-**Wormhole hack** (February 2022, $325M) exploited signature verification bug. Attacker bypassed guardian signature check, allowing them mint wrapped tokens without locking equivalent assets on source chain. Bug subtle - verification logic failed properly validate all signatures, assuming earlier checks sufficient. This highlights smart contract security challenges amplified trong bridges where funds locked equal total value at risk.
-
-**Trust assumptions** vary dramatically across bridge designs. Custodial bridges (WBTC) require trusting centralized entities holding source assets. Federation bridges (Multichain) distribute trust across set of validators but create n-of-m trust model. Trustless bridges attempt cryptographic verification but face gas costs và complexity challenges. No bridge truly trustless - all involve assumptions về source chain security, validator honesty, hoặc implementation correctness.
-
-**Liquidity fragmentation** worsens as bridges proliferate. Multiple Bitcoin representations exist on Ethereum - WBTC, renBTC, tBTC, hBTC - each incompatible và fragmenting liquidity. User wanting trade Bitcoin on Ethereum must choose which wrapper, affecting available liquidity và creating arbitrage opportunities. Standardization attempts (like Bitcoin SPV proofs) struggle gain adoption due to varying security models và gas costs.
-
-Cross-chain MEV introduces attack vectors novel. Attacker monitoring pending bridge transactions có thể front-run on destination chain, back-run on source chain, hoặc sandwich both sides. Oracle manipulation affects cross-chain bridges relying on price feeds. Flash loan attacks amplified - borrow on one chain, manipulate price, trigger favorable cross-chain action, repay loan. Multi-chain atomicity creates opportunities for sophisticated exploits.
-
-**Data availability** critical cho optimistic bridges relying on fraud proofs. If transaction data không available, validators cannot verify validity, cannot construct fraud proofs. Solutions include posting transaction data to multiple chains, using erasure coding for redundancy, và requiring data availability attestations. Trade-off: more data means higher costs, limiting scalability benefits.
-
-**Finality differences** create challenges. Bitcoin has probabilistic finality (6 confirmations standard), Ethereum had probabilistic (now absolute post-Merge), BFT chains have immediate finality. Bridges must handle varying finality guarantees carefully. Waiting for finality on source chain before allowing claims on destination adds latency. Not waiting risks reorganizations invalidating transfers, creating double-spend scenarios.
+- **Rủi ro bảo mật cầu nối**: Các vụ tấn công cầu nối đã gây thiệt hại hơn 2 tỷ USD. Vụ **Ronin Bridge** (tháng 3/2022, 625 triệu USD) cho thấy rủi ro tập trung khóa khi kẻ tấn công chiếm 5 trong số 9 khóa trình xác thực để rút cạn quỹ. Vụ **Wormhole** (tháng 2/2022, 325 triệu USD) xuất phát từ lỗi bỏ qua bước xác minh chữ ký của guardian, cho phép đúc token bọc mà không cần khóa tài sản gốc.
+- **Giả định tin cậy (Trust assumptions)**: Cầu nối lưu ký (WBTC) tin cậy vào tổ chức nắm giữ tài sản; cầu nối liên minh (Multichain) phân tán niềm tin vào mô hình n-trên-m; cầu nối xác minh mật mã giảm thiểu niềm tin nhưng tốn gas và phức tạp. Không có cầu nối nào hoàn toàn miễn nhiễm giả định — tất cả đều phụ thuộc vào an ninh chuỗi nguồn, sự trung thực của trình xác thực hoặc tính đúng đắn của mã nguồn.
+- **Phân mảnh thanh khoản**: Sự tồn tại đồng thời của nhiều phiên bản tài sản bọc (như WBTC, renBTC, tBTC, hBTC trên Ethereum) khiến thanh khoản bị chia nhỏ và không tương thích trực tiếp với nhau.
+- **MEV xuyên chuỗi và tấn công phức hợp**: Kẻ tấn công theo dõi giao dịch cầu nối đang chờ xử lý có thể chạy trước ở chuỗi đích, chạy sau ở chuỗi nguồn hoặc kết hợp flash loan và thao túng oracle để khai thác chênh lệch giá.
+- **Tính sẵn sàng dữ liệu (Data availability)**: Đặc biệt quan trọng với cầu nối lạc quan (optimistic bridges) dựa trên bằng chứng gian lận — nếu dữ liệu giao dịch không sẵn có, người giám sát không thể lập bằng chứng gian lận.
+- **Khác biệt về tính cuối cùng (Finality)**: Bitcoin có tính cuối cùng xác suất (thường chờ 6 xác nhận), Ethereum sau The Merge có tính cuối cùng xác định, còn các chuỗi BFT đạt tính cuối cùng gần như tức thì. Cầu nối phải xử lý cẩn thận sự chênh lệch này để tránh rủi ro tổ chức lại chuỗi (reorg) gây chi tiêu lặp.
 
 ---
 
-## 7. Related Concepts
+## 7. Các khái niệm liên quan
 
-Cross-chain communication relates intimately to **blockchain interoperability standards** emerging across industry. Token standards like ERC-20 enable composability within Ethereum, but cross-chain requires meta-standards coordinating multiple ecosystems. **Cross-Chain Transfer Protocol (CCTP)** by Circle enables native USDC burning on one chain, minting on another, avoiding wrapped tokens entirely. This shows asset-specific solutions possible where generic bridges struggle.
-
-**Liquidity networks** like **Connext** và **Hop Protocol** optimize cross-chain transfers through liquidity pools on destination chains. Instead of waiting for slow bridge finality, users swap through pools, receiving funds immediately. Liquidity providers rebalanced through canonical bridge afterward. This separates user experience (fast) from security (slow but safe canonical bridge), improving usability substantially.
-
-**Cross-chain DEXs** attempt enable trading across chains seamlessly. **THORChain** provides liquidity pools for native assets across multiple chains, using continuous liquidity pools và incentivized node operators. Users swap BTC for ETH directly without wrapping. Security model relies on node operators bonding RUNE token, economically incentivizing honest behavior. However, THORChain suffered multiple hacks, showing cross-chain DEX security challenges remain.
-
-**Blockchain abstraction layers** like **LayerZero** và **Axelar** provide messaging infrastructure. Instead of asset bridges, they enable arbitrary message passing between chains. Smart contract on Ethereum can call function on Avalanche, with results returned. This enables complex cross-chain applications - governance voting on one chain controlling protocol on another, cross-chain lending, unified liquidity management. Implementation complexity high but unlocks composability across chains.
-
-**Shared sequencing** represents newer approach where single sequencer orders transactions across multiple rollups simultaneously. This enables atomic cross-rollup transactions without asynchronous messaging. All rollups using shared sequencer have synchronized state, eliminating traditional cross-chain latency. Trade-off: centralizes sequencing (though can be decentralized through rotation/auction), but significantly simplifies interoperability.
+- **Chuẩn chuyển tài sản bản địa**: **Cross-Chain Transfer Protocol (CCTP)** của Circle cho phép đốt USDC bản địa trên chuỗi nguồn và đúc USDC bản địa trên chuỗi đích, loại bỏ hoàn toàn tài sản bọc.
+- **Mạng lưới thanh khoản (Liquidity networks)**: Các giao thức như **Connext** và **Hop Protocol** dùng bể thanh khoản trên chuỗi đích để người dùng nhận tiền gần như ngay lập tức, sau đó mới cân bằng lại qua cầu nối chính thức.
+- **Sàn DEX xuyên chuỗi**: **THORChain** cho phép hoán đổi tài sản bản địa (như BTC sang ETH) trực tiếp qua các bể thanh khoản liên tục được bảo đảm bằng tài sản đặt cọc RUNE, dù từng trải qua nhiều sự cố bảo mật.
+- **Lớp truyền thông điệp tổng quát**: **LayerZero** và **Axelar** cho phép truyền thông điệp tùy ý và gọi hàm hợp đồng giữa các chuỗi, mở đường cho các ứng dụng đa chuỗi (quản trị, cho vay và quản lý thanh khoản hợp nhất).
+- **Trình sắp xếp dùng chung (Shared sequencing)**: Một trình sắp xếp duy nhất xác định thứ tự giao dịch đồng thời cho nhiều rollup, cho phép thực thi giao dịch nguyên tử xuyên rollup mà không cần độ trễ truyền tin bất đồng bộ.
 
 ---
 
-## 8. ⭐ Fundamental Papers / Whitepapers
+## 8. Tài liệu nền tảng và bài báo quan trọng
 
-| Paper | Year | Author(s) | Contribution |
-|-------|------|-----------|--------------|
-| **"Atomic Cross-Chain Swaps"** | 2013 | Tier Nolan | First description of trustless atomic swaps using HTLCs |
-| **"Bitcoin and Cryptocurrency Technologies"** | 2016 | Narayanan et al. | Chapter on cross-chain protocols |
-| **"Polkadot: Vision for a Heterogeneous Multi-Chain Framework"** | 2016 | Gavin Wood | Relay chain và parachain architecture |
-| **"Cosmos: A Network of Distributed Ledgers"** | 2016 | Jae Kwon, Ethan Buchman | IBC protocol foundations |
-| **"IBC Protocol Specification"** | 2020 | Cosmos team | Complete IBC technical spec |
-| **"XCMP: Cross-Chain Message Passing"** | 2020 | Polkadot team | Parachain communication protocol |
-| **"LayerZero: Trustless Omnichain Interoperability Protocol"** | 2021 | LayerZero Labs | Ultra-light node verification |
-| **"Wormhole: A Generic Message Passing Protocol"** | 2021 | Certus One | Guardian network approach |
-| **"THORChain: A Decentralized Liquidity Network"** | 2018 | THORChain team | Cross-chain DEX design |
+| Tài liệu | Năm | Tác giả | Đóng góp chính |
+|----------|-----|---------|----------------|
+| **"Atomic Cross-Chain Swaps"** | 2013 | Tier Nolan | Mô tả đầu tiên về hoán đổi nguyên tử không cần tin cậy bằng HTLC |
+| **"Bitcoin and Cryptocurrency Technologies"** | 2016 | Narayanan và cộng sự | Chương phân tích các giao thức xuyên chuỗi |
+| **"Polkadot: Vision for a Heterogeneous Multi-Chain Framework"** | 2016 | Gavin Wood | Kiến trúc relay chain và parachain |
+| **"Cosmos: A Network of Distributed Ledgers"** | 2016 | Jae Kwon, Ethan Buchman | Nền tảng giao thức IBC |
+| **"IBC Protocol Specification"** | 2020 | Đội ngũ Cosmos | Đặc tả kỹ thuật đầy đủ của IBC |
+| **"XCMP: Cross-Chain Message Passing"** | 2020 | Đội ngũ Polkadot | Giao thức truyền thông điệp giữa các parachain |
+| **"LayerZero: Trustless Omnichain Interoperability Protocol"** | 2021 | LayerZero Labs | Xác minh bằng nút siêu nhẹ (Ultra-Light Node) |
+| **"Wormhole: A Generic Message Passing Protocol"** | 2021 | Certus One | Kiến trúc mạng lưới Guardian |
+| **"THORChain: A Decentralized Liquidity Network"** | 2018 | Đội ngũ THORChain | Thiết kế sàn giao dịch phi tập trung xuyên chuỗi |
 
 ---
 
-## 9. 🎨 Illustrations & Visual References
+## 9. Minh họa và tài liệu trực quan
 
-### HTLC Atomic Swap Flow
+### Luồng hoán đổi nguyên tử HTLC
 ```
 Alice (Bitcoin)                          Bob (Ethereum)
      |                                        |
@@ -520,63 +476,57 @@ Alice (Bitcoin)                          Bob (Ethereum)
      |<---------------------------------------|
      ✓ Both parties received funds!
 ```
-*Diagram: HTLC atomic swap protocol flow*
+*Sơ đồ: Luồng hoạt động của giao thức hoán đổi nguyên tử HTLC*
 
-### Bridge Architecture Comparison
+### So sánh kiến trúc các loại cầu nối
 
-| Type | Trust Model | Security | Examples |
-|------|-------------|----------|----------|
-| **Custodial** | Trust entity | Centralized risk | WBTC, centralized exchanges |
-| **Federation** | Trust n-of-m validators | Distributed trust | Multichain, Synapse |
-| **Optimistic** | Trust 1-of-n honest validator | Fraud proof based | Optimism Bridge, Arbitrum |
-| **ZK** | Trust cryptography | Math-based | zkSync Bridge |
-| **Shared Security** | Trust relay chain | Validator set | Polkadot parachains |
+| Loại cầu nối | Mô hình tin cậy | Đặc điểm bảo mật | Ví dụ |
+|--------------|-----------------|------------------|-------|
+| **Lưu ký (Custodial)** | Tin cậy tổ chức lưu ký | Rủi ro tập trung | WBTC, sàn giao dịch tập trung |
+| **Liên minh (Federation)** | Tin cậy n-trên-m trình xác thực | Phân tán niềm tin có giới hạn | Multichain, Synapse |
+| **Lạc quan (Optimistic)** | Tin cậy ít nhất 1 trong n người giám sát trung thực | Dựa trên bằng chứng gian lận | Optimism Bridge, Arbitrum |
+| **ZK** | Tin cậy mật mã học | Dựa trên chứng minh toán học | zkSync Bridge |
+| **Bảo mật chia sẻ** | Tin cậy chuỗi chuyển tiếp | Dùng chung tập trình xác thực | Polkadot parachains |
 
-*Source: [L2Beat Bridge Risk Framework](https://l2beat.com/bridges/risk)*
+*Nguồn: [L2Beat Bridge Risk Framework](https://l2beat.com/bridges/risk)*
 
-### Cross-Chain Communication Landscape
+### Kiến trúc giao thức IBC
 ![IBC Protocol Architecture](https://tutorials.cosmos.network/resized-images/600/academy/2-cosmos-concepts/images/ibc.png)  
-*Source: [Cosmos IBC Documentation](https://tutorials.cosmos.network/academy/2-cosmos-concepts/6-ibc.html)*
+*Nguồn: [Cosmos IBC Documentation](https://tutorials.cosmos.network/academy/2-cosmos-concepts/6-ibc.html)*
 
-### Polkadot Architecture
+### Kiến trúc Polkadot
 ![Polkadot Relay Chain and Parachains](https://wiki.polkadot.network/assets/images/polkadot-relay-chain-0e42bf5a5e344e33ca945ef2d5d82c24.png)  
-*Source: [Polkadot Wiki](https://wiki.polkadot.network/)*
+*Nguồn: [Polkadot Wiki](https://wiki.polkadot.network/)*
 
-### Interactive Tools
-- [Cosmos IBC Tracker](https://www.mintscan.io/cosmos/relayers) - Monitor IBC transfers
-- [Polkadot.js](https://polkadot.js.org/) - Interact with Polkadot ecosystem
-- [Bridge Analytics](https://dune.com/browse/dashboards?q=bridge) - Cross-chain volume data
-- [L2Beat Bridges](https://l2beat.com/bridges) - Bridge security rankings
-
----
-
-## 10. Summary và Key Takeaways
-
-Cross-chain communication represents frontier critical cho blockchain's evolution from isolated networks to interconnected ecosystem. Technical approaches range từ atomic swaps using HTLCs (trustless but limited functionality) to sophisticated bridge protocols (greater functionality but introduced trust assumptions) to purpose-built interoperability platforms (Polkadot, Cosmos) designed from ground up for cross-chain operations.
-
-Core technical challenge involves verifying state của one blockchain from another without running full node. Solutions include light clients (verify headers và merkle proofs), relay chains (shared validators), và oracle networks (external verification). Each approach trades off between security guarantees, implementation complexity, gas costs, và trust assumptions. No solution achieves perfect trustlessness while maintaining practicality.
-
-Security remains paramount concern. Bridge hacks totaling >$2 billion demonstrate vulnerability của cross-chain infrastructure. Concentrating value trong bridges creates honeypots attracting sophisticated attackers. Defense requires multi-layered approach: secure validator sets (geographic diversity, key management), robust smart contract code (formal verification, audits), monitoring systems (anomaly detection), và economic security (insurance funds, slashing).
-
-Mathematical guarantees underpin trustless approaches. HTLCs prove atomicity through hash preimage requirements và time locks. Light client verification proves transaction inclusion through merkle proofs và consensus verification. Zero-knowledge proofs enable succinct state verification. Understanding these cryptographic foundations essential for evaluating bridge security claims.
-
-Future directions include shared sequencing across rollups, intent-based cross-chain protocols where users express desired outcomes rather than specific paths, và standardization efforts like EIP-5164 (Cross-Chain Execution). As blockchain ecosystem matures, interoperability transitions from nice-to-have feature to fundamental infrastructure requirement. Mastering cross-chain communication concepts positions developers và researchers at forefront của blockchain's next evolution phase.
+### Công cụ tương tác tham khảo
+- [Cosmos IBC Tracker](https://www.mintscan.io/cosmos/relayers) — Theo dõi các giao dịch chuyển tiếp IBC.
+- [Polkadot.js](https://polkadot.js.org/) — Tương tác với hệ sinh thái Polkadot.
+- [Bridge Analytics](https://dune.com/browse/dashboards?q=bridge) — Dữ liệu khối lượng giao dịch xuyên chuỗi.
+- [L2Beat Bridges](https://l2beat.com/bridges) — Phân tích và xếp hạng rủi ro các cầu nối.
 
 ---
 
-✅ **End of Lecture**
+## 10. Tóm tắt
 
-Next: Lecture 06.01 - Blockchain Bridges: Architecture và Security
+Giao tiếp xuyên chuỗi là bước tiến quan trọng giúp chuyển đổi hệ sinh thái blockchain từ các mạng lưới cô lập sang môi trường kết nối liền mạch. Các hướng tiếp cận trải rộng từ hoán đổi nguyên tử dùng HTLC (không cần tin cậy nhưng giới hạn tính năng), các giao thức cầu nối đa dạng (mở rộng chức năng nhưng phát sinh giả định tin cậy) đến các nền tảng thiết kế sẵn cho tương tác như Polkadot và Cosmos.
+
+Bài toán cốt lõi nằm ở việc xác minh trạng thái của một blockchain từ một blockchain khác mà không cần chạy nút đầy đủ, với các giải pháp tiêu biểu gồm khách nhẹ, chuỗi chuyển tiếp và mạng lưới oracle. Mỗi lựa chọn đều đánh đổi giữa đảm bảo bảo mật, độ phức tạp kỹ thuật, chi phí gas và giả định tin cậy. Trước thực tế thiệt hại hơn 2 tỷ USD từ các vụ tấn công cầu nối, bảo vệ hạ tầng xuyên chuỗi đòi hỏi phòng thủ nhiều lớp gồm đa dạng hóa trình xác thực, kiểm toán và xác minh hình thức hợp đồng, giám sát bất thường và đảm bảo kinh tế.
+
+---
+
+**Kết thúc bài giảng**
+
+Bài tiếp theo: Lecture 06.01 — Blockchain Bridges: Architecture và Security
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [What is an Atomic Swap in Crypto? Time Locked Smart Contracts](https://www.youtube.com/watch?v=-9NDKbJo_A4) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto giải thích atomic swap và khóa thời gian; xem trước trước công thức HTLC.
-- [Introduction to Atomic Swaps: Live Demo +  Solidity Tutorial Of Hash Timelocked Contract (HTLC)](https://www.youtube.com/watch?v=VZX2ApRLuwM) — EatTheBlocks, tiếng Anh. EatTheBlocks viết hash timelock contract bằng Solidity và chạy demo; đúng phần hiện thực trong bài.
-- [A Technical Introduction to The Lightning Network - We Are Developers 2020](https://www.youtube.com/watch?v=E1n3sKKPD_k) — aantonop, tiếng Anh. Antonopoulos cho thấy Lightning dùng cùng primitive HTLC ở quy mô thanh toán; nối bài với một hệ đang chạy.
+- **Xem trước:** [What is an Atomic Swap in Crypto? Time Locked Smart Contracts](https://www.youtube.com/watch?v=-9NDKbJo_A4) — Whiteboard Crypto, tiếng Anh. Giải thích cơ chế atomic swap và khóa thời gian; nên xem trước phần công thức HTLC.
+- [Introduction to Atomic Swaps: Live Demo +  Solidity Tutorial Of Hash Timelocked Contract (HTLC)](https://www.youtube.com/watch?v=VZX2ApRLuwM) — EatTheBlocks, tiếng Anh. Hướng dẫn viết và chạy thử hợp đồng HTLC bằng Solidity, tương ứng với phần cài đặt trong bài.
+- [A Technical Introduction to The Lightning Network - We Are Developers 2020](https://www.youtube.com/watch?v=E1n3sKKPD_k) — aantonop, tiếng Anh. Trình bày cách Lightning Network ứng dụng nguyên thủy HTLC ở quy mô thanh toán thực tế.
 
-## References
+## Tài liệu tham khảo
 
 1. Nolan, T. (2013). *Atomic Cross-Chain Swaps*. BitcoinTalk Forum.
 2. Wood, G. (2016). *Polkadot: Vision for a Heterogeneous Multi-Chain Framework*. Polkadot Whitepaper.
@@ -584,4 +534,3 @@ Next: Lecture 06.01 - Blockchain Bridges: Architecture và Security
 4. Cosmos Network. (2020). *IBC Protocol Specification*. https://github.com/cosmos/ibc
 5. LayerZero Labs. (2021). *LayerZero: Trustless Omnichain Interoperability Protocol*. LayerZero Whitepaper.
 6. L2Beat Team. (2024). *Bridge Risk Framework*. https://l2beat.com/bridges/risk
-

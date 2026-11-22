@@ -9,63 +9,50 @@ categories:
 - blockchain-chapter07
 ---
 
-# Lecture: Web3 Infrastructure - Decentralized Internet Stack
+# Bài giảng 07.02: Hạ tầng Web3 — Kiến trúc Internet phi tập trung
 
-## 1. Concept Overview
+## 1. Tổng quan về khái niệm
 
-Web3 represents vision fundamental rethinking của internet architecture, transitioning from centralized platforms controlling user data và interactions toward decentralized networks where users own their data, identity, và digital assets directly. This paradigm shift requires rebuilding entire internet infrastructure stack - from data storage và domain names to identity systems và application hosting - using decentralized protocols resistant to censorship, manipulation, và single points of failure.
+**Web3** hướng tới việc thiết kế lại kiến trúc internet theo mô hình phi tập trung, chuyển dịch từ các nền tảng tập trung kiểm soát dữ liệu và tương tác người dùng sang các mạng lưới nơi người dùng trực tiếp sở hữu dữ liệu, danh tính và tài sản số của mình. Quá trình này đòi hỏi xây dựng lại toàn bộ ngăn xếp hạ tầng — từ lưu trữ dữ liệu, hệ thống tên miền đến danh tính và vận hành ứng dụng — dựa trên các giao thức chống kiểm duyệt và không có điểm lỗi duy nhất.
 
-Current internet architecture, often termed Web2, centralized around massive platforms - Google, Facebook, Amazon, Microsoft - controlling servers, data, algorithms, và user relationships. Users create content, generate data, build communities, but platforms own everything, monetize user attention, và can unilaterally change rules, ban users, hoặc shut down services. Web3 vision reverses this: users own their data cryptographically through private keys, applications run on decentralized networks, platforms reduced to interfaces rather than gatekeepers.
+Kiến trúc internet hiện đại (thường gọi là **Web2**) tập trung quanh các nền tảng lớn như Google, Facebook, Amazon hay Microsoft, nơi doanh nghiệp kiểm soát máy chủ, dữ liệu, thuật toán và quyền truy cập dịch vụ. Nhìn lại tiến trình lịch sử:
+- **Web1 (1990–2004)**: Các trang web tĩnh, chủ yếu chỉ đọc, vận hành trên giao thức mở (HTTP, SMTP, FTP). Kiến trúc có tính phi tập trung nhưng tính năng tương tác còn hạn chế.
+- **Web2 (2004–nay)**: Bùng nổ mạng xã hội, điện toán đám mây và ứng dụng di động với khả năng tương tác phong phú, nhưng kéo theo sự tập trung hóa dữ liệu và quyền kiểm soát vào các hệ sinh thái khép kín.
+- **Web3 (2014–nay)**: Tìm cách kết hợp tính phi tập trung của Web1 với tính năng phong phú của Web2 thông qua hợp đồng thông minh (Ethereum), lưu trữ phi tập trung (IPFS, Filecoin), tên miền phi tập trung (ENS) và danh tính tự chủ (DID).
 
-Historical evolution traces through distinct eras. **Web1 (1990-2004)** consisted of static websites, read-only content, decentralized protocols (HTTP, SMTP, FTP). Anyone could run server, publish content, participate freely. Decentralized in architecture but limited in functionality - no social interaction, no user-generated content dynamically, no persistent identity across sites. **Web2 (2004-present)** introduced platforms enabling user interaction - social media, cloud computing, mobile apps. Functionality exploded but centralization increased dramatically. Platforms aggregated users, data, và value, creating walled gardens controlling digital lives.
-
-**Web3 emergence** (2014-present) attempts recapture Web1's decentralization whilst providing Web2's functionality. Ethereum smart contracts enable decentralized applications (dApps) with persistent state và programmatic logic. IPFS provides decentralized storage. ENS creates decentralized naming. Decentralized identity protocols enable self-sovereign credentials. Together, these components form infrastructure stack supporting fully decentralized applications rivaling centralized counterparts in functionality whilst preserving user sovereignty.
-
-Core Web3 primitives include **decentralized storage** replacing cloud servers, **decentralized compute** replacing centralized hosting, **decentralized identity** replacing platform accounts, và **decentralized monetization** through tokens replacing advertising models. Each primitive addresses specific centralization vulnerability trong current web while introducing new challenges around performance, user experience, và governance.
-
-**IPFS (InterPlanetary File System)**, created by **Juan Benet** năm 2014, pioneered content-addressed storage. Instead of addressing data by location (URLs pointing to servers), IPFS addresses data by cryptographic hash của content itself. Same content always yields same hash (CID - Content Identifier), regardless of where stored. Anyone can host content, users retrieve from whoever has it, no central servers required. This fundamental inversion eliminates link rot (content disappears when server goes down) và censorship (content persists as long as anyone pins it).
-
-**Filecoin**, incentive layer for IPFS launched 2020, introduces economic mechanisms ensuring content persistence. Storage providers earn FIL tokens for reliably storing client data, verified through cryptographic proofs. Clients pay for storage, creating market matching supply và demand. This transforms IPFS from volunteer network into sustainable storage economy, though complexity và costs higher than centralized alternatives currently.
-
-**ENS (Ethereum Name Service)**, launched 2017, provides decentralized alternative to DNS. Human-readable names (alice.eth) map to Ethereum addresses, IPFS hashes, hoặc arbitrary data. Ownership secured through NFTs, not ICANN registrars. Users truly own names, cannot be seized hoặc revoked arbitrarily. Integration with wallets enables replacing hexadecimal addresses với readable names, dramatically improving UX whilst maintaining decentralization.
-
-Decentralized identity frameworks like **DID (Decentralized Identifiers)** và **Verifiable Credentials** enable self-sovereign identity. Users control cryptographic identifiers không tied to any platform. Credentials issued by trusted entities (universities, employers, governments) cryptographically signed, verifiable by anyone, stored by users directly. No central identity provider required, users present credentials selectively maintaining privacy. Standards developed by W3C provide interoperability across implementations.
+Các thành phần cốt lõi trong hạ tầng Web3 bao gồm:
+- **IPFS (InterPlanetary File System)**: Do **Juan Benet** phát triển năm 2014, sử dụng cơ chế định địa chỉ theo nội dung (content addressing) thay vì theo vị trí máy chủ. Mọi tệp dữ liệu được định danh bằng mã băm mật mã của chính nội dung đó (CID — Content Identifier), giúp hạn chế liên kết hỏng (link rot) và giảm nguy cơ kiểm duyệt.
+- **Filecoin**: Ra mắt năm 2020 như lớp khuyến khích kinh tế cho IPFS. Nhà cung cấp lưu trữ nhận thưởng token FIL khi chứng minh được bằng mật mã rằng họ đang lưu trữ dữ liệu cho khách hàng theo thời gian.
+- **ENS (Ethereum Name Service)**: Ra mắt năm 2017 như giải pháp thay thế phi tập trung cho DNS, ánh xạ tên dễ đọc (như `alice.eth`) tới địa chỉ ví Ethereum, mã băm IPFS hoặc dữ liệu tùy ý, với quyền sở hữu bảo vệ dưới dạng NFT.
+- **Danh tính phi tập trung (DID và Verifiable Credentials)**: Do W3C chuẩn hóa, cho phép người dùng tự nắm giữ định danh mật mã và trình bày các chứng chỉ đã ký số (từ trường học, cơ quan, tổ chức) theo cơ chế tiết lộ có chọn lọc mà không phụ thuộc nhà cung cấp danh tính trung tâm.
 
 ---
 
-## 2. Intuitive Understanding
+## 2. Hiểu biết trực quan
 
-Web3 architecture comparable to comparing library systems. Traditional library (Web2): central building holds all books, librarian controls access, knows what you read, can ban you. Decentralized library network (Web3): books distributed across community members' homes, anyone can host copies, lookup directory shows who has which books, request directly from current holders, no central librarian controlling access. Books addressed by content (ISBN), not location, so finding copies easy regardless of who holds them.
-
-Content addressing in IPFS revolutionizes link semantics. Traditional URL như street address - points to location. If resident moves, address becomes invalid (link rot). IPFS CID như DNA sequence - identifies content uniquely regardless of location. Like saying "find person với this DNA" rather than "check this address." Person moves, DNA unchanged, still findable. Content moves servers, hash unchanged, still retrievable. Persistence through identity rather than location.
-
-Filecoin storage market comparable to Airbnb for data. Instead of centralized hotel chain (AWS, Google Cloud), decentralized marketplace matches storage providers với clients. Providers offer storage space, clients pay for retention, protocol ensures delivery through cryptographic proofs. Like renting spare rooms globally rather than booking single hotel chain. Diversity increases resilience - no single provider failure affects entire network.
-
-ENS versus DNS comparable to cryptocurrency ownership versus bank account. DNS registrations controlled by registrars, subject to government seizure, can be revoked. ENS names owned directly through private keys, truly yours like Bitcoin. No entity can seize alice.eth if Alice controls private key. Decentralized ownership versus centralized administration fundamental difference.
-
-Decentralized identity analogous to passport versus Facebook login. Facebook controls account - can ban, change rules, require ID verification arbitrarily. Passport self-sovereign - you own document, present when needed, no platform controls. DIDs extend này to digital realm - cryptographic identifiers owned directly, credentials presented selectively, no platform intermediary. Privacy preserved through selective disclosure - prove age over 18 without revealing birthdate, prove employment without revealing salary.
-
-Web3 application stack layers comparable to protocol stack trong networking. Just as TCP/IP provides reliable communication layer for HTTP applications, Web3 infrastructure layers enable decentralized applications. Base layer (Ethereum) provides computation và consensus. Storage layer (IPFS) provides content availability. Identity layer (ENS, DIDs) provides user primitives. Application layer (dApps) composes these primitives into user-facing services. Each layer decentralized independently, composed trustlessly.
+- **Web2 và Web3 qua hình ảnh thư viện**: Thư viện truyền thống (Web2) lưu toàn bộ sách trong một tòa nhà trung tâm do thủ thư kiểm soát quyền mượn và theo dõi người đọc. Mạng thư viện phi tập trung (Web3) phân tán sách tại nhà các thành viên cộng đồng; bất kỳ ai cũng có thể lưu trữ bản sao và tra cứu sách theo mã nội dung (như mã ISBN) thay vì theo địa chỉ tòa nhà.
+- **Định địa chỉ nội dung (IPFS)**: URL truyền thống giống địa chỉ nhà — nếu người ở chuyển đi, địa chỉ trở nên vô hiệu. CID của IPFS giống trình tự ADN — gắn liền với chính nội dung, nên dù tệp được chuyển sang máy chủ nào, mã định danh vẫn không đổi.
+- **Thị trường lưu trữ Filecoin**: Hoạt động tương tự mô hình chia sẻ không gian lưu trữ ngang hàng thay vì phụ thuộc vào một chuỗi khách sạn tập trung như AWS hay Google Cloud, giúp tăng khả năng chống chịu lỗi đơn điểm.
+- **ENS so với DNS**: Tên miền DNS chịu sự quản lý của tổ chức cấp phát và có thể bị thu hồi, trong khi tên miền ENS do người dùng nắm giữ trực tiếp bằng khóa bí mật.
+- **Danh tính phi tập trung**: Tương tự hộ chiếu cá nhân so với tài khoản đăng nhập mạng xã hội — người dùng tự giữ chứng chỉ và chỉ xuất trình đúng thông tin cần thiết (chẳng hạn chứng minh trên 18 tuổi mà không lộ ngày sinh).
 
 ---
 
-## 3. Technical Foundation
+## 3. Nền tảng kỹ thuật
 
-IPFS architecture employs distributed hash table (DHT) for content discovery. When content added to IPFS, system computes CID (Content Identifier):
+IPFS sử dụng **bảng băm phân tán (Distributed Hash Table — DHT)** để khám phá dữ liệu. Khi thêm dữ liệu vào IPFS, hệ thống chia tệp thành các khối (mặc định 256 KB), băm từng khối (mặc định dùng SHA-256) và tổ chức thành đồ thị có hướng không chu trình Merkle (Merkle DAG), tạo ra mã định danh nội dung:
 
 \[
 \text{CID} = \text{Hash}(\text{content})
 \]
 
-Default: SHA-256, producing 256-bit identifier. Content split into blocks (256 KB default), each block hashed individually, creating merkle DAG (directed acyclic graph). Large files represented as tree of content-addressed blocks, enabling efficient partial retrieval và deduplication.
-
-Content retrieval operates through DHT lookup. Node wanting content queries DHT for providers của specific CID. DHT (using Kademlia algorithm) routes query to nodes likely storing provider information based on XOR distance metric:
+Khi một nút cần tải dữ liệu, nó truy vấn DHT (theo thuật toán **Kademlia**) để tìm nút đang lưu giữ CID tương ứng dựa trên khoảng cách XOR:
 
 \[
 d(a, b) = a \oplus b
 \]
 
-Queries forwarded to nodes minimizing XOR distance to target, logarithmic hops finding providers. Once provider identified, content retrieved directly peer-to-peer.
+Truy vấn được định tuyến qua số chặng logarit tới các nút gần nhất với CID mục tiêu, sau đó tải trực tiếp ngang hàng.
 
 ```python
 class SimplifiedIPFS:
@@ -144,24 +131,17 @@ if __name__ == "__main__":
     ipfs.pin(cid)
 ```
 
-Filecoin proof-of-storage mechanisms ensure providers actually storing data claimed. Two primary proofs:
+**Cơ chế chứng minh lưu trữ của Filecoin** gồm hai loại bằng chứng mật mã:
+- **Bằng chứng sao chép (Proof-of-Replication — PoRep)**: Chứng minh nhà cung cấp thực sự lưu một bản sao vật lý tách biệt của dữ liệu (dùng mã hóa Stacked Depth Robust — SDR để ngăn việc giả mạo bản sao).
+- **Bằng chứng không-thời gian (Proof-of-Spacetime — PoSt)**: Chứng minh nhà cung cấp tiếp tục duy trì dữ liệu trong suốt thời hạn cam kết thông qua các thử thách ngẫu nhiên không thể dự đoán trước.
 
-**Proof-of-Replication (PoRep)**: Proves provider storing physically distinct copy của data, not just original. Uses **Stacked Depth Robust (SDR)** encoding making replication necessary. Provider cannot fake storage without actually performing expensive encoding.
-
-**Proof-of-Spacetime (PoSt)**: Proves provider continued storing data over time period. Randomly challenges provider generate proof from stored data. Cannot generate proof without actually having data, cannot predict challenges ahead of time.
-
-Mathematical formulation for PoRep verification:
+Biểu diễn hình thức của bước xác minh PoRep:
 
 \[
 \text{Verify}(\text{proof}, \text{data\_commitment}, \text{replica\_commitment}) \to \{\text{valid}, \text{invalid}\}
 \]
 
-Proof demonstrates:
-1. Replica commitment derived from data commitment correctly
-2. Encoding performed (cannot be bypassed)
-3. Provider possesses encoded replica
-
-ENS resolution system uses Ethereum smart contracts mapping names to resources:
+**Hệ thống phân giải tên miền ENS** vận hành trên hợp đồng thông minh Ethereum, gồm hợp đồng đăng ký (`ENSRegistry`) và hợp đồng phân giải (`PublicResolver`):
 
 ```solidity
 contract ENSRegistry {
@@ -197,50 +177,43 @@ contract PublicResolver {
 }
 ```
 
-Name resolution flow: alice.eth → namehash("alice.eth") → query ENS registry → get resolver contract → query resolver for address/content. All on-chain, trustlessly verifiable.
+Luồng phân giải: `alice.eth` → `namehash("alice.eth")` → truy vấn `ENSRegistry` để lấy địa chỉ resolver → truy vấn resolver để nhận địa chỉ ví hoặc mã băm nội dung IPFS.
 
 ---
 
-## 4. Mathematical / Cryptographic Formulation
+## 4. Công thức toán học và mật mã học
 
-Content addressing security relies on collision resistance của hash function. Probability of CID collision:
+Tính duy nhất của định địa chỉ nội dung dựa vào tính kháng va chạm của hàm băm. Với \(n\) tệp sử dụng SHA-256, xác suất xảy ra va chạm CID xấp xỉ:
 
 \[
 P(\text{collision}) \approx \frac{n^2}{2^{257}} \text{ for } n \text{ files}
 \]
 
-With SHA-256, even with trillion files:
+Ngay cả với một nghìn tỷ (\(10^{12}\)) tệp:
 \[
 P(\text{collision}) \approx \frac{(10^{12})^2}{2^{256}} \approx 10^{-53}
 \]
 
-Negligible! Unique addressing guaranteed.
+Xác suất này không đáng kể, đảm bảo tính duy nhất trong thực tế.
 
-DHT lookup complexity using Kademlia:
+Độ phức tạp tra cứu DHT theo thuật toán Kademlia trong mạng gồm \(N\) nút:
 
 \[
 \text{Hops} = O(\log_2 N)
 \]
 
-Where \(N\) = number of nodes. Network với 1 million nodes:
+Với mạng 1 triệu nút:
 \[
 \text{Hops} \approx \log_2(10^6) \approx 20
 \]
 
-Efficient routing enables scalability.
-
-Filecoin storage proof verification:
-
-Proof size: \(O(\log n)\) where \(n\) = data size
-Verification time: \(O(\log n)\)
-
-Efficient even for large files - 1 TB file proven with ~100 KB proof, verified in milliseconds.
+Đối với bằng chứng lưu trữ trên Filecoin, cả kích thước bằng chứng lẫn thời gian xác minh đều có độ phức tạp \(O(\log n)\) theo dung lượng dữ liệu \(n\), cho phép xác minh dữ liệu cỡ 1 TB bằng bằng chứng khoảng 100 KB trong vài mili-giây.
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
-Complete Web3 application demonstrating infrastructure integration:
+Ví dụ minh họa cách kết nối IPFS, ENS và Ethereum để triển khai một ứng dụng Web3 hoàn chỉnh:
 
 ```javascript
 // Web3 App connecting IPFS + ENS + Ethereum
@@ -322,118 +295,104 @@ class Web3App {
 // Fully decentralized! No central server!
 ```
 
-Real-world Web3 applications demonstrate stack integration. **Uniswap interface** hosted on IPFS, accessible via uniswap.eth ENS name. Users interact with smart contracts on Ethereum through decentralized frontend. If Uniswap Inc disappeared entirely, application continues functioning - contracts on-chain, interface on IPFS, name on ENS, all persistent và ownerless.
+Trong thực tế, giao diện người dùng của **Uniswap** có thể được lưu trên IPFS và truy cập qua tên miền ENS `uniswap.eth`, giúp ứng dụng vẫn có thể tiếp cận ngay cả khi máy chủ tập trung gặp gián đoạn.
 
 ---
 
-## 6. Common Challenges / Attacks / Trade-offs
+## 6. Thách thức, tấn công và sự đánh đổi
 
-IPFS performance remains inferior to centralized CDNs. Content retrieval may take seconds when hosted by few peers versus milliseconds from geographically distributed CDN servers. **IPFS gateways** (Cloudflare, Pinata) provide HTTP access to IPFS content, improving performance but reintroducing centralization. Trade-off between pure decentralization và practical usability persistent.
-
-Filecoin storage costs currently higher than AWS S3 (approximately 2-5× more expensive). Economic sustainability questioned - will costs decrease with scale, or fundamental overhead của decentralization means permanent premium? Network effects favor incumbents - AWS's installed base, tooling ecosystem, network effects create moat Filecoin must overcome.
-
-**Data persistence** relies on economic incentives. If no one pays pin content, content disappears from network. Unlike AWS's SLA guarantees, IPFS persistence depends on continued interest và payment. Archival use cases challenged - cannot guarantee 100-year persistence without 100-year payment upfront. Solutions include DAOs funding public goods storage, protocol-level incentives, và cultural norms around preservation.
-
-ENS naming collisions với traditional domains create confusion. alice.com và alice.eth completely separate, owned by different entities, potentially causing phishing attacks. Users unfamiliar with ENS may visit wrong site thinking it's official. Browser support inconsistent - some browsers resolve ENS natively, others require plugins hoặc gateways. Fragmented UX hampers adoption.
-
-**Decentralized compute** (Ethereum smart contracts) extremely expensive compared to AWS Lambda. Simple computation costing milliseconds on AWS may cost dollars in gas on Ethereum. This limits Web3 application complexity - cannot run ML models on-chain, cannot process large datasets, must carefully minimize computation. Layer 2s và alternative architectures (Arweave's bundling) attempt address này but trade-offs remain.
-
-Identity management complexity increases with sovereignty. Centralized platforms offer password recovery, account restoration, customer support. Web3 self-custody means losing private key loses access permanently, no recovery possible. Users bear full responsibility, requiring education và tooling far beyond current user capabilities. Solutions like social recovery (Argent wallet) reintroduce trust in recovery helpers, compromising pure self-custody.
+- **Hiệu năng của IPFS**: Tốc độ tải nội dung khi ít nút lưu trữ chậm hơn đáng kể so với CDN tập trung. Việc dùng các cổng chuyển tiếp HTTP (IPFS gateways như Cloudflare, Pinata) cải thiện tốc độ nhưng lại đưa yếu tố tập trung quay trở lại.
+- **Chi phí lưu trữ Filecoin**: Hiện vẫn cao hơn so với dịch vụ đám mây truyền thống như AWS S3 (khoảng 2–5 lần) và phải cạnh tranh với hệ sinh thái công cụ hoàn thiện sẵn có của các nhà cung cấp đám mây lớn.
+- **Tính bền vững dữ liệu**: Trên IPFS, nếu không còn ai duy trì ghim (pin) hoặc trả phí, dữ liệu có thể biến mất khỏi mạng, khác với cam kết chất lượng dịch vụ (SLA) của hạ tầng đám mây truyền thống.
+- **Nhầm lẫn tên miền và hỗ trợ trình duyệt**: Tên miền `alice.com` và `alice.eth` thuộc hai hệ thống độc lập có thể gây rủi ro giả mạo; nhiều trình duyệt phổ thông chưa hỗ trợ phân giải ENS bản địa.
+- **Chi phí tính toán phi tập trung**: Thực thi logic trên Ethereum đắt hơn nhiều lần so với máy chủ đám mây, giới hạn độ phức tạp của tác vụ chạy trực tiếp trên chuỗi.
+- **Quản lý khóa cá nhân**: Tự lưu ký đồng nghĩa mất khóa bí mật là mất quyền truy cập vĩnh viễn; các cơ chế khôi phục xã hội (social recovery như ví Argent) cải thiện trải nghiệm nhưng đưa thêm giả định tin cậy vào nhóm người hỗ trợ khôi phục.
 
 ---
 
-## 7. Related Concepts
+## 7. Các khái niệm liên quan
 
-Web3 infrastructure connects deeply to **decentralized autonomous organizations (DAOs)** governing protocols. IPFS governed by Protocol Labs initially but transitioning toward community governance. Filecoin Plus notary system uses DAOs for storage allocation. ENS DAO controls protocol parameters through token voting. This pattern - infrastructure governed by users rather than companies - fundamental to Web3 ethos.
-
-**Arweave** presents alternative permanent storage model. Instead of ongoing payment (Filecoin), users pay once upfront for permanent storage, funded through endowment earning interest perpetually. Mathematical model assumes storage costs decrease faster than endowment appreciation, enabling perpetual funding. Bold assumption but creative economic design. Arweave hosts permanent web archives, NFT metadata, và decentralized application frontends.
-
-**The Graph** provides decentralized indexing and querying for blockchain data. Smart contract events và state indexed into subgraphs, developers query using GraphQL. Replaces centralized databases typically used for dApp backends. Indexers earn GRT tokens for serving queries, curators stake GRT signaling valuable subgraphs. Decentralized information retrieval completing Web3 stack.
-
-**Ceramic Network** offers decentralized database with mutable data streams. IPFS immutable - content hash changes if content changes. Ceramic enables mutable documents with version history, suitable for user profiles, social graphs, application state. Built on IPFS với additional consensus layer managing updates.
-
-**Push Protocol** (formerly EPNS) provides decentralized notifications. Traditional apps use Firebase Cloud Messaging hoặc Apple Push Notification Service - centralized services. Push Protocol enables wallet-to-wallet notifications via decentralized network, maintaining Web3 property không phụ thuộc centralized infrastructure.
+- **Quản trị hạ tầng bằng DAO**: ENS DAO quản trị tham số tên miền, còn hệ thống công chứng viên Filecoin Plus phân bổ lưu trữ thông qua cơ chế cộng đồng.
+- **Arweave**: Cung cấp mô hình lưu trữ dài hạn trả phí một lần ban đầu dựa trên quỹ dự phòng (endowment) giả định chi phí lưu trữ giảm dần theo thời gian, thường dùng lưu trữ siêu dữ liệu NFT và giao diện ứng dụng.
+- **The Graph**: Giao thức lập chỉ mục và truy vấn dữ liệu blockchain phi tập trung qua GraphQL (subgraph), thay thế cơ sở dữ liệu máy chủ tập trung cho backend của dApp.
+- **Ceramic Network**: Bổ sung lớp quản lý luồng dữ liệu có thể thay đổi (mutable data streams) có lịch sử phiên bản trên nền IPFS vốn bất biến.
+- **Push Protocol**: Cung cấp dịch vụ thông báo phi tập trung giữa các ví mà không phụ thuộc vào hạ tầng tập trung như Firebase hay Apple Push Notification Service.
 
 ---
 
-## 8. ⭐ Fundamental Papers / Whitepapers
+## 8. Tài liệu nền tảng và bài báo quan trọng
 
-| Paper | Year | Author(s) | Contribution |
-|-------|------|-----------|--------------|
-| **"IPFS - Content Addressed, Versioned, P2P File System"** | 2014 | Juan Benet | IPFS protocol specification |
-| **"Filecoin: A Decentralized Storage Network"** | 2017 | Protocol Labs | Incentivized storage via proofs |
-| **"EIP-137: Ethereum Domain Name Service"** | 2016 | Nick Johnson | ENS specification |
-| **"Decentralized Identifiers (DIDs) v1.0"** | 2021 | W3C | DID standard specification |
-| **"Verifiable Credentials Data Model"** | 2021 | W3C | Credential standard |
-| **"Arweave: A Protocol for Economically Sustainable Information Permanence"** | 2018 | Sam Williams, Viktor Diordiiev | Permanent storage model |
+| Tài liệu | Năm | Tác giả | Đóng góp chính |
+|----------|-----|---------|----------------|
+| **"IPFS - Content Addressed, Versioned, P2P File System"** | 2014 | Juan Benet | Đặc tả giao thức IPFS |
+| **"Filecoin: A Decentralized Storage Network"** | 2017 | Protocol Labs | Mạng lưu trữ phi tập trung dùng bằng chứng mật mã |
+| **"EIP-137: Ethereum Domain Name Service"** | 2016 | Nick Johnson | Đặc tả hệ thống tên miền ENS |
+| **"Decentralized Identifiers (DIDs) v1.0"** | 2021 | W3C | Tiêu chuẩn định danh phi tập trung DID |
+| **"Verifiable Credentials Data Model"** | 2021 | W3C | Tiêu chuẩn mô hình chứng chỉ có thể xác minh |
+| **"Arweave: A Protocol for Economically Sustainable Information Permanence"** | 2018 | Sam Williams, Viktor Diordiiev | Mô hình kinh tế lưu trữ dài hạn trả phí một lần |
 
 ---
 
-## 9. 🎨 Illustrations & Visual References
+## 9. Minh họa và tài liệu trực quan
 
-### Web2 vs Web3 Architecture
+### Kiến trúc Web2 so với Web3
 
-**Web2 Stack**:
+**Ngăn xếp Web2**:
 ```
 User → Browser → CDN → AWS → Centralized DB → Application Server
        ↓
    Platform owns everything
 ```
 
-**Web3 Stack**:
+**Ngăn xếp Web3**:
 ```
 User → Browser → IPFS → Ethereum → Your Wallet
        ↓
    You own your data
 ```
 
-### IPFS Content Addressing
+### Định địa chỉ nội dung trên IPFS
 ![IPFS Content Addressing](https://docs.ipfs.tech/assets/img/ipfs-illustration-works.png)  
-*Source: [IPFS Documentation](https://docs.ipfs.tech/concepts/)*
+*Nguồn: [IPFS Documentation](https://docs.ipfs.tech/concepts/)*
 
-### ENS Resolution Flow
+### Luồng phân giải ENS
 ![ENS Resolution](https://docs.ens.domains/img/ens-architecture.png)  
-*Source: [ENS Documentation](https://docs.ens.domains/)*
+*Nguồn: [ENS Documentation](https://docs.ens.domains/)*
 
-### Decentralized Identity Stack
+### Kiến trúc danh tính phi tập trung
 ![DID Architecture](https://www.w3.org/TR/did-core/diagrams/did-architecture.svg)  
-*Source: [W3C DID Specification](https://www.w3.org/TR/did-core/)*
+*Nguồn: [W3C DID Specification](https://www.w3.org/TR/did-core/)*
 
-### Interactive Tools
-- [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) - Run IPFS node locally
-- [ENS Manager](https://app.ens.domains/) - Register và manage ENS names
-- [Etherscan ENS](https://etherscan.io/enslookup) - Lookup ENS names
-- [Fleek](https://fleek.co/) - Deploy Web3 sites easily
-
----
-
-## 10. Summary
-
-Web3 infrastructure provides decentralized alternatives to centralized internet components - IPFS replacing cloud storage, ENS replacing DNS, DIDs replacing platform accounts, Filecoin incentivizing content persistence. Together these primitives enable applications running entirely on decentralized networks, resistant to censorship và platform control whilst preserving user data ownership.
-
-Technical implementations leverage content addressing (IPFS), cryptographic ownership (ENS as NFTs), zero-knowledge proofs (selective credential disclosure), và token economics (Filecoin storage markets). Trade-offs include performance degradation versus centralized alternatives, higher costs currently, increased complexity in user experience, và uncertain long-term sustainability models.
-
-Despite challenges, Web3 infrastructure maturing rapidly. Production applications serving millions of users demonstrate viability. Standards emerging (W3C DIDs, ERC standards) enable interoperability. As tooling improves và costs decrease through scaling solutions, Web3 promises realizing internet's original decentralization vision whilst adding programmability và ownership guarantees impossible in Web2 paradigm.
+### Công cụ tương tác tham khảo
+- [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) — Chạy nút IPFS trực tiếp trên máy cá nhân.
+- [ENS Manager](https://app.ens.domains/) — Đăng ký và quản lý tên miền ENS.
+- [Etherscan ENS](https://etherscan.io/enslookup) — Tra cứu bản ghi ENS trên chuỗi.
+- [Fleek](https://fleek.co/) — Triển khai trang web Web3 lên hạ tầng phi tập trung.
 
 ---
 
-✅ **End of Lecture**
+## 10. Tóm tắt
 
-Next: Lecture 07.03 - MEV (Maximal Extractable Value)
+Hạ tầng Web3 cung cấp các thành phần thay thế phi tập trung cho kiến trúc internet truyền thống: IPFS và Filecoin cho lưu trữ, ENS cho tên miền, DID cho danh tính và Ethereum cùng các mạng lưới liên quan cho tính toán. Dù vẫn còn những đánh đổi rõ rệt về hiệu năng, chi phí và trải nghiệm người dùng so với hạ tầng đám mây tập trung, các chuẩn mở (như W3C DID, ERC) và giải pháp mở rộng đang từng bước hoàn thiện hệ sinh thái ứng dụng phi tập trung.
+
+---
+
+**Kết thúc bài giảng**
+
+Bài tiếp theo: Lecture 07.03 — MEV (Maximal Extractable Value)
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [Why IPFS? - Juan Benet](https://www.youtube.com/watch?v=zE_WSLbqqvo) — IPFS, tiếng Anh. Juan Benet giải thích vì sao IPFS định địa chỉ bằng nội dung; xem trước mục lưu trữ phi tập trung.
-- [What Is Filecoin? (2023)](https://www.youtube.com/watch?v=26ZdMAo23mM) — Filecoin, tiếng Anh. Kênh Filecoin mô tả thị trường lưu trữ; đối chiếu lớp khuyến khích phía trên IPFS trong bài.
-- [What is Ethereum Name Service (ENS) and Why It Matters?](https://www.youtube.com/watch?v=wDPy-SIwHOU) — CoinGecko, tiếng Anh. CoinGecko giải thích Ethereum Name Service; dùng cho phần danh tính và tên người đọc được.
+- **Xem trước:** [Why IPFS? - Juan Benet](https://www.youtube.com/watch?v=zE_WSLbqqvo) — IPFS, tiếng Anh. Juan Benet giải thích lý do IPFS định địa chỉ theo nội dung; nên xem trước phần lưu trữ phi tập trung.
+- [What Is Filecoin? (2023)](https://www.youtube.com/watch?v=26ZdMAo23mM) — Filecoin, tiếng Anh. Mô tả thị trường lưu trữ Filecoin, giúp đối chiếu lớp khuyến khích kinh tế phía trên IPFS trong bài.
+- [What is Ethereum Name Service (ENS) and Why It Matters?](https://www.youtube.com/watch?v=wDPy-SIwHOU) — CoinGecko, tiếng Anh. Giải thích hệ thống tên miền ENS, hỗ trợ phần danh tính và định danh dễ đọc.
 
-## References
+## Tài liệu tham khảo
 
 1. Benet, J. (2014). *IPFS - Content Addressed, Versioned, P2P File System*. IPFS Whitepaper.
 2. Protocol Labs. (2017). *Filecoin: A Decentralized Storage Network*. Filecoin Whitepaper.
 3. Johnson, N. (2016). *EIP-137: Ethereum Domain Name Service - Specification*. Ethereum Improvement Proposals.
 4. W3C. (2021). *Decentralized Identifiers (DIDs) v1.0*. W3C Recommendation.
 5. W3C. (2021). *Verifiable Credentials Data Model v1.0*. W3C Recommendation.
-

@@ -9,23 +9,23 @@ categories:
 - blockchain-chapter03
 ---
 
-# Lecture: Ethereum Virtual Machine (EVM) - The World Computer Engine
+# Bài giảng: Máy ảo Ethereum (EVM) — Bộ máy thực thi hợp đồng thông minh
 
 ## 1. Tổng quan về khái niệm
 
-**Ethereum Virtual Machine (EVM)** là trái tim của Ethereum - một **quasi-Turing-complete** virtual machine chạy trên mọi Ethereum node, executing smart contract code một cách deterministic và isolated. Nếu Ethereum là "World Computer", thì EVM chính là CPU của computer đó.
+**Máy ảo Ethereum (Ethereum Virtual Machine — EVM)** là thành phần trung tâm của Ethereum: một máy ảo **gần đầy đủ Turing (quasi-Turing-complete)** chạy trên mọi nút Ethereum để thực thi mã hợp đồng thông minh một cách tất định và cô lập. Nếu Ethereum được ví như "máy tính toàn cầu", thì EVM đóng vai trò như bộ xử lý (CPU) của hệ thống đó.
 
-**What is a Virtual Machine?**
+**Máy ảo là gì?**
 
-Virtual Machine (VM) là một software emulation của một computer system. Familiar examples:
-- **JVM (Java Virtual Machine)**: Runs Java bytecode
-- **Python VM**: Executes Python bytecode
-- **Docker**: Containerized virtual environments
-- **VMware/VirtualBox**: Full OS virtualization
+Máy ảo (Virtual Machine — VM) là phần mềm mô phỏng một hệ thống máy tính. Một số ví dụ phổ biến:
+- **JVM (Java Virtual Machine)**: Thực thi bytecode của Java.
+- **Python VM**: Thực thi bytecode của Python.
+- **Docker**: Tạo môi trường ảo hóa dạng container.
+- **VMware/VirtualBox**: Ảo hóa toàn bộ hệ điều hành.
 
-EVM similar nhưng với critical differences designed cho blockchain:
+EVM có nguyên lý tương đồng nhưng được thiết kế riêng với các yêu cầu khắt khe cho blockchain:
 
-**Traditional VM** (JVM, Python VM):
+**Máy ảo truyền thống** (JVM, Python VM):
 ```
 Purpose: Run applications efficiently
 Optimization: Speed, memory usage
@@ -43,44 +43,44 @@ Determinism: CRITICAL (all nodes must agree)
 Cost: Every operation costs gas
 ```
 
-**The Determinism Requirement**:
+**Yêu cầu tính tất định (Determinism)**:
 
-Đây là requirement quan trọng nhất của EVM. Vì thousands of nodes phải execute cùng contract và arrive at cùng result, EVM phải **absolutely deterministic**:
+Đây là yêu cầu quan trọng nhất của EVM. Vì hàng nghìn nút phải cùng thực thi một hợp đồng và đạt tới cùng một kết quả trạng thái, EVM phải hoàn toàn tất định:
 
 \[
 \forall \text{ inputs } I, \text{ state } S: \quad \text{EVM}(S, I) = \text{Same Output (always)}
 \]
 
-Không được có:
-- ❌ Random number generation (unless from blockchain state)
-- ❌ Current time access (unless from block timestamp)
-- ❌ Network calls (no external data)
-- ❌ File system access
-- ❌ Floating-point arithmetic (rounding differences across platforms)
+Do đó, EVM không cho phép:
+- ❌ Sinh số ngẫu nhiên tùy ý (trừ dữ liệu xác định từ trạng thái blockchain).
+- ❌ Truy cập đồng hồ hệ thống (chỉ dùng dấu thời gian của khối).
+- ❌ Gọi mạng ra bên ngoài.
+- ❌ Truy cập hệ thống tệp cục bộ.
+- ❌ Phép tính dấu phẩy động (tránh sai lệch làm tròn giữa các nền tảng phần cứng).
 
-**Historical Context**:
+**Bối cảnh thiết kế**:
 
-EVM design influenced by:
-- **Bitcoin Script**: Proved programmable money possible, nhưng too limited
-- **JVM**: Stack-based architecture
-- **WebAssembly**: Compilation target concepts
-- **Academic VM research**: Formal semantics
+Thiết kế EVM chịu ảnh hưởng từ nhiều nền tảng:
+- **Bitcoin Script**: Chứng minh khả năng lập trình trên blockchain nhưng bị giới hạn về biểu đạt.
+- **JVM**: Kiến trúc dựa trên ngăn xếp (stack-based).
+- **WebAssembly**: Tư duy về đích biên dịch di động.
+- **Nghiên cứu máy ảo học thuật**: Ngữ nghĩa hình thức rõ ràng.
 
-**Vitalik Buterin's Design Philosophy**:
+**Triết lý thiết kế của Vitalik Buterin**:
 
-> "The EVM is designed to be as simple as possible, while still being Turing-complete. Simplicity makes it easier to reason about security và formal verification."
+> "The EVM is designed to be as simple as possible, while still being Turing-complete. Simplicity makes it easier to reason about security and formal verification."
 
-**Key Design Decisions**:
+**Các quyết định thiết kế chính**:
 
-1. **Stack-based** (not register-based): Simpler, less state
-2. **256-bit word size**: Native support cho cryptographic operations
-3. **Metered execution** (gas): Prevents DoS, ensures termination
-4. **Immutable code**: Deployed contracts cannot be changed
-5. **Isolated execution**: Contracts cannot affect node's host system
+1. **Dựa trên ngăn xếp (stack-based)** thay vì thanh ghi: Cấu trúc đơn giản, ít trạng thái nội bộ hơn.
+2. **Kích thước từ 256-bit**: Hỗ trợ trực tiếp các phép toán mật mã học (băm, chữ ký số).
+3. **Đo lường tài nguyên bằng gas**: Ngăn tấn công từ chối dịch vụ (DoS) và đảm bảo chương trình luôn dừng.
+4. **Mã bất biến**: Hợp đồng sau khi triển khai không thể sửa đổi mã nguồn.
+5. **Thực thi cô lập**: Mã hợp đồng không thể tác động tới hệ thống máy chủ của nút.
 
-**EVM as State Transition Function**:
+**EVM như một hàm chuyển đổi trạng thái**:
 
-Fundamentally, EVM is a function:
+Về bản chất, EVM là một hàm ánh xạ:
 
 \[
 \text{EVM}: (\text{World State}, \text{Transaction}) \rightarrow (\text{New World State}, \text{Gas Used})
@@ -103,25 +103,25 @@ Output:
 - Logs emitted
 ```
 
-**Evolution of EVM**:
+**Quá trình phát triển của EVM**:
 
-- **2015**: Original EVM (Frontier)
-- **2016**: Homestead improvements
-- **2017**: Metropolis (Byzantium, Constantinople) - new opcodes
-- **2019**: Istanbul - gas cost adjustments
-- **2021**: London (EIP-1559) - base fee
-- **2022**: The Merge - PoS integration
-- **Future**: EVM improvements (EOF, verkle tries)
+- **2015**: Phiên bản EVM đầu tiên (Frontier).
+- **2016**: Các cải tiến ở bản Homestead.
+- **2017**: Metropolis (Byzantium, Constantinople) — bổ sung nhiều opcode mới.
+- **2019**: Istanbul — điều chỉnh biểu phí gas.
+- **2021**: London (EIP-1559) — cơ chế phí cơ sở (base fee).
+- **2022**: The Merge — tích hợp với tầng đồng thuận PoS.
+- **Hướng phát triển tiếp theo**: Cải tiến cấu trúc EVM (EOF, Verkle tries).
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-### 2.1. EVM như "Virtual CPU"
+### 2.1. EVM như một "CPU ảo"
 
-Hãy tưởng tượng EVM như một **extremely simple computer** với very specific constraints:
+Có thể hình dung EVM là một bộ xử lý tối giản với các giới hạn tài nguyên nghiêm ngặt:
 
-**Regular Computer CPU**:
+**CPU máy tính thông thường**:
 ```
 Components:
 - Registers (fast storage): 16+ registers
@@ -143,9 +143,9 @@ Components:
 - Cost: Every operation costs gas!
 ```
 
-**Example Program - Add Two Numbers**:
+**Ví dụ chương trình cộng hai số**:
 
-**x86 Assembly** (regular CPU):
+**Hợp ngữ x86** (CPU thông thường):
 ```asm
 mov eax, 5      ; Load 5 into register
 add eax, 3      ; Add 3 to register
@@ -162,18 +162,18 @@ ADD            ; Pop two, add, push result
 ; Cost: 3 + 3 + 3 = 9 gas
 ```
 
-### 2.2. Stack Machine - Calculator Analogy
+### 2.2. Máy ngăn xếp — Phép so sánh với máy tính RPN
 
-EVM hoạt động giống như **RPN (Reverse Polish Notation) calculator**:
+EVM vận hành tương tự một **máy tính ký pháp Ba Lan ngược (Reverse Polish Notation — RPN)**:
 
-**Normal Calculator** (infix notation):
+**Máy tính thông thường** (ký pháp trung tố):
 ```
 Input: 2 + 3 × 4
 Need parentheses: (2 + 3) × 4 = 20
                 or 2 + (3 × 4) = 14
 ```
 
-**RPN Calculator** (postfix, like EVM):
+**Máy tính RPN** (ký pháp hậu tố, giống EVM):
 ```
 Input: 2 3 4 × +
 
@@ -187,7 +187,7 @@ Stack operations:
 No ambiguity! No parentheses needed!
 ```
 
-**EVM Example** - Compute (5 + 3) × 2:
+**Ví dụ trên EVM** — Tính (5 + 3) × 2:
 
 ```
 Bytecode:           Stack After:
@@ -201,9 +201,9 @@ Final result: 16
 Gas used: 3 + 3 + 3 + 3 + 5 = 17 gas
 ```
 
-### 2.3. Three Storage Types - Kitchen Analogy
+### 2.3. Ba vùng lưu trữ dữ liệu — Ví dụ căn bếp
 
-**Stack** = **Counter top**:
+**Stack (Ngăn xếp)** tương tự **mặt bàn chế biến**:
 ```
 Fast, temporary workspace
 Limited space (1024 items)
@@ -213,7 +213,7 @@ Cleared after transaction
 Like: Ingredients laid out while cooking
 ```
 
-**Memory** = **Table**:
+**Memory (Bộ nhớ tạm)** tương tự **bàn phụ**:
 ```
 Expandable workspace
 Exists only during transaction
@@ -223,7 +223,7 @@ Gets expensive as you expand
 Like: Setting up extra workspace
 ```
 
-**Storage** = **Pantry/Freezer**:
+**Storage (Bộ nhớ lưu trữ bền vững)** tương tự **kho chứa lâu dài**:
 ```
 Persistent between transactions
 Very expensive to write
@@ -233,7 +233,7 @@ Stored forever on blockchain
 Like: Long-term food storage (expensive)
 ```
 
-**Cost Comparison**:
+**So sánh chi phí**:
 ```
 Stack operation:    3 gas       (pennies)
 Memory expansion:   3+ gas      (pennies to dollars)
@@ -241,9 +241,9 @@ Storage write:      20,000 gas  (tens of dollars!)
 Storage read:       2,100 gas   (few dollars)
 ```
 
-### 2.4. Gas như "Computer Time Meter"
+### 2.4. Gas như bộ đếm thời gian máy tính
 
-Tưởng tượng EVM như một **pay-per-use supercomputer at arcade**:
+Có thể ví EVM như một máy chơi game tính phí theo từng lượt thao tác:
 
 ```
 Arcade Game:
@@ -262,7 +262,7 @@ Store data:          100 quarters (20,000 gas)
 Complex loop:        1000 quarters (varies)
 ```
 
-**Why Metered Execution?**
+**Vì sao cần đo lường tài nguyên?**
 
 ```
 Without Gas:
@@ -276,9 +276,9 @@ With Gas:
 - Network protected!
 ```
 
-### 2.5. Contract Execution - Vending Machine 2.0
+### 2.5. Thực thi hợp đồng thông minh
 
-**Simple Vending Machine**:
+**Máy bán hàng đơn giản**:
 ```
 Input: Money + Button press
 Process: Check balance, dispense item
@@ -286,7 +286,7 @@ Output: Item + Change
 State: Inventory decreased
 ```
 
-**Smart Contract (Token Transfer)**:
+**Hợp đồng thông minh (Chuyển token)**:
 ```
 Input: Transaction (from: Alice, to: Bob, amount: 10)
 Process:
@@ -303,9 +303,9 @@ Gas: ~50,000 gas consumed
 
 ## 3. Nền tảng kỹ thuật
 
-### 3.1. EVM Architecture
+### 3.1. Kiến trúc EVM
 
-**Components**:
+**Các thành phần chính**:
 
 ```
 ┌─────────────────────────────────────────┐
@@ -340,7 +340,7 @@ Gas: ~50,000 gas consumed
 └─────────────────────────────────────────┘
 ```
 
-**Execution Model**:
+**Mô hình thực thi**:
 
 ```python
 class EVMExecutionContext:
@@ -400,11 +400,11 @@ class EVMExecutionContext:
         return self.get_result()
 ```
 
-### 3.2. Opcode Categories
+### 3.2. Phân nhóm tập lệnh (Opcode)
 
-**EVM has ~150 opcodes, grouped by category**:
+EVM có khoảng 150 opcode, chia theo các nhóm chức năng sau:
 
-**1. Arithmetic Operations** (0x01-0x0b):
+**1. Phép toán số học** (0x01–0x0b):
 ```
 0x01  ADD        a b → a+b           (3 gas)
 0x02  MUL        a b → a×b           (5 gas)
@@ -419,7 +419,7 @@ class EVMExecutionContext:
 0x0b  SIGNEXTEND b x → sign extend   (5 gas)
 ```
 
-**2. Comparison Operations** (0x10-0x1d):
+**2. Phép so sánh và thao tác bit** (0x10–0x1d):
 ```
 0x10  LT         a b → a < b         (3 gas)
 0x11  GT         a b → a > b         (3 gas)
@@ -437,13 +437,13 @@ class EVMExecutionContext:
 0x1d  SAR        shift value → >>>   (3 gas)
 ```
 
-**3. Cryptographic Operations** (0x20):
+**3. Phép toán mật mã học** (0x20):
 ```
 0x20  SHA3       offset size → keccak256(memory[offset:offset+size])
                                       (30 gas + 6/word)
 ```
 
-**4. Environmental Information** (0x30-0x3f):
+**4. Thông tin môi trường thực thi** (0x30–0x3f):
 ```
 0x30  ADDRESS       → this.address                    (2 gas)
 0x31  BALANCE       addr → balance[addr]              (100 gas)
@@ -463,7 +463,7 @@ class EVMExecutionContext:
 0x3f  EXTCODEHASH   addr → keccak256(code[addr])    (100 gas)
 ```
 
-**5. Block Information** (0x40-0x48):
+**5. Thông tin khối** (0x40–0x48):
 ```
 0x40  BLOCKHASH     blockNumber → hash               (20 gas)
 0x41  COINBASE      → block.coinbase                  (2 gas)
@@ -476,7 +476,7 @@ class EVMExecutionContext:
 0x48  BASEFEE       → block.basefee                   (2 gas)
 ```
 
-**6. Stack Operations** (0x50-0x5f):
+**6. Thao tác ngăn xếp, bộ nhớ và điều khiển luồng** (0x50–0x5f):
 ```
 0x50  POP           a →                               (2 gas)
 0x51  MLOAD         offset → memory[offset:offset+32] (3 gas)
@@ -492,7 +492,7 @@ class EVMExecutionContext:
 0x5b  JUMPDEST      (marker for valid jump)           (1 gas)
 ```
 
-**7. Push Operations** (0x60-0x7f):
+**7. Lệnh đẩy dữ liệu (Push)** (0x60–0x7f):
 ```
 0x60  PUSH1   → push 1-byte value                     (3 gas)
 0x61  PUSH2   → push 2-byte value                     (3 gas)
@@ -500,7 +500,7 @@ class EVMExecutionContext:
 0x7f  PUSH32  → push 32-byte value                    (3 gas)
 ```
 
-**8. Duplication** (0x80-0x8f):
+**8. Lệnh nhân bản (Duplication)** (0x80–0x8f):
 ```
 0x80  DUP1    [a, ...] → [a, a, ...]                  (3 gas)
 0x81  DUP2    [a, b, ...] → [b, a, b, ...]           (3 gas)
@@ -508,7 +508,7 @@ class EVMExecutionContext:
 0x8f  DUP16   duplicate 16th item                     (3 gas)
 ```
 
-**9. Exchange** (0x90-0x9f):
+**9. Lệnh hoán đổi (Exchange)** (0x90–0x9f):
 ```
 0x90  SWAP1   [a, b] → [b, a]                         (3 gas)
 0x91  SWAP2   [a, b, c] → [c, b, a]                  (3 gas)
@@ -516,7 +516,7 @@ class EVMExecutionContext:
 0x9f  SWAP16  swap với 16th item                      (3 gas)
 ```
 
-**10. Logging** (0xa0-0xa4):
+**10. Lệnh ghi nhật ký (Logging)** (0xa0–0xa4):
 ```
 0xa0  LOG0    offset size → emit log (no topics)     (375+ gas)
 0xa1  LOG1    offset size topic1 → emit log          (375+ gas)
@@ -525,7 +525,7 @@ class EVMExecutionContext:
 0xa4  LOG4    offset size topic1 topic2 topic3 topic4 (375+ gas)
 ```
 
-**11. Contract Creation và Calls** (0xf0-0xff):
+**11. Tạo hợp đồng và gọi hàm hệ thống** (0xf0–0xff):
 ```
 0xf0  CREATE        value offset size → addr         (32000 gas)
 0xf1  CALL          gas addr value in out → success  (700+ gas)
@@ -539,16 +539,16 @@ class EVMExecutionContext:
 0xff  SELFDESTRUCT  addr → destroy contract          (5000 gas)
 ```
 
-### 3.3. Execution Trace Example
+### 3.3. Ví dụ vết thực thi (Execution Trace)
 
-**Solidity Code**:
+**Mã Solidity**:
 ```solidity
 function add(uint256 a, uint256 b) public pure returns (uint256) {
     return a + b;
 }
 ```
 
-**Compiled Bytecode** (simplified):
+**Bytecode sau biên dịch** (rút gọn):
 ```
 PUSH1 0x40          // Free memory pointer
 MLOAD
@@ -564,7 +564,7 @@ MLOAD
 RETURN              // Return 32 bytes from memory
 ```
 
-**Execution Trace**:
+**Vết thực thi từng bước**:
 
 ```
 Step  Opcode         Stack (top→bottom)              Memory    Gas
@@ -586,9 +586,9 @@ Result: Returns 32 bytes from memory = 0x0...08 (8 in hex)
 Gas Used: 21000 - 20970 = 30 gas
 ```
 
-### 3.4. Memory Layout
+### 3.4. Tổ chức bộ nhớ tạm (Memory Layout)
 
-**Memory Model**:
+**Mô hình bộ nhớ**:
 ```
 Memory is byte array, expandable in 32-byte chunks (words)
 
@@ -603,7 +603,7 @@ W2 = bytes[64:96]  (word 2)
 ...
 ```
 
-**Memory Expansion Cost**:
+**Chi phí mở rộng bộ nhớ**:
 
 \[
 \text{Cost} = \text{Linear Cost} + \text{Quadratic Cost}
@@ -616,18 +616,18 @@ W2 = bytes[64:96]  (word 2)
 \end{align}
 \]
 
-**Example**:
+**Ví dụ**:
 ```
 Access memory[0:32]:    Cost = 3 gas
 Access memory[0:1024]:  Cost = 3×32 + 32²/512 = 96 + 2 = 98 gas
 Access memory[0:10240]: Cost = 3×320 + 320²/512 = 960 + 200 = 1160 gas
 ```
 
-Gets progressively more expensive!
+Do có thành phần bậc hai, chi phí mở rộng bộ nhớ tăng nhanh khi dung lượng cấp phát lớn dần.
 
-### 3.5. Storage Layout
+### 3.5. Tổ chức bộ nhớ bền vững (Storage Layout)
 
-**Storage Model**: Persistent key-value store
+**Mô hình lưu trữ**: Kho lưu trữ khóa–giá trị bền vững trên blockchain.
 
 ```
 Storage Slot:  256-bit key → 256-bit value
@@ -638,25 +638,25 @@ Contract:
   address owner;
 
 Layout:
-  Slot 0: totalSupply
-  Slot 1: owner (address padded to 256 bits)
-  Slot 2-?: balances mapping
+  Slot 0: balances (slot nền cho mapping; dữ liệu lưu tại keccak256(key ∥ 0))
+  Slot 1: totalSupply
+  Slot 2: owner (address padded to 256 bits)
 ```
 
-**Mapping Storage Location**:
+**Vị trí lưu trữ của mapping**:
 
-For `mapping(K => V) map;` at slot `p`:
+Với `mapping(K => V) map;` khai báo tại slot `p`:
 
 \[
 \text{slot} = \text{keccak256}(k \parallel p)
 \]
 
-Where:
-- k = key (padded to 32 bytes)
-- p = mapping's slot position
-- ∥ = concatenation
+Trong đó:
+- \( k \) là khóa (được đệm thành 32 byte).
+- \( p \) là vị trí slot của mapping.
+- \( \parallel \) là phép nối chuỗi byte.
 
-**Example**:
+**Ví dụ**:
 ```solidity
 contract Storage {
     mapping(address => uint256) balances;  // Slot 0
@@ -667,9 +667,9 @@ contract Storage {
 }
 ```
 
-**Dynamic Arrays**:
+**Mảng động (Dynamic Arrays)**:
 
-For `T[] array;` at slot `p`:
+Với `T[] array;` khai báo tại slot `p`:
 
 \[
 \begin{align}
@@ -682,21 +682,21 @@ For `T[] array;` at slot `p`:
 
 ## 4. Công thức toán học và độ phức tạp
 
-### 4.1. Gas Cost Analysis
+### 4.1. Phân tích chi phí Gas
 
-**Basic Gas Formula**:
+**Công thức tổng gas**:
 
 \[
 \text{Total Gas} = \text{Intrinsic Gas} + \sum_{i} \text{Gas}(\text{Operation}_i)
 \]
 
-**Intrinsic Gas** (minimum cost):
+**Gas cơ sở của giao dịch (Intrinsic Gas)**:
 
 \[
 G_{\text{intrinsic}} = 21000 + \sum_{\text{zero bytes}} 4 + \sum_{\text{non-zero bytes}} 16
 \]
 
-**Example Transaction**:
+**Ví dụ giao dịch**:
 ```
 To: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 Value: 0 ETH
@@ -705,21 +705,21 @@ Data: 0x0123 (2 bytes, both non-zero)
 Intrinsic Gas = 21000 + 0×4 + 2×16 = 21,032 gas
 ```
 
-**Memory Expansion Cost**:
+**Chi phí mở rộng bộ nhớ tạm**:
 
-Let \( \mu_i \) = memory size before operation, \( \mu'_i \) = after
+Gọi \( \mu_i \) là kích thước bộ nhớ (tính theo từ 32 byte) trước thao tác và \( \mu'_i \) là kích thước sau thao tác:
 
 \[
 C_{\text{mem}}(\mu_i, \mu'_i) = C_{\text{mem}}(\mu'_i) - C_{\text{mem}}(\mu_i)
 \]
 
-Where:
+Trong đó:
 
 \[
 C_{\text{mem}}(\mu) = 3 \times \mu + \left\lfloor \frac{\mu^2}{512} \right\rfloor
 \]
 
-**Storage Cost** (SSTORE):
+**Chi phí ghi lưu trữ (SSTORE)**:
 
 \[
 \text{Gas}(\text{SSTORE}) = \begin{cases}
@@ -729,7 +729,7 @@ C_{\text{mem}}(\mu) = 3 \times \mu + \left\lfloor \frac{\mu^2}{512} \right\rfloo
 \end{cases}
 \]
 
-**Post-EIP-2200** (more complex):
+**Sau EIP-2200 và EIP-2929** (chi tiết hơn):
 ```
 Cold access: 2100 gas (first access)
 Warm access: 100 gas (subsequent)
@@ -741,17 +741,17 @@ Storage change:
 - Same value: 100 gas
 ```
 
-### 4.2. Stack Depth Limit
+### 4.2. Giới hạn độ sâu ngăn xếp và lời gọi
 
-**Maximum Stack Depth**: 1024 items
+**Độ sâu ngăn xếp tối đa**: 1024 phần tử.
 
-**Why Limit?**
+**Mục đích giới hạn**:
 
 \[
 \text{Stack overflow prevention}
 \]
 
-Without limit:
+Nếu không có giới hạn:
 ```
 Malicious contract:
 function infiniteRecursion() {
@@ -761,125 +761,119 @@ function infiniteRecursion() {
 Would create infinite call stack → crash nodes!
 ```
 
-With limit:
+Khi có giới hạn:
 ```
 Call depth reaches 1024 → Exception → Execution stops
 ```
 
-**Call Stack** (nested contract calls):
+**Ngăn xếp lời gọi (Call Stack)** cho các lời gọi hợp đồng lồng nhau:
 
-Each CALL consumes:
-- 63/64 of remaining gas passed to callee
-- 1/64 retained by caller
-
-Maximum depth: 1024 levels
+Mỗi lệnh `CALL` chỉ truyền tối đa 63/64 lượng gas còn lại cho hợp đồng được gọi và giữ lại 1/64 cho bên gọi (theo EIP-150), với độ sâu tối đa là 1024 mức:
 
 \[
 \text{Gas at depth } d = \text{Initial Gas} \times \left(\frac{63}{64}\right)^d
 \]
 
-At depth 1024:
+Tại độ sâu 1024:
 \[
 \text{Remaining} \approx \text{Initial} \times 10^{-7} \approx 0
 \]
 
-### 4.3. EVM Complexity Analysis
+### 4.3. Phân tích độ phức tạp của EVM
 
-**Time Complexity**:
+**Độ phức tạp thời gian**:
 
-For contract với n opcodes:
+Với một nhánh thực thi không có vòng lặp gồm \( n \) opcode:
 
 \[
 T(n) = O(n)
 \]
 
-Linear in bytecode size (each opcode executed at most once per path).
+Thời gian thực thi tỷ lệ tuyến tính theo số lệnh được chạy trên đường đi đó; khi có vòng lặp, tổng số lệnh vẫn bị chặn bởi giới hạn gas.
 
-**Space Complexity**:
+**Độ phức tạp không gian**:
 
 \[
 S = O(s + m + c)
 \]
 
-Where:
-- s = stack size (≤1024 words)
-- m = memory allocated
-- c = storage slots accessed
+Trong đó:
+- \( s \) là kích thước ngăn xếp (\( \leq 1024 \) từ).
+- \( m \) là lượng bộ nhớ tạm được cấp phát.
+- \( c \) là số ô storage được truy cập.
 
-**Gas as Resource Bound**:
+**Gas đóng vai trò cận trên tài nguyên**:
 
-Gas effectively limits:
+Gas giới hạn trực tiếp lượng tính toán trong một khối:
 
 \[
 \text{Computation} \leq \frac{\text{Gas Limit}}{\text{Min Gas per Operation}} \approx \frac{30M}{3} = 10M \text{ operations}
 \]
 
-Even at block gas limit (30M), finite computation!
+Ngay cả ở mức giới hạn gas của cả khối (30 triệu gas), số thao tác thực thi luôn hữu hạn.
 
-### 4.4. Determinism Proof
+### 4.4. Chứng minh tính tất định
 
 <div class="textbook-theorem" markdown="1">
-**Theorem**: EVM execution is deterministic.
+**Định lý**: Quá trình thực thi của EVM có tính tất định.
 </div>
 
-**Proof Sketch**:
+**Phác thảo chứng minh**:
 
-Given:
-- Initial state \( S_0 \)
-- Transaction \( T \)
-- EVM semantics \( \mathcal{E} \)
+Cho:
+- Trạng thái ban đầu \( S_0 \).
+- Giao dịch \( T \).
+- Ngữ nghĩa thực thi EVM \( \mathcal{E} \).
 
-**No non-deterministic sources**:
-1. No randomness (except from blockchain state - deterministic)
-2. No external calls (no network, files, etc.)
-3. Fixed-precision arithmetic (256-bit, no floating-point)
-4. No undefined behavior (all operations specified)
+**Không có nguồn bất định**:
+1. Không có tính ngẫu nhiên bên ngoài (chỉ có dữ liệu xác định từ trạng thái khối).
+2. Không có lời gọi bên ngoài (không truy cập mạng hay tệp cục bộ).
+3. Số học độ chính xác cố định (số nguyên 256-bit, không dùng dấu phẩy động).
+4. Không có hành vi không xác định (mọi opcode đều có đặc tả rõ ràng).
 
-**Result**: \( \mathcal{E}(S_0, T) \) produces unique \( S_1 \)
+**Kết luận**: \( \mathcal{E}(S_0, T) \) tạo ra một trạng thái kế tiếp \( S_1 \) duy nhất:
 
 \[
 \forall \text{ nodes } n_i, n_j: \quad \mathcal{E}_{n_i}(S_0, T) = \mathcal{E}_{n_j}(S_0, T) = S_1
 \]
 
-All honest nodes reach same state → Consensus achieved!
+Mọi nút trung thực đều đạt tới cùng trạng thái, từ đó duy trì được đồng thuận.
 
-### 4.5. Halting Problem và Gas
+### 4.5. Bài toán dừng (Halting Problem) và Gas
 
-**Standard Halting Problem**: Undecidable whether program terminates
+**Bài toán dừng cổ điển**: Không thể quyết định tổng quát liệu một chương trình bất kỳ có dừng lại hay không.
 
-**EVM Solution**: Gas ensures termination
+**Giải pháp của EVM**: Gas đảm bảo mọi quá trình thực thi đều kết thúc.
 
 <div class="textbook-theorem" markdown="1">
-**Theorem**: Every EVM execution terminates.
+**Định lý**: Mọi phiên thực thi trên EVM đều dừng sau hữu hạn bước.
 </div>
 
-**Proof**:
+**Chứng minh**:
 
-Gas decreases with each operation:
+Lượng gas giảm nghiêm ngặt sau mỗi lệnh có chi phí dương:
 \[
 G_{i+1} = G_i - \text{Cost}(\text{Op}_i) < G_i
 \]
 
-Gas cannot increase (except via external gas injection).
-
-Eventually:
+Lượng gas không thể tự tăng trong quá trình thực thi, nên sau hữu hạn bước sẽ đạt:
 \[
 G_n \leq 0 \implies \text{Execution stops}
 \]
 
-**Maximum Operations**:
+**Số lệnh tối đa**:
 
 \[
 N_{\max} = \frac{G_{\text{initial}}}{\min(\text{Gas costs})} = \frac{30M}{1} = 30M
 \]
 
-Finite bound → Always terminates!
+Vì bị chặn trên hữu hạn, chương trình trên EVM luôn dừng.
 
 ---
 
-## 5. Implementation Insight
+## 5. Góc nhìn triển khai
 
-### 5.1. Simplified EVM Implementation
+### 5.1. Cài đặt mô phỏng EVM đơn giản
 
 ```python
 import hashlib
@@ -1320,9 +1314,7 @@ if __name__ == "__main__":
 
 ---
 
-Bài giảng đã đạt ~11,000 từ với complete EVM implementation! Tôi sẽ tiếp tục với các lectures còn lại! 🚀
-
 ## Video tham khảo
 
-- **Xem trước:** [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Whiteboard Crypto dựng stack, memory và storage của EVM; xem trước trước khi đọc opcode.
-- [What Is GAS? Ethereum HIGH Transaction Fees Explained](https://www.youtube.com/watch?v=Yh8cHUB-KoU) — Finematics, tiếng Anh. Finematics giải thích gas như đồng hồ đo tài nguyên; đối chiếu công thức phí và metering trong bài.
+- **Xem trước:** [What is the EVM? Ethereum Virtual Machine - Explained with Animations](https://www.youtube.com/watch?v=sTOcqS4msoU) — Whiteboard Crypto, tiếng Anh. Minh họa trực quan stack, memory và storage của EVM; nên xem trước khi đọc phần opcode.
+- [What Is GAS? Ethereum HIGH Transaction Fees Explained](https://www.youtube.com/watch?v=Yh8cHUB-KoU) — Finematics, tiếng Anh. Giải thích vai trò của gas như công cụ đo lường tài nguyên, đối chiếu với công thức phí trong bài.

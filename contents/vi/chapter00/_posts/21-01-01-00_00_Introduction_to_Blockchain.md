@@ -13,62 +13,62 @@ categories:
 
 ## 1. Tổng quan về khái niệm
 
-Blockchain là một trong những công nghệ đột phá nhất của thế kỷ 21, được sinh ra từ nhu cầu tạo ra một hệ thống thanh toán điện tử ngang hàng (peer-to-peer) không cần bên trung gian tin cậy. Khái niệm này lần đầu tiên được giới thiệu vào năm 2008 bởi một cá nhân hoặc nhóm người ẩn danh dưới bút danh **Satoshi Nakamoto** trong bài báo mang tính cách mạng "Bitcoin: A Peer-to-Peer Electronic Cash System".
+Blockchain ra đời từ bài toán xây dựng một hệ thống thanh toán điện tử ngang hàng (peer-to-peer) không phụ thuộc vào bên trung gian tin cậy. Mô hình này được giới thiệu lần đầu vào năm 2008 bởi một cá nhân hoặc nhóm tác giả ẩn danh dưới bút danh **Satoshi Nakamoto** trong bài báo *"Bitcoin: A Peer-to-Peer Electronic Cash System"*.
 
-Trước khi Bitcoin ra đời, các hệ thống thanh toán điện tử đều phải đối mặt với một vấn đề cơ bản được gọi là **vấn đề chi tiêu gấp đôi (double-spending problem)**. Trong thế giới vật lý, khi bạn đưa một tờ tiền giấy cho ai đó, bạn không còn sở hữu nó nữa - đó là tính chất vật lý tự nhiên. Nhưng với dữ liệu số, một file có thể được sao chép vô hạn lần. Làm thế nào để đảm bảo rằng một đồng tiền điện tử không thể được "chi tiêu" nhiều lần bởi cùng một người?
+Trước khi Bitcoin xuất hiện, các hệ thống thanh toán điện tử đều phải đối mặt với **bài toán chi tiêu gấp đôi (double-spending problem)**. Trong thế giới vật lý, khi bạn trao một tờ tiền giấy cho người khác, bạn không còn giữ tờ tiền đó nữa. Tuy nhiên, dữ liệu số có thể được sao chép vô hạn lần. Do đó, câu hỏi đặt ra là làm thế nào để đảm bảo một đơn vị tiền điện tử không bị cùng một người chi tiêu nhiều lần.
 
-Giải pháp truyền thống là dựa vào một bên trung gian đáng tin cậy - như ngân hàng, PayPal, hay Visa - để theo dõi ai sở hữu bao nhiêu tiền và ai đã chuyển cho ai. Nhưng điều này tạo ra nhiều vấn đề: phí giao dịch cao, thời gian xử lý chậm, rủi ro về quyền riêng tư, và quan trọng nhất là **single point of failure** - nếu bên trung gian này bị tấn công, phá sản, hoặc hành động không trung thực, toàn bộ hệ thống sẽ sụp đổ.
+Cách tiếp cận truyền thống là dựa vào một bên trung gian tin cậy — chẳng hạn ngân hàng, PayPal hay Visa — để quản lý số dư và xác nhận giao dịch. Cách làm này kéo theo nhiều hạn chế như phí giao dịch cao, thời gian xử lý chậm, rủi ro về quyền riêng tư và đặc biệt là **điểm lỗi đơn (single point of failure)**: nếu bên trung gian bị tấn công, ngừng hoạt động hoặc hành xử thiếu trung thực, toàn bộ hệ thống sẽ bị ảnh hưởng.
 
-Blockchain giải quyết vấn đề này một cách triệt để bằng cách thay thế bên trung gian tin cậy bằng một **cơ chế đồng thuận phân tán (distributed consensus mechanism)**. Thay vì một ngân hàng duy nhất lưu trữ sổ cái, hàng nghìn (hoặc hàng triệu) máy tính độc lập trên toàn thế giới cùng lưu trữ và xác thực cùng một bản sao của sổ cái. Mỗi giao dịch mới phải được đa số mạng lưới xác nhận trước khi được ghi vào sổ cái vĩnh viễn. Điều này tạo ra một hệ thống:
+Blockchain giải quyết bài toán này bằng cách thay thế bên trung gian bằng một **cơ chế đồng thuận phân tán (distributed consensus mechanism)**. Thay vì để một tổ chức duy nhất quản lý sổ cái, hàng nghìn máy tính độc lập trên toàn cầu cùng lưu trữ và xác thực chung một bản sao của sổ cái. Mỗi giao dịch mới cần được đa số mạng lưới xác nhận trước khi ghi vĩnh viễn vào chuỗi. Nhờ đó, hệ thống đạt được các đặc tính chính sau:
 
-- **Phi tập trung (Decentralized)**: Không có một thực thể duy nhất kiểm soát
-- **Minh bạch (Transparent)**: Mọi người đều có thể kiểm tra lịch sử giao dịch
-- **Bất biến (Immutable)**: Một khi đã ghi vào blockchain, dữ liệu gần như không thể thay đổi
-- **An toàn (Secure)**: Được bảo vệ bởi mật mã học và cơ chế đồng thuận
+- **Phi tập trung (Decentralized)**: Không có một thực thể duy nhất nắm quyền kiểm soát toàn mạng.
+- **Minh bạch (Transparent)**: Mọi người tham gia đều có thể kiểm tra lịch sử giao dịch.
+- **Bất biến (Immutable)**: Dữ liệu một khi đã ghi vào blockchain rất khó bị sửa đổi.
+- **An toàn (Secure)**: Được bảo vệ bởi các nguyên lý mật mã học và cơ chế đồng thuận.
 
-Blockchain không chỉ là công nghệ đằng sau Bitcoin. Nó là một **paradigm mới về cách lưu trữ và xác thực dữ liệu trong môi trường không tin cậy**. Từ các hợp đồng thông minh (smart contracts) trên Ethereum đến quản lý chuỗi cung ứng, từ hệ thống bỏ phiếu điện tử đến quản lý danh tính số, blockchain đang mở ra vô số ứng dụng tiềm năng.
+Phạm vi ứng dụng của blockchain không chỉ dừng lại ở Bitcoin mà mở rộng sang một mô hình lưu trữ và xác thực dữ liệu mới trong môi trường không tin cậy lẫn nhau. Từ hợp đồng thông minh (smart contracts) trên Ethereum đến quản lý chuỗi cung ứng, bỏ phiếu điện tử và quản lý danh tính số, công nghệ này đang được triển khai trong nhiều lĩnh vực khác nhau.
 
-Để hiểu sâu về blockchain, chúng ta cần nắm vững ba trụ cột chính:
-1. **Mật mã học (Cryptography)**: Hash functions, digital signatures, public-key cryptography
-2. **Cấu trúc dữ liệu phân tán (Distributed Data Structures)**: Merkle trees, blocks, chains
-3. **Cơ chế đồng thuận (Consensus Mechanisms)**: Proof-of-Work, Proof-of-Stake, Byzantine Fault Tolerance
+Để nắm vững nguyên lý hoạt động của blockchain, chúng ta cần hiểu rõ ba trụ cột cốt lõi:
+1. **Mật mã học (Cryptography)**: Hàm băm (hash functions), chữ ký số (digital signatures) và mật mã khóa công khai (public-key cryptography).
+2. **Cấu trúc dữ liệu phân tán (Distributed Data Structures)**: Cây Merkle (Merkle trees), khối (blocks) và chuỗi khối (chains).
+3. **Cơ chế đồng thuận (Consensus Mechanisms)**: Proof-of-Work, Proof-of-Stake và khả năng chịu lỗi Byzantine (Byzantine Fault Tolerance).
 
 ---
 
 ## 2. Hiểu biết trực quan
 
-Hãy tưởng tượng blockchain như một **cuốn sổ kế toán công khai mà ai cũng có thể xem, nhưng không ai có thể xóa hay chỉnh sửa**.
+Có thể hình dung blockchain như một **cuốn sổ kế toán công khai mà ai cũng có thể đọc, nhưng không ai có thể tự ý xóa hay sửa đổi nội dung đã ghi**.
 
-Trong một ngôi làng nhỏ, thay vì có một ngân hàng trung tâm ghi lại tất cả các giao dịch, mọi người trong làng đều giữ một bản sao của sổ kế toán. Khi Alice muốn chuyển 10 đồng xu cho Bob, cô ấy thông báo cho cả làng:
+Giả sử trong một ngôi làng nhỏ, thay vì có một ngân hàng trung tâm ghi chép mọi giao dịch, mỗi người dân đều giữ một bản sao của cuốn sổ kế toán. Khi Alice muốn chuyển 10 đồng xu cho Bob, cô thông báo công khai cho cả làng:
 
-> "Tôi, Alice, muốn chuyển 10 đồng xu cho Bob. Đây là chữ ký số của tôi để chứng minh đây là tôi."
+> "Tôi, Alice, muốn chuyển 10 đồng xu cho Bob. Đây là chữ ký số của tôi để xác nhận giao dịch này."
 
-Mọi người trong làng kiểm tra:
-- Alice có thực sự đủ 10 đồng xu không? (bằng cách xem lại lịch sử giao dịch)
-- Chữ ký có thực sự của Alice không?
-- Giao dịch này có hợp lệ không?
+Mọi người trong làng sẽ cùng kiểm tra:
+- Alice có đủ 10 đồng xu hay không (dựa trên lịch sử giao dịch đã lưu).
+- Chữ ký có đúng là của Alice hay không.
+- Giao dịch có tuân thủ các quy tắc hợp lệ hay không.
 
-Nếu đa số mọi người đồng ý giao dịch là hợp lệ, họ ghi nó vào sổ cái của mình. Nhưng thay vì ghi từng giao dịch riêng lẻ, họ thu thập nhiều giao dịch lại thành một **"trang"** (block). Mỗi trang mới được **"dán chặt"** vào trang trước bằng một **"con dấu mật mã"** đặc biệt (cryptographic hash), tạo thành một chuỗi các trang không thể tách rời.
+Nếu đa số đồng ý giao dịch hợp lệ, họ ghi nhận giao dịch đó vào bản sao sổ cái của mình. Thay vì ghi rời từng giao dịch, họ gom nhiều giao dịch lại thành một **"trang"** (block). Mỗi trang mới được gắn chặt với trang liền trước bằng một **"con dấu mật mã"** (cryptographic hash), tạo thành một chuỗi các trang liên kết chặt chẽ với nhau.
 
-Nếu ai đó cố gắng gian lận - ví dụ, Charlie muốn thay đổi một giao dịch cũ để lấy thêm tiền - anh ta sẽ phải:
-1. Thay đổi trang đó trong sổ của mình
-2. Nhưng điều này sẽ phá vỡ "con dấu mật mã" liên kết với trang tiếp theo
-3. Vậy anh ta phải tính lại con dấu cho trang đó và TẤT CẢ các trang sau đó
-4. Làm điều này nhanh hơn phần còn lại của làng (chiếm hơn 50% sức mạnh tính toán)
+Nếu Charlie cố tình gian lận bằng cách sửa một giao dịch cũ để chiếm thêm tiền, anh ta buộc phải:
+1. Sửa đổi trang chứa giao dịch đó trong cuốn sổ của mình.
+2. Tính lại con dấu mật mã của trang bị sửa vì liên kết với trang kế tiếp đã bị phá vỡ.
+3. Tính lại toàn bộ con dấu của tất cả các trang đứng sau đó.
+4. Hoàn thành toàn bộ quá trình này nhanh hơn phần còn lại của ngôi làng (tức nắm giữ hơn 50% tổng năng lực tính toán).
 
-Trong thực tế, với hàng nghìn máy tính tham gia, việc này gần như không thể thực hiện.
+Trong thực tế, với hàng nghìn máy tính độc lập cùng tham gia, kịch bản này gần như không khả thi về mặt chi phí và tính toán.
 
-**Analogy khác**: Blockchain giống như **một blockchain vật lý** (chuỗi khối thực sự):
-- Mỗi khối chứa dữ liệu (giao dịch)
-- Mỗi khối được liên kết với khối trước nó bằng một "móc khóa" mật mã
-- Nếu bạn muốn thay đổi một khối ở giữa chuỗi, bạn phải "cắt đứt" và "hàn lại" tất cả các khối sau nó
-- Nhưng mọi người khác trong mạng đều giữ bản sao của chuỗi nguyên gốc, nên họ sẽ từ chối phiên bản đã bị thay đổi của bạn
+Một cách liên tưởng khác là xem blockchain như **một chuỗi khối vật lý**:
+- Mỗi khối chứa dữ liệu giao dịch.
+- Mỗi khối nối với khối trước nó bằng một liên kết mật mã.
+- Muốn sửa một khối ở giữa chuỗi, kẻ tấn công phải tháo rời và nối lại toàn bộ các khối phía sau.
+- Vì mọi thành viên khác trong mạng đều giữ bản sao của chuỗi gốc, họ sẽ dễ dàng phát hiện và từ chối phiên bản bị sửa đổi.
 
-Hiểu theo cách này, blockchain về cơ bản là:
-- **Một cơ sở dữ liệu phân tán** mà không có một bên nào kiểm soát
-- **Chỉ có thể thêm vào** (append-only) - bạn có thể thêm dữ liệu mới nhưng không thể xóa dữ liệu cũ
-- **Được bảo vệ bằng mật mã** để ngăn chặn gian lận
-- **Được đồng bộ hóa** thông qua cơ chế đồng thuận giữa nhiều node
+Tóm lại, về bản chất, blockchain là:
+- **Một cơ sở dữ liệu phân tán** không chịu sự kiểm soát của một bên duy nhất.
+- **Cấu trúc chỉ cho phép ghi thêm (append-only)**: có thể bổ sung dữ liệu mới nhưng không thể tùy tiện xóa hay sửa dữ liệu cũ.
+- **Được bảo vệ bằng mật mã** nhằm ngăn chặn gian lận và phát hiện giả mạo.
+- **Được đồng bộ hóa** giữa nhiều nút mạng (node) thông qua cơ chế đồng thuận.
 
 ---
 
@@ -76,63 +76,63 @@ Hiểu theo cách này, blockchain về cơ bản là:
 
 ### 3.1. Cấu trúc của một Block
 
-Một block trong blockchain chứa ba thành phần chính:
+Một block trong blockchain gồm ba thành phần chính:
 
 **Block Header (Phần đầu khối)**:
-- **Previous Block Hash**: Hash của block trước đó, tạo ra chuỗi liên kết
-- **Timestamp**: Thời gian block được tạo ra
-- **Nonce**: Một số được sử dụng trong quá trình mining (Proof-of-Work)
-- **Merkle Root**: Hash tổng hợp của tất cả các giao dịch trong block
-- **Difficulty Target**: Mức độ khó của bài toán mật mã cần giải
+- **Previous Block Hash**: Giá trị băm của block liền trước, tạo thành liên kết chuỗi.
+- **Timestamp**: Dấu thời gian ghi nhận thời điểm tạo block.
+- **Nonce**: Số nguyên được thay đổi liên tục trong quá trình đào (mining) ở cơ chế Proof-of-Work.
+- **Merkle Root**: Giá trị băm đại diện cho toàn bộ các giao dịch nằm trong block.
+- **Difficulty Target**: Ngưỡng độ khó của bài toán mật mã mà block cần thỏa mãn.
 
 **Transaction List (Danh sách giao dịch)**:
-- Chứa tất cả các giao dịch được đóng gói trong block này
-- Mỗi giao dịch bao gồm: sender, receiver, amount, signature
+- Chứa toàn bộ giao dịch được đóng gói trong block.
+- Mỗi giao dịch cơ bản gồm người gửi (sender), người nhận (receiver), số lượng (amount) và chữ ký số (signature).
 
-**Metadata**:
-- Block number/height
-- Size of block
-- Number of transactions
+**Metadata (Siêu dữ liệu)**:
+- Chỉ số hoặc chiều cao của block (block number/height).
+- Kích thước của block.
+- Tổng số giao dịch trong block.
 
-### 3.2. Cryptographic Hash Functions
+### 3.2. Hàm băm mật mã (Cryptographic Hash Functions)
 
-Hash function là trái tim của blockchain. Một hash function \( H \) là một hàm toán học nhận đầu vào có độ dài bất kỳ và tạo ra đầu ra có độ dài cố định:
+Hàm băm đóng vai trò trung tâm trong kiến trúc blockchain. Một hàm băm \( H \) là một hàm toán học nhận đầu vào có độ dài tùy ý và ánh xạ sang đầu ra có độ dài cố định:
 
 \[
 H: \{0,1\}^* \rightarrow \{0,1\}^n
 \]
 
-Trong Bitcoin, sử dụng **SHA-256** (Secure Hash Algorithm 256-bit), tạo ra output 256 bit.
+Bitcoin sử dụng thuật toán **SHA-256** (Secure Hash Algorithm 256-bit), luôn tạo ra chuỗi đầu ra dài 256 bit.
 
-**Tính chất quan trọng của cryptographic hash function**:
+**Các tính chất quan trọng của hàm băm mật mã**:
 
-1. **Deterministic**: Cùng input luôn cho cùng output
+1. **Tính tất định (Deterministic)**: Cùng một đầu vào luôn cho ra đúng một đầu ra duy nhất:
    \[
    H(x) = y \implies H(x) = y \text{ (luôn luôn)}
    \]
 
-2. **Pre-image Resistance**: Từ hash \( h \), cực kỳ khó tìm input \( x \) sao cho \( H(x) = h \)
-   - Khó khăn tính toán: \( O(2^n) \) với n = 256
+2. **Kháng tiền ảnh (Pre-image Resistance)**: Cho trước giá trị băm \( h \), cực kỳ khó về mặt tính toán để tìm ra đầu vào \( x \) sao cho \( H(x) = h \).
+   - Độ phức tạp tìm kiếm vét cạn: \( O(2^n) \) với \( n = 256 \).
 
-3. **Collision Resistance**: Cực kỳ khó tìm hai input khác nhau \( x_1 \neq x_2 \) sao cho \( H(x_1) = H(x_2) \)
-   - Birthday paradox: cần khoảng \( 2^{n/2} \) phép thử, tức \( 2^{128} \) cho SHA-256
+3. **Kháng va chạm (Collision Resistance)**: Cực kỳ khó tìm được hai đầu vào khác nhau \( x_1 \neq x_2 \) sao cho \( H(x_1) = H(x_2) \).
+   - Theo nghịch lý ngày sinh (birthday paradox), cần khoảng \( 2^{n/2} \) phép thử, tức khoảng \( 2^{128} \) phép thử đối với SHA-256.
 
-4. **Avalanche Effect**: Thay đổi một bit trong input sẽ thay đổi trung bình 50% các bit trong output
+4. **Hiệu ứng tuyết lở (Avalanche Effect)**: Chỉ cần thay đổi 1 bit ở đầu vào, trung bình 50% số bit ở đầu ra sẽ thay đổi một cách khó dự đoán.
 
 **Ví dụ thực tế với SHA-256**:
 ```
 Input: "Hello, Blockchain!"
-Output: 4d5a5e0b7c8d3f8e9a2c1b0d6f3e7a9c5b4d2e1f8a7b6c5d4e3f2a1b0c9d8e7f6
+Output: 7526b1d2bc17587443fbf1fafb27e95d70615bc7576c6e34c1f139c9ce857733
 
 Input: "Hello, Blockchain?" (chỉ thay ! bằng ?)
-Output: 8f7e6d5c4b3a2918d7c6b5a493827160f9e8d7c6b5a4938271605f4e3d2c1b0a
+Output: 69b14049b5a3915315f57a3db1dec988b4b330426c46a61bbde4993575840f52
 ```
 
-Thay đổi nhỏ → thay đổi hoàn toàn output.
+Chỉ một ký tự thay đổi đã làm toàn bộ chuỗi đầu ra biến đổi hoàn toàn.
 
 ### 3.3. Cấu trúc chuỗi (Chain Structure)
 
-Blockchain được hình thành bằng cách mỗi block chứa hash của block trước đó:
+Blockchain được liên kết theo dạng chuỗi nhờ mỗi block đều chứa giá trị băm của block liền trước:
 
 ```
 Block 0 (Genesis)          Block 1                Block 2                Block 3
@@ -143,17 +143,16 @@ Block 0 (Genesis)          Block 1                Block 2                Block 3
 └──────────────┘          └──────────────┘       └──────────────┘       └──────────────┘
 ```
 
-Tính bất biến (Immutability) đến từ đây:
-- Nếu thay đổi data trong Block 1
-- Hash của Block 1 thay đổi
-- Previous hash trong Block 2 không còn khớp
-- Toàn bộ chain từ Block 2 trở đi trở nên invalid
+Tính bất biến (immutability) bắt nguồn trực tiếp từ cơ chế liên kết này:
+- Nếu dữ liệu trong Block 1 bị thay đổi, giá trị băm của Block 1 sẽ thay đổi theo.
+- Trường `Previous Hash` lưu trong Block 2 không còn khớp với giá trị băm mới của Block 1.
+- Hệ quả là toàn bộ phần chuỗi từ Block 2 trở đi trở nên không hợp lệ.
 
-### 3.4. Merkle Tree (Hash Tree)
+### 3.4. Cây Merkle (Merkle Tree / Hash Tree)
 
-Để tổ chức hiệu quả hàng nghìn giao dịch trong một block, blockchain sử dụng **Merkle Tree** - một cấu trúc dữ liệu dạng cây nhị phân trong đó:
-- Các leaf node chứa hash của từng giao dịch
-- Các internal node chứa hash của concatenation hai node con
+Để tổ chức và xác minh hiệu quả hàng nghìn giao dịch trong một block, blockchain sử dụng **cây Merkle** — một cấu trúc cây nhị phân trong đó:
+- Các nút lá (leaf node) chứa giá trị băm của từng giao dịch.
+- Các nút trong (internal node) chứa giá trị băm của chuỗi ghép (concatenation) từ hai nút con.
 
 ```
                     Merkle Root
@@ -165,86 +164,79 @@ Tính bất biến (Immutability) đến từ đây:
              Tx0     Tx1     Tx2     Tx3
 ```
 
-**Lợi ích**:
-1. **Efficient Verification**: Có thể verify một giao dịch có trong block không chỉ với \( O(\log n) \) hash values
-2. **Compact Representation**: Block header chỉ cần lưu Merkle root (32 bytes) thay vì toàn bộ transactions (có thể hàng MB)
-3. **Simplified Payment Verification (SPV)**: Light clients có thể verify transactions mà không cần tải toàn bộ blockchain
+**Lợi ích chính**:
+1. **Xác minh hiệu quả**: Kiểm tra một giao dịch có nằm trong block hay không chỉ cần \( O(\log n) \) giá trị băm.
+2. **Biểu diễn gọn nhẹ**: Phần đầu khối (block header) chỉ cần lưu Merkle root (32 byte) thay vì toàn bộ danh sách giao dịch (có thể lên tới hàng megabyte).
+3. **Xác minh thanh toán đơn giản hóa (SPV — Simplified Payment Verification)**: Các nút nhẹ (light client) có thể xác minh giao dịch mà không cần tải xuống toàn bộ blockchain.
 
-### 3.5. Distributed Ledger Technology (DLT)
+### 3.5. Công nghệ Sổ cái Phân tán (Distributed Ledger Technology — DLT)
 
-Blockchain là một dạng của Distributed Ledger Technology. Một distributed ledger có các đặc điểm:
+Blockchain là một dạng cụ thể của công nghệ sổ cái phân tán (DLT). Một hệ thống sổ cái phân tán có năm đặc điểm cơ bản:
 
-**Replication**: Mỗi node trong mạng lưu trữ một bản sao đầy đủ (hoặc một phần) của ledger
-
-**Consensus**: Các node phải đồng ý về trạng thái hiện tại của ledger thông qua consensus protocol
-
-**Validation**: Mỗi node độc lập validate các transactions trước khi accept
-
-**Synchronization**: Các node liên tục đồng bộ để duy trì consistency
-
-**Fault Tolerance**: Hệ thống tiếp tục hoạt động ngay cả khi một số node fail hoặc hành động maliciously
+- **Nhân bản dữ liệu (Replication)**: Mỗi nút trong mạng lưu trữ một bản sao đầy đủ (hoặc một phần) của sổ cái.
+- **Đồng thuận (Consensus)**: Các nút thống nhất về trạng thái hiện tại của sổ cái thông qua giao thức đồng thuận.
+- **Xác thực (Validation)**: Mỗi nút tự kiểm tra tính hợp lệ của giao dịch trước khi chấp nhận.
+- **Đồng bộ hóa (Synchronization)**: Các nút liên tục cập nhật dữ liệu với nhau để duy trì tính nhất quán.
+- **Khả năng chịu lỗi (Fault Tolerance)**: Hệ thống vẫn tiếp tục vận hành ổn định ngay cả khi một số nút gặp sự cố hoặc hành động ác ý.
 
 ---
 
 ## 4. Công thức toán học và mật mã học
 
-### 4.1. Hash Function - Định nghĩa chính thác
+### 4.1. Hàm băm — Định nghĩa chính xác
 
-Cho \( H: \{0,1\}^* \rightarrow \{0,1\}^{256} \) là SHA-256 hash function.
+Cho \( H: \{0,1\}^* \rightarrow \{0,1\}^{256} \) là hàm băm SHA-256.
 
-**Computational Hardness Assumptions**:
+**Các giả định về độ khó tính toán**:
 
-1. **Pre-image Resistance** (One-wayness):
+1. **Kháng tiền ảnh (Pre-image Resistance / Tính một chiều)**:
    \[
    \Pr[\text{Adversary finds } x \text{ given } H(x)] < \frac{1}{2^{256}}
    \]
+   (với mỗi phép thử ngẫu nhiên đơn lẻ, xác suất tìm đúng là \( 2^{-256} \)).
 
-2. **Second Pre-image Resistance**:
+2. **Kháng tiền ảnh thứ hai (Second Pre-image Resistance)**:
    \[
    \text{Given } x_1, \text{ find } x_2 \neq x_1 \text{ such that } H(x_1) = H(x_2)
    \]
-   Probability of success: \( < 2^{-256} \)
+   Xác suất thành công mỗi phép thử: \( < 2^{-256} \).
 
-3. **Collision Resistance**:
+3. **Kháng va chạm (Collision Resistance)**:
    \[
    \text{Find any } x_1 \neq x_2 \text{ such that } H(x_1) = H(x_2)
    \]
-   By birthday paradox, requires approximately \( 2^{128} \) attempts.
+   Theo nghịch lý ngày sinh, cần khoảng \( 2^{128} \) phép thử.
 
-### 4.2. Chain Integrity
+### 4.2. Tính toàn vẹn của chuỗi (Chain Integrity)
 
-Tính toàn vẹn của blockchain được đảm bảo bởi liên kết hash:
+Tính toàn vẹn của blockchain được duy trì nhờ chuỗi liên kết băm. Xét một blockchain \( B = [B_0, B_1, ..., B_n] \), trong đó mỗi block \( B_i \) gồm:
+- Dữ liệu: \( D_i \)
+- Giá trị băm của block trước: \( h_{i-1} = H(B_{i-1}) \)
+- Giá trị băm hiện tại: \( h_i = H(B_i) = H(D_i || h_{i-1} || \text{metadata}_i) \)
 
-Cho blockchain \( B = [B_0, B_1, ..., B_n] \) với mỗi block \( B_i \) có:
-- Data: \( D_i \)
-- Previous hash: \( h_{i-1} = H(B_{i-1}) \)
-- Current hash: \( h_i = H(B_i) = H(D_i || h_{i-1} || \text{metadata}_i) \)
+Để sửa đổi block \( B_k \) mà không bị phát hiện, kẻ tấn công phải:
+1. Tính lại giá trị băm mới \( h_k' = H(D_k' || h_{k-1} || ...) \).
+2. Tính lại \( h_{k+1}' = H(D_{k+1} || h_k' || ...) \).
+3. Lặp lại cho toàn bộ các block \( B_{k+2}, ..., B_n \).
+4. Đuổi kịp và vượt qua chuỗi trung thực (nếu mạng dùng cơ chế Proof-of-Work).
 
-Để thay đổi block \( B_k \) mà không bị phát hiện, attacker phải:
-1. Compute new \( h_k' = H(D_k' || h_{k-1} || ...) \)
-2. Recompute \( h_{k+1}' = H(D_{k+1} || h_k' || ...) \)
-3. Repeat for all blocks \( B_{k+2}, ..., B_n \)
-4. Catch up with the honest chain (if PoW is used)
-
-**Computational Cost**:
+**Chi phí tính toán**:
 \[
 \text{Cost} = \sum_{i=k}^{n} \text{Work}(B_i) 
 \]
 
-Trong Proof-of-Work, \( \text{Work}(B_i) \) yêu cầu tìm nonce thỏa mãn:
+Trong Proof-of-Work, \( \text{Work}(B_i) \) đòi hỏi tìm một giá trị `nonce` thỏa mãn:
 \[
 H(\text{block\_header}_i) < \text{Target}_i
 \]
 
-### 4.3. Merkle Proof
+### 4.3. Bằng chứng Merkle (Merkle Proof)
 
-Để chứng minh transaction \( T_x \) có trong block với Merkle root \( M_R \):
+Để chứng minh giao dịch \( T_x \) thuộc về một block có Merkle root là \( M_R \), bên xác minh (verifier) chỉ cần:
+- Giao dịch \( T_x \)
+- Đường dẫn xác thực (authentication path): \( [h_1, h_2, ..., h_{\log_2 n}] \)
 
-Verifier cần:
-- Transaction \( T_x \)
-- Authentication path: \( [h_1, h_2, ..., h_{\log_2 n}] \)
-
-Verification:
+Quá trình xác minh diễn ra lần lượt từ lá lên gốc:
 \[
 \begin{align}
 h_0 &= H(T_x) \\
@@ -255,31 +247,31 @@ h_{\log_2 n}' &= M_R
 \end{align}
 \]
 
-Nếu \( h_{\log_2 n}' = M_R \), transaction được verify.
+Nếu kết quả cuối cùng \( h_{\log_2 n}' = M_R \), giao dịch được xác nhận là có mặt trong block.
 
-**Complexity**: \( O(\log n) \) thay vì \( O(n) \)
+**Độ phức tạp**: \( O(\log n) \) thay vì \( O(n) \).
 
-### 4.4. Byzantine Fault Tolerance
+### 4.4. Khả năng chịu lỗi Byzantine (Byzantine Fault Tolerance)
 
-Trong mạng phân tán với \( n \) nodes, trong đó có \( f \) nodes là Byzantine (malicious hoặc faulty), consensus có thể đạt được nếu:
+Trong một mạng phân tán gồm \( n \) nút, trong đó có tối đa \( f \) nút Byzantine (hỏng hóc hoặc hành xử ác ý), đồng thuận cổ điển theo mô hình BFT có thể đạt được khi:
 
 \[
 n \geq 3f + 1
 \]
 
-Tức là cần ít nhất 2/3 + 1 nodes là honest.
+Nói cách khác, mạng cần có hơn 2/3 tổng số nút (cụ thể là ít nhất \( 2f + 1 \) nút) hoạt động trung thực.
 
-**Intuition**: 
-- \( f \) Byzantine nodes có thể gửi conflicting messages
-- Cần \( f + 1 \) honest nodes để form majority
-- Cần thêm \( f \) honest nodes để overcome worst case where \( f \) Byzantine nodes align
-- Total: \( 2f + 1 \) honest + \( f \) Byzantine = \( 3f + 1 \)
+**Trực giác chứng minh**:
+- \( f \) nút Byzantine có thể không phản hồi hoặc gửi các thông điệp mâu thuẫn nhau.
+- Cần ít nhất \( f + 1 \) nút trung thực để tạo thành đa số áp đảo so với \( f \) nút ác ý.
+- Trong trường hợp xấu nhất khi \( f \) nút Byzantine im lặng và \( f \) nút khác nói dối, cần thêm \( f \) nút trung thực để đảm bảo đa số phiếu vẫn thuộc về các nút trung thực.
+- Tổng số nút tối thiểu: \( 2f + 1 \) nút trung thực + \( f \) nút Byzantine = \( 3f + 1 \).
 
 ---
 
-## 5. Implementation Insight
+## 5. Minh họa triển khai
 
-### 5.1. Simplified Block Structure (Python)
+### 5.1. Cấu trúc Block đơn giản hóa (Python)
 
 ```python
 import hashlib
@@ -425,9 +417,9 @@ if __name__ == "__main__":
         print(f"  Transactions: {len(block.transactions)}")
 ```
 
-### 5.2. Bitcoin Implementation (C++)
+### 5.2. Cài đặt trong Bitcoin Core (C++)
 
-Bitcoin Core implementation sử dụng cấu trúc tương tự nhưng phức tạp hơn:
+Cấu trúc phần đầu khối của Bitcoin Core tuân theo nguyên lý tương tự nhưng tối ưu hơn về dung lượng và hiệu năng:
 
 ```cpp
 // Simplified Bitcoin block header structure
@@ -446,9 +438,9 @@ public:
 };
 ```
 
-### 5.3. Ethereum Block Structure
+### 5.3. Cấu trúc Block của Ethereum
 
-Ethereum có cấu trúc phức tạp hơn với state transitions:
+Ethereum có cấu trúc block phức tạp hơn vì cần quản lý thêm các chuyển đổi trạng thái (state transitions) của hợp đồng thông minh:
 
 ```javascript
 // Simplified Ethereum block structure
@@ -479,15 +471,15 @@ interface Block {
 
 ## 6. Các thách thức và đánh đổi thường gặp
 
-### 6.1. Blockchain Trilemma
+### 6.1. Bộ ba bất khả thi của Blockchain (Blockchain Trilemma)
 
-Vitalik Buterin đã mô tả "Blockchain Trilemma" - sự đánh đổi giữa ba thuộc tính:
+Vitalik Buterin khái quát "Blockchain Trilemma" như sự đánh đổi giữa ba thuộc tính cốt lõi:
 
-1. **Decentralization (Phi tập trung)**: Số lượng nodes tham gia
-2. **Security (Bảo mật)**: Khó khăn để attack
-3. **Scalability (Khả năng mở rộng)**: Throughput và latency
+1. **Tính phi tập trung (Decentralization)**: Số lượng và mức độ phân tán của các nút tham gia.
+2. **Bảo mật (Security)**: Khả năng chống chịu của mạng lưới trước các cuộc tấn công.
+3. **Khả năng mở rộng (Scalability)**: Thông lượng xử lý giao dịch (throughput) và độ trễ (latency).
 
-Không thể tối ưu hóa cả ba cùng lúc:
+Trong thiết kế thực tế, rất khó tối ưu đồng thời cả ba thuộc tính này:
 
 ```
          Decentralization
@@ -502,37 +494,35 @@ Visa: High Scalability + Security, No Decentralization
 Private Chains: High Scalability, Low Decentralization
 ```
 
-**Ví dụ cụ thể**:
-- **Bitcoin**: ~7 transactions/second (TPS)
-- **Ethereum**: ~15-30 TPS
-- **Visa**: ~24,000 TPS
+**So sánh thông lượng tham khảo**:
+- **Bitcoin**: ~7 giao dịch/giây (TPS)
+- **Ethereum**: ~15–30 TPS
+- **Visa**: ~24.000 TPS
 - **PayPal**: ~193 TPS
 
-### 6.2. Storage Requirements
+### 6.2. Yêu cầu về lưu trữ
 
-Blockchain size tăng liên tục:
-- Bitcoin blockchain: ~500 GB (tính đến 2024)
-- Ethereum blockchain: ~1 TB+ (full archive node)
+Dung lượng dữ liệu của blockchain tăng liên tục theo thời gian:
+- Blockchain Bitcoin: ~500 GB (tính đến năm 2024).
+- Blockchain Ethereum: ~1 TB trở lên đối với nút lưu trữ đầy đủ (full archive node).
 
-Điều này tạo ra **centralization pressure**: chỉ những entities có resources mới có thể chạy full node.
+Xu hướng này tạo ra **áp lực tập trung hóa**, vì chỉ những tổ chức có đủ tài nguyên phần cứng mới duy trì được nút đầy đủ (full node).
 
-**Solutions**:
-- **Light clients**: Chỉ lưu block headers, verify bằng SPV
-- **Pruning**: Xóa old state data, chỉ giữ recent
-- **Sharding**: Chia blockchain thành multiple shards
+**Các hướng giải quyết**:
+- **Light clients (Nút nhẹ)**: Chỉ lưu block header và xác minh giao dịch bằng SPV.
+- **Pruning (Cắt tỉa dữ liệu)**: Xóa dữ liệu trạng thái cũ, chỉ giữ lại các phần gần nhất cần cho xác thực.
+- **Sharding (Phân mảnh)**: Chia mạng blockchain thành nhiều phân vùng (shard) để xử lý và lưu trữ song song.
 
-### 6.3. 51% Attack
+### 6.3. Tấn công 51% (51% Attack)
 
-Nếu một attacker kiểm soát >50% mining power (PoW) hoặc stake (PoS), họ có thể:
-- Double-spend coins
-- Censor transactions
-- Reverse transactions
+Nếu một kẻ tấn công kiểm soát hơn 50% năng lực đào (trong PoW) hoặc lượng tài sản đặt cược (trong PoS), họ có thể:
+- Thực hiện chi tiêu gấp đôi (double-spend) các giao dịch của chính mình.
+- Kiểm duyệt, ngăn chặn một số giao dịch được đưa vào block.
+- Đảo ngược các giao dịch gần đây thông qua tái tổ chức chuỗi.
 
-**Probability of successful attack** (PoW):
+**Xác suất tấn công thành công trong PoW**:
 
-Cho attacker có tỷ lệ hash power \( q \), honest miners có \( p = 1 - q \).
-
-Xác suất attacker bắt kịp honest chain sau \( z \) blocks:
+Giả sử kẻ tấn công nắm tỷ lệ sức mạnh băm \( q \), còn các thợ đào trung thực nắm \( p = 1 - q \). Xác suất kẻ tấn công đuổi kịp chuỗi trung thực sau khi đã bị dẫn trước \( z \) block là:
 
 \[
 P_{\text{catch-up}} = \begin{cases}
@@ -541,87 +531,86 @@ P_{\text{catch-up}} = \begin{cases}
 \end{cases}
 \]
 
-Với \( q = 0.4 \) (40% hash power), sau 6 confirmations:
+Chẳng hạn, với \( q = 0.4 \) (40% sức mạnh băm), sau 6 xác nhận:
 \[
 P_{\text{catch-up}} = \left(\frac{0.4}{0.6}\right)^6 \approx 0.088 = 8.8\%
 \]
 
-**Defense**: Wait for more confirmations. Bitcoin thường đợi 6 confirmations (~1 giờ).
+**Biện pháp phòng vệ**: Chờ thêm nhiều xác nhận (confirmations). Trên mạng Bitcoin, các giao dịch giá trị lớn thường chờ 6 xác nhận (khoảng 1 giờ).
 
-### 6.4. Finality Problem
+### 6.4. Bài toán tính chung cuộc (Finality Problem)
 
-Trong PoW blockchains, không có **absolute finality**. Luôn có khả năng một chain reorganization xảy ra.
+Trong các blockchain sử dụng PoW, không có **tính chung cuộc tuyệt đối (absolute finality)**; về mặt lý thuyết, luôn tồn tại khả năng xảy ra tái tổ chức chuỗi (chain reorganization).
 
-**Types of Finality**:
-- **Probabilistic Finality** (Bitcoin, PoW Ethereum): Finality increases với số confirmations
-- **Absolute Finality** (PoS Ethereum, Tendermint): Blocks are finalized after certain conditions
+**Hai dạng tính chung cuộc**:
+- **Tính chung cuộc theo xác suất (Probabilistic Finality)** (Bitcoin, Ethereum thời kỳ PoW): Mức độ chắc chắn tăng dần theo số lượng xác nhận.
+- **Tính chung cuộc tuyệt đối (Absolute Finality)** (Ethereum PoS, Tendermint): Block được chốt vĩnh viễn sau khi đáp ứng đủ điều kiện đồng thuận.
 
-### 6.5. Energy Consumption
+### 6.5. Tiêu thụ năng lượng
 
-Bitcoin PoW tiêu thụ ~150 TWh/năm (tương đương Argentina).
+Cơ chế PoW của Bitcoin tiêu thụ khoảng 150 TWh điện mỗi năm (tương đương mức tiêu thụ điện của Argentina).
 
-**Environmental concerns**:
-- Carbon footprint
-- E-waste from mining hardware
+**Các lo ngại về môi trường**:
+- Lượng phát thải khí nhà kính (carbon footprint).
+- Rác thải điện tử từ các thiết bị đào chuyên dụng lỗi thời.
 
-**Solutions**:
-- Proof-of-Stake (giảm 99.95% energy)
-- Green mining (renewable energy)
-- Alternative consensus (PoA, DPoS)
+**Các hướng giảm thiểu**:
+- Chuyển sang Proof-of-Stake (giảm khoảng 99,95% năng lượng tiêu thụ).
+- Sử dụng năng lượng tái tạo cho hoạt động đào.
+- Áp dụng các cơ chế đồng thuận thay thế như PoA hoặc DPoS.
 
-### 6.6. Privacy Concerns
+### 6.6. Hạn chế về quyền riêng tư
 
-Blockchain là **pseudonymous**, không phải anonymous:
-- Tất cả transactions đều public
-- Địa chỉ có thể được link với real-world identity
-- Transaction graph analysis
+Blockchain mang tính **giả danh (pseudonymous)** chứ không hoàn toàn ẩn danh (anonymous):
+- Mọi giao dịch đều hiển thị công khai trên sổ cái.
+- Địa chỉ ví có thể bị liên kết ngược với danh tính thực.
+- Dữ liệu giao dịch có thể bị phân tích theo đồ thị dòng tiền (transaction graph analysis).
 
-**Solutions**:
-- **Zero-Knowledge Proofs** (ZK-SNARKs, ZK-STARKs)
-- **Ring Signatures** (Monero)
-- **Mixing Services** (CoinJoin)
+**Các giải pháp cải thiện**:
+- **Bằng chứng không tiết lộ kiến thức (Zero-Knowledge Proofs)**: ZK-SNARKs, ZK-STARKs.
+- **Chữ ký vòng (Ring Signatures)**: Được sử dụng trong Monero.
+- **Dịch vụ trộn giao dịch (Mixing Services)**: Chẳng hạn CoinJoin.
 
 ---
 
 ## 7. Các khái niệm liên quan
 
-### 7.1. Blockchain vs Traditional Database
+### 7.1. So sánh Blockchain và Cơ sở dữ liệu truyền thống
 
-| Feature | Blockchain | Traditional DB |
+| Đặc điểm | Blockchain | Cơ sở dữ liệu truyền thống |
 |---------|-----------|----------------|
-| Control | Decentralized | Centralized |
-| Trust Model | Trustless | Trusted admin |
-| Transparency | Public (or permissioned) | Private |
-| Immutability | High | Low (can edit/delete) |
-| Performance | Low (consensus overhead) | High |
-| Cost | High (redundancy) | Low |
-| ACID Properties | Eventual consistency | Strong consistency |
+| Quyền kiểm soát | Phi tập trung | Tập trung |
+| Mô hình tin cậy | Không cần bên trung gian (Trustless) | Tin cậy quản trị viên |
+| Tính minh bạch | Công khai (hoặc có phân quyền) | Riêng tư |
+| Tính bất biến | Cao | Thấp (có thể sửa/xóa) |
+| Hiệu năng | Thấp (tốn chi phí đồng thuận) | Cao |
+| Chi phí vận hành | Cao (do lưu trữ nhân bản) | Thấp |
+| Tính nhất quán | Nhất quán cuối cùng (Eventual consistency) | Nhất quán mạnh (Strong consistency) |
 
-### 7.2. Public vs Private Blockchains
+### 7.2. Blockchain công khai và Blockchain riêng tư
 
-**Public (Permissionless)**:
-- Anyone can join
-- Full transparency
-- Token incentives
-- Examples: Bitcoin, Ethereum
+**Công khai / Không cần cấp phép (Public / Permissionless)**:
+- Bất kỳ ai cũng có thể tham gia mạng lưới.
+- Minh bạch hoàn toàn.
+- Sử dụng cơ chế khuyến khích bằng token.
+- Ví dụ: Bitcoin, Ethereum.
 
-**Private (Permissioned)**:
-- Restricted access
-- Controlled transparency
-- No token needed
-- Examples: Hyperledger Fabric, R3 Corda
+**Riêng tư / Có cấp phép (Private / Permissioned)**:
+- Hạn chế quyền truy cập và tham gia.
+- Mức độ minh bạch được kiểm soát theo phân quyền.
+- Không nhất thiết cần token nội sinh.
+- Ví dụ: Hyperledger Fabric, R3 Corda.
 
-**Consortium**:
-- Semi-decentralized
-- Multiple organizations control
-- Example: Energy Web Chain
+**Liên minh (Consortium)**:
+- Bán phi tập trung, do nhiều tổ chức cùng đồng quản lý.
+- Ví dụ: Energy Web Chain.
 
-### 7.3. Blockchain vs DAG (Directed Acyclic Graph)
+### 7.3. Blockchain và DAG (Đồ thị có hướng không chu trình)
 
-**DAG-based systems** (IOTA, Nano, Hedera):
-- Không có blocks, mỗi transaction reference trước đó
-- Potentially higher throughput
-- Different security model
+**Các hệ thống dựa trên DAG** (IOTA, Nano, Hedera):
+- Không đóng gói giao dịch thành block; mỗi giao dịch tham chiếu trực tiếp đến các giao dịch trước đó.
+- Có tiềm năng đạt thông lượng cao hơn.
+- Áp dụng mô hình bảo mật khác với blockchain truyền thống.
 
 ```
 Blockchain:      DAG:
@@ -634,99 +623,99 @@ Blockchain:      DAG:
   B0             Tx0
 ```
 
-### 7.4. Layer 1 vs Layer 2
+### 7.4. Layer 1 và Layer 2
 
-**Layer 1**: Base blockchain protocol (Bitcoin, Ethereum)
+**Layer 1**: Giao thức blockchain nền tảng (như Bitcoin, Ethereum).
 
-**Layer 2**: Solutions built on top để improve scalability:
-- **State Channels** (Lightning Network)
-- **Sidechains** (Polygon)
-- **Rollups** (Optimistic, ZK-Rollups)
+**Layer 2**: Các giải pháp xây dựng phía trên Layer 1 để mở rộng khả năng xử lý:
+- **Kênh trạng thái (State Channels)**: Lightning Network.
+- **Chuỗi song song (Sidechains)**: Polygon.
+- **Rollups**: Optimistic Rollups, ZK-Rollups.
 
 ---
 
 ## 8. ⭐ Các bài báo và whitepaper nền tảng
 
-| Paper | Year | Author(s) | Contribution |
+| Bài báo | Năm | Tác giả | Đóng góp chính |
 |-------|------|-----------|--------------|
-| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Giới thiệu blockchain và Proof-of-Work consensus, giải quyết double-spending problem |
-| **"Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform"** | 2014 | Vitalik Buterin | Mở rộng blockchain thành nền tảng lập trình với smart contracts |
-| **"Practical Byzantine Fault Tolerance"** | 1999 | Miguel Castro, Barbara Liskov | Nền tảng cho modern consensus algorithms (PBFT) |
-| **"The Byzantine Generals Problem"** | 1982 | Leslie Lamport, Robert Shostak, Marshall Pease | Định nghĩa Byzantine fault tolerance problem |
-| **"Merkle Tree"** (concept) | 1979 | Ralph Merkle | Cấu trúc dữ liệu hiệu quả cho verification |
-| **"Secure Hash Standard (SHS)"** | 2015 | NIST FIPS 180-4 | SHA-256 specification |
-| **"Majority is not Enough: Bitcoin Mining is Vulnerable"** | 2013 | Ittay Eyal, Emin Gün Sirer | Phân tích selfish mining attack |
-| **"The Bitcoin Lightning Network"** | 2016 | Joseph Poon, Thaddeus Dryja | Layer 2 scaling solution |
-| **"Chainlink: A Decentralized Oracle Network"** | 2017 | Steve Ellis et al. | Kết nối blockchain với real-world data |
+| **"Bitcoin: A Peer-to-Peer Electronic Cash System"** | 2008 | Satoshi Nakamoto | Giới thiệu blockchain và đồng thuận Proof-of-Work, giải quyết bài toán chi tiêu gấp đôi |
+| **"Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform"** | 2014 | Vitalik Buterin | Mở rộng blockchain thành nền tảng lập trình hỗ trợ hợp đồng thông minh |
+| **"Practical Byzantine Fault Tolerance"** | 1999 | Miguel Castro, Barbara Liskov | Đặt nền móng cho các thuật toán đồng thuận chịu lỗi Byzantine thực tế (PBFT) |
+| **"The Byzantine Generals Problem"** | 1982 | Leslie Lamport, Robert Shostak, Marshall Pease | Hình thức hóa bài toán chịu lỗi Byzantine |
+| **"Merkle Tree"** (khái niệm) | 1979 | Ralph Merkle | Đề xuất cấu trúc cây băm giúp xác minh dữ liệu hiệu quả |
+| **"Secure Hash Standard (SHS)"** | 2015 | NIST FIPS 180-4 | Đặc tả chuẩn của thuật toán SHA-256 |
+| **"Majority is not Enough: Bitcoin Mining is Vulnerable"** | 2013 | Ittay Eyal, Emin Gün Sirer | Phân tích tấn công đào ích kỷ (selfish mining) |
+| **"The Bitcoin Lightning Network"** | 2016 | Joseph Poon, Thaddeus Dryja | Đề xuất giải pháp mở rộng Layer 2 cho Bitcoin |
+| **"Chainlink: A Decentralized Oracle Network"** | 2017 | Steve Ellis et al. | Kết nối blockchain với dữ liệu ngoài chuỗi |
 
-**Recommended Reading Order**:
-1. Satoshi's Bitcoin whitepaper (8 pages, accessible)
-2. Ethereum whitepaper (technical but readable)
-3. Byzantine Generals Problem (understand consensus challenges)
-4. PBFT paper (modern consensus mechanisms)
+**Thứ tự đọc gợi ý**:
+1. Whitepaper Bitcoin của Satoshi Nakamoto (8 trang, ngắn gọn và dễ tiếp cận).
+2. Whitepaper Ethereum (chuyên sâu hơn nhưng vẫn dễ theo dõi).
+3. *The Byzantine Generals Problem* (nắm rõ thách thức của bài toán đồng thuận).
+4. Bài báo PBFT (tìm hiểu cơ chế đồng thuận BFT hiện đại).
 
 ---
 
 ## 9. 🎨 Minh họa và tham khảo hình ảnh
 
-| Description | Source | Notes |
+| Mô tả | Nguồn | Ghi chú |
 |-------------|--------|-------|
-| **Blockchain structure diagram** | [Mastering Bitcoin - Chapter 7](https://github.com/bitcoinbook/bitcoinbook) by Andreas Antonopoulos | Open-source educational material, shows block linking |
-| **Hash function visualization** | [Khan Academy - Cryptographic Hash Functions](https://www.khanacademy.org/computing/computer-science/cryptography) | Excellent for understanding one-way property |
-| **Bitcoin transaction flow** | [Bitcoin.org - How Bitcoin Works](https://bitcoin.org/en/how-it-works) | Official Bitcoin documentation |
-| **Merkle tree illustration** | [Ethereum.org - Merkle Proofs](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/) | Shows efficient verification |
-| **Distributed ledger concept** | [IBM Blockchain Docs](https://www.ibm.com/blockchain/what-is-blockchain) | Enterprise perspective on DLT |
-| **Byzantine Generals visualization** | [Martin Kleppmann's Blog](https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html) | Distributed systems concepts |
-| **Blockchain trilemma diagram** | [Vitalik Buterin's Blog](https://vitalik.ca) | Scalability-security-decentralization tradeoff |
+| **Sơ đồ cấu trúc blockchain** | [Mastering Bitcoin - Chapter 7](https://github.com/bitcoinbook/bitcoinbook) của Andreas Antonopoulos | Tài liệu mở, minh họa cách liên kết các block |
+| **Minh họa hàm băm** | [Khan Academy - Cryptographic Hash Functions](https://www.khanacademy.org/computing/computer-science/cryptography) | Dễ hình dung tính chất một chiều của hàm băm |
+| **Luồng giao dịch Bitcoin** | [Bitcoin.org - How Bitcoin Works](https://bitcoin.org/en/how-it-works) | Tài liệu chính thức của Bitcoin |
+| **Minh họa cây Merkle** | [Ethereum.org - Merkle Proofs](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/) | Trình bày cơ chế xác minh hiệu quả |
+| **Khái niệm sổ cái phân tán** | [IBM Blockchain Docs](https://www.ibm.com/blockchain/what-is-blockchain) | Góc nhìn doanh nghiệp về DLT |
+| **Minh họa bài toán các tướng Byzantine** | [Martin Kleppmann's Blog](https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html) | Các khái niệm hệ thống phân tán |
+| **Sơ đồ Blockchain Trilemma** | [Vitalik Buterin's Blog](https://vitalik.ca) | Phân tích đánh đổi mở rộng — bảo mật — phi tập trung |
 
-**Interactive Tools**:
-- [Blockchain Demo](https://andersbrownworth.com/blockchain/) - Interactive visualization by Anders Brownworth
-- [3D Blockchain Visualizer](https://www.blockchain.com/explorer) - Real-time Bitcoin blockchain explorer
-- [Ethereum Virtual Machine Illustrated](https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf) - EVM internals
+**Công cụ tương tác**:
+- [Blockchain Demo](https://andersbrownworth.com/blockchain/) — Minh họa trực quan của Anders Brownworth.
+- [3D Blockchain Visualizer](https://www.blockchain.com/explorer) — Trình khám phá blockchain Bitcoin theo thời gian thực.
+- [Ethereum Virtual Machine Illustrated](https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf) — Minh họa chi tiết cơ chế bên trong EVM.
 
 ---
 
 ## 10. Tóm tắt và điểm chính
 
-**Core Concepts**:
-1. Blockchain là distributed ledger giải quyết double-spending không cần bên thứ ba
-2. Sử dụng cryptographic hash functions để tạo immutability
-3. Consensus mechanisms đảm bảo agreement trong environment không tin cậy
-4. Trade-off giữa decentralization, security, và scalability
+**Khái niệm cốt lõi**:
+1. Blockchain là sổ cái phân tán giải quyết bài toán chi tiêu gấp đôi mà không cần bên trung gian tin cậy.
+2. Các hàm băm mật mã tạo nên tính bất biến và khả năng phát hiện giả mạo cho chuỗi dữ liệu.
+3. Cơ chế đồng thuận giúp các nút đạt được thống nhất trong môi trường không tin cậy lẫn nhau.
+4. Thiết kế blockchain luôn phải cân bằng giữa ba yếu tố: phi tập trung, bảo mật và khả năng mở rộng.
 
-**Technical Foundation**:
-- Hash functions: SHA-256, collision resistance, pre-image resistance
-- Block structure: header, transactions, previous hash
-- Merkle trees: efficient verification
-- Chain linking: tamper-evident structure
+**Nền tảng kỹ thuật**:
+- Hàm băm: SHA-256, kháng va chạm và kháng tiền ảnh.
+- Cấu trúc block: header, danh sách giao dịch và giá trị băm của block liền trước.
+- Cây Merkle: xác minh giao dịch hiệu quả với chi phí \( O(\log n) \).
+- Liên kết chuỗi: cấu trúc phát hiện mọi thay đổi trái phép.
 
-**Applications**:
-- Cryptocurrency (Bitcoin, Ethereum)
-- Smart contracts
-- Supply chain management
-- Digital identity
-- Decentralized finance (DeFi)
+**Ứng dụng tiêu biểu**:
+- Tiền mã hóa (Bitcoin, Ethereum).
+- Hợp đồng thông minh (Smart contracts).
+- Quản lý chuỗi cung ứng.
+- Danh tính số.
+- Tài chính phi tập trung (DeFi).
 
-**Challenges**:
-- Scalability limitations
-- Energy consumption (PoW)
-- Privacy concerns
-- Finality vs speed tradeoffs
-- Storage requirements
+**Thách thức chính**:
+- Giới hạn về khả năng mở rộng.
+- Mức tiêu thụ năng lượng (với cơ chế PoW).
+- Hạn chế về quyền riêng tư.
+- Đánh đổi giữa tính chung cuộc và tốc độ xác nhận.
+- Yêu cầu lưu trữ ngày càng tăng.
 
 ---
 
-✅ **End of Lecture 00.00**
+✅ **Kết thúc Lecture 00.00**
 
-**Next**: Lecture 00.01 - Distributed Systems and Consensus Theory
+**Bài tiếp theo**: Lecture 00.01 - Hệ thống phân tán và Lý thuyết đồng thuận
 
 ---
 
 ## Video tham khảo
 
-- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Đi từ sổ cái chung và chữ ký số tới câu đố proof-of-work; trực giác cho phần tổng quan và chuỗi hash của bài.
-- [How does a blockchain work - Simply Explained](https://www.youtube.com/watch?v=SSo_EIwHSd4) — Simply Explained, tiếng Anh. Xem cách một block được nối với block trước bằng hash, đúng mô hình notebook công khai ở phần hiểu biết trực quan.
-- [Introduction to Bitcoin: what is bitcoin and why does it matter?](https://www.youtube.com/watch?v=l1si5ZWLgy0) — aantonop, tiếng Anh. Antonopoulos đặt Bitcoin vào bài toán truyền giá trị không cần trung gian, bối cảnh lịch sử mà mục 1 của bài mở ra.
+- **Xem trước:** [But how does bitcoin actually work?](https://www.youtube.com/watch?v=bBC-nXj3Ng4) — 3Blue1Brown, tiếng Anh. Đi từ sổ cái chung và chữ ký số tới bài toán Proof-of-Work; giúp xây dựng trực giác cho phần tổng quan và chuỗi băm của bài.
+- [How does a blockchain work - Simply Explained](https://www.youtube.com/watch?v=SSo_EIwHSd4) — Simply Explained, tiếng Anh. Minh họa cách một block được nối với block trước bằng hàm băm, tương ứng với mô hình sổ cái công khai ở phần hiểu biết trực quan.
+- [Introduction to Bitcoin: what is bitcoin and why does it matter?](https://www.youtube.com/watch?v=l1si5ZWLgy0) — aantonop, tiếng Anh. Antonopoulos đặt Bitcoin trong bài toán truyền giá trị không cần trung gian, phù hợp với bối cảnh lịch sử ở mục 1.
 
 ## References
 
@@ -735,4 +724,3 @@ Blockchain:      DAG:
 3. Antonopoulos, A. M. (2017). *Mastering Bitcoin: Programming the Open Blockchain*. O'Reilly Media.
 4. Narayanan, A., Bonneau, J., Felten, E., Miller, A., & Goldfeder, S. (2016). *Bitcoin and Cryptocurrency Technologies*. Princeton University Press.
 5. Castro, M., & Liskov, B. (1999). Practical byzantine fault tolerance. OSDI, 99, 173-186.
-
