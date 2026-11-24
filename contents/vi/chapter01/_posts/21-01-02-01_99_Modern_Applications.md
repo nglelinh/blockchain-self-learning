@@ -14,6 +14,36 @@ lesson_type: optional
 
 > Bài này là **tùy chọn**, **không** viết lại các kiến thức về UTXO, Script, điều chỉnh độ khó hay lý thuyết trò chơi của phí giao dịch. Nội dung dưới đây chỉ ra những hệ thống *đã triển khai hoặc đang đặc tả* dựa trên chính kiến trúc Bitcoin mà Chapter 01 đã trình bày.
 
+Nhiều người từng nghĩ Bitcoin là một "hóa thạch số" đóng băng từ năm 2009 và không thể tiến hóa thêm. Thực tế giai đoạn **2022–2026** chứng minh điều ngược lại: ngay cả khi tầng đồng thuận cốt lõi (PoW, UTXO, quy tắc 21 triệu BTC) gần như giữ nguyên bất biến để bảo vệ độ tin cậy, bốn lớp bao quanh nó đã trải qua bước nhảy vọt đáng kinh ngạc — từ **BIP-324** mã hóa toàn bộ đường truyền P2P chống nghe lén, **BitVM / BitVM2** đưa khả năng kiểm chứng tính toán tổng quát lên Script mà không cần sửa giao thức, **Ordinals / Inscriptions** khai thác phần witness thành không gian xuất bản dữ liệu, cho đến **assumeUTXO** rút ngắn thời gian khởi chạy nút đầy đủ từ nhiều ngày xuống vài phút.
+
+---
+
+## Bản đồ kiến thức nền: Bốn bước tiến Bitcoin 2022–2026 dựa trên những nguyên lý kỹ thuật nào?
+
+### 1. Mật mã đường truyền (BIP-324) và Bảo vệ tầng mạng P2P
+Trước đây, mọi nút Bitcoin nói chuyện với nhau bằng văn bản thuần (plaintext), cho phép nhà mạng (ISP) dễ dàng nghe lén hoặc chặn lọc giao dịch. **BIP-324** bổ sung trao đổi khóa ElligatorSwift (trên đường cong `secp256k1`) và mã hóa đối xứng ChaCha20-Poly1305 để ngụy trang lưu lượng Bitcoin như luồng byte ngẫu nhiên thuần túy.
+
+### 2. Xác minh lạc quan bằng tìm kiếm nhị phân (BitVM / BitVM2)
+Bitcoin Script cố tình không đầy đủ Turing, nhưng vẫn biểu diễn được **cổng logic NAND** (mà mọi mạch số trên đời đều dựng được từ cổng NAND!). **BitVM** kết hợp cây cam kết Taproot (MAST) với **trò chơi tranh chấp chia đôi (bisection game)**: hai bên chạy chương trình khổng lồ ngoài chuỗi, và chỉ khi có tranh chấp mới đưa đúng **1 bước sai duy nhất** lên chuỗi L1 để trọng tài phân xử — mở đường cho cầu nối (bridge) và Rollup tối thiểu hóa niềm tin trên Bitcoin.
+
+### 3. Kinh tế học trọng số SegWit (Inscriptions) và Đồng bộ trạng thái (`assumeUTXO`)
+Quy tắc **SegWit** gán trọng số 1 đơn vị cho mỗi byte dữ liệu `witness` (rẻ gấp 4 lần byte dữ liệu thường), vô tình tạo ra thị trường ghi dữ liệu bất biến (Inscriptions) cạnh tranh trực tiếp vào phí khối. Trong khi đó, **assumeUTXO** cho phép nút mới tải trước ảnh chụp nhanh (snapshot) tập UTXO tại một khối tin cậy rồi xác minh song song toàn bộ lịch sử từ Genesis ở chế độ nền.
+
+---
+
+### Khung giải thích: tự tay tính chiết khấu SegWit cho Inscriptions và số vòng tranh chấp BitVM (nên đọc chậm)
+
+1. **Chi phí không gian khối của một Inscription 100 KB nhờ chiết khấu SegWit:**
+   - Một khối Bitcoin có giới hạn cứng là $$4\,000\,000\text{ WU}$$ (weight units), tương đương $$1\,000\,000\text{ vByte}$$ (vì $$1\text{ vByte} = 4\text{ WU}$$).
+   - Mỗi byte dữ liệu giao dịch thường (non-witness) tốn **4 WU**, còn mỗi byte đặt trong vùng `witness` (như kịch bản Taproot của Inscription) chỉ tốn **1 WU** (chiết khấu 75%).
+   - Do đó, một ảnh 100 KB ($$100\,000\text{ byte}$$) nhúng trong `witness` chỉ chiếm $$\frac{100\,000}{4} = \mathbf{25\,000\text{ vByte}}$$ — tức chỉ khoảng $$2.5\%$$ dung lượng một khối, giúp chi phí lưu trữ dữ liệu giảm đúng 4 lần so với nhét vào phần giao dịch thường!
+2. **Sức mạnh logarit của trò chơi chia đôi trong BitVM:**
+   - Giả sử một phép kiểm chứng bằng chứng không tiết lộ (ZK proof) ngoài chuỗi cần tới $$N = 2^{30} \approx 1.07\text{ tỷ}$$ cổng logic NAND. Chạy trực tiếp 1 tỷ cổng trên Bitcoin L1 là bất khả thi.
+   - Nhờ trò chơi **chia đôi (binary search)** giữa người chứng minh (Prover) và người thách thức (Challenger): mỗi vòng, Prover cam kết trạng thái ở đúng điểm giữa đoạn tranh chấp; Challenger chỉ ra nửa trái hay nửa phải chứa sai lệch.
+   - Sau đúng **$$\log_2(2^{30}) = 30\text{ vòng}$$** tương tác, hai bên khoanh chính xác vào **đúng 1 cổng NAND duy nhất** có đầu vào khớp nhưng đầu ra sai — và Bitcoin L1 chỉ cần chạy một đoạn Script tí hon để kiểm tra đúng 1 cổng đó rồi tịch thu tiền đặt cọc của kẻ gian!
+
+---
+
 ## 1. Vì sao kiến trúc 2008–2017 vẫn là nền tảng — và những lớp nào đã chuyển dịch
 
 Bitcoin Core vẫn vận hành trên nền PoW, mô hình UTXO và ngôn ngữ Script. Tuy nhiên, trong giai đoạn 2022–2026, bốn lớp *xung quanh* tầng đồng thuận đã phát triển nhanh: (1) **tầng truyền tải P2P** được mã hóa (BIP-324), (2) **tính toán lạc quan trên Script/Taproot** (BitVM / BitVM2) mà không cần soft-fork thêm opcode mới, (3) **lưu dữ liệu trong phần witness** (inscriptions / Ordinals) biến không gian khối thành lớp xuất bản dữ liệu, và (4) **tối ưu hóa đồng bộ nút** (assumeUTXO) giúp giảm rào cản tải khối ban đầu (IBD).

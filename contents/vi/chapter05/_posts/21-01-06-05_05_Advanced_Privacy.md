@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.05: Kỹ thuật bảo vệ quyền riêng tư nâng cao — Giao dịch bảo mật và hơn thế nữa
 
+Hãy thử tưởng tượng một bài toán tưởng như mâu thuẫn tuyệt đối trong kế toán: bạn muốn chuyển tiền trên một sổ cái công khai mà **giấu kín hoàn toàn số tiền giao dịch** (không ai biết bạn gửi 1 USD hay 1 triệu USD), vậy mà mọi nút mạng trên thế giới vẫn có thể kiểm tra chắc chắn 100% rằng *"tổng tiền đầu vào bằng đúng tổng tiền đầu ra"* và bạn không hề gian lận in thêm tiền!
+
+Kỳ tích mật mã đó chính là **Giao dịch Bảo mật (Confidential Transactions)** kết hợp với **Chữ ký vòng (RingCT)** và **Địa chỉ tàng hình (Stealth Addresses)** — bộ ba công nghệ tạo nên lớp riêng tư mặc định của Monero, Mimblewimble và các giao thức bảo mật hiện đại.
+
+---
+
+## Bản đồ kiến thức nền: Kỹ thuật Bảo vệ Quyền riêng tư Nâng cao dựa trên bốn trụ cột nào?
+
+1. **Cam kết Pedersen đồng cấu cộng ($$C(v, r) = vG + rH$$):** Niêm phong số tiền $$v$$ bằng yếu tố làm mù ngẫu nhiên $$r$$ sao cho không ai đọc được $$v$$, nhưng cộng hai cam kết lại vẫn ra cam kết của tổng hai số tiền!
+2. **Bằng chứng khoảng (Range Proofs — Bulletproofs):** Chứng minh ngắn gọn (kích thước chỉ tăng theo $$\log_2(\text{số bit})$$) rằng số tiền bị che giấu thực sự nằm trong khoảng $$[0,\, 2^{64}-1]$$, chặn đứng trò gian lận dùng số âm để in tiền.
+3. **Chữ ký vòng & Ảnh khóa (Ring Signatures & Key Images):** Ký thay mặt một nhóm $$k$$ khóa công khai để giấu người gửi thật, đồng thời gắn một thẻ *Key Image* duy nhất giúp mạng phát hiện ngay nếu ai đó cố chi tiêu kép cùng một đồng tiền.
+4. **Địa chỉ tàng hình (Stealth Addresses):** Dùng trao đổi khóa Diffie–Hellman để tự động sinh một địa chỉ dùng 1 lần duy nhất cho người nhận ở mỗi giao dịch, khiến không ai gom được các khoản thu nhập của cùng một người.
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Các kỹ thuật bảo vệ quyền riêng tư nâng cao vượt xa cơ chế trộn giao dịch cơ bản và tính ẩn danh giả, triển khai các giao thức mật mã cho phép ẩn hoàn toàn số tiền, loại tài sản và danh tính các bên tham gia, trong khi vẫn giữ nguyên khả năng kiểm chứng các thuộc tính cốt lõi của blockchain như chống chi tiêu lặp và kiểm toán tổng cung. Những kỹ thuật này cũng hướng tới việc cân bằng giữa quyền riêng tư cá nhân và yêu cầu tuân thủ pháp lý thông qua cơ chế tiết lộ có chọn lọc (selective disclosure).
@@ -72,6 +87,31 @@ Phương trình này chứng minh tổng đầu vào bằng tổng đầu ra (kh
 Đối với khoảng 64-bit, kích thước bằng chứng chỉ vào khoảng 600 byte.
 
 ---
+
+### Khung giải thích: tự tay kiểm tra Cam kết Pedersen xác minh $$10 = 7 + 3$$ mà không lộ số tiền (nên đọc chậm)
+
+Trong nhóm điểm đường cong elliptic (ký hiệu cộng), chọn hai điểm sinh công khai $$G, H$$ sao cho không ai biết logarit rời rạc giữa chúng. Cam kết Pedersen của số tiền $$v$$ với số che bí mật $$r$$ là:
+
+$$
+C(v, r) = vG + rH.
+$$
+
+Giả sử Alice đang nắm một đầu vào **10 đồng** (đã được niêm phong trên chuỗi bởi $$C_{\text{in}} = 10G + 5H$$, với số che $$r_{\text{in}} = 5$$). Alice muốn trả Bob **7 đồng** và tự nhận lại **3 đồng** tiền thối:
+
+1. **Bước 1 — Niêm phong hai đầu ra:**
+   - Cho Bob ($$v_1 = 7$$): Alice chọn ngẫu nhiên $$r_1 = 2$$ và tính $$C_1 = 7G + 2H$$.
+   - Tiền thối ($$v_2 = 3$$): Alice chọn đúng $$r_2 = r_{\text{in}} - r_1 = 5 - 2 = 3$$ và tính $$C_2 = 3G + 3H$$.
+   - Alice chỉ đăng 3 điểm đường cong $$(C_{\text{in}}, C_1, C_2)$$ lên blockchain — **không hề công bố các con số $$10, 7, 3$$!**
+
+2. **Bước 2 — Nút mạng kiểm tra cân bằng kế toán mà không biết số tiền:**
+   Nút mạng chỉ việc cộng hai điểm đường cong đầu ra và so với đầu vào:
+   $$
+   C_1 + C_2 = (7G + 2H) + (3G + 3H) = (7 + 3)G + (2 + 3)H = 10G + 5H = C_{\text{in}}!
+   $$
+   **Khớp tuyệt đối!** Mọi nút mạng chắc chắn $$v_1 + v_2 = v_{\text{in}}$$ mà không biết một đồng nào!
+
+3. **Tại sao bắt buộc phải kèm Range Proof (Bulletproofs)?**
+   Vì trên trường hữu hạn modulo $$q$$, số $$-90 \equiv q - 90$$ hoàn toàn hợp lệ! Nếu không có bằng chứng khoảng, Alice có thể đặt $$v_1 = 100$$ và $$v_2 = -90$$ (vẫn thỏa $$100 + (-90) = 10 \Rightarrow C_1 + C_2 = C_{\text{in}}$$) để in ra 90 đồng từ hư không! Bằng chứng khoảng Bulletproofs khóa chặt $$0 \le v_1, v_2 < 2^{64}$$, bịt kín hoàn toàn kẽ hở này.
 
 ## 4. Góc nhìn triển khai
 

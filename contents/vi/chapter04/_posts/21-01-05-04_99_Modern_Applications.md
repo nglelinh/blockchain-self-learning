@@ -14,6 +14,20 @@ lesson_type: optional
 
 > Bài học này là phần **tùy chọn**, **không** trình bày lại bộ ba bất khả thi, kênh trạng thái hay định nghĩa Optimistic và ZK-Rollup. Nội dung chỉ tổng hợp các hệ thống đã triển khai trên mainnet và các đề xuất cải tiến về khả dụng dữ liệu (DA) đã được kích hoạt.
 
+Nếu bạn đọc tài liệu Ethereum năm 2019, mọi người đều tin rằng "Execution Sharding" (chia chuỗi chính thành 64 chuỗi nhỏ chạy song song) là tương lai duy nhất. Thế nhưng chỉ trong giai đoạn **2022–2026**, toàn bộ ngành blockchain đã thực hiện một cú bẻ lái lịch sử sang **lộ trình lấy Rollup làm trung tâm (Rollup-Centric Roadmap)**: giữ nguyên một lớp thanh toán L1 tinh gọn, đẩy việc thực thi lên các mạng L2 (Optimistic & ZK Rollup), rồi tung ra nâng cấp **EIP-4844 (Blobs)** giúp phí giao dịch L2 lập tức giảm từ 10 đến 100 lần!
+
+Bài cập nhật hiện đại này nối trực tiếp kiến thức mở rộng quy mô ở Chương 4 với hạ tầng thực tế đang vận hành hàng tỷ đô la hôm nay: Blob, KZG commitment, Fault Proofs không cần cấp phép và hệ sinh thái Rollup mô-đun.
+
+---
+
+## Bản đồ kiến thức nền: Lộ trình mở rộng 2022–2026 đứng trên ba trụ cột nào?
+
+1. **Dữ liệu Blob & Cam kết đa thức KZG (EIP-4844 / Proto-Danksharding):** Tách dữ liệu tạm của Rollup khỏi calldata vĩnh viễn của EVM thành các gói **Blob 128 KB** tự xóa sau ~18 ngày, kèm cam kết mật mã KZG giúp L1 xác minh mà không cần lưu mãi mãi.
+2. **Bằng chứng lỗi tương tác (Permissionless Fault Proofs / Bisection Game):** Cơ chế cho phép bất kỳ ai thách thức một gốc trạng thái sai của Optimistic Rollup và phân xử công bằng trên L1 chỉ trong vài chục bước.
+3. **Kiến trúc Mô-đun (Modular Blockchain):** Tách rời bốn chức năng vốn bị bó cứng trong một chuỗi đơn khối: *Thực thi (Execution)*, *Thanh toán (Settlement)*, *Đồng thuận (Consensus)* và *Khả dụng dữ liệu (DA)*.
+
+---
+
 ## 1. Lộ trình lấy Rollup làm trung tâm đi vào thực tế
 
 Các bài 04.00–04.02 đã nêu bài toán giới hạn 7–30 TPS cùng nguyên lý của rollup và sharding. Trong thực tế, Ethereum theo đuổi **lộ trình lấy rollup làm trung tâm (rollup-centric roadmap)**: L1 cung cấp khả dụng dữ liệu (data availability — DA) và tầng quyết toán (settlement), còn L2 đảm nhiệm tầng thực thi (execution). Ba cột mốc chính gồm:
@@ -52,6 +66,22 @@ Giai đoạn 2023–2025, nhiều nhóm phát triển đã đạt mức tương 
 [PeerDAS](https://ethereum.org/roadmap/fusaka/peerdas/) chia dữ liệu blob thành 128 cột kèm mã xóa (erasure coding); mỗi nút chỉ cần lưu giữ khoảng 1/8 dữ liệu (theo dõi 8 subnet ngẫu nhiên). Việc xác minh tính khả dụng dữ liệu được thực hiện qua lấy mẫu ngẫu nhiên — đúng tinh thần bài 04.02 mà không cần chờ phân mảnh tầng thực thi. Ngoài ra, [EIP-7892](https://eips.ethereum.org/EIPS/eip-7892) (các đợt nâng cấp BPO — Blob Parameter Only) cho phép tăng số lượng blob theo lịch trình mà không cần đợt hard fork quy mô lớn.
 
 Các hướng phát triển giai đoạn 2025–2026 như based rollup (giao quyền sắp xếp giao dịch cho proposer trên L1) và native rollup (tích hợp precompile xác thực thực thi) nhằm giảm mức độ tin cậy đặt vào sequencer, đồng thời gắn kết chặt hơn với cơ chế PBS ở Chương 02.
+
+### Khung giải thích: tự tay kiểm tra Trò chơi Chia đôi (Bisection Game) của Fault Proof (nên đọc chậm)
+
+Một câu hỏi rất tự nhiên về Optimistic Rollup: *nếu một lô giao dịch L2 có tới $$N = 1{,}048{,}576 = 2^{20}$$ bước lệnh máy ảo, làm sao hợp đồng thông minh trên L1 có thể phân xử ai đúng ai sai mà không phải chạy lại toàn bộ 1 triệu bước đó (vốn vượt xa giới hạn gas của L1)?*
+
+Câu trả lời là **tìm kiếm nhị phân tương tác (Bisection Game)** giữa Người đề xuất (Proposer) và Người thách thức (Challenger):
+
+1. **Vòng 0:** Cả hai đồng ý trạng thái đầu $$S_0$$, nhưng bất đồng ở trạng thái cuối $$S_{2^{20}}$$.
+2. **Vòng 1 (chia đôi ở giữa):** Người đề xuất công bố hàm băm trạng thái tại chính giữa $$S_{2^{19}}$$ (bước thứ $$524{,}288$$).
+   - Nếu Người thách thức thấy $$S_{2^{19}}$$ *sai* → lỗi chắc chắn nằm ở **nửa đầu** $$[0,\, 2^{19}]$$.
+   - Nếu thấy $$S_{2^{19}}$$ *đúng* → lỗi chắc chắn nằm ở **nửa sau** $$[2^{19},\, 2^{20}]$$.
+3. **Lặp lại chia đôi:** Sau $$k$$ vòng, độ dài đoạn tranh chấp chỉ còn $$\frac{2^{20}}{2^k}$$.
+   - Sau đúng **$$k = \log_2(2^{20}) = 20$$ vòng tương tác**, đoạn tranh chấp co về đúng **1 bước lệnh đơn lẻ** $$[i,\, i+1]$$!
+4. **Phán quyết trên L1:** Hợp đồng thông minh trên L1 chỉ cần chạy **đúng 1 lệnh máy ảo duy nhất** đó (tốn vài chục nghìn gas) để xem trạng thái $$S_i \to S_{i+1}$$ khớp hay không, rồi tịch thu tiền cược (slash) của bên gian lận!
+
+Còn với **EIP-4844**, 1 Blob chứa $$4{,}096$$ phần tử trường $$\times 32\text{ byte} = 131{,}072\text{ byte}$$ (128 KB) có thị trường phí riêng độc lập với gas thực thi EVM — đó là lý do phí L2 giảm hàng chục lần dù L1 vẫn đang tắc nghẽn.
 
 ## 3. Góc nhìn triển khai
 

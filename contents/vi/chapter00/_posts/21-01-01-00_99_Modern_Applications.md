@@ -14,6 +14,42 @@ lesson_type: optional
 
 > Bài này là **tùy chọn**, **không** thay thế các bài 00.00–00.03 về sổ cái phân tán, hàm băm, cây Merkle hay ECDSA. Nội dung dưới đây chỉ ra cách những thành phần nền tảng đó được triển khai trong các hệ thống thực tế giai đoạn 2022–2026.
 
+Nếu bạn đọc sách giáo khoa blockchain viết năm 2017, mọi thứ dừng lại ở ba khối gạch quen thuộc: cây Merkle nhị phân, chữ ký ECDSA từng giao dịch một, và tài khoản chỉ có một khóa bí mật duy nhất. Nhưng chỉ vài năm sau, khi hàng chục triệu người dùng và hàng trăm nghìn trình xác thực (validator) cùng đổ lên Ethereum, chính ba khối gạch ấy gặp giới hạn về kích thước bằng chứng và băng thông. Giai đoạn **2022–2026** chứng kiến cuộc "đại tu" ngoạn mục ngay trên tầng nền tảng: **cây Verkle (KZG)** thu gọn bằng chứng trạng thái xuống vài trăm byte, **EIP-4844 (blobs)** mở làn cao tốc riêng cho dữ liệu rollup, **BLS12-381** gộp hàng chục nghìn chữ ký thành một điểm duy nhất, và **EIP-7702** biến ví thường thành tài khoản thông minh linh hoạt.
+
+---
+
+## Bản đồ kiến thức nền: Ba nâng cấp mật mã – cấu trúc dữ liệu 2022–2026 dựa trên toán học nào?
+
+Để không bị ngợp trước rừng mã hiệu EIP, hãy gắn ba nâng cấp lớn này vào đúng ba nhánh toán học đại học quen thuộc:
+
+### 1. Cam kết đa thức (KZG) và Cây Verkle
+Thay vì băm từng cặp nút con như cây Merkle (độ rộng nhánh 2 hoặc 16, bằng chứng dài hàng kilobyte), **cam kết KZG (Kate–Zaverucha–Goldberg)** coi cả một vector $$256$$ giá trị con như các điểm nội suy của một **đa thức bậc $$< 256$$** trên trường hữu hạn, rồi nén toàn bộ đa thức ấy thành **đúng một điểm 48 byte** trên đường cong elliptic! Nhờ tính chất chia đa thức $$(P(X) - P(z)) / (X - z)$$, bằng chứng cho biết giá trị tại một chỉ số $$z$$ có kích thước hằng số $$O(1)$$ bất kể số nhánh rộng bao nhiêu — mở đường cho **nút không trạng thái (stateless clients)**.
+
+### 2. Chữ ký gộp trên Đường cong ghép cặp (BLS12-381)
+Trong ECDSA thông thường, ta không thể cộng hai chữ ký của hai người khác nhau thành một chữ ký ngắn gọn. **Mật mã ghép cặp song tuyến tính (bilinear pairing)** trang bị thêm một ánh xạ $$e: \mathbb{G}_1 \times \mathbb{G}_2 \to \mathbb{G}_T$$ thỏa $$e(aP, bQ) = e(P, Q)^{ab}$$. Nhờ tính tuyến tính này, $$N$$ chữ ký $$S_i = sk_i \cdot H(m)$$ trên cùng một thông điệp cộng thẳng lại thành $$S_{\text{agg}} = \sum_{i=1}^N S_i$$ — chỉ tốn **48 byte** cho cả chục nghìn validator!
+
+### 3. Tính sẵn có dữ liệu tạm thời (Blobs) và Trừu tượng hóa tài khoản (EIP-7702)
+Thay vì ép mọi nút lưu vĩnh viễn dữ liệu giao dịch Layer 2 trong lịch sử calldata, **EIP-4844** gắn các gói **blob** (~128 KB/blob) chỉ lưu khoảng 18 ngày và cam kết bằng KZG — đủ thời gian cho cửa sổ khiếu nại gian lận của rollup. Song song đó, **EIP-7702** tách rời khái niệm "người ký" khỏi "logic ví", cho phép tài khoản EOA tạm thời ủy quyền cho mã hợp đồng thông minh để gộp giao dịch hoặc trả phí gas hộ người dùng.
+
+---
+
+### Khung giải thích: tự tay so sánh chi phí băng thông của BLS và Verkle bằng con số thực tế (nên đọc chậm)
+
+Hãy tính nhanh hai phép nhân để thấy vì sao Ethereum *bắt buộc* phải nâng cấp từ công cụ đời 2015 sang bộ công cụ 2022–2026:
+
+1. **Nén chữ ký validator bằng BLS12-381:** Trên Beacon Chain, mỗi slot 12 giây có khoảng $$N = 30\,000$$ validator cùng ký chứng thực (attestation) cho một khối.
+   - *Nếu dùng ECDSA truyền thống* (mỗi chữ ký 65 byte): chỉ riêng chữ ký đã ngốn $$30\,000 \times 65 = 1\,950\,000\text{ byte} \approx \mathbf{1.95\text{ MB}}$$ mỗi 12 giây!
+   - *Khi dùng chữ ký gộp BLS:* cộng tất cả chữ ký $$S = \sum_{i=1}^{30\,000} sk_i H(m)$$ thành **đúng 1 điểm 48 byte** (cộng thêm một bitfield $$30\,000 / 8 = 3\,750\text{ byte}$$ ghi nhận ai đã ký), và kiểm tra toàn bộ bằng **1 phép ghép cặp duy nhất**:
+     $$
+     e(S,\ G) \stackrel{?}{=} e\!\Bigl(H(m),\ \sum_{i=1}^{30\,000} PK_i\Bigr).
+     $$
+     Kích thước chữ ký giảm từ $$1.95\text{ MB}$$ xuống $$48\text{ byte}$$ — **nhẹ hơn hơn 40.000 lần**!
+2. **Thu gọn bằng chứng trạng thái từ Merkle Patricia sang Verkle:** Với $$N \approx 2^{28} \approx 268\text{ triệu}$$ tài khoản:
+   - *Cây Merkle Patricia (16 nhánh):* chiều sâu $$\log_{16}(2^{28}) = 7$$ tầng; mỗi tầng phải gửi kèm tối đa $$15$$ mã băm anh em ($$15 \times 32 = 480\text{ byte}$$), khiến một bằng chứng trạng thái phình lên cỡ **$$3\text{–}4\text{ KB}$$** — quá nặng để nhét vào mỗi khối.
+   - *Cây Verkle (256 nhánh dùng KZG):* chiều sâu rút xuống chỉ còn $$\log_{256}(2^{28}) = 3.5 \approx 4$$ tầng, và nhờ đa thức KZG không cần gửi 255 nút anh em mà gộp tất cả các mở đa thức thành một bằng chứng duy nhất chỉ cỡ **$$150\text{–}200\text{ byte}$$**!
+
+---
+
 ## 1. Vì sao chương nền tảng vẫn cần thiết — và điều gì đã thay đổi
 
 Ba trụ cột của Chapter 00 — đồng thuận phân tán, hàm băm/cây Merkle và chữ ký số — không hề bị thay thế; điều thay đổi là *hình thức triển khai thực tế* của chúng. Một block Ethereum sau nâng cấp Dencun không chỉ gồm phần đầu khối, danh sách giao dịch và Merkle root, mà còn mang theo **blob** (EIP-4844) để các nút cam kết và lưu trữ tạm thời. Một tài khoản cũng không còn chỉ là cặp khóa ECDSA trên `secp256k1`: EIP-7702 cho phép tài khoản sở hữu bên ngoài (EOA) *ủy quyền tạm thời* cho mã hợp đồng thông minh. Tương tự, chứng thực của trình xác thực (validator) không còn là từng chữ ký ECDSA riêng lẻ mà chuyển sang dùng **BLS12-381** trên beacon chain để gộp hàng nghìn chứng thực thành một chữ ký gọn nhẹ.

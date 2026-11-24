@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 07.02: Hạ tầng Web3 — Kiến trúc Internet phi tập trung
 
+Một ứng dụng DeFi có thể chạy hợp đồng thông minh hoàn toàn phi tập trung trên hàng nghìn nút Ethereum — nhưng nếu giao diện web của nó đặt trên một máy chủ AWS duy nhất, mọi truy vấn đọc dữ liệu đi qua đúng một khóa API tập trung, và tên miền `.com` có thể bị thu hồi bởi một cơ quan quản lý, thì ứng dụng đó vẫn có thể "tắt đèn" chỉ sau một nút bấm!
+
+Đó là lý do Web3 không thể chỉ có mỗi blockchain: để xây dựng một **Internet phi tập trung thực thụ**, ta cần cả một chồng hạ tầng đầy đủ từ lưu trữ tệp, định danh tên miền, lập chỉ mục dữ liệu cho đến mạng lưới nút truy vấn RPC và hạ tầng vật lý (DePIN).
+
+---
+
+## Bản đồ kiến thức nền: Chồng Hạ tầng Web3 Phi tập trung gồm bốn tầng cốt lõi nào?
+
+1. **Lưu trữ phi tập trung & Định địa chỉ theo nội dung (IPFS, Filecoin, Arweave):** Thay địa chỉ theo *vị trí máy chủ* (`https://server.com/file`) bằng địa chỉ theo *mã băm nội dung* (CID), kết hợp bằng chứng lưu trữ (Proof-of-Spacetime / Proof-of-Access) để thưởng cho các nút giữ dữ liệu lâu dài.
+2. **Định danh & Tên miền phi tập trung (ENS, DID):** Ánh xạ tên dễ đọc như `alice.eth` thành địa chỉ ví và bản ghi nội dung IPFS, do chính khóa riêng của người dùng kiểm soát thay vì tổ chức DNS tập trung.
+3. **Lập chỉ mục & Truy vấn (Indexing — The Graph):** Vì đọc lịch sử sự kiện trực tiếp từ blockchain rất chậm, các mạng Subgraph lập chỉ mục dữ liệu sự kiện thành API GraphQL có cơ chế thưởng–phạt bằng token.
+4. **Truy cập mạng & Hạ tầng vật lý (Decentralized RPC & DePIN):** Thay thế cổng RPC đơn điểm lỗi bằng mạng lưới nhà cung cấp nút phân tán và mở rộng cơ chế khuyến khích token ra hạ tầng vật lý (băng thông, GPU, cảm biến).
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Web3** hướng tới việc thiết kế lại kiến trúc internet theo mô hình phi tập trung, chuyển dịch từ các nền tảng tập trung kiểm soát dữ liệu và tương tác người dùng sang các mạng lưới nơi người dùng trực tiếp sở hữu dữ liệu, danh tính và tài sản số của mình. Quá trình này đòi hỏi xây dựng lại toàn bộ ngăn xếp hạ tầng — từ lưu trữ dữ liệu, hệ thống tên miền đến danh tính và vận hành ứng dụng — dựa trên các giao thức chống kiểm duyệt và không có điểm lỗi duy nhất.
@@ -210,6 +225,26 @@ Với mạng 1 triệu nút:
 Đối với bằng chứng lưu trữ trên Filecoin, cả kích thước bằng chứng lẫn thời gian xác minh đều có độ phức tạp \(O(\log n)\) theo dung lượng dữ liệu \(n\), cho phép xác minh dữ liệu cỡ 1 TB bằng bằng chứng khoảng 100 KB trong vài mili-giây.
 
 ---
+
+### Khung giải thích: tự tay kiểm tra định tuyến Kademlia DHT (khoảng cách XOR) của IPFS (nên đọc chậm)
+
+Không có máy chủ Google hay danh bạ trung tâm, làm sao một nút IPFS trong mạng gồm **1 triệu máy tính** có thể tìm ra đúng máy nào đang giữ tệp có mã băm $$K$$ chỉ trong chưa đầy 1 giây? Câu trả lời là thuật toán bảng băm phân tán **Kademlia DHT** dùng **khoảng cách XOR từng bit**:
+
+$$
+d(A, B) = A \oplus B.
+$$
+
+Hãy thử định tuyến bằng tay trên không gian địa chỉ 4-bit siêu nhỏ:
+- Nút hiện tại của bạn: $$A = \texttt{1010}_2\;(10)$$.
+- Tệp cần tìm có mã băm: $$K = \texttt{1101}_2\;(13)$$.
+- Trong bảng định tuyến, bạn biết hai nút hàng xóm: $$B = \texttt{1100}_2\;(12)$$ và $$C = \texttt{0101}_2\;(5)$$.
+
+**Tính khoảng cách XOR tới đích $$K = \texttt{1101}_2$$ (so từng bit: giống = 0, khác = 1):**
+- Từ bạn ($$A$$): $$d(A, K) = \texttt{1010} \oplus \texttt{1101} = \texttt{0111}_2 = \mathbf{7}$$.
+- Từ hàng xóm $$B$$: $$d(B, K) = \texttt{1100} \oplus \texttt{1101} = \texttt{0001}_2 = \mathbf{1}$$ (trùng khớp 3 bit đầu tiên!).
+- Từ hàng xóm $$C$$: $$d(C, K) = \texttt{0101} \oplus \texttt{1101} = \texttt{1000}_2 = \mathbf{8}$$ (xa hơn cả chính bạn!).
+
+Nút $$A$$ lập tức hỏi nút $$B$$! Vì mỗi bước nhảy khử đi ít nhất 1 bit khác biệt từ trái sang phải, khoảng cách giảm đi ít nhất một nửa sau mỗi bước — nên trong mạng **1.000.000 nút**, bạn luôn tìm thấy đúng máy chủ giữ tệp chỉ sau tối đa $$\log_2(1{,}000{,}000) \approx \mathbf{20\text{ bước nhảy}}$$ mà không cần bất kỳ máy chủ trung tâm nào!
 
 ## 5. Góc nhìn triển khai
 

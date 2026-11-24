@@ -11,6 +11,55 @@ categories:
 
 # Lecture: Digital Signatures và Public-Key Cryptography
 
+Nếu hàm băm giúp ta chắc chắn một bức thư không bị tẩy xóa trên đường đi, thì một câu hỏi hóc búa khác vẫn còn nguyên: *làm sao biết chắc bức thư chuyển 10 BTC kia thực sự do Alice ký, chứ không phải do một tin tặc nào đó giả danh Alice viết ra?* Trên một mạng lưới mở nơi mọi người đều có thể nhìn thấy toàn bộ dữ liệu giao dịch, bạn không thể dùng "mật khẩu chung" như ngân hàng truyền thống — vì hễ công bố mật khẩu để mạng lưới kiểm tra thì ai cũng sẽ biết và đánh cắp tiền của bạn!
+
+Lời giải thiên tài của mật mã học hiện đại (Diffie–Hellman 1976, Rivest–Shamir–Adleman 1977, và mật mã đường cong elliptic của Koblitz–Miller 1985) là **mật mã khóa công khai (public-key cryptography)** và **chữ ký số**: tách riêng một **khóa bí mật** (giữ kín tuyệt đối để ký) và một **khóa công khai** (phát rộng rãi cho cả thế giới xác minh). Trên blockchain, "sở hữu tiền" thực chất không có nghĩa là giữ đồng xu nào trong máy — mà đơn giản là **nắm giữ khóa bí mật tạo ra chữ ký số hợp lệ**.
+
+---
+
+## Bản đồ kiến thức nền: Mật mã khóa công khai và Chữ ký số đứng trên ba trụ cột toán học nào?
+
+Với nền tảng số học đồng dư và đại số trừu tượng bậc đại học, bạn có thể nhìn thấu cơ chế của chữ ký số qua ba trụ cột:
+
+### 1. Lý thuyết số đồng dư và Hàm cửa sập (RSA)
+Phép nhân hai số nguyên tố lớn $$p \times q = n$$ chỉ mất vài micro giây, nhưng bài toán ngược lại — phân tích $$n$$ (cỡ 2048 bit) ra thừa số nguyên tố $$p, q$$ — hiện chưa có thuật toán cổ điển nào giải nhanh. Nhờ định lý Euler $$a^{\varphi(n)} \equiv 1 \pmod n$$, người biết $$p, q$$ dễ dàng tính khóa nghịch đảo $$d \equiv e^{-1} \pmod{\varphi(n)}$$ để ký, trong khi cả thế giới chỉ cần biết $$(e, n)$$ để kiểm tra.
+
+### 2. Hình học đại số hữu hạn và Bài toán Logarit rời rạc trên Đường cong Elliptic (ECC / ECDSA / Schnorr)
+Khóa RSA 3072-bit khá cồng kềnh cho blockchain. Bitcoin và Ethereum dùng **mật mã đường cong elliptic** (như `secp256k1`: $$y^2 \equiv x^3 + 7 \pmod p$$): các điểm trên đường cong lập thành một nhóm abel dưới phép cộng hình học (nối dây cung rồi lấy đối xứng). Tính $$Q = d \cdot G$$ (cộng điểm sinh $$G$$ với chính nó $$d$$ lần bằng nhân đôi–cộng) cực nhanh, nhưng biết $$G$$ và $$Q$$ mà tìm ngược ra số bí mật $$d$$ (**ECDLP**) khó đến mức khóa ECC 256-bit đạt độ an toàn ngang ngửa RSA 3072-bit!
+
+### 3. Tính ngẫu nhiên của Nonce $$k$$ và Bảo mật thực thi
+Trong ECDSA và Schnorr, mỗi chữ ký phải trộn thêm một số ngẫu nhiên dùng một lần gọi là **nonce $$k$$**. Toán học của sơ đồ cực kỳ sắc bén, nhưng chỉ cần một lỗi kỹ thuật nhỏ — **dùng lại cùng một giá trị $$k$$ cho hai thông điệp khác nhau** — khóa bí mật $$d$$ lập tức bị giải ra bằng đúng một phép trừ sơ cấp! (Đây chính là nguyên nhân khiến hệ máy PlayStation 3 và nhiều ví Bitcoin đời đầu bị bẻ khóa hoàn toàn.)
+
+---
+
+### Khung giải thích: tự tay ký và xác minh RSA mini, rồi phá khóa ECDSA khi tái sử dụng nonce (nên đọc chậm)
+
+Hãy tự tay thực hiện hai phép tính kinh điển để hiểu sâu bản chất toán học của chữ ký số:
+
+1. **Tự tay ký & xác minh chữ ký RSA mini ($$p = 5,\ q = 11$$):**
+   - **Tạo khóa:** Tính $$n = p \cdot q = 55$$ và $$\varphi(n) = (5-1)(11-1) = 40$$. Chọn số mũ công khai $$e = 3$$ (vì $$\gcd(3, 40) = 1$$). Tìm khóa bí mật $$d$$ sao cho $$3d \equiv 1 \pmod{40}$$: thử ngay $$d = 27$$ vì $$3 \times 27 = 81 = 2 \times 40 + 1 \equiv 1 \pmod{40}$$!
+   - **Alice ký thông điệp có mã băm $$m = 2$$:** Tính chữ ký $$s = m^d \bmod n = 2^{27} \bmod 55$$. Nhẩm nhanh:
+     $$
+     2^5 = 32,\quad 2^{10} = 1024 \equiv 34 \pmod{55},\quad 2^{20} \equiv 34^2 = 1156 \equiv 1 \pmod{55} \quad (\text{vì } 55 \times 21 = 1155!).
+     $$
+     Do đó $$s = 2^{20} \cdot 2^7 \equiv 1 \cdot 128 \equiv 18 \pmod{55}$$. Alice gửi cặp $$(m = 2,\ s = 18)$$.
+   - **Mạng lưới xác minh bằng khóa công khai $$(e = 3,\ n = 55)$$:** Tính $$s^e \bmod n = 18^3 \bmod 55$$:
+     $$
+     18^2 = 324 \equiv -6 \pmod{55} \implies 18^3 \equiv (-6)\cdot 18 = -108 \equiv 2 \pmod{55} = m!
+     $$
+     Khớp chính xác $$2 = 2$$ mà không hề biết $$d = 27$$!
+2. **Vì sao tái sử dụng nonce $$k$$ trong ECDSA lập tức làm lộ khóa bí mật $$d$$?** Trong ECDSA, chữ ký $$(r, s)$$ của thông điệp có mã băm $$z$$ thỏa $$s \equiv k^{-1}(z + r d) \pmod q$$ (với $$r$$ chỉ phụ thuộc vào $$k$$). Nếu Alice ký hai giao dịch $$z_1 \neq z_2$$ bằng **cùng một nonce $$k$$**, hai chữ ký $$(r, s_1)$$ và $$(r, s_2)$$ sẽ có **cùng tọa độ $$r$$**! Kẻ tấn công lập tức trừ hai phương trình:
+   $$
+   s_1 - s_2 \equiv k^{-1}(z_1 - z_2) \pmod q \implies k \equiv (z_1 - z_2)(s_1 - s_2)^{-1} \pmod q.
+   $$
+   Biết $$k$$ rồi, thay ngược vào phương trình đầu thu ngay khóa bí mật:
+   $$
+   d \equiv r^{-1}(s_1 k - z_1) \pmod q!
+   $$
+   Đó là lý do chuẩn **RFC 6979** (sinh nonce $$k$$ tất định từ hàm băm của khóa bí mật và thông điệp) là bắt buộc trong mọi ví tiền mã hóa hiện đại!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Ở bài giảng trước, chúng ta đã tìm hiểu hàm băm — công cụ giúp kiểm tra tính toàn vẹn của dữ liệu. Tuy nhiên, riêng hàm băm không thể chứng minh **tính xác thực nguồn gốc (authenticity)**: làm thế nào biết chắc ai là người tạo ra thông điệp đó? **Chữ ký số (digital signatures)** ra đời để giải quyết bài toán này.

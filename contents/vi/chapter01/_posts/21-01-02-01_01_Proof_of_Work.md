@@ -11,6 +11,53 @@ categories:
 
 # Lecture: Proof-of-Work Deep Dive - Mining, Security, và Economics
 
+Làm sao tổ chức một cuộc bầu cử công bằng trên internet để chọn người có quyền viết trang sổ cái tiếp theo, khi bất kỳ ai cũng có thể tạo ra 10 triệu địa chỉ IP giả chỉ trong vài giây? Nếu áp dụng quy tắc "mỗi máy tính một phiếu", kẻ tấn công sẽ lập tức chiếm trọn cuộc bầu cử (tấn công Sybil).
+
+Câu trả lời táo bạo của Satoshi Nakamoto là biến **điện năng và phép tính mật mã không thể làm giả** thành tấm vé xổ số toàn cầu: **Proof-of-Work (PoW)**. Muốn được quyền đề xuất khối mới, thợ đào phải tìm một con số `nonce` sao cho mã băm SHA-256 kép của tiêu đề khối nhỏ hơn một ngưỡng mục tiêu cực nhỏ — tương đương việc tung hàng tỷ tỷ con xúc xắc mỗi giây cho đến khi tất cả đều ra mặt lục. Quá trình tìm kiếm cực kỳ tốn kém (**khó tìm**), nhưng khi tìm ra rồi thì bất kỳ điện thoại nào cũng kiểm tra lại chỉ bằng **1 phép băm duy nhất** (**dễ kiểm chứng**).
+
+---
+
+## Bản đồ kiến thức nền: Toán học và Kinh tế học của Proof-of-Work đứng trên ba trụ cột nào?
+
+Nếu bạn đã học xác suất thống kê ở đại học (phân phối hình học, phân phối mũ, quá trình Poisson và bước đi ngẫu nhiên), bạn đã nắm gần như trọn bộ công cụ phân tích PoW:
+
+### 1. Quá trình Poisson và Tính không nhớ (Memoryless)
+Vì SHA-256 hoạt động như một hàm ngẫu nhiên đồng đều (random oracle), mỗi lần thử một `nonce` mới là một phép thử Bernoulli độc lập với xác suất trúng cực nhỏ $$p = \frac{\text{Target}}{2^{256}}$$. Khi toàn mạng thử hàng trăm tỷ tỷ phép băm mỗi giây, thời gian chờ giữa hai khối liên tiếp tuân theo **phân phối mũ** với kỳ vọng $$T = 10\text{ phút}$$ (tốc độ $$\lambda = 1/600\text{ khối/giây}$$). Tính *không nhớ* của phân phối mũ có nghĩa là: dù bạn đã đào hụt suốt 30 phút không ra khối, xác suất tìm thấy khối trong phút tiếp theo vẫn y hệt như lúc mới bắt đầu — không có khái niệm "sắp tới lượt"!
+
+### 2. Cơ chế hồi tiếp điều chỉnh độ khó (Difficulty Adjustment)
+Tốc độ băm (hashrate) toàn cầu tăng giảm liên tục theo giá điện và phần cứng ASIC. Cứ sau đúng **2.016 khối** (lý tưởng là $$2\,016 \times 10\text{ phút} = 14\text{ ngày} = 1\,209\,600\text{ giây}$$), mọi nút Bitcoin tự động so sánh thời gian thực tế $$T_{\text{thực}}$$ với 2 tuần chuẩn rồi cập nhật mục tiêu: $$\text{Target}_{\text{mới}} = \text{Target}_{\text{cũ}} \times \frac{T_{\text{thực}}}{14\text{ ngày}}$$ (giới hạn biến động tối đa 4 lần mỗi chu kỳ để chống thao túng).
+
+### 3. Bài toán con bạc phá sản và An ninh xác suất (Tấn công 51%)
+Trong Chương 11 của whitepaper Bitcoin, Satoshi mô hình hóa cuộc đua giữa chuỗi trung thực (tỉ lệ hashrate $$p$$) và kẻ tấn công chi tiêu gấp đôi đào bí mật (tỉ lệ $$q = 1 - p$$) bằng **bước đi ngẫu nhiên (Gambler's Ruin)** kết hợp phân phối Poisson. Kết quả chứng minh rằng chỉ cần $$q < 0.5$$, xác suất kẻ tấn công bắt kịp sau $$z$$ khối xác nhận **giảm theo hàm mũ về 0**!
+
+---
+
+### Khung giải thích: tự tay tính độ khó PoW và xác suất tấn công chi tiêu gấp đôi (nên đọc chậm)
+
+Hãy kiểm tra trực tiếp hai phép tính kinh điển của Bitcoin bằng máy tính bỏ túi:
+
+1. **Cần bao nhiêu bit `0` đứng đầu ở tốc độ mạng hiện đại?**
+   - Giả sử tổng hashrate toàn mạng là $$H = 600\text{ EH/s} = 6 \times 10^{20}\text{ phép băm/giây}$$.
+   - Để trung bình cứ $$T = 600\text{ giây}$$ (10 phút) mới có 1 khối ra đời, kỳ vọng số phép băm cần thiết cho mỗi khối là:
+     $$
+     N_{\text{hash}} = H \cdot T = (6 \times 10^{20}) \times 600 = 3.6 \times 10^{23} \approx 2^{78.25}.
+     $$
+   - Điều này có nghĩa là xác suất trúng của mỗi phép thử phải là $$p \approx 2^{-78.25}$$ — tức mã băm SHA-256 hợp lệ của khối phải bắt đầu bằng **khoảng 78 bit `0` liên tiếp** (gần **20 chữ số thập lục phân `0`** ở đầu chuỗi hex)!
+2. **Kiểm tra bài toán điều chỉnh độ khó:** Nếu trong một chu kỳ 2.016 khối, lượng máy đào tăng vọt khiến cả 2.016 khối được tìm thấy chỉ trong **10 ngày** (thay vì 14 ngày), thì giao thức tự động thu hẹp mục tiêu:
+   $$
+   \text{Target}_{\text{mới}} = \text{Target}_{\text{cũ}} \times \frac{10}{14} \approx 0.714\,\text{Target}_{\text{cũ}} \quad \bigl(\text{tức độ khó tăng } +40\%\bigr),
+   $$
+   kéo thời gian khối quay lại đúng 10 phút!
+3. **Ước lượng xác suất kẻ tấn công bắt kịp sau $$z = 6$$ xác nhận:** Nếu kẻ tấn công nắm $$q = 10\%$$ hashrate ($$p = 0.9$$), tỉ số bước lùi/tiến là $$\frac{q}{p} = \frac{1}{9}$$.
+   - Theo định lý con bạc phá sản, nếu kẻ tấn công đang bị dẫn trước đúng $$z = 6$$ khối, xác suất họ đuổi kịp trong tương lai là:
+     $$
+     \Bigl(\frac{q}{p}\Bigr)^z = \Bigl(\frac{1}{9}\Bigr)^6 = \frac{1}{531\,441} \approx 0.00019\%.
+     $$
+   - Tính thêm phần kẻ tấn công đào được sẵn $$k$$ khối trong lúc chờ 6 xác nhận (phân phối Poisson với $$\lambda = z\frac{q}{p} = \frac{6}{9} = 0.667$$ trong công thức đầy đủ của Satoshi), tổng xác suất thành công là **$$\approx 0.024\%$$** (chưa tới 1 phần 4.000)!
+   - Nhưng nếu kẻ tấn công nắm tới $$q = 30\%$$ ($$\frac{q}{p} = \frac{3}{7} \approx 0.429$$), công thức Satoshi cho thấy sau $$z = 6$$ xác nhận xác suất vẫn lên tới **$$17.7\%$$** — muốn kéo rủi ro xuống dưới $$0.1\%$$ lúc đó cần đợi tới **$$z = 24$$ xác nhận**!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Proof-of-Work (PoW)** là cơ chế đồng thuận cốt lõi của Bitcoin, cho phép hàng nghìn nút độc lập thống nhất về thứ tự giao dịch mà không cần tin cậy lẫn nhau. Ý tưởng nền tảng của PoW đã xuất hiện trước Bitcoin nhưng được Satoshi Nakamoto tích hợp theo một cách mới vào bài toán đồng thuận phân tán.

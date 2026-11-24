@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.02: Bảo mật hợp đồng thông minh — Lỗ hổng và thực hành tốt
 
+Tháng 6 năm 2016, một vụ tấn công chấn động đã rút cạn 3,6 triệu ETH (trị giá khoảng 60 triệu USD thời điểm đó) khỏi quỹ The DAO, buộc cộng đồng Ethereum phải thực hiện một đợt hard fork gây tranh cãi tách đôi mạng lưới. Thủ phạm không hề bẻ khóa mật mã đường cong elliptic hay phá vỡ đồng thuận PoW — hắn chỉ lợi dụng đúng **hai dòng code Solidity viết ngược thứ tự nhau**!
+
+Khác với phần mềm web truyền thống nơi lập trình viên có thể âm thầm tung bản vá sau 5 phút, hợp đồng thông minh trên blockchain mang tính **bất biến**, **mã nguồn công khai** và **trực tiếp giữ hàng tỷ đô la tài sản thanh khoản tức thì**. Chỉ một lỗ hổng logic nhỏ là đủ để kẻ tấn công viết bot rút sạch quỹ trong đúng 1 block 12 giây.
+
+---
+
+## Bản đồ kiến thức nền: Bảo mật Hợp đồng Thông minh nghiên cứu những bề mặt tấn công nào?
+
+1. **Lỗ hổng dòng điều khiển & trạng thái (Reentrancy):** Khi hợp đồng gọi ra địa chỉ bên ngoài *trước khi* cập nhật số dư nội bộ, kẻ tấn công tái nhập vào hàm rút tiền lặp đi lặp lại. Khắc phục chuẩn bằng mẫu **Checks–Effects–Interactions (CEI)** và `ReentrancyGuard`.
+2. **Lỗi số học & độ chính xác (Overflow, Underflow, Rounding):** Tràn số nguyên (đã được bảo vệ mặc định từ Solidity 0.8+, trừ khối `unchecked`) và lỗi làm tròn chia nguyên trong các giao thức DeFi / Vault (tấn công lạm phát cổ phần — *inflation attack*).
+3. **Tấn công kinh tế & Oracle (Flash Loans & Price Manipulation):** Kẻ tấn công vay hàng trăm triệu đô la không cần thế chấp trong cùng 1 giao dịch để làm méo giá spot trên một pool AMM, đánh lừa giao thức đọc giá trực tiếp thay vì dùng TWAP hoặc Oracle phi tập trung (Chainlink).
+4. **Kiểm soát truy cập & Nâng cấp (Access Control & Proxy Storage Collision):** Quên kiểm tra `onlyOwner`, để hở hàm `initialize()` trên hợp đồng Proxy, hay lệch khe bộ nhớ (storage slot) khi nâng cấp logic.
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Bảo mật hợp đồng thông minh (smart contract security)** là một trong những khía cạnh quan trọng nhất của phát triển blockchain. Khác với phần mềm truyền thống, một lỗi lập trình trong hợp đồng thông minh có thể dẫn đến **thiệt hại tài chính không thể đảo ngược lên tới hàng triệu USD**, trong khi mã nguồn không thể vá trực tiếp sau khi đã triển khai lên chuỗi.
@@ -607,6 +622,24 @@ Bot steals value from victim's price impact!
 Trên các mạng như Ethereum, giá trị MEV tích lũy hàng năm có thể đạt quy mô hàng trăm triệu đến hàng tỷ USD, dù giá trị MEV ở từng khối riêng lẻ biến động mạnh (thường nhỏ trong điều kiện thông thường nhưng có thể tăng vọt ở những khối xuất hiện cơ hội chênh lệch giá hoặc thanh lý lớn).
 
 ---
+
+### Khung giải thích: tự tay lần vết ngăn xếp gọi hàm (Call Stack) của vụ tấn công Reentrancy (nên đọc chậm)
+
+Để thấy vì sao chỉ **đảo thứ tự hai dòng code** lại quyết định sinh tử của hàng triệu đô la, hãy theo dõi từng dòng trạng thái của hợp đồng `Vault` bị lỗi:
+
+- **Trạng thái ban đầu:** `Vault` đang giữ tổng cộng **3 ETH** (2 ETH của Alice + 1 ETH của Attacker), nên `balances[Attacker] = 1 ETH`.
+- **Hàm rút tiền bị lỗi:**
+  `(1) require(balances[msg.sender] >= 1 ether);`
+  `(2) msg.sender.call{value: 1 ether}("");` *(gọi ra ngoài trước!)*
+  `(3) balances[msg.sender] = 0;` *(cập nhật trạng thái sau!)*
+
+**Diễn biến từng khung gọi hàm trong cùng 1 giao dịch:**
+1. **Lượt gọi 1:** `Attacker` gọi `withdraw()`. Dòng `(1)` thấy `balances[Attacker] == 1 ETH` (Hợp lệ!). Dòng `(2)` chuyển **1 ETH** sang `Attacker` (`Vault` còn **2 ETH**) và tự động chạy hàm `receive()` của `Attacker`. *Dòng `(3)` vẫn chưa hề được chạy!*
+2. **Lượt gọi 2 (tái nhập từ bên trong `receive()`):** `Attacker` gọi lại `withdraw()`. Dòng `(1)` đọc `balances[Attacker]` — **vẫn bằng 1 ETH!** Dòng `(2)` chuyển tiếp **1 ETH** (`Vault` còn **1 ETH**).
+3. **Lượt gọi 3 (tái nhập lần nữa):** Dòng `(1)` vẫn thấy `1 ETH` → dòng `(2)` rút nốt **1 ETH** cuối cùng (`Vault` về **0 ETH**!).
+4. **Thoát đệ quy:** `receive()` dừng gọi tiếp; lúc này cả 3 lượt mới lần lượt chạy tới dòng `(3)` gán `balances[Attacker] = 0` — nhưng `Attacker` đã ôm trọn **3 ETH** (lãi ròng 2 ETH của Alice)!
+
+**Sửa bằng 1 nhát cắt (Checks–Effects–Interactions):** Đưa dòng `(3) balances[msg.sender] = 0;` lên **trước** dòng `(2)`. Ngay khi lượt gọi 2 tái nhập, dòng `(1)` lập tức đọc thấy `0 < 1` và hoàn tác (revert) toàn bộ cuộc tấn công!
 
 ## 5. Góc nhìn triển khai
 

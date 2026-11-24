@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.00: Quyền riêng tư trên Blockchain — Vượt qua tính ẩn danh giả
 
+Một trong những hiểu lầm lớn nhất của người mới bước vào thế giới crypto là tin rằng Bitcoin hay Ethereum có tính "ẩn danh". Trên thực tế, blockchain công khai giống như một **cuốn sổ kế toán bằng kính trong suốt** đặt giữa quảng trường: mọi số dư, mọi giao dịch từng xảy ra từ ngày đầu tiên đều được phơi bày vĩnh viễn. Chỉ cần một lần bạn rút tiền từ sàn giao dịch có xác minh danh tính (KYC) về ví cá nhân, các công ty phân tích chuỗi có thể lần ngược và liên kết toàn bộ mạng lưới địa chỉ của bạn chỉ trong vài giây!
+
+Bài học mở đầu Chương 5 bóc tách ranh giới giữa **ẩn danh giả (pseudonymity)** và **quyền riêng tư thật sự**, giải thích những thuật toán truy vết đồ thị giao dịch mà giới phân tích chuỗi đang dùng, và đặt nền móng toán học để đo lường mức độ riêng tư bằng **tập ẩn danh** và **entropy thông tin**.
+
+---
+
+## Bản đồ kiến thức nền: Quyền riêng tư trên Blockchain nghiên cứu những bài toán nào?
+
+1. **Ẩn danh giả vs. Ẩn danh mạnh (Pseudonymity vs. Unlinkability):** Thay tên thật bằng địa chỉ `0x...` chỉ là ẩn danh giả; quyền riêng tư thật đòi hỏi phá vỡ cả *tính liên kết* (linkability) giữa các giao dịch lẫn *tính công khai số tiền*.
+2. **Phân tích đồ thị & Heuristic truy vết (Chain Analytics):** Các quy tắc như *Common-Input-Ownership* (nhiều đầu vào UTXO cùng ký trong một giao dịch thường thuộc cùng một chủ ví) và nhận diện *địa chỉ tiền thối (change address)*.
+3. **Đo lường ẩn danh bằng Lý thuyết Thông tin (Anonymity Set & Shannon Entropy):** Một hệ thống trộn giao dịch không chỉ cần nhiều người tham gia, mà phân phối xác suất nối đầu vào–đầu ra phải càng đồng đều càng tốt.
+4. **Hộp công cụ bảo vệ (CoinJoin, Stealth Addresses, Ring Signatures, Shielded Pools):** Từ trộn giao dịch không cần mật mã mới đến che giấu toàn bộ đồ thị bằng Zero-Knowledge Proofs.
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Một trong những hiểu lầm phổ biến nhất về blockchain là cho rằng công nghệ này có tính "ẩn danh" (anonymous). Trên thực tế, Bitcoin và phần lớn các blockchain chỉ mang tính **ẩn danh giả (pseudonymous)**: các giao dịch được gắn với địa chỉ ví thay vì tên thật, nhưng toàn bộ lịch sử giao dịch đều hoàn toàn **công khai và có thể truy vết**.
@@ -795,6 +810,23 @@ Với **Groth16** (lược đồ phổ biến nhất):
 Như vậy, kích thước bằng chứng Groth16 thậm chí nhỏ hơn cả một giao dịch thông thường.
 
 ---
+
+### Khung giải thích: tự tay tính Entropy của Tập ẩn danh trong một phiên CoinJoin (nên đọc chậm)
+
+Tại sao trong một giao dịch trộn **CoinJoin**, mọi người tham gia lại bắt buộc phải chọn **cùng một mệnh giá chuẩn** (ví dụ đúng $$1.0\text{ BTC}$$)? Hãy dùng công thức **Entropy Shannon** $$H = -\sum_{i} p_i \log_2 p_i$$ (đo số bit bất định của kẻ quan sát) để tự kiểm chứng:
+
+1. **Trường hợp 1 — Không trộn (1 đầu vào → 1 đầu ra):** Kẻ quan sát chắc chắn $$100\%$$ ($$p_1 = 1$$):
+   $$H = -1 \cdot \log_2(1) = 0\text{ bit}$$ (hoàn toàn trong suốt).
+2. **Trường hợp 2 — CoinJoin chuẩn 8 người cùng gửi đúng $$1.0\text{ BTC}$$:** Với một đầu ra $$1.0\text{ BTC}$$ bất kỳ, cả 8 đầu vào đều đồng khả năng $$p_i = \frac{1}{8}$$:
+   $$
+   H = -\sum_{i=1}^8 \frac{1}{8}\log_2\Bigl(\frac{1}{8}\Bigr) = \log_2(8) = 3.0\text{ bit}.
+   $$
+   (Nếu lặp lại 2 vòng trộn độc lập với 8 người mới mỗi vòng, tập ẩn danh nhân lên $$8 \times 8 = 64$$ và entropy đạt $$\log_2(64) = 6.0\text{ bit}$$!)
+3. **Trường hợp 3 — Lỗi mệnh giá lẻ:** Giả sử 7 người gửi $$1.0\text{ BTC}$$, riêng Alice gửi $$1.37\text{ BTC}$$ và nhận ra $$1.37\text{ BTC}$$.
+   - Đầu ra $$1.37\text{ BTC}$$ lập tức bị khớp duy nhất với đầu vào $$1.37\text{ BTC}$$ → entropy của Alice sụp về **$$0\text{ bit}$$**!
+   - Không chỉ hại chính mình, Alice còn loại mình khỏi tập ứng viên của 7 người kia, kéo entropy của cả nhóm tụt xuống $$\log_2(7) \approx 2.81\text{ bit}$$!
+
+**Kết luận:** Quyền riêng tư trên blockchain là một *tài sản tập thể* — một đầu mối rò rỉ siêu dữ liệu (số tiền lẻ, thời gian trùng khớp, địa chỉ IP) có thể làm sụp đổ entropy của cả nhóm.
 
 ## 5. Góc nhìn triển khai
 

@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 07.05: Tương lai của Blockchain — Xu hướng và Đổi mới
 
+Vào thập niên 1990, muốn dùng Internet bạn phải nghe tiếng modem dial-up rít lên, tự cấu hình địa chỉ IP và hiểu các giao thức mạng. Ba thập kỷ sau, hàng tỷ người dùng Internet mỗi giây mà chẳng cần biết TCP/IP hay DNS là gì — công nghệ đã thực sự chiến thắng khi nó **biến mất vào nền sau**.
+
+Blockchain đang đứng trước đúng bước ngoặt chuyển mình ấy. Tương lai của blockchain không nằm ở việc bắt người dùng ghi nhớ 24 từ khóa bí mật hay chuyển cầu nối thủ công giữa 15 mạng L2, mà nằm ở **kiến trúc mô-đun quy mô trăm nghìn TPS**, **chứng minh ZK thời gian thực**, **trừu tượng hóa tài khoản và chuỗi**, cùng sự hội tụ với **AI và tài sản thế giới thực (RWA)**.
+
+---
+
+## Bản đồ kiến thức nền: Bốn xu hướng định hình Tương lai Blockchain (2025–2035)
+
+1. **Mở rộng quy mô Mô-đun & DAS (100,000+ TPS):** Kết hợp Rollup, lớp Khả dụng Dữ liệu (Danksharding / Celestia) và Lấy mẫu khả dụng dữ liệu (DAS) để mở rộng băng thông toàn cầu mà điện thoại cá nhân vẫn tự kiểm chứng được.
+2. **Trừu tượng hóa Tài khoản & Chuỗi (Account & Chain Abstraction):** Đăng nhập bằng Passkey/FaceID, tài trợ phí gas ngầm và gom thanh khoản xuyên chuỗi để người dùng tương tác mượt như ứng dụng Web2.
+3. **ZK Toàn phần (Ubiquitous ZK & Realtime Proving):** Mọi block L1 và giao dịch L2 đều được chứng minh bằng ZK trong vài giây, giúp mọi thiết bị di động trở thành nút xác minh tin cậy hoàn toàn (Stateless Light Clients).
+4. **Hội tụ với Tài chính thực & AI (RWA & AI Agents):** Token hóa trái phiếu, cổ phiếu, thanh toán 24/7 trên chuỗi, đồng thời cung cấp lớp thanh toán tự động và xác minh suy luận (zkML) cho các tác tử AI tự trị.
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Công nghệ blockchain đang đứng trước giai đoạn chuyển mình từ hạ tầng thử nghiệm sang nền tảng vận hành thực tế phục vụ hàng triệu người dùng. Quỹ đạo phát triển trong thời gian tới bao gồm các đổi mới kỹ thuật (blockchain dạng mô-đun, zkEVM, trừu tượng hóa tài khoản), các lĩnh vực ứng dụng mới (khoa học phi tập trung, tài chính tái tạo, mạng xã hội phi tập trung), sự hoàn thiện khung pháp lý cũng như các thảo luận về vai trò của tính phi tập trung trong xã hội.
@@ -49,6 +64,28 @@ Ví dụ với 100 rollup hoạt động trên 64 phân mảnh và thông lượ
 Mức thông lượng lý thuyết này tiệm cận quy mô xử lý của các mạng lưới thanh toán toàn cầu như Visa.
 
 ---
+
+### Khung giải thích: tự tay tính bài toán 100,000 TPS và xác suất bảo mật của Lấy mẫu Dữ liệu (DAS) (nên đọc chậm)
+
+Làm thế nào một mạng blockchain tương lai có thể đạt **$$100{,}000\text{ TPS}$$** (vượt đỉnh mạng Visa) mà không buộc mọi nút mạng cá nhân phải sở hữu đường truyền trung tâm dữ liệu? Hãy kiểm tra hai phép tính gọn:
+
+1. **Băng thông cần thiết ở mức 100,000 TPS:**
+   Mỗi giao dịch nén tối giản trên Rollup tốn cỡ $$100\text{ byte}$$ dữ liệu. Tổng lưu lượng phát tán toàn mạng là:
+   $$
+   100{,}000\text{ tx/s} \times 100\text{ byte/tx} = \mathbf{10\text{ MB/giây}}\;(\approx 80\text{ Mbps}).
+   $$
+   Một chiếc điện thoại hay máy tính cá nhân không thể tải liên tục 10 MB/giây (gần 1 TB mỗi ngày!) chỉ để tự kiểm chứng blockchain.
+
+2. **Phép màu của Lấy mẫu Khả dụng Dữ liệu (DAS + Mã hóa xóa Reed–Solomon 2D):**
+   Dữ liệu block được mã hóa dư thừa gấp 4 lần (chỉ cần có mặt bất kỳ **25%** số mảnh là khôi phục trọn vẹn 100% block). Do đó, muốn *giấu dữ liệu* không cho mạng khôi phục, kẻ sản xuất block xấu buộc phải giấu đi **hơn 75%** số mảnh (chỉ công bố tối đa 25% — hoặc với ngưỡng 50% theo hàng/cột, giấu ít nhất 25% số mảnh).
+   - Giả sử kẻ xấu giấu đúng $$25\%$$ số mảnh (tức $$75\%$$ mảnh còn lại vẫn phản hồi bình thường).
+   - Một điện thoại nút nhẹ bốc thăm ngẫu nhiên **$$k$$ mảnh nhỏ** để kiểm tra. Xác suất kẻ xấu qua mặt được cả $$k$$ lần kiểm tra là $$(0.75)^k$:
+     - Với $$k = 30$$ mảnh: $$(0.75)^{30} \approx 0.00018\;(0.018\%)$$.
+     - Với $$k = 75$$ mảnh (chỉ tốn vài chục KB!):
+       $$
+       (0.75)^{75} \approx \mathbf{4.3 \times 10^{-10}} \quad (\text{chưa tới 1 phần 2 tỷ!}).
+       $$
+   Nhờ định lý xác suất kết hợp mã hóa xóa này, mạng lưới mở rộng lên 100,000 TPS trong khi mỗi điện thoại chỉ cần tải vài chục KB mỗi block để kiểm chứng độc lập!
 
 ## 5. Góc nhìn triển khai
 

@@ -11,6 +11,48 @@ categories:
 
 # Bài giảng: Proof-of-Stake — Đồng thuận dựa trên tài sản đặt cọc
 
+Tháng 9 năm 2022, lịch sử công nghệ chứng kiến một ca "thay động cơ máy bay ngay giữa bầu trời" chưa từng có tiền lệ: mạng lưới Ethereum đang bảo vệ hàng trăm tỷ đô la tài sản đã tắt hoàn toàn hệ thống đào Proof-of-Work tiêu thụ điện ngang một quốc gia cỡ trung bình, chuyển sang **Proof-of-Stake (PoS)** — cắt giảm ngay lập tức **hơn 99.95% lượng điện năng tiêu thụ** mà không bỏ lỡ một khối giao dịch nào!
+
+Nhưng đằng sau bước nhảy ngoạn mục ấy là hàng loạt câu hỏi hóc búa mà cộng đồng mật mã học mất gần một thập kỷ để giải quyết: nếu tạo khối mới gần như không tốn điện, điều gì ngăn một validator ký đồng thời lên *mọi* nhánh phân nhánh để ăn thưởng cả hai đầu (**vấn đề Nothing-at-Stake**)? Và nếu một kẻ tấn công mua lại khóa bí mật của các validator cũ từ năm 2020 rồi âm thầm viết lại cả lịch sử (**tấn công tầm xa — Long-Range Attack**), một nút mới tham gia mạng làm sao phân biệt được chuỗi thật?
+
+---
+
+## Bản đồ kiến thức nền: Proof-of-Stake đứng trên ba trụ cột toán học – kinh tế nào?
+
+### 1. Chọn validator có trọng số cổ phần và Ngẫu nhiên phân tán (RANDAO / VRF)
+Trong PoS, xác suất được chọn đề xuất khối tỉ lệ trực tiếp với lượng tài sản khóa đặt cọc $$s_i / S$$. Thách thức mật mã học là phải tạo ra **nguồn ngẫu nhiên công bằng không thể thao túng** (như cơ chế trộn băm **RANDAO** của Ethereum hay hàm ngẫu nhiên kiểm chứng được **VRF** của Algorand/Cardano) để không ai biết trước quá xa hoặc cố tình bỏ lượt nhằm lái kết quả xổ số về phía mình.
+
+### 2. Kinh tế học răn đe: Trừng phạt Slashing và Giải quyết Nothing-at-Stake
+PoS giải quyết bài toán *Nothing-at-Stake* bằng một vũ khí mà PoW không thể có ở tầng giao thức: **Slashing** (tịch thu và đốt bỏ tài sản đặt cọc). Nếu một validator ký hai khối mâu thuẫn ở cùng một độ cao (equivocation), chính hai chữ ký số hợp lệ đó tạo thành **bằng chứng gian lận không thể chối cãi**; bất kỳ ai gửi hai chữ ký ấy lên chuỗi đều khiến tài sản đặt cọc của kẻ gian bị cắt phạt ngay lập tức!
+
+### 3. Tính chốt khối kinh tế và Tính chủ quan yếu (Weak Subjectivity)
+Trong các giao thức PoS lai BFT (như Casper FFG của Ethereum), khi một checkpoint gom đủ $$\ge 2/3$$ cổ phần chứng thực, nó đạt **tính chốt khối (finality)** — muốn đảo ngược nó, ít nhất $$1/3$$ tổng cổ phần toàn mạng buộc phải ký mâu thuẫn và bị đốt sạch! Tuy nhiên, vì khóa cũ đã rút hết tiền không còn gì để phạt, một nút mới tham gia mạng lần đầu cần tin vào một "điểm mốc chủ quan gần đây" (weak subjectivity checkpoint) trong vài tuần đổ lại để chống tấn công tầm xa.
+
+---
+
+### Khung giải thích: tự tay tính xác suất đề xuất khối và chi phí đốt cọc (Slashing) trong Ethereum PoS (nên đọc chậm)
+
+Hãy kiểm tra cơ chế kinh tế của Ethereum PoS bằng những con số sát thực tế:
+
+1. **Tần suất đề xuất khối của một validator đặt cọc 32 ETH:**
+   - Giả sử toàn mạng có $$S = 32\,000\,000\text{ ETH}$$ đang đặt cọc, chia đều thành $$N = \frac{32\,000\,000}{32} = 1\,000\,000$$ validator.
+   - Mỗi slot dài đúng $$12\text{ giây}$$, nên một năm có $$\frac{365 \times 86\,400}{12} = 2\,628\,000\text{ slot}$$.
+   - Với xác suất được chọn ở mỗi slot là $$p = \frac{1}{1\,000\,000} = 10^{-6}$$, kỳ vọng số lần validator của bạn được đề xuất khối trong một năm là:
+     $$
+     \mathbb{E}[\text{khối/năm}] = 2\,628\,000 \times 10^{-6} \approx \mathbf{2.63\text{ khối/năm}}
+     $$
+     (phần lớn thu nhập ổn định hằng ngày thực ra đến từ nhiệm vụ ký chứng thực *attestation* mỗi 6.4 phút, không chỉ từ đề xuất khối!).
+2. **Toán học của Phạt tương quan (Correlated Slashing) chống tấn công 1/3:**
+   - Nếu chỉ 1 validator vô tình cấu hình lỗi ký đúp (lỗi kỹ thuật đơn lẻ), hình phạt tương quan gần như bằng 0 (chỉ mất khoản phạt khởi điểm nhỏ khoảng $$1/32$$ cọc) — tránh đẩy người dùng lương thiện phá sản vì sự cố phần mềm.
+   - Ngược lại, trong một cuộc tấn công có tổ chức, giả sử tỉ lệ $$\alpha$$ tổng số validator cùng ký mâu thuẫn trong cửa sổ 36 ngày. Công thức phạt tương quan của Ethereum cắt tỉ lệ $$\min(1,\ 3\alpha)$$ số dư đặt cọc!
+   - Để phá vỡ tính chốt khối (chốt 2 chuỗi đối nghịch), giao nhau của hai tập đại biểu $$2/3$$ buộc ít nhất **$$\alpha = \frac{1}{3}$$** tổng cổ phần phải ký đúp. Thay $$\alpha = \frac{1}{3}$$ vào công thức phạt:
+     $$
+     \text{Tỉ lệ bị đốt} = \min\!\Bigl(1,\ 3 \times \frac{1}{3}\Bigr) = \mathbf{100\%}!
+     $$
+     Toàn bộ **$$\approx 10.67\text{ triệu ETH}$$** của kẻ tấn công lập tức bốc hơi vĩnh viễn!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Proof-of-Stake (PoS)** là cơ chế đồng thuận thay thế cho Proof-of-Work (PoW), trong đó các validator được chọn để đề xuất khối dựa trên lượng tiền mã hóa mà họ đặt cọc (stake), thay vì dựa trên năng lực tính toán. Cơ chế này khắc phục nhiều hạn chế của PoW trong khi vẫn duy trì các đảm bảo an ninh cho mạng lưới.

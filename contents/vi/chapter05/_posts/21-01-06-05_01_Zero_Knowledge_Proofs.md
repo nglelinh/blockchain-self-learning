@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.01: Chứng minh không tiết lộ thông tin (Zero-Knowledge Proofs)
 
+Hãy tưởng tượng bạn cần chứng minh với toàn bộ mạng lưới blockchain rằng: *"Tôi thực sự sở hữu khóa bí mật của khoản tiền này và số dư sau giao dịch không bị âm"* — nhưng tuyệt đối **không được tiết lộ khóa bí mật, không tiết lộ số dư, thậm chí không tiết lộ bạn là ai**. Nghe tưởng như một nghịch lý logic bất khả thi, thế nhưng vào năm 1985, Goldwasser, Micali và Rackoff đã biến điều đó thành một nhánh toán học chấn động mang tên **Chứng minh Không Tiết lộ (Zero-Knowledge Proofs — ZKP)**.
+
+Ngày nay, ZKP không còn nằm trong các hội nghị mật mã thuần túy: nó là động cơ đứng sau các giao dịch riêng tư (Zcash), các mạng mở rộng quy mô ZK-Rollup (Starknet, zkSync, Polygon zkEVM) và hệ thống xác thực danh tính số thế hệ mới.
+
+---
+
+## Bản đồ kiến thức nền: Chứng minh Không Tiết lộ (ZKP) dựa trên những trụ cột nào?
+
+1. **Bộ ba tiên đề vàng:** Mọi hệ ZKP phải thỏa đồng thời **Tính đầy đủ** (người trung thực luôn thuyết phục được), **Tính vững chắc / Soundness** (kẻ gian không thể giả mạo bằng chứng trừ xác suất không đáng kể), và **Không tiết lộ / Zero-Knowledge** (người kiểm chứng không học thêm được 1 bit nào ngoài việc phát biểu là đúng).
+2. **Số học hóa (Arithmetization — R1CS, QAP, AIR):** Biến một chương trình máy tính bất kỳ thành hệ phương trình đa thức trên trường hữu hạn $$\mathbb{F}_p$$ để có thể kiểm tra toàn bộ phép tính chỉ tại một điểm ngẫu nhiên (nhờ bổ đề Schwartz–Zippel).
+3. **Biến đổi Fiat–Shamir:** Thay người kiểm chứng tương tác bằng một hàm băm mật mã sinh ra thử thách ngẫu nhiên, biến giao thức hỏi–đáp thành một **bằng chứng tĩnh ngắn gọn** có thể đưa lên blockchain.
+4. **SNARK vs. STARK:** zk-SNARK dùng cam kết đường cong elliptic/pairing (bằng chứng siêu nhỏ vài trăm byte, nhưng đôi khi cần thiết lập tin cậy); zk-STARK chỉ dùng hàm băm & cây Merkle (bằng chứng lớn hơn nhưng minh bạch và kháng lượng tử).
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Chứng minh không tiết lộ thông tin (Zero-Knowledge Proofs — ZKP)** là một trong những bước tiến quan trọng nhất của mật mã học và công nghệ blockchain. ZKP cho phép một bên (người chứng minh — prover) chứng minh với bên kia (người xác minh — verifier) rằng một mệnh đề là đúng **mà không tiết lộ bất kỳ thông tin nào ngoài tính đúng đắn của chính mệnh đề đó**.
@@ -707,6 +722,35 @@ Compare to re-execution:
 ```
 
 ---
+
+### Khung giải thích: tự tay chạy giao thức Schnorr Zero-Knowledge modulo $$p = 23$$ (nên đọc chậm)
+
+Trước khi đụng tới các mạch SNARK hàng triệu cổng, hãy tự tay chạy trọn vẹn **giao thức Schnorr** — giao thức ZKP kinh điển, đẹp và trong suốt nhất — để chứng minh bạn biết khóa bí mật $$x$$ sao cho $$y = g^x \bmod p$$ mà không bao giờ gửi $$x$$ đi!
+
+Chọn trường nhỏ $$p = 23$$ và phần tử sinh $$g = 2$$ có cấp $$q = 11$$ (kiểm tra nhanh: $$2^{11} = 2048 = 89 \times 23 + 1 \equiv 1 \pmod{23}$$).
+- **Khóa bí mật của Prover:** $$x = 4$$.
+- **Khóa công khai:** $$y = 2^4 \bmod 23 = 16$$.
+
+Bây giờ chạy 3 bước trao đổi bằng tay:
+
+1. **Bước 1 — Cam kết (Prover):** Chọn số ngẫu nhiên bí mật $$r = 3 \in \mathbb{Z}_{11}$$, tính và gửi cam kết:
+   $$
+   t = g^r \bmod 23 = 2^3 \bmod 23 = 8.
+   $$
+2. **Bước 2 — Thử thách (Verifier):** Chọn ngẫu nhiên một thử thách $$c = 3 \in \mathbb{Z}_{11}$$ gửi cho Prover.
+3. **Bước 3 — Phản hồi (Prover):** Tính và gửi duy nhất con số:
+   $$
+   s = (r + c \cdot x) \bmod 11 = (3 + 3 \cdot 4) \bmod 11 = 15 \bmod 11 = 4.
+   $$
+4. **Bước 4 — Kiểm chứng (Verifier kiểm tra $$g^s \stackrel{?}{\equiv} t \cdot y^c \pmod{23}$$):**
+   - **Vế trái:** $$g^s \bmod 23 = 2^4 \bmod 23 = 16$$.
+   - **Vế phải:** $$t \cdot y^c = 8 \cdot 16^3 \pmod{23}$$. Tính tay: $$16^2 = 256 = 11(23) + 3 \equiv 3$$, suy ra $$16^3 \equiv 3 \cdot 16 = 48 \equiv 2 \pmod{23}$$, và
+     $$
+     8 \cdot 2 = 16 \pmod{23}!
+     $$
+   **Khớp hoàn hảo $$16 = 16$$!**
+
+**Tại sao không lộ $$x$$?** Vì $$s = r + cx \pmod{11}$$ bị che kín bởi số ngẫu nhiên $$r$$ dùng đúng một lần (như mã một lần One-Time Pad): nhìn vào $$s = 4$$, mọi giá trị $$x$$ đều khớp với một giá trị $$r$$ tương ứng. (Và hãy lưu ý bài học bảo mật: nếu Prover *tái sử dụng* cùng một $$r$$ cho hai thử thách $$c_1 \neq c_2$$, kẻ tấn công lấy hiệu $$s_1 - s_2 \equiv (c_1 - c_2)x \pmod{11}$$ sẽ khôi phục ngay khóa bí mật $$x$$!)
 
 ## 5. Góc nhìn triển khai
 

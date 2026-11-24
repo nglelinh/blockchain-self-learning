@@ -11,6 +11,59 @@ categories:
 
 # Bài giảng: Khả năng mở rộng Blockchain — Bộ ba bất khả thi và các giải pháp
 
+Mạng lưới thẻ thanh toán Visa xử lý trung bình vài nghìn giao dịch mỗi giây và có thể gánh đỉnh điểm hơn 24.000 TPS trên toàn cầu. Thế nhưng Bitcoin chỉ xử lý được khoảng **7 TPS**, còn Ethereum tầng gốc (Layer 1) chỉ khoảng **15–30 TPS**. Tại sao một công nghệ ra đời thế kỷ XXI lại chậm hơn hệ thống thẻ ngân hàng thập niên 1970 tới hàng nghìn lần? Phải chăng các kỹ sư blockchain không biết cách tăng tốc cơ sở dữ liệu?
+
+Câu trả lời nằm ở bản chất hoàn toàn khác biệt của **xác minh toàn cầu không cần tin cậy**: trên Visa, chỉ có một trung tâm dữ liệu tập trung xác nhận giao dịch; còn trên một blockchain phi tập trung, **hàng chục nghìn máy tính cá nhân trên toàn thế giới phải tự tay tải về và chạy lại từng giao dịch một** để không phải tin bất kỳ ai! Chính giới hạn vật lý của băng thông mạng, ổ cứng và CPU ấy tạo nên **Bộ ba bất khả thi (Blockchain Trilemma)** mà bài học này mổ xẻ cặn kẽ.
+
+---
+
+## Bản đồ kiến thức nền: Bài toán Mở rộng Blockchain đứng trên ba trụ cột phân tích nào?
+
+### 1. Bộ ba bất khả thi (Blockchain Trilemma)
+Do Vitalik Buterin khái quát hóa, Bộ ba bất khả thi chỉ ra sự căng thẳng cố hữu giữa **Phi tập trung** (máy tính phổ thông tại nhà vẫn chạy được full node), **Bảo mật** (chi phí tấn công cực lớn, mọi nút tự xác minh toàn bộ luật chơi), và **Khả năng mở rộng** (thông lượng TPS cao, độ trễ thấp). Nếu tăng thẳng kích thước khối lên 1 GB/giây để đạt 100.000 TPS, chỉ các trung tâm dữ liệu siêu đắt đỏ mới đủ sức chạy nút — hy sinh tính phi tập trung!
+
+### 2. Bốn nút thắt vật lý của một Nút đầy đủ (Full Node)
+Một nút blockchain luôn bị chặn bởi 4 giới hạn phần cứng thực:
+1. **Băng thông P2P:** Thời gian lan truyền khối mới tới toàn mạng phải nhỏ hơn nhiều so với thời gian tạo khối, nếu không tỷ lệ phân nhánh (orphan/stale blocks) tăng vọt làm suy yếu bảo mật.
+2. **CPU thực thi:** Thời gian xác minh chữ ký và chạy bytecode hợp đồng thông minh.
+3. **Phình to trạng thái (State Bloat):** Dung lượng RAM/SSD cần thiết để đọc–ghi nhanh cây trạng thái đang phình lên hàng trăm GB.
+4. **Lịch sử lưu trữ:** Tổng dung lượng mọi khối từ Genesis.
+
+### 3. Hai trường phái mở rộng: Tầng 1 (On-chain) vs. Tầng 2 (Off-chain / Modular)
+- **Mở rộng Tầng 1:** Tối ưu phần cứng và thực thi song song (như Solana, Monad) hoặc chia nhỏ trạng thái/dữ liệu thành nhiều mảnh (**Sharding / Danksharding**).
+- **Mở rộng Tầng 2 (Kiến trúc mô-đun):** Giữ Tầng 1 nhỏ gọn, phi tập trung và siêu bảo mật làm lớp thanh toán & sẵn có dữ liệu, còn đẩy phần thực thi nặng nề lên **Rollups** (sẽ học sâu ở bài 04.01).
+
+---
+
+### Khung giải thích: tự tay tính giới hạn TPS từ kích thước khối và tính phí băng thông khi "tăng khối thô" (nên đọc chậm)
+
+Đừng tin vào những con số TPS quảng cáo mơ hồ — bạn có thể tự tính ngay giới hạn vật lý của bất kỳ blockchain nào chỉ bằng 3 phép chia:
+
+1. **Tính TPS tối đa của Bitcoin:**
+   - Kích thước khối hiệu dụng: $$1\,000\,000\text{ vByte}$$; thời gian trung bình mỗi khối: $$T = 600\text{ giây}$$.
+   - Kích thước trung bình một giao dịch chuẩn (1 input, 2 output): $$\approx 225\text{ vByte}$$.
+   - Số giao dịch tối đa mỗi khối: $$\frac{1\,000\,000}{225} \approx 4\,444\text{ giao dịch}$$.
+   - Thông lượng:
+     $$
+     \text{TPS}_{\text{BTC}} \approx \frac{4\,444}{600} \approx \mathbf{7.4\text{ TPS}}.
+     $$
+2. **Tính TPS của Ethereum L1:**
+   - Giới hạn khối: $$30\,000\,000\text{ gas}$$; thời gian slot: $$12\text{ giây}$$.
+   - Nếu toàn khối chỉ chứa lệnh chuyển ETH đơn giản ($$21\,000\text{ gas}$$): $$\frac{30\,000\,000 / 21\,000}{12} \approx \mathbf{119\text{ TPS}}$$.
+   - Nhưng thực tế phần lớn là giao dịch DeFi phức tạp (trung bình $$\approx 150\,000\text{ gas}$$):
+     $$
+     \text{TPS}_{\text{ETH thực tế}} \approx \frac{30\,000\,000 / 150\,000}{12} = \frac{200}{12} \approx \mathbf{16.7\text{ TPS}}.
+     $$
+3. **Thử nghiệm tư duy — chuyện gì xảy ra nếu ta ép một chuỗi L1 đơn khối đạt 50.000 TPS chỉ bằng cách phình to khối?**
+   - Giả sử mỗi giao dịch chiếm $$200\text{ byte}$$: lưu lượng dữ liệu sinh ra mỗi giây là $$50\,000 \times 200 = \mathbf{10\text{ MB/giây}}$$ (tương đương băng thông liên tục $$80\text{ Mbps}$$ chỉ để *nhận* dữ liệu, chưa kể phát lại cho 10 nút hàng xóm = $$800\text{ Mbps}$$!).
+   - Tổng dung lượng ổ cứng tích lũy chỉ trong **1 năm** ($$3.15 \times 10^7\text{ giây}$$):
+     $$
+     10\text{ MB/s} \times 3.15 \times 10^7\text{ s} \approx \mathbf{315\text{ Terabyte/năm}}!
+     $$
+   Không một cá nhân nào có thể chạy full node tại nhà với chi phí 315 TB ổ cứng mỗi năm — con số đó giải thích rõ hơn mọi lý thuyết vì sao mở rộng blockchain đòi hỏi các đột phá mật mã và kiến trúc như **Rollups**!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Khả năng mở rộng (Scalability)** là một trong những thách thức lớn nhất của công nghệ blockchain. Trong khi các hệ thống thanh toán truyền thống như Visa xử lý khoảng 24.000 giao dịch mỗi giây (TPS), Bitcoin chỉ đạt khoảng 7 TPS và Ethereum đạt khoảng 15–30 TPS. Khoảng cách chênh lệch theo cấp độ lớn này là nút thắt cốt lõi khi đưa blockchain vào ứng dụng rộng rãi.

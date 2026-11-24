@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.03: Xác minh hình thức — Chứng minh tính đúng đắn của hợp đồng thông minh bằng toán học
 
+Nhà khoa học máy tính huyền thoại Edsger Dijkstra từng nói một câu bất hủ: *"Kiểm thử phần mềm (testing) có thể cho thấy sự tồn tại của lỗi, nhưng không bao giờ chứng minh được sự vắng mặt của lỗi."* Với một hợp đồng thông minh DeFi quản lý hàng tỷ đô la, bạn có thể viết 10.000 bài unit test và tất cả đều xanh — nhưng chỉ cần **một đầu vào kỳ dị duy nhất** trong số $$2^{256}$$ khả năng phá vỡ bất biến thanh khoản, toàn bộ giao thức vẫn có thể bốc hơi!
+
+**Xác minh hình thức (Formal Verification)** bước vào đúng khoảng trống đó: thay vì thử vài nghìn ca kiểm thử rời rạc, ta dịch mã nguồn hợp đồng sang ngôn ngữ logic toán học và **chứng minh định lý** rằng các tính chất an toàn luôn đúng cho *mọi* đầu vào và *mọi* trình tự giao dịch có thể xảy ra.
+
+---
+
+## Bản đồ kiến thức nền: Xác minh Hình thức dựa trên những nhánh toán học nào?
+
+1. **Logic Hoare ($$\{P\}\, C\, \{Q\}$$) & Bất biến hệ thống:** Đặc tả toán học nói rằng nếu tiền điều kiện $$P$$ đúng trước khi chạy lệnh $$C$$, thì hậu điều kiện $$Q$$ chắc chắn đúng sau khi $$C$$ kết thúc. Trong DeFi, bất biến cốt lõi thường là *"tổng số dư mọi tài khoản luôn bằng tổng cung token"*.
+2. **Thực thi tượng trưng & Bộ giải SMT (Symbolic Execution — Z3):** Thay biến đầu vào bằng ký hiệu đại số $$x, y$$ rồi đưa mọi nhánh điều kiện vào bộ giải thỏa mãn công thức (SMT Solver). Nếu tồn tại dù chỉ 1 đầu vào phá vỡ bất biến, bộ giải sẽ tự động in ra đúng **phản ví dụ tấn công**!
+3. **Kiểm tra mô hình (Model Checking):** Duyệt có hệ thống toàn bộ đồ thị trạng thái hữu hạn của giao thức (đặc biệt hữu ích cho cơ chế đồng thuận và giao thức nhiều bên).
+4. **Trợ lý chứng minh định lý (Interactive Theorem Provers — Coq, Lean, Isabelle):** Chứng minh bằng máy hoàn chỉnh từng bước logic cho các hệ thống siêu trọng yếu (như lõi compiler, mạch ZK và hợp đồng cầu nối).
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Xác minh hình thức (formal verification)** là phương pháp tiếp cận toán học chặt chẽ nhằm đảm bảo tính đúng đắn của phần mềm, đặc biệt quan trọng đối với hợp đồng thông minh nơi một lỗi nhỏ có thể gây thiệt hại tài chính không thể đảo ngược. Khác với kiểm thử truyền thống vốn chỉ xác nhận chương trình hoạt động đúng trên các đầu vào cụ thể, xác minh hình thức chứng minh bằng toán học rằng chương trình hành xử đúng với **mọi đầu vào có thể xảy ra**. Sự khác biệt này mang ý nghĩa sống còn trong bối cảnh blockchain, bởi hợp đồng thông minh quản lý lượng tài sản hàng tỷ USD, được triển khai bất biến và luôn đối mặt với những kẻ tấn công có động cơ kinh tế rất lớn.
@@ -187,6 +202,34 @@ balances[sender] -= amount;
 Chứng minh hình thức cho thấy phiên bản thứ hai cho phép nhiều lần rút tiền diễn ra trước khi trạng thái kịp cập nhật, làm vi phạm bất biến của hợp đồng.
 
 ---
+
+### Khung giải thích: tự tay chứng minh bất biến bằng Logic Hoare — và bắt một lỗ hổng "in tiền vô hạn" (nên đọc chậm)
+
+Xét một hàm chuyển token trông cực kỳ vô hại:
+
+```text
+b1 := bal[from];
+b2 := bal[to];
+bal[from] := b1 - amt;
+bal[to]   := b2 + amt;
+```
+
+Ta muốn chứng minh bất biến bảo toàn tổng cung $$I:\ \sum_i \text{bal}[i] = S$$ dưới tiền điều kiện $$P:\ I \land (\text{bal}[\text{from}] \ge \text{amt} \ge 0)$$.
+
+1. **Trường hợp 1 — Khi $$\text{from} \neq \text{to}$$:**
+   Sau hai phép gán, tổng mới là:
+   $$
+   S' = S - \text{bal}[\text{from}] - \text{bal}[\text{to}] + (b_1 - \text{amt}) + (b_2 + \text{amt}) = S.
+   $$
+   Bất biến $$I$$ được **chứng minh đúng tuyệt đối** cho mọi số nguyên $$b_1, b_2, \text{amt}$$!
+2. **Trường hợp 2 — Bỏ sót điều kiện $$\text{from} \neq \text{to}$$ (bộ giải SMT bắt sống lỗi!):**
+   Nếu kẻ tấn công gọi `transfer(Alice, Alice, 100)` với số dư ban đầu `bal[Alice] = 100`:
+   - `b1 = 100`, `b2 = 100`.
+   - `bal[Alice] := 100 - 100 = 0`.
+   - `bal[Alice] := 100 + 100 = 200` (**ghi đè lên chính `bal[Alice]`!**).
+   - Tổng cung mới $$S' = S + 100 \neq S$$ — kẻ tấn công vừa **tự nhân đôi tài sản vô hạn** chỉ bằng cách tự chuyển tiền cho chính mình!
+
+Chỉ một điều kiện nhỏ `from != to` mà unit test thông thường rất dễ quên, nhưng khi viết bộ ba Hoare $$\{P\}\,C\,\{Q\}$$ cho bộ giải SMT, máy tính lập tức chỉ ra phản ví dụ `from = to = Alice, amt = 100` trong chưa tới 1 mili-giây!
 
 ## 5. Góc nhìn triển khai
 

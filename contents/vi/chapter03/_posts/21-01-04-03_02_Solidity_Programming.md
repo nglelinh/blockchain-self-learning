@@ -11,6 +11,40 @@ categories:
 
 # Bài giảng: Lập trình Solidity — Phát triển hợp đồng thông minh
 
+Trong lập trình web truyền thống, nếu bạn viết nhầm một dòng code, bạn có thể sửa lỗi và triển khai bản vá sau 5 phút. Nhưng trên Ethereum, hợp đồng thông minh một khi đã triển khai lên chuỗi thường là **bất biến** và nắm giữ trực tiếp hàng triệu đô la tài sản công khai — bất kỳ kẻ tấn công nào trên thế giới cũng có thể đọc mã nguồn và khai thác sai sót chỉ trong một khối 12 giây! Chính vụ tấn công **The DAO năm 2016** (mất 3.6 triệu ETH chỉ vì đặt dòng cập nhật số dư *sau* dòng gửi tiền — lỗi Reentrancy) đã dạy cả ngành một bài học xương máu: lập trình **Solidity** không chỉ là viết mã chạy đúng, mà là thiết kế phần mềm trong môi trường đối kháng hoàn toàn.
+
+---
+
+## Bản đồ kiến thức nền: Lập trình Solidity an toàn và tối ưu đứng trên ba trụ cột nào?
+
+### 1. Hệ kiểu tĩnh, Giao diện ABI và Bố cục Ô nhớ (Storage Layout)
+Solidity biên dịch thành bytecode EVM và giao tiếp với thế giới bên ngoài qua chuẩn **ABI (Application Binary Interface)**: mỗi hàm được nhận diện bằng **4 byte đầu của mã băm Keccak-256** của chữ ký hàm (ví dụ `transfer(address,uint256)` có selector `0xa9059cbb`). Bên trong hợp đồng, các biến trạng thái được xếp tuần tự vào các **ô nhớ 32 byte (storage slots)** — cách bạn sắp xếp thứ tự khai báo biến quyết định trực tiếp chi phí gas!
+
+### 2. Tư duy bảo mật đối kháng và Mẫu Checks–Effects–Interactions (CEI)
+Khác với phần mềm thông thường, khi hợp đồng của bạn gọi sang một địa chỉ bên ngoài (như gửi ETH), địa chỉ đó có thể là một hợp đồng ác ý lập tức **gọi ngược lại (re-enter)** vào chính hàm đang chạy dở! Quy tắc sống còn **Checks–Effects–Interactions** yêu cầu luôn: (1) Kiểm tra điều kiện (`require`), (2) Cập nhật trạng thái số dư trước, rồi mới (3) Gửi tiền ra ngoài sau cùng (kết hợp `ReentrancyGuard`).
+
+### 3. Tiêu chuẩn giao diện (ERC) và Mẫu thiết kế nâng cấp
+Toàn bộ hệ sinh thái Ethereum lắp ghép được với nhau như gạch Lego nhờ các giao diện chuẩn: **ERC-20** (token thay thế được), **ERC-721 / ERC-1155** (NFT), và **Proxy Pattern (`delegatecall`)** cho phép tách riêng hợp đồng lưu dữ liệu với hợp đồng chứa logic khi cần nâng cấp bảo mật có kiểm soát.
+
+---
+
+### Khung giải thích: tự tay tính tiết kiệm 33% Gas nhờ kỹ thuật đóng gói ô nhớ (Storage Slot Packing) (nên đọc chậm)
+
+Mỗi ô nhớ `storage` của EVM rộng đúng **32 byte (256 bit)**, và ghi một ô mới từ `0` sang khác `0` tốn khoảng **20.000 gas**. Hãy so sánh hai cách viết cùng một cấu trúc `struct` gồm 3 biến (`uint128` = 16 byte, `uint256` = 32 byte):
+
+1. **Cách viết chưa tối ưu (xen kẽ kích thước):**
+   - `uint128 a;` (16 byte) → đặt vào **Slot 0** (còn thừa 16 byte trống).
+   - `uint256 b;` (32 byte) → không vừa 16 byte trống của Slot 0, buộc phải nhảy sang **Slot 1**!
+   - `uint128 c;` (16 byte) → buộc phải nhảy sang **Slot 2**!
+   - **Tổng chi phí khởi tạo:** $$3\text{ slot} \times 20\,000\text{ gas} = \mathbf{60\,000\text{ gas}}$$.
+2. **Cách viết tối ưu (gom các biến nhỏ đứng cạnh nhau):**
+   - `uint128 a;` (16 byte) và `uint128 c;` (16 byte) → $$16 + 16 = 32\text{ byte}$$, trình biên dịch Solidity tự động **đóng gói khít cả hai vào chung Slot 0**!
+   - `uint256 b;` (32 byte) → nằm gọn trong **Slot 1**.
+   - **Tổng chi phí khởi tạo:** $$2\text{ slot} \times 20\,000\text{ gas} = \mathbf{40\,000\text{ gas}}$$!
+3. **Kết luận:** Không hề thay đổi bất kỳ logic nào của chương trình, chỉ đổi vị trí hai dòng khai báo biến đã cắt giảm ngay **20.000 gas (33.3%)** cho mỗi người dùng tạo mới bản ghi — nhân lên 1 triệu người dùng, đó là khoản tiết kiệm khổng lồ!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Solidity** là ngôn ngữ lập trình chính dùng để viết hợp đồng thông minh trên Ethereum. Được **Gavin Wood** (đồng sáng lập Ethereum) thiết kế vào năm 2014, Solidity là ngôn ngữ **định kiểu tĩnh (statically-typed)** và **hướng hợp đồng (contract-oriented)**, có cú pháp gần với JavaScript và C++ nhưng được tối ưu hóa cho môi trường thực thi blockchain.

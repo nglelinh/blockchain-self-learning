@@ -14,6 +14,21 @@ lesson_type: optional
 
 > Bài giảng này mang tính **tùy chọn**. Nội dung **không** lặp lại lý thuyết atomic swap, HTLC hay kiến trúc cầu nối khóa-và-đúc, mà tập trung vào các *mạng truyền thông điệp và mô hình ý định (intent)* đã đi vào vận hành thực tế cùng các bài học bảo mật sau loạt sự cố 2022–2024.
 
+Sau hàng loạt vụ hack cầu nối chấn động năm 2022, ngành tương tác xuyên chuỗi bước vào giai đoạn trưởng thành vượt bậc trong **2022–2026**. Thay vì một mô hình Multisig đơn điệu, hạ tầng hiện đại đã phân hóa thành bốn trường phái rõ rệt: **IBC** mở rộng ra ngoài Cosmos nhờ bằng chứng ZK, **Chainlink CCIP** bổ sung mạng lưới quản trị rủi ro độc lập, **LayerZero v2** tách rời lớp xác minh thành các DVN mô-đun, và đặc biệt là **cầu nối dựa trên Ý định (Intents)** giúp người dùng chuyển tiền giữa các L2 chỉ trong 2 giây!
+
+Bài cập nhật hiện đại này giúp bạn đặt bốn trụ cột thực chiến ấy vào đúng khung phân tích bảo mật đã học ở Chương 6.
+
+---
+
+## Bản đồ kiến thức nền: Hạ tầng Xuyên chuỗi 2022–2026 gồm bốn kiến trúc chủ đạo nào?
+
+1. **Light Client chuẩn hóa & ZK-IBC:** Xác minh trực tiếp tiêu đề block bằng mật mã (không cần tin bên thứ ba), dùng bằng chứng ZK để nén chi phí kiểm chứng chữ ký của chuỗi nguồn trên EVM.
+2. **Xác minh Mô-đun (LayerZero v2 — DVN):** Cho phép từng ứng dụng tự chọn tổ hợp nhiều mạng xác minh độc lập (ví dụ yêu cầu đồng thời 2/3 DVN gồm Google Cloud + Polyhedra ZK + Axelar ký duyệt).
+3. **Phòng thủ nhiều lớp (Chainlink CCIP):** Tách mạng Oracle truyền tin khỏi một *Mạng Quản trị Rủi ro (Risk Management Network)* độc lập chuyên giám sát bất thường và ngắt cầu dao khẩn cấp (rate limit).
+4. **Kiến trúc Ý định (Intent-Based Bridges — Across, UniswapX):** Người dùng chỉ ký *kết quả mong muốn*; các **Solver** cạnh tranh ứng vốn trả tiền tức thì trong 2 giây rồi tự lo khâu thanh toán bù trừ chậm phía sau.
+
+---
+
 ## 1. Sau bài học “cầu nối là điểm yếu nhất”
 
 Các bài 06.00–06.02 trình bày HTLC, phân loại cầu nối (khách nhẹ, liên minh, lạc quan), Polkadot parachain và Cosmos IBC. Thực tế giai đoạn 2022–2024 cho thấy hàng tỷ USD đã thất thoát qua các vụ tấn công cầu nối (Ronin, Wormhole, Nomad, Multichain…). Phản ứng của toàn ngành không phải tìm một "cầu nối duy nhất hoàn hảo", mà là **tách lớp kiến trúc**: (1) lớp *truyền thông điệp (message passing)* với giả định tin cậy minh bạch, (2) lớp *thanh toán và thanh khoản* thông qua ý định (intents) và mạng lưới solver, và (3) lớp *bảo mật chia sẻ* (ICS, xác minh qua restaking).
@@ -55,6 +70,19 @@ Cách tiếp cận này đánh dấu bước chuyển từ kiến trúc cầu n�
 | Bể thanh khoản của cầu nối cạn kiệt | Thiết kế kinh tế | Rủi ro thanh khoản (không phải lỗi đồng thuận) |
 
 Ngoài ra, cầu nối BitVM2 (nêu ở bài 01.99) là một hướng giải quyết ở phía Bitcoin dựa trên giả định tối thiểu 1-trong-n nút trung thực.
+
+### Khung giải thích: tự tay tính dòng tiền và tốc độ của Cầu nối Ý định (Intent-Based Bridge) (nên đọc chậm)
+
+Tại sao chuyển $$1{,}000\text{ USDC}$$ từ Arbitrum sang Optimism qua cầu nối gốc L1 phải đợi tới **7 ngày** (cửa sổ thách thức của Optimistic Rollup), nhưng qua một cầu nối Intent như Across chỉ mất **2 giây**? Hãy theo dõi từng đồng USDC:
+
+1. **Người dùng (Alice) ký một Ý định (Intent) trên Arbitrum:**
+   - Alice nạp $$1{,}000\text{ USDC}$$ vào hợp đồng ký quỹ (Escrow) kèm điều kiện: *"Bất kỳ Solver nào chứng minh đã trả cho tôi tối thiểu $$999\text{ USDC}$$ trên Optimism sẽ được nhận trọn $$1{,}000\text{ USDC}$$ của tôi."*
+2. **Solver ứng vốn ngay lập tức (2 giây):**
+   - Solver kiểm tra hợp đồng Arbitrum thấy tiền của Alice đã khóa chắc chắn, liền chuyển thẳng **$$999.2\text{ USDC}$$** từ ví dự trữ sẵn trên Optimism sang cho Alice. Alice hoàn tất giao dịch trong 2 giây (phí thực tế chỉ $$0.8\text{ USDC} = 0.08\%$$)!
+3. **Thanh toán bù trừ theo lô (Batch Settlement):**
+   - Thay vì gửi 500 bằng chứng xuyên chuỗi lẻ tẻ đắt đỏ, Solver gom 500 lệnh như vậy (tổng $$500{,}000\text{ USDC}$$) thành **1 gốc Merkle duy nhất** gửi qua cầu nối chính để nhận lại $$500{,}000\text{ USDC}$$ trên Arbitrum, hưởng tổng lãi chênh lệch $$500 \times 0.8 = 400\text{ USDC}$$ trừ chi phí gas 1 lần (~$$5\text{ USD}$$).
+
+**Đột phá kiến trúc:** Cầu nối Intent không hề "đi tắt" qua bảo mật của L1 — nó **tách rời tốc độ trải nghiệm người dùng (2 giây)** khỏi **tốc độ thanh toán cuối cùng (vài giờ đến 7 ngày)** bằng cách để Solver chịu rủi ro vốn và thu phí nhỏ!
 
 ## 3. Góc nhìn triển khai
 

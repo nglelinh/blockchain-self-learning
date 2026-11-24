@@ -14,6 +14,42 @@ lesson_type: optional
 
 > Bài học này là phần **tùy chọn**, **không** trình bày lại mô hình tài khoản, tập lệnh EVM, Solidity hay AMM hằng số tích. Nội dung tập trung vào các nâng cấp giao thức và bộ công cụ phát triển đã trở thành tiêu chuẩn trong giai đoạn 2022–2026.
 
+Nếu bộ bài 03.00–03.03 cho bạn nền móng vững chắc về Ethereum, EVM, Solidity và DeFi thế hệ đầu, thì giai đoạn **2022–2026** chứng kiến toàn bộ ngăn xếp (stack) ứng dụng Ethereum trưởng thành vượt bậc. Máy trạng thái EVM bên dưới gần như giữ nguyên kỷ luật cũ, nhưng cách người dùng và lập trình viên tương tác với nó đã lột xác: **Dencun (EIP-4844 + EIP-1153)** mở ra blob giá rẻ và bộ nhớ tạm thời `transient storage`; **ERC-4337 và EIP-7702** đưa trải nghiệm ví thông minh (không cần quản lý gas thủ công, khôi phục xã hội) tới hàng triệu người dùng; **Uniswap v4** gom mọi bể thanh khoản vào một hợp đồng **Singleton** duy nhất gắn **Hooks**; còn bộ công cụ **Foundry** viết bằng Rust thay thế hoàn toàn Truffle cũ.
+
+---
+
+## Bản đồ kiến thức nền: Ba cuộc cách mạng tầng ứng dụng Ethereum 2022–2026 là gì?
+
+### 1. Bộ nhớ tạm thời (EIP-1153 `TSTORE`/`TLOAD`) và Kiến trúc Singleton (Uniswap v4)
+Trước Dencun, muốn lưu một cờ khóa chống reentrancy hay sổ nợ tạm giữa các lệnh gọi trong cùng 1 giao dịch, lập trình viên vẫn phải ghi vào `storage` (hàng nghìn gas) rồi xóa đi! **EIP-1153** bổ sung vùng nhớ **Transient Storage** sống trọn trong 1 giao dịch rồi tự xóa sạch, chỉ tốn **100 gas** — làm bệ phóng cho kiến trúc **Singleton + Flash Accounting** của Uniswap v4.
+
+### 2. Trừu tượng hóa tài khoản (ERC-4337 & EIP-7702)
+Trong mô hình cũ, làm mất 12 từ khóa khôi phục là mất trắng tài sản, và muốn gửi USDC bạn vẫn buộc phải mua sẵn ETH trả gas. **ERC-4337** (mempool phụ + Paymaster trả gas hộ) và **EIP-7702** (cho phép EOA tạm thời gắn mã hợp đồng thông minh ngay trong một giao dịch) phá bỏ hoàn toàn rào cản trải nghiệm người dùng mà không cần từ bỏ ví hiện có.
+
+### 3. Quy trình kỹ thuật chuẩn hóa với Foundry (`forge`, `cast`, `anvil`)
+Thay vì viết kiểm thử hợp đồng bằng JavaScript chậm chạp, **Foundry** cho phép viết trực tiếp unit test, **fuzz testing** (bơm hàng chục nghìn đầu vào ngẫu nhiên tìm lỗi biên) và **invariant testing** bằng chính Solidity với tốc độ nhanh hơn hàng chục lần!
+
+---
+
+### Khung giải thích: tự tay tính khoản tiết kiệm Gas của Uniswap v4 Singleton + Flash Accounting (nên đọc chậm)
+
+Hãy so sánh một giao dịch hoán đổi 3 chặng quen thuộc **`ETH → USDC → WBTC → ARB`** giữa Uniswap v2/v3 và Uniswap v4:
+
+1. **Trên Uniswap v2/v3 (mỗi cặp token là một hợp đồng riêng):**
+   - Để đi qua 3 bể, giao dịch phải gọi vào 3 hợp đồng khác nhau và thực hiện **4 lần chuyển token ERC-20 thực sự** (mỗi lần cập nhật số dư `SSTORE` tốn khoảng $$25\,000\text{ gas}$$ cho token trung gian `USDC` và `WBTC` dù người dùng không hề giữ chúng sau khi giao dịch xong!):
+     $$
+     \text{Chi phí chuyển token trung gian} \approx 4 \times 25\,000 = \mathbf{100\,000\text{ gas}}.
+     $$
+2. **Trên Uniswap v4 (Singleton `PoolManager` + `TSTORE` 100 gas):**
+   - Toàn bộ các bể nằm trong **đúng 1 hợp đồng duy nhất**. Khi đi qua 3 bể, hợp đồng không chuyển `USDC` hay `WBTC` ra ngoài mà chỉ ghi nhận cộng/trừ nợ ròng tạm thời trong **Transient Storage (`TSTORE`, chỉ 100 gas/lần)**!
+   - Đến cuối giao dịch, nợ `USDC` và `WBTC` tự triệt tiêu về **0**; hợp đồng chỉ cần thực hiện đúng **2 lần chuyển khoản ròng** (`ETH` đi vào và `ARB` đi ra):
+     $$
+     \text{Chi phí thanh toán ròng} \approx 2 \times 25\,000 + 6 \times 100 \approx \mathbf{50\,600\text{ gas}}!
+     $$
+3. **Kết quả:** Kiến trúc Singleton kết hợp EIP-1153 cắt giảm ngay **gần 50% chi phí chuyển giao tài sản** cho giao dịch đa chặng (và giảm hơn 99% chi phí tạo bể thanh khoản mới vì không còn phải triển khai một hợp đồng mới cho mỗi cặp token)!
+
+---
+
 ## 1. Cùng một EVM nhưng quy trình tương tác với L1 đã thay đổi
 
 Các bài 03.00–03.03 giới thiệu Ethereum như một máy tính toàn cầu với mô hình tài khoản, cây trạng thái, EVM, gas, AMM kiểu Uniswap v2 và giao thức cho vay như Aave, Compound. Từ The Merge (2022) qua Shanghai (2023), Dencun (2024) đến Pectra (2025), hàm chuyển đổi trạng thái cốt lõi hầu như giữ nguyên, nhưng cách người dùng và hợp đồng tương tác với L1 đã thay đổi đáng kể: rollup chuyển sang dùng blob thay cho calldata, tài khoản EOA có thể gắn mã ủy quyền (EIP-7702), bundler của ERC-4337 tạo thành mempool phụ, Uniswap v4 mở rộng pool với cơ chế hook, và Foundry (`forge`/`cast`/`anvil`) thay thế Truffle làm bộ công cụ chuẩn.

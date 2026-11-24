@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 05.04: Mật mã học hậu lượng tử — Chuẩn bị cho kỷ nguyên máy tính lượng tử
 
+Toàn bộ hàng nghìn tỷ đô la tài sản trên Bitcoin và Ethereum hiện nay đang được khóa bằng chữ ký đường cong elliptic (ECDSA trên `secp256k1` hoặc BLS). Khi bạn nhận tiền vào một địa chỉ mới (vốn là hàm băm của khóa công khai), khóa công khai của bạn vẫn còn ẩn mình an toàn. Nhưng ngay khoảnh khắc bạn ký một giao dịch chi tiêu, khóa công khai lập tức hiện ra trên mempool công khai — và trước một máy tính lượng tử chịu lỗi trong tương lai chạy **thuật toán Shor**, kẻ tấn công có thể khôi phục khóa bí mật và cướp giao dịch trước khi block kịp xác nhận!
+
+Mật mã hậu lượng tử (PQC) không phải khoa học viễn tưởng xa vời: NIST đã ban hành các chuẩn chính thức **FIPS 203/204/205** vào năm 2024, và các mạng blockchain đang đứng trước bài toán thiết kế đầy thách thức: làm sao chuyển sang chữ ký kháng lượng tử mà không làm phình kích thước block lên gấp hàng chục lần?
+
+---
+
+## Bản đồ kiến thức nền: Mật mã Hậu lượng tử cho Blockchain đứng trên bốn trụ cột nào?
+
+1. **Bản đồ đe dọa lượng tử (Shor vs. Grover):** Thuật toán **Shor** phá hoàn toàn chữ ký khóa công khai (ECDSA, Ed25519, RSA, BLS) trong thời gian đa thức; ngược lại, thuật toán **Grover** chỉ tăng tốc bậc hai với hàm băm SHA-256 (kéo mức an toàn 256-bit xuống 128-bit — vẫn rất an toàn, không cần bỏ SHA-256!).
+2. **Các họ chữ ký PQC chính:** Mật mã dựa trên **Lưới** (ML-DSA / Dilithium, Falcon — cân bằng tốt giữa tốc độ và kích thước) và mật mã dựa trên **Hàm băm** (SLH-DSA / SPHINCS+, XMSS — bảo thủ nhất về giả định an toàn nhưng chữ ký lớn).
+3. **Nút thắt băng thông & kích thước chữ ký:** Chữ ký PQC lớn gấp 10 đến 100 lần chữ ký ECDSA (64 byte), trực tiếp cắt giảm số giao dịch trên mỗi block (TPS).
+4. **Chiến lược di cư (Migration & Aggregation):** Kết hợp chữ ký lai (Hybrid ECDSA + PQC), Account Abstraction (ERC-4337 cho phép đổi thuật toán chữ ký ngay ở cấp ví), và **tổng hợp hàng nghìn chữ ký PQC bằng một bằng chứng ZK-STARK duy nhất**.
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Máy tính lượng tử đặt ra một mối đe dọa trực tiếp đối với nền tảng mật mã học hiện tại của công nghệ blockchain. Trong khi máy tính cổ điển xử lý các bit nhị phân (0 hoặc 1), máy tính lượng tử khai thác các hiện tượng cơ học lượng tử như **chồng chập (superposition)** và **vướng víu (entanglement)** để xử lý các bit lượng tử (qubit) có thể tồn tại đồng thời ở nhiều trạng thái. Nhờ đó, một số thuật toán lượng tử có thể giải quyết các bài toán toán học nhanh hơn theo cấp số mũ so với thuật toán cổ điển tốt nhất, đe dọa trực tiếp các lược đồ mật mã đang bảo vệ hàng tỷ USD tài sản trên các hệ sinh thái blockchain.
@@ -156,6 +171,25 @@ Với SHA-256 (\(n = 256\)):
 Mức này vẫn còn đáng kể nhưng biên độ an toàn đã thu hẹp; do đó SHA-512 (độ bảo mật va chạm lượng tử ~170 bit) thường được khuyến nghị trong bối cảnh hậu lượng tử.
 
 ---
+
+### Khung giải thích: tự tay tính "cái giá băng thông" khi chuyển blockchain sang chữ ký hậu lượng tử (nên đọc chậm)
+
+Tại sao Bitcoin và Ethereum không thể đơn giản "đổi hàm `ecdsa_verify` thành `ml_dsa_verify` trong một bản cập nhật cuối tuần"? Hãy làm một phép chia đơn giản trên một block kích thước **1 MB** ($$1{,}000{,}000\text{ byte}$$):
+
+1. **Hiện trạng với ECDSA (`secp256k1`):**
+   - Chữ ký: $$64\text{ byte}$$; khóa công khai nén: $$33\text{ byte}$$ → phần mật mã chỉ tốn $$\approx 97\text{ byte}$$.
+   - Cộng thêm siêu dữ liệu giao dịch (~$$153\text{ byte}$$), mỗi giao dịch cỡ **$$250\text{ byte}$$**.
+   - Sức chứa của block 1 MB: $$\frac{1{,}000{,}000}{250} = \mathbf{4{,}000}\text{ giao dịch/block}$$.
+
+2. **Chuyển thẳng sang ML-DSA-65 (Dilithium3 — chuẩn NIST FIPS 204):**
+   - Chữ ký: $$3{,}309\text{ byte}$$; khóa công khai: $$1{,}952\text{ byte}$$ → phần mật mã vọt lên **$$5{,}261\text{ byte}$$** (gấp **54 lần** ECDSA!).
+   - Tổng kích thước giao dịch cỡ **$$5{,}414\text{ byte}$$**.
+   - Sức chứa của cùng block 1 MB: $$\frac{1{,}000{,}000}{5{,}414} \approx \mathbf{185}\text{ giao dịch/block}$$ (**thông lượng sụp giảm hơn 21 lần!**).
+
+3. **Chuyển sang SLH-DSA-128s (SPHINCS+ — chuẩn NIST FIPS 205, chỉ dựa trên hàm băm):**
+   - Chữ ký: $$7{,}856\text{ byte}$$, khóa công khai $$32\text{ byte}$$ → tổng giao dịch cỡ **$$8{,}040\text{ byte}$$** → chỉ còn **$$\approx 124\text{ giao dịch/block}$$** (giảm **32 lần**)!
+
+**Lối thoát kỹ thuật:** Phép tính tay ở trên cho thấy rõ vì sao nghiên cứu blockchain hậu lượng tử tập trung vào **Falcon** (chữ ký nhỏ hơn, ~666 byte) và đặc biệt là **tổng hợp chữ ký bằng ZK-STARK** — gom 4.000 chữ ký PQC ngoài chuỗi thành một bằng chứng STARK duy nhất vài chục KB đưa lên block!
 
 ## 5. Góc nhìn triển khai
 

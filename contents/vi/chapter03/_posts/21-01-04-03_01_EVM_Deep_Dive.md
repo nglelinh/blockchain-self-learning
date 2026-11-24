@@ -11,6 +11,45 @@ categories:
 
 # Bài giảng: Máy ảo Ethereum (EVM) — Bộ máy thực thi hợp đồng thông minh
 
+Khi bạn nhấn nút "Swap" trên một sàn phi tập trung, đoạn mã hợp đồng thông minh đó không chạy trên máy chủ Amazon hay Google nào cả — nó được thực thi **đồng thời, từng lệnh một, trên hàng nghìn máy tính độc lập khắp hành tinh**, từ máy chủ Linux tại Đức đến laptop ở Việt Nam, và tất cả đều phải cho ra cùng một kết quả khớp tới từng bit cuối cùng! Làm thế nào một chiếc máy ảo có thể vừa chạy mã nguồn tùy ý của người lạ mà không sợ bị vòng lặp vô hạn làm treo cả mạng lưới, vừa đảm bảo tính tất định tuyệt đối trên mọi hệ điều hành?
+
+Câu trả lời nằm ở **Máy ảo Ethereum (EVM)** — một chiếc máy tính ngăn xếp 256-bit tối giản, cô lập hoàn toàn khỏi hệ thống tệp và mạng bên ngoài, nơi mỗi lệnh máy (opcode) đều được niêm yết sẵn một cái giá tính bằng **Gas**. Hiểu sâu EVM là bước chuyển từ người "biết dùng Solidity" sang kỹ sư hiểu tận gốc chi phí, hiệu năng và lỗ hổng bảo mật của hợp đồng thông minh.
+
+---
+
+## Bản đồ kiến thức nền: Máy ảo Ethereum (EVM) đứng trên ba trụ cột khoa học máy tính nào?
+
+### 1. Kiến trúc Máy ảo Ngăn xếp 256-bit (Stack-based VM)
+Khác với CPU x86/ARM dùng thanh ghi (registers), EVM là máy ảo dùng **ngăn xếp (stack)** với kích thước mỗi từ (word) đúng **256 bit (32 byte)** — kích thước được chọn có chủ đích để khớp hoàn hảo với mã băm Keccak-256 và tọa độ chữ ký đường cong elliptic `secp256k1`! Ngăn xếp có độ sâu tối đa 1.024 phần tử, và các lệnh chỉ thao tác trên tối đa 16 phần tử trên cùng (`DUP1`–`DUP16`, `SWAP1`–`SWAP16` — nguồn gốc của lỗi biên dịch nổi tiếng *"Stack too deep"*).
+
+### 2. Phân tầng Bộ nhớ: Calldata, Memory và Storage
+EVM tách dữ liệu thành ba khu vực có chi phí cách biệt hàng nghìn lần:
+- **`calldata`:** Vùng chỉ đọc chứa tham số đầu vào giao dịch — rẻ nhất.
+- **`memory`:** Mảng byte tạm thời xóa sạch sau khi giao dịch kết thúc — chi phí tăng theo hàm **bậc hai** theo kích thước mở rộng để chống tấn công tràn RAM.
+- **`storage`:** Bảng ánh xạ khóa–giá trị $$256\text{-bit} \to 256\text{-bit}$$ lưu vĩnh viễn trong cây trạng thái toàn cầu — đắt đỏ nhất vì mọi nút trên Trái Đất phải lưu trữ lâu dài.
+
+### 3. Cơ chế Gas — Giải pháp thực tiễn cho Bài toán Dừng (Halting Problem)
+Định lý Alan Turing (1936) chứng minh không có thuật toán nào kiểm tra trước được liệu một chương trình bất kỳ có rơi vào vòng lặp vô hạn hay không. Ethereum không cố giải bài toán bất khả đó: nó biến EVM thành **gần đầy đủ Turing (quasi-Turing-complete)** bằng cách thu phí **gas** cho từng lệnh máy; nếu chương trình lặp vô hạn, `gasLimit` cạn kiệt sẽ lập tức ngắt thực thi (`Out of Gas`), hoàn tác mọi thay đổi trạng thái nhưng vẫn trừ phí đã tiêu!
+
+---
+
+### Khung giải thích: tự tay chạy chuỗi bytecode EVM `6003600501600055` và tính hóa đơn Gas (nên đọc chậm)
+
+Hãy tự tay làm CPU của EVM giải mã và thực thi chuỗi bytecode vỏn vẹn 8 byte `60 03 60 05 01 60 00 55` (tính `3 + 5` rồi lưu vào ô nhớ `storage[0]`):
+
+1. **`60 03` (`PUSH1 0x03`, tốn 3 gas):** Đẩy số `3` lên đỉnh ngăn xếp → Stack: `[3]`.
+2. **`60 05` (`PUSH1 0x05`, tốn 3 gas):** Đẩy số `5` lên đỉnh ngăn xếp → Stack: `[3, 5]`.
+3. **`01` (`ADD`, tốn 3 gas):** Rút hai phần tử đỉnh (`5` và `3`), cộng lại thành `8` rồi đẩy trở lại → Stack: `[8]`.
+4. **`60 00` (`PUSH1 0x00`, tốn 3 gas):** Đẩy địa chỉ ô nhớ `0` lên đỉnh ngăn xếp → Stack: `[8, 0]`.
+5. **`55` (`SSTORE`, ghi từ `0` sang giá trị khác `0` ở ô lạnh: tốn 20.000 + 2.100 = 22.100 gas!):** Rút khóa `0` và giá trị `8`, ghi vĩnh viễn `storage[0] = 8` vào cây trạng thái → Stack: `[]`.
+
+Hãy nhìn sự chênh lệch choáng ngợp trong hóa đơn:
+- Tổng 4 lệnh tính toán trên ngăn xếp (`PUSH1`, `PUSH1`, `ADD`, `PUSH1`): chỉ tốn **$$12\text{ gas}$$**.
+- Đúng 1 lệnh ghi vĩnh viễn lên đĩa toàn cầu (`SSTORE`): tốn **$$22\,100\text{ gas}$$** — đắt gấp **hơn 1.840 lần**!
+Đó là lý do nguyên tắc vàng của mọi kỹ sư EVM là: *tính toán thật nhiều trong `stack`/`memory`, nhưng tối thiểu hóa tuyệt đối số lần chạm vào `storage`!*
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Máy ảo Ethereum (Ethereum Virtual Machine — EVM)** là thành phần trung tâm của Ethereum: một máy ảo **gần đầy đủ Turing (quasi-Turing-complete)** chạy trên mọi nút Ethereum để thực thi mã hợp đồng thông minh một cách tất định và cô lập. Nếu Ethereum được ví như "máy tính toàn cầu", thì EVM đóng vai trò như bộ xử lý (CPU) của hệ thống đó.

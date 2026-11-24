@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 07.01: NFT và Quyền sở hữu số (Non-Fungible Tokens)
 
+Câu nói châm biếm nổi tiếng nhất về NFT là: *"Tôi chỉ cần bấm chuột phải rồi chọn Lưu ảnh (Save As) là có ngay bức tranh giống hệt!"* Câu đùa ấy thực ra chạm đúng bản chất cốt lõi nhất của bài học này: **một NFT không hề là tệp ảnh JPEG**. Bức ảnh chỉ là phần hiển thị, còn NFT là **bản ghi quyền sở hữu duy nhất, bất biến và kiểm chứng công khai bằng mật mã** trên blockchain — giống như việc chụp ảnh bức tranh Mona Lisa bằng điện thoại không biến bạn thành chủ sở hữu hợp pháp của bảo tàng Louvre.
+
+Nhưng chính ở đây cũng ẩn giấu một cạm bẫy kỹ thuật chết người: nếu siêu dữ liệu (metadata) của NFT trỏ về một máy chủ `https://` thông thường thay vì hệ thống lưu trữ định địa chỉ theo nội dung (IPFS/Arweave), chiếc NFT trị giá hàng trăm nghìn đô la có thể biến thành một trang báo lỗi `404 Not Found` ngay khi máy chủ đó đóng cửa!
+
+---
+
+## Bản đồ kiến thức nền: NFT và Quyền sở hữu số đứng trên bốn trụ cột nào?
+
+1. **Chuẩn mã hóa tài sản không thể thay thế (ERC-721 & ERC-1155):** Mỗi token được định danh duy nhất bởi cặp `(contractAddress, tokenId)` kèm bảng ánh xạ `ownerOf[tokenId] -> address` bất khả xâm phạm.
+2. **Định địa chỉ theo nội dung (Content Addressing — IPFS/Arweave):** Dùng mã băm mật mã (CID) làm chính địa chỉ của tệp dữ liệu, bảo đảm không ai có thể lén tráo đổi hình ảnh hay thuộc tính sau khi đúc (mint).
+3. **Tiền bản quyền & Giao dịch (EIP-2981):** Cơ chế chia sẻ phần trăm doanh thu cho tác giả mỗi khi tài sản đổi chủ trên thị trường thứ cấp (kèm thách thức thực thi giữa các sàn giao dịch).
+4. **Ứng dụng vượt xa nghệ thuật số:** Vị thế thanh khoản tập trung Uniswap v3 (mỗi vị thế LP là một NFT!), vé sự kiện chống giả mạo, chứng chỉ học thuật không thể chuyển nhượng (*Soulbound Tokens*) và tài sản thế giới thực (RWA).
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Token không thể thay thế (Non-Fungible Tokens — NFTs)** mang lại sự thay đổi căn bản trong cách biểu diễn quyền sở hữu trên môi trường số. Trước khi có blockchain, tài sản số luôn gặp một đặc tính cố hữu là có thể sao chép hoàn hảo với chi phí gần như bằng không — một tệp nhạc MP3, một bức ảnh số hay một tài liệu đều có thể nhân bản vô hạn. Điều này tạo ra mâu thuẫn giữa sự dồi dào của hàng hóa số và tính khan hiếm cần thiết để hình thành giá trị kinh tế.
@@ -116,6 +131,24 @@ R(t) = \sum_{i=1}^{k} \frac{1}{f_i}
 Thuộc tính càng hiếm (tần suất \(f_i\) càng nhỏ) thì đóng góp vào điểm độ hiếm càng lớn.
 
 ---
+
+### Khung giải thích: tự tay tính chi phí lưu ảnh trực tiếp On-chain vs. Lưu mã băm CID (IPFS) (nên đọc chậm)
+
+Tại sao hầu hết NFT không lưu trực tiếp tệp ảnh lên Ethereum mà chỉ lưu một đường dẫn mã băm `ipfs://...`? Hãy tự kiểm chứng bằng chi phí lưu trữ thực của máy ảo Ethereum (EVM):
+
+Trên Ethereum, ghi mới 1 khe nhớ (`SSTORE`) cỡ **32 byte** tốn **$$20{,}000\text{ gas}$$** — tương đương $$\frac{20{,}000}{32} = 625\text{ gas/byte}$$.
+
+1. **Nếu lưu thẳng 1 ảnh PNG dung lượng 500 KB ($$500{,}000\text{ byte}$$) lên chuỗi:**
+   $$
+   \text{Gas cần thiết} = 500{,}000 \times 625 = \mathbf{312{,}500{,}000\text{ gas}!}
+   $$
+   Con số này **gấp hơn 10 lần giới hạn gas của cả một block Ethereum (30 triệu gas)** — về mặt kỹ thuật thậm chí không thể nhét vừa vào một giao dịch đơn lẻ!
+
+2. **Nếu lưu tệp ảnh trên IPFS/Arweave và chỉ ghi mã băm CID (32 byte) lên chuỗi:**
+   - Chi phí lưu trữ trên chuỗi: chỉ đúng **$$20{,}000\text{ gas}$$** (rẻ hơn **15.625 lần**, tương đương chưa tới 1 USD ở mức phí bình thường!).
+   - Tính toàn vẹn mật mã: vì $$\mathrm{CID} = \mathrm{SHA256}(\text{dữ liệu ảnh})$$, bất kỳ ai sửa dù chỉ 1 pixel trên ảnh sẽ làm CID thay đổi hoàn toàn và bị ví người dùng phát hiện ngay lập tức!
+
+(Chỉ những dự án nghệ thuật mã nguồn thuần như *CryptoPunks* hay *Autoglyphs* — dùng vài trăm byte mã SVG/thuật toán sinh hình — mới đủ nhỏ để lưu 100% trực tiếp on-chain!)
 
 ## 5. Góc nhìn triển khai
 

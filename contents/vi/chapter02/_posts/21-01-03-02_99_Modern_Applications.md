@@ -14,6 +14,40 @@ lesson_type: optional
 
 > Bài học này là phần **tùy chọn**, **không** trình bày lại Casper FFG, LMD-GHOST, PBFT hay Tendermint. Nội dung chỉ điểm qua các *triển khai thực tế và bản nâng cấp* đã diễn ra trên chính những giao thức mà Chương 02 đã phân tích.
 
+Nếu năm 2020 câu hỏi lớn nhất của cả ngành là *"Liệu một blockchain trăm tỷ đô la có thực sự vận hành được bằng Proof-of-Stake không?"*, thì sau sự kiện **The Merge (15/09/2022)** câu hỏi đó đã khép lại hoàn toàn. Trọng tâm kỹ thuật giai đoạn **2022–2026** dịch chuyển sang những bài toán vận hành ở quy mô công nghiệp: làm sao tách rời quyền *xây dựng khối tối ưu MEV* khỏi quyền *đề xuất khối* (**PBS / MEV-Boost**) để validator nhỏ không bị đè bẹp; làm sao thu gọn gánh nặng truyền tin của hơn một triệu validator (**EIP-7251** trong nâng cấp Pectra); và cách **CometBFT** kế thừa Tendermint để vận hành hàng chục chuỗi liên kết trong hệ sinh thái Cosmos.
+
+---
+
+## Bản đồ kiến thức nền: Ba mặt trận đồng thuận thực chiến 2022–2026 là gì?
+
+### 1. Đồng thuận Gasper (LMD-GHOST + Casper FFG) trong thực tế
+Ethereum PoS không dùng một thuật toán đơn lẻ mà ghép đôi hai cơ chế bổ trợ nhau: **LMD-GHOST** (quy tắc chọn nhánh nhanh từng slot 12 giây, ưu tiên *Liveness*) và **Casper FFG** (tiện ích chốt khối BFT sau mỗi 2 epoch $$\approx 12.8\text{ phút}$$, bảo đảm *Safety* kinh tế tuyệt đối).
+
+### 2. Tách biệt Người đề xuất – Người xây dựng khối (PBS & MEV-Boost)
+Vì việc sắp xếp thứ tự giao dịch DeFi mang lại lợi nhuận chênh lệch giá khổng lồ (**MEV**), các tay chơi chuyên nghiệp có thuật toán tối ưu tốt hơn nhiều so với người staking tại nhà. **PBS (Proposer-Builder Separation)** tạo ra một thị trường đấu giá công khai: các *Builder* chuyên nghiệp tranh nhau đóng gói khối sinh lời cao nhất rồi trả giá mua quyền phát khối từ *Proposer* (validator ngẫu nhiên) — giúp validator nhỏ vẫn nhận được lợi suất cạnh tranh mà không cần chạy bot MEV phức tạp.
+
+### 3. Nâng cấp Pectra (EIP-7251 / EIP-7002) và Tương lai Single-Slot Finality
+Giới hạn cứng 32 ETH/validator ban đầu khiến số lượng validator phình lên vượt ngưỡng 1 triệu, làm phình to mạng P2P chứng thực. **EIP-7251 (MaxEB)** cho phép gộp số dư hiệu lực lên tới **2.048 ETH/validator**, cắt mạnh lượng chữ ký phải gom mỗi slot — bước đệm thiết yếu tiến tới chốt khối ngay trong 1 slot (**Single-Slot Finality**).
+
+---
+
+### Khung giải thích: tự tay tính hiệu quả nén mạng P2P của EIP-7251 (MaxEB) trong nâng cấp Pectra (nên đọc chậm)
+
+Hãy tính nhanh một phép chia đơn giản để thấy vì sao EIP-7251 là nâng cấp hạ tầng sống còn của Ethereum 2025–2026:
+
+1. **Trước Pectra (trần cứng 32 ETH/validator):** Giả sử một giao thức liquid staking hoặc tổ chức nắm giữ $$204\,800\text{ ETH}$$ tham gia đặt cọc. Họ buộc phải chia tách số tiền ấy thành:
+   $$
+   \frac{204\,800\text{ ETH}}{32\text{ ETH/validator}} = \mathbf{6\,400\text{ validator độc lập}}.
+   $$
+   Mỗi epoch (32 slot = 6.4 phút), cả 6.400 validator này đều phải tạo, truyền phát và gộp chữ ký chứng thực BLS riêng lẻ!
+2. **Sau Pectra với EIP-7251 (nâng trần lên 2.048 ETH/validator):** Cũng chính $$204\,800\text{ ETH}$$ đó (với cùng trọng số biểu quyết và cùng phần thưởng cộng dồn tự động!) nay gộp gọn thành:
+   $$
+   \frac{204\,800\text{ ETH}}{2\,048\text{ ETH/validator}} = \mathbf{100\text{ validator}}!
+   $$
+3. **Hệ quả hệ thống:** Tổng lượng cổ phần bảo vệ mạng **không hề giảm một wei nào**, nhưng lưu lượng tin nhắn chứng thực P2P của tổ chức đó giảm **đúng 64 lần**! (Đồng thời, để tránh bất công cho người đặt cọc lớn, phạt slashing khởi điểm cũng được điều chỉnh tỉ lệ hợp lý, và EIP-7002 cho phép hợp đồng thông minh tầng thực thi chủ động kích hoạt lệnh rút validator không cần khóa ký đồng thuận.)
+
+---
+
 ## 1. Từ “Ethereum 2.0 trên lý thuyết” tới Beacon Chain vận hành thực tế
 
 Bài 02.00 đã trình bày PoS, vấn đề nothing-at-stake và cơ chế slashing. Ngày 15 tháng 9 năm 2022, [The Merge](https://ethereum.org/roadmap/merge/) ngừng cơ chế đào PoW và gắn tầng thực thi vào Beacon Chain: trạng thái EVM giữ nguyên, còn tầng đồng thuận chuyển sang Gasper (FFG + LMD-GHOST). Đây không phải việc tạo ra một chuỗi mới mà là thay đổi cơ chế đồng thuận của một máy trạng thái đã vận hành liên tục từ năm 2015.

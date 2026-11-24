@@ -11,6 +11,51 @@ categories:
 
 # Bài giảng: Kiến trúc Ethereum — Nền tảng máy tính phi tập trung
 
+Nếu Bitcoin là một chiếc máy tính bỏ túi chuyên dụng chỉ làm đúng một việc cực kỳ xuất sắc — chuyển giá trị an toàn không cần trung gian — thì năm 2013, chàng lập trình viên 19 tuổi **Vitalik Buterin** đặt một câu hỏi làm thay đổi hoàn toàn lịch sử blockchain: *thay vì mỗi ứng dụng mới (tên miền phi tập trung, sàn giao dịch, cho vay, bảo hiểm) lại phải tự xây một blockchain riêng từ con số 0, tại sao không xây dựng **một chiếc máy tính toàn cầu dùng chung** nơi bất kỳ ai cũng có thể tải mã chương trình lên và để cả mạng lưới cùng thực thi một cách tất định?*
+
+Câu trả lời đó là **Ethereum**. Để biến blockchain từ "sổ cái giao dịch" thành **máy chuyển trạng thái toàn cầu (World State Machine)**, Ethereum từ bỏ mô hình UTXO của Bitcoin để chuyển sang **mô hình Tài khoản (Account Model)**, trang bị cây lưu trữ **Merkle Patricia Trie (MPT)** và đặt ra cơ chế **Gas** để giải quyết bài toán dừng (Halting Problem) của Alan Turing.
+
+---
+
+## Bản đồ kiến thức nền: Kiến trúc Ethereum đứng trên ba trụ cột khoa học máy tính nào?
+
+### 1. Máy chuyển trạng thái tất định (Deterministic State Machine)
+Về mặt toán học, toàn bộ mạng Ethereum chỉ là một hàm chuyển trạng thái thuần túy:
+
+$$
+\sigma_{t+1} = \Upsilon(\sigma_t,\ T),
+$$
+
+trong đó $$\sigma_t$$ là **Trạng thái Thế giới (World State)** hiện tại (bảng ánh xạ mọi địa chỉ 20 byte tới bộ 4 thông tin: `nonce`, `balance`, `storageRoot`, `codeHash`) và $$T$$ là một giao dịch hợp lệ. Mọi nút trên Trái Đất bắt đầu từ cùng $$\sigma_t$$ và chạy cùng $$T$$ phải ra **đúng y hệt từng bit** của $$\sigma_{t+1}$$!
+
+### 2. Mô hình Tài khoản (EOA vs. Contract Account) và Cơ chế Nonce
+Ethereum có hai loại tài khoản cùng chung không gian địa chỉ: **EOA (Externally Owned Account)** do khóa bí mật điều khiển (có thể chủ động khởi phát giao dịch), và **Contract Account** do mã bytecode điều khiển (chỉ chạy khi được gọi). Mỗi tài khoản có một bộ đếm tuần tự gọi là **`nonce`**: giao dịch gửi đi từ một EOA bắt buộc phải đánh số `nonce` tăng dần liên tiếp $$0, 1, 2, \dots$$ — chỉ bằng một số nguyên duy nhất, Ethereum chặn đứng hoàn toàn **tấn công phát lại (replay attack)**!
+
+### 3. Cây Merkle Patricia Biến đổi (Modified Merkle Patricia Trie — MPT)
+Mỗi tiêu đề khối Ethereum không chỉ chứa 1 gốc Merkle như Bitcoin, mà chứa **3 gốc cây MPT riêng biệt**: `stateRoot` (chụp toàn bộ số dư và bộ nhớ mọi hợp đồng), `transactionsRoot` (danh sách giao dịch), và `receiptsRoot` (nhật ký sự kiện và gas thực tiêu). Nhờ cấu trúc cây tiền tố (Radix Trie) kết hợp băm Merkle, các nút nhẹ có thể kiểm chứng ngay lập tức số dư hoặc biến lưu trữ của bất kỳ hợp đồng nào chỉ từ 32 byte `stateRoot`!
+
+---
+
+### Khung giải thích: tự tay chạy hàm chuyển trạng thái $$\Upsilon(\sigma_t, T)$$ kèm cơ chế phí EIP-1559 (nên đọc chậm)
+
+Hãy đóng vai một nút Ethereum cập nhật trạng thái thế giới cho một giao dịch chuyển ETH chuẩn sau nâng cấp EIP-1559:
+
+1. **Trạng thái ban đầu $$\sigma_t$$:**
+   - Alice (EOA): `nonce = 5`, `balance = 2.000000 ETH`.
+   - Bob (EOA): `nonce = 0`, `balance = 1.000000 ETH`.
+   - Phí nền của khối hiện tại: `baseFee = 15 gwei` ($$1\text{ gwei} = 10^{-9}\text{ ETH}$$).
+2. **Giao dịch $$T$$ do Alice ký:** `nonce = 5`, `to = Bob`, `value = 0.400000 ETH`, `gasLimit = 21 000` (mức chuẩn cho chuyển ETH thường), `maxFeePerGas = 20 gwei`, `maxPriorityFeePerGas = 2 gwei`.
+3. **Tính phí gas thực tế và chia dòng tiền:**
+   - Giá gas hiệu lực: $$\text{effectiveGasPrice} = \min(20,\ 15 + 2) = \mathbf{17\text{ gwei}}$$.
+   - Tổng phí Alice phải trả: $$21\,000 \times 17\text{ gwei} = 357\,000\text{ gwei} = \mathbf{0.000357\text{ ETH}}$$.
+   - Theo EIP-1559, phần phí nền $$21\,000 \times 15 = 315\,000\text{ gwei}$$ bị **đốt vĩnh viễn** khỏi tổng cung ETH (giảm áp lực lạm phát); chỉ phần tiền boa $$21\,000 \times 2 = 42\,000\text{ gwei}$$ được cộng cho validator đề xuất khối!
+4. **Trạng thái mới $$\sigma_{t+1} = \Upsilon(\sigma_t, T)$$:**
+   - Alice: `balance` $$= 2.000000 - 0.400000 - 0.000357 = \mathbf{1.599643\text{ ETH}}$$, và `nonce` tăng từ `5` lên **`6`**.
+   - Bob: `balance` $$= 1.000000 + 0.400000 = \mathbf{1.400000\text{ ETH}}$$.
+   - Nếu kẻ xấu bắt lấy nguyên gói tin giao dịch $$T$$ và phát lại lần thứ hai để rút thêm 0.4 ETH của Alice, mọi nút kiểm tra thấy `T.nonce (5) != Alice.nonce (6)` và loại bỏ ngay lập tức!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Ethereum** không chỉ là một đồng tiền mã hóa mà còn là một **máy tính phi tập trung toàn cầu (decentralized world computer)**, cho phép bất kỳ ai triển khai và vận hành **hợp đồng thông minh (smart contract)** — các chương trình tự động thực thi trên mạng lưới phân tán. Nếu Bitcoin thường được ví như "vàng kỹ thuật số" hay "tiền mặt ngang hàng", thì Ethereum hướng tới mô hình "tiền có thể lập trình" và nền tảng cho ứng dụng phi tập trung (dApp).

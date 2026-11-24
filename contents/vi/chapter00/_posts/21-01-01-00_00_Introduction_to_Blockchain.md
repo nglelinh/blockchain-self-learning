@@ -11,6 +11,53 @@ categories:
 
 # Lecture: Giới thiệu về Blockchain và Distributed Ledgers
 
+Tháng 10 năm 2008, khi cuộc khủng hoảng tài chính toàn cầu đang làm lung lay niềm tin vào các ngân hàng lớn nhất thế giới, một bức thư điện tử ngắn xuất hiện trên danh sách thư của giới mật mã học. Tác giả ký tên **Satoshi Nakamoto** và đặt ra một câu hỏi tưởng như nghịch lý: *làm thế nào hai người xa lạ ở hai đầu Trái Đất có thể chuyển tiền điện tử trực tiếp cho nhau mà không cần bất kỳ ngân hàng, công ty thẻ tín dụng hay trọng tài trung tâm nào đứng giữa kiểm tra xem đồng tiền đó đã bị chi tiêu hai lần hay chưa?*
+
+Trước năm 2008, mọi hệ thống thanh toán số đều xoay quanh một quyển sổ cái nằm trong phòng máy chủ của một tổ chức trung gian. Đột phá của **blockchain** không phải là phát minh ra một định dạng cơ sở dữ liệu kỳ bí, mà là sự kết hợp tinh tế giữa **mật mã học**, **hệ phân tán** và **động lực kinh tế** để hàng nghìn máy tính không tin nhau cùng ghi và bảo vệ chung một quyển sổ cái bất biến. Bài học mở đầu này giúp bạn nhìn xuyên qua lớp từ khóa truyền thông để nắm đúng kiến trúc cốt lõi của sổ cái phân tán.
+
+---
+
+## Bản đồ kiến thức nền: Blockchain đứng trên ba trụ cột khoa học nào?
+
+Với nền tảng toán học và tin học đại học (cấu trúc dữ liệu, xác suất, lý thuyết đồ thị), bạn có thể tách blockchain thành ba trụ cột rõ ràng:
+
+### 1. Mật mã học ứng dụng (Hàm băm & Chữ ký số)
+Nếu sổ cái mở công khai cho mọi người cùng giữ, điều gì ngăn kẻ gian sửa lại một giao dịch từ năm ngoái? **Hàm băm mật mã** tạo ra "dấu vân tay" duy nhất cho mỗi khối dữ liệu và móc nối khối sau vào dấu vân tay của khối trước thành một **chuỗi băm (hash chain)** — sửa một bit ở quá khứ sẽ làm vỡ dây chuyền mọi dấu vân tay phía sau. Song song đó, **chữ ký số khóa công khai** bảo đảm chỉ chủ sở hữu khóa bí mật mới có quyền ký tiêu số dư của mình.
+
+### 2. Hệ thống phân tán và Đồng thuận (Distributed Consensus)
+Khi không có máy chủ trung tâm, các nút mạng nằm rải rác toàn cầu chịu độ trễ truyền tin và có thể chứa các nút gian lận. **Lý thuyết đồng thuận phân tán** giải quyết bài toán: làm sao toàn mạng thống nhất *đúng một thứ tự giao dịch duy nhất* (ngăn chi tiêu gấp đôi) ngay cả khi một phần nút ngừng hoạt động hoặc cố tình tung tin giả.
+
+### 3. Lý thuyết trò chơi và Động lực kinh tế (Cryptoeconomics)
+Thuật toán thuần túy chưa đủ trong một mạng mở mà ai cũng có thể tạo hàng triệu tài khoản giả (tấn công Sybil). Blockchain đưa **chi phí vật lý hoặc kinh tế thực** (năng lực tính toán trong PoW, tài sản đặt cọc trong PoS) cùng phần thưởng khối vào giao thức, khiến hành vi trung thực trở thành chiến lược có lợi nhất về mặt kinh tế.
+
+---
+
+### Khung giải thích: tự tay kiểm tra chuỗi băm chống giả mạo 3 khối (nên đọc chậm)
+
+Để thấy vì sao chỉ sửa một con số trong quá khứ lại làm sụp đổ toàn bộ chuỗi khối, hãy tự tay tính một **chuỗi băm mini 3 khối** bằng hàm băm đồ chơi $$h(x) = (7x + 13) \bmod 97$$ (trong thực tế Bitcoin dùng SHA-256 trên không gian $$2^{256}$$):
+
+1. **Tạo Khối 0 (Genesis)** với dữ liệu giao dịch $$d_0 = 10$$:
+   $$
+   H_0 = h(10) = (7 \cdot 10 + 13) \bmod 97 = 83.
+   $$
+2. **Tạo Khối 1** chứa dữ liệu $$d_1 = 25$$ và **móc nối** mã băm khối trước $$H_0 = 83$$ bằng cách tính $$h(H_0 + d_1)$$:
+   $$
+   H_1 = h(83 + 25) = (7 \cdot 108 + 13) \bmod 97 = 769 \bmod 97 = 90 \quad (\text{vì } 97 \times 7 = 679).
+   $$
+3. **Tạo Khối 2** chứa dữ liệu $$d_2 = 40$$ móc vào $$H_1 = 90$$:
+   $$
+   H_2 = h(90 + 40) = (7 \cdot 130 + 13) \bmod 97 = 923 \bmod 97 = 50 \quad (\text{vì } 97 \times 9 = 873).
+   $$
+   Toàn mạng lúc này cùng ghi nhớ dấu vân tay đầu chuỗi là $$H_2 = 50$$.
+4. **Thử tấn công sửa lén Khối 0** từ $$d_0 = 10$$ thành $$d_0' = 11$$ (chỉ lệch đúng 1 đơn vị!):
+   - $$H_0' = (7 \cdot 11 + 13) \bmod 97 = 90 \neq 83$$.
+   - $$H_1' = (7(90 + 25) + 13) \bmod 97 = 818 \bmod 97 = 42 \neq 90$$.
+   - $$H_2' = (7(42 + 40) + 13) \bmod 97 = 587 \bmod 97 = 5 \neq 50$$!
+
+Chỉ một thay đổi nhỏ nhất ở Khối 0 đã tạo hiệu ứng domino làm sai lệch toàn bộ mã băm phía sau: mọi nút trung thực chỉ cần đối chiếu $$H_2' = 5 \neq 50$$ là phát hiện ngay gian lận mà không cần tin bất kỳ ai!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Blockchain ra đời từ bài toán xây dựng một hệ thống thanh toán điện tử ngang hàng (peer-to-peer) không phụ thuộc vào bên trung gian tin cậy. Mô hình này được giới thiệu lần đầu vào năm 2008 bởi một cá nhân hoặc nhóm tác giả ẩn danh dưới bút danh **Satoshi Nakamoto** trong bài báo *"Bitcoin: A Peer-to-Peer Electronic Cash System"*.

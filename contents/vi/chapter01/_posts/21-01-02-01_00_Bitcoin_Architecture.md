@@ -11,6 +11,51 @@ categories:
 
 # Lecture: Bitcoin Architecture - Hệ thống tiền điện tử phi tập trung đầu tiên
 
+Ngày 3 tháng 1 năm 2009, khối đầu tiên của mạng Bitcoin (Genesis Block) được đào lên. Giấu kín trong trường dữ liệu tùy ý của khối ấy là dòng tiêu đề trang nhất tờ *The Times* của London cùng ngày: *"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks."* Dòng chữ ấy vừa đóng vai trò dấu thời gian chứng minh khối không bị đào lén từ trước, vừa là tuyên ngôn kiến trúc: lần đầu tiên trong lịch sử, một mạng lưới tiền tệ vận hành hoàn toàn bằng mã nguồn mở, mật mã học và đồng thuận ngang hàng đã chính thức khởi chạy.
+
+Điều khiến **kiến trúc Bitcoin** trở thành kiệt tác kỹ thuật không nằm ở sự cầu kỳ, mà ở **sự tối giản có chủ đích**: thay vì lưu bảng số dư tài khoản như ngân hàng, Bitcoin lưu một đồ thị các "tờ tiền số nguyên vẹn" gọi là **UTXO**; thay vì một ngôn ngữ lập trình phức tạp dễ sinh lỗ hổng, Bitcoin dùng một ngôn ngữ ngăn xếp cố tình *không đầy đủ Turing* mang tên **Bitcoin Script**.
+
+---
+
+## Bản đồ kiến thức nền: Kiến trúc Bitcoin đứng trên ba trụ cột nào?
+
+Để đọc hiểu Bitcoin như một kỹ sư hệ thống tốt nghiệp đại học, hãy nắm rõ ba trụ cột kỹ thuật cốt lõi:
+
+### 1. Mô hình UTXO (Unspent Transaction Output) — Sổ cái dạng đồ thị DAG
+Ngân hàng lưu số dư dạng bảng: `Alice: 100 USD`. Bitcoin **không có khái niệm "số dư tài khoản"** ở tầng giao thức! Thay vào đó, mỗi giao dịch tiêu hủy một hoặc nhiều "đồng xu chưa tiêu" (UTXO) cũ ở đầu vào và đúc ra các UTXO mới ở đầu ra. Toàn bộ lịch sử Bitcoin thực chất là một **đồ thị có hướng không chu trình (DAG)** các giao dịch; số dư hiển thị trên ví của bạn chỉ là tổng tất cả các UTXO hiện chưa bị tiêu mà khóa bí mật của bạn có thể mở khóa! Mô hình này giúp xác minh giao dịch song song cực dễ và kiểm tra chống chi tiêu gấp đôi cực gọn.
+
+### 2. Ngôn ngữ ngăn xếp Bitcoin Script và Taproot (MAST + Schnorr)
+Mỗi UTXO không "ghi tên" chủ sở hữu mà gắn một đoạn mã khóa (`scriptPubKey` — như một ổ khóa số). Muốn tiêu UTXO đó, giao dịch mới phải cung cấp đoạn mã mở khóa (`scriptSig` / `witness` — chiếc chìa khóa). Máy ảo ngăn xếp của Bitcoin chạy nối hai đoạn mã; nếu cuối cùng trên đỉnh ngăn xếp là `TRUE` thì giao dịch hợp lệ. Bitcoin cố tình **cấm vòng lặp** (không đầy đủ Turing) để tránh tấn công treo máy vô hạn. Từ nâng cấp Taproot (2021), chữ ký Schnorr và cây MAST giúp các điều kiện chi tiêu phức tạp trông hệt như một giao dịch đơn giản thông thường!
+
+### 3. Đồng thuận Nakamoto và Mạng ngang hàng (P2P)
+Các giao dịch hợp lệ lan truyền qua mạng ngang hàng (gossip protocol) vào vùng chờ (`mempool`), rồi được thợ đào gom vào khối, gắn vào cây Merkle và khóa bằng Proof-of-Work. Khi có phân nhánh tạm thời, mọi nút đều tuân theo quy tắc đơn giản: **chọn nhánh hợp lệ có tổng công sức tích lũy (chainwork) lớn nhất**.
+
+---
+
+### Khung giải thích: tự tay theo dõi một giao dịch UTXO và chạy máy ảo ngăn xếp P2PKH (nên đọc chậm)
+
+Hãy tự tay đóng vai một nút đầy đủ (full node) Bitcoin xác minh một giao dịch từ đầu đến cuối:
+
+1. **Bài toán tiền thừa (Change) trong mô hình UTXO:** Giả sử Alice đang sở hữu đúng **1 UTXO** trị giá $$0.8000\text{ BTC}$$ (như một tờ tiền mệnh giá 0.8 BTC không thể xé lẻ), và muốn trả cho Bob $$0.5000\text{ BTC}$$ với phí thợ đào $$0.0005\text{ BTC}$$.
+   - *Đầu vào (Input):* Tham chiếu tới UTXO $$0.8000\text{ BTC}$$ cũ (tiêu hủy hoàn toàn tờ tiền này).
+   - *Đầu ra 1 (Output 0):* $$0.5000\text{ BTC}$$ khóa bằng mã băm khóa công khai của Bob.
+   - *Đầu ra 2 (Output 1 — Tiền thừa):* $$0.8000 - 0.5000 - 0.0005 = \mathbf{0.2995\text{ BTC}}$$ gửi ngược về một địa chỉ mới của chính Alice!
+   - *Phí thợ đào ẩn (Implicit Fee):* Bitcoin không có trường `fee` tường minh — phí chính là hiệu số $$\sum \text{Input} - \sum \text{Output} = 0.8000 - (0.5000 + 0.2995) = 0.0005\text{ BTC}$$. (Nếu một lập trình viên quên tạo đầu ra tiền thừa, toàn bộ $$0.3000\text{ BTC}$$ dư ra sẽ tự động trở thành phí thưởng cho thợ đào!)
+2. **Chạy tay máy ảo ngăn xếp cho kịch bản P2PKH (Pay-to-Public-Key-Hash):**
+   - Mã mở khóa của Alice: `<Sig> <PubKey>`.
+   - Mã khóa của UTXO cũ: `OP_DUP OP_HASH160 <PubKeyHash_Alice> OP_EQUALVERIFY OP_CHECKSIG`.
+   - Ghép lại và chạy từng lệnh từ trái sang phải trên ngăn xếp (Stack):
+     1. Đẩy `<Sig>`, `<PubKey>` → Stack: `[<Sig>, <PubKey>]`.
+     2. `OP_DUP` (nhân đôi đỉnh) → Stack: `[<Sig>, <PubKey>, <PubKey>]`.
+     3. `OP_HASH160` (băm đỉnh bằng RIPEMD160(SHA256)) → Stack: `[<Sig>, <PubKey>, <Hash>]`.
+     4. Đẩy `<PubKeyHash_Alice>` → Stack: `[<Sig>, <PubKey>, <Hash>, <PubKeyHash_Alice>]`.
+     5. `OP_EQUALVERIFY` (so khớp hai phần tử đỉnh; khớp thì xóa cả hai, sai thì hủy ngay giao dịch) → Stack: `[<Sig>, <PubKey>]`.
+     6. `OP_CHECKSIG` (kiểm tra chữ ký `<Sig>` khớp khóa công khai `<PubKey>` và nội dung giao dịch) → Stack: `[TRUE]`!
+
+Chỉ trong 6 bước ngăn xếp hoàn toàn tất định, mọi nút trên toàn cầu đều xác minh được giao dịch của Alice mà không cần bất kỳ cơ sở dữ liệu tài khoản trung tâm nào!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Ngày 31 tháng 10 năm 2008, giữa bối cảnh khủng hoảng tài chính toàn cầu, một cá nhân hoặc nhóm tác giả ẩn danh lấy bút danh **Satoshi Nakamoto** đã công bố whitepaper *"Bitcoin: A Peer-to-Peer Electronic Cash System"* trên một diễn đàn thư điện tử về mật mã học. Tài liệu dài 9 trang này đặt nền móng cho sự ra đời của hệ thống tiền điện tử phi tập trung đầu tiên vận hành ổn định trong thực tế.

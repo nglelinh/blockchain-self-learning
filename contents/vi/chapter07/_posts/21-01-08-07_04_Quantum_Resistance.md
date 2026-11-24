@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 07.04: Chiến lược kháng lượng tử cho Blockchain
 
+Nâng cấp mật mã cho một ngân hàng truyền thống chỉ cần đội IT cập nhật thư viện TLS trên máy chủ trong một đêm. Nhưng nâng cấp mật mã cho một mạng lưới phi tập trung như Bitcoin hay Ethereum — nơi có hàng chục triệu chiếc ví ngủ đông không ai chạm tới suốt 10 năm (kể cả khoảng 1 triệu BTC của Satoshi Nakamoto nằm trên các địa chỉ P2PK đã lộ sẵn khóa công khai!) — lại là **bài toán điều phối và kỹ thuật khó nhất trong lịch sử blockchain**.
+
+Nếu bài 05.04 giới thiệu các họ thuật toán hậu lượng tử (PQC), thì bài học này tập trung vào **chiến lược chuyển đổi thực chiến ở cấp độ giao thức và quản trị mạng**: bảo vệ giao dịch đang bay trên mempool, nâng cấp ví không gián đoạn và xử lý bài toán tài sản ngủ đông.
+
+---
+
+## Bản đồ kiến thức nền: Chiến lược Kháng lượng tử cho Blockchain gồm bốn lớp phòng thủ nào?
+
+1. **Phân loại mức độ phơi nhiễm địa chỉ:** Phân biệt rạch ròi tài sản *rất dễ tổn thương* (địa chỉ P2PK cũ hoặc địa chỉ tái sử dụng đã lộ khóa công khai trên chuỗi) với tài sản *an toàn tạm thời* (địa chỉ P2PKH/Bech32 chưa từng chi tiêu, khóa công khai vẫn ẩn sau hàm băm SHA-256).
+2. **Giao thức di cư hai pha Commit–Reveal:** Chống kịch bản máy lượng tử cướp giao dịch ngay khi người dùng phát lệnh chuyển tiền sang ví hậu lượng tử mới trên mempool.
+3. **Tính linh hoạt mật mã nhờ Account Abstraction (Crypto-Agility):** Tách định danh ví khỏi thuật toán chữ ký ECDSA cứng nhắc để từng người dùng nâng cấp dần sang chữ ký lưới hoặc chữ ký hàm băm mà không cần hard fork cưỡng bức toàn mạng.
+4. **Bài toán quản trị tài sản ngủ đông:** Lựa chọn đạo đức – kỹ thuật đầy tranh cãi: *có nên đặt thời hạn đóng băng các ví cũ không di cư để ngăn máy lượng tử cướp hàng triệu BTC bán tháo ra thị trường không?*
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Mối đe dọa từ máy tính lượng tử đòi hỏi các hệ sinh thái blockchain phải xây dựng chiến lược chuyển đổi chủ động từ sớm. Bài giảng này xem xét các giải pháp thực tiễn để chuẩn bị cho kỷ nguyên hậu lượng tử, bao gồm lược đồ chữ ký lai, lộ trình chuyển đổi theo từng giai đoạn, kế hoạch ứng phó khẩn cấp và các điều chỉnh cấp giao thức nhằm đảm bảo tính tương thích ngược trong suốt thời kỳ chuyển tiếp.
@@ -68,6 +83,21 @@ Mức độ bảo mật của lược đồ chữ ký lai trong giai đoạn chu
 Hệ thống vẫn an toàn chừng nào ít nhất một trong hai lược đồ chưa bị phá vỡ, mang lại cơ chế bảo vệ thận trọng và liên tục.
 
 ---
+
+### Khung giải thích: tự tay kiểm tra cơ chế Commit–Reveal hai pha chống máy lượng tử cướp giao dịch (nên đọc chậm)
+
+Giả sử năm 2035 xuất hiện máy tính lượng tử chạy được thuật toán Shor đủ nhanh để bẻ khóa ECDSA trong vài phút. Bob đang giữ 10 BTC trong một địa chỉ cũ chưa từng chi tiêu `Addr = SHA256(PK)` (nên `PK` vẫn bí mật!). Làm sao Bob chuyển an toàn 10 BTC sang ví hậu lượng tử mới `Addr_PQ`?
+
+- **Nếu Bob chuyển thẳng 1 bước (NGUY HIỂM):** Bob phát giao dịch ký bằng ECDSA kèm khóa công khai `PK` lên mempool. Ngay lập tức, kẻ tấn công có máy lượng tử đọc `PK`, chạy Shor lấy khóa bí mật `sk` trong 30 giây, ký một giao dịch *khác* chuyển 10 BTC về ví hacker `Addr_Hacker` với phí gas cao hơn để thợ đào ưu tiên đóng gói trước!
+
+- **Giải pháp di cư hai pha Commit–Reveal (dùng sức mạnh kháng Shor của SHA-256):**
+  1. **Pha 1 — Cam kết (Block $$t$$):** Bob tạo một số bí mật `nonce` và chỉ phát lên chuỗi duy nhất mã băm cam kết:
+     $$
+     C = \mathrm{SHA256}\bigl(\texttt{PK} \,\|\, \texttt{Addr\_PQ} \,\|\, \texttt{nonce}\bigr).
+     $$
+     Vì `PK` **chưa hề lộ ra**, thuật toán Shor hoàn toàn vô dụng (tìm ngược SHA-256 bằng Grover vẫn tốn $$2^{128}$$ bước — bất khả thi!).
+  2. **Pha 2 — Mở khóa (Block $$t + 6$$, sau khi $$C$$ đã được xác nhận vĩnh viễn):** Bob mới công bố `PK`, `Addr_PQ`, `nonce` cùng chữ ký (hoặc bằng chứng STARK).
+     - Dù máy lượng tử lúc này có bẻ được `sk` từ `PK` và cố ký giao dịch cướp tiền về `Addr_Hacker`, nút mạng kiểm tra thấy không tồn tại cam kết hợp lệ `SHA256(PK || Addr_Hacker || nonce)` nào đã được chốt từ block $$t$$ → **giao dịch của hacker bị loại bỏ ngay lập tức!**
 
 ## 5. Góc nhìn triển khai
 

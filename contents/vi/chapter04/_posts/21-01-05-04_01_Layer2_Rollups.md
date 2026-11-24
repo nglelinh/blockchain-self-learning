@@ -11,6 +11,44 @@ categories:
 
 # Bài giảng: Giải pháp Layer 2 — Phân tích chuyên sâu về Rollups
 
+Sau khi thấy bài toán 315 TB/năm ở bài trước, một ý tưởng thiên tài đã định hình lại toàn bộ tương lai của Ethereum: *tại sao bắt tất cả 10.000 nút Ethereum phải tự tay chạy lại từng lệnh cộng trừ của 50.000 giao dịch mỗi giây, trong khi ta có thể để **một máy chủ chuyên dụng (Sequencer)** thực thi hàng nghìn giao dịch bên ngoài, nén gọn dữ liệu lại thành một bó nhỏ, rồi chỉ gửi dữ liệu nén kèm một **bằng chứng toán học hoặc cơ chế khiếu nại** lên Ethereum kiểm tra?*
+
+Đó chính là nguyên lý của **Rollups** (gồm hai trường phái lớn: **Optimistic Rollups** như Arbitrum, Optimism, Base và **ZK-Rollups** như zkSync, Starknet, Scroll). Khác với sidechain (phải tự chịu trách nhiệm bảo mật bằng tập validator riêng yếu hơn), Rollup đăng trực tiếp dữ liệu giao dịch lên Tầng 1 Ethereum, nên ngay cả khi toàn bộ máy chủ Rollup bị sập hay cố tình gian lận, người dùng vẫn có thể tự dựng lại số dư và rút tiền an toàn thẳng từ Tầng 1!
+
+---
+
+## Bản đồ kiến thức nền: Công nghệ Layer 2 Rollups đứng trên ba trụ cột nào?
+
+### 1. Kiến trúc Mô-đun: Tách rời Thực thi khỏi Tính sẵn có Dữ liệu (DA)
+Mọi blockchain làm 3 việc: *Thực thi (Execution)*, *Đồng thuận/Thanh toán (Settlement)*, và *Tính sẵn có Dữ liệu (Data Availability — DA)*. Rollup chỉ giữ phần **Thực thi** ở ngoài chuỗi (off-chain), còn thuê nguyên lớp **Settlement + DA** của Ethereum L1 — biến Ethereum từ "máy tính xử lý từng giao dịch lẻ" thành "tòa án tối cao và kho lưu trữ dữ liệu bảo mật" cho hàng chục mạng L2!
+
+### 2. Optimistic Rollups: Giả định trung thực + Bằng chứng gian lận (Fraud Proofs)
+Optimistic Rollup đăng gốc trạng thái mới lên L1 và mặc định tin là đúng trong một **cửa sổ tranh chấp** (thường 7 ngày). Nếu có bất kỳ ai phát hiện Sequencer gian lận, họ kích hoạt **trò chơi chia đôi tương tác (interactive fault proof)** — khoanh vùng đúng 1 bước tính toán sai trên L1 để bác bỏ khối gian và tịch thu tiền đặt cọc của kẻ xấu. Ưu điểm: tương thích EVM cực dễ; nhược điểm: rút tiền trực tiếp về L1 phải đợi hết 7 ngày (hoặc dùng cầu nối thanh khoản nhanh).
+
+### 3. ZK-Rollups: Bằng chứng hợp lệ mật mã (Validity Proofs — SNARK / STARK)
+Thay vì đợi 7 ngày xem có ai kiện không, **ZK-Rollup** đính kèm ngay một **bằng chứng không tiết lộ (ZK validity proof)** cùng mỗi lô giao dịch: một chuỗi vài trăm byte chứng minh toán học 100% rằng *"tất cả 10.000 giao dịch trong lô này đều hợp lệ và dẫn đúng tới gốc trạng thái mới!"* Hợp đồng thông minh trên L1 chỉ mất vài trăm nghìn gas để xác minh bằng chứng và **chốt trạng thái ngay lập tức** không cần cửa sổ 7 ngày!
+
+---
+
+### Khung giải thích: tự tay tính mức giảm phí giao dịch của Rollup trước và sau nâng cấp Dencun (EIP-4844) (nên đọc chậm)
+
+Tại sao cùng kế thừa bảo mật của Ethereum mà giao dịch trên Layer 2 lại rẻ hơn Tầng 1 từ hàng chục đến hàng nghìn lần? Hãy tính trực tiếp trên một giao dịch chuyển ETH cơ bản:
+
+1. **Chi phí trực tiếp trên Ethereum L1:** Một lệnh chuyển ETH tốn cố định **$$21\,000\text{ gas}$$** (tại giá gas 20 gwei và ETH = 3.000 USD, phí là $$21\,000 \times 20 \times 10^{-9} \times 3\,000 = \mathbf{1.26\text{ USD}}$$).
+2. **Nén dữ liệu trên Rollup:** Thay vì đăng đủ 110 byte giao dịch thô, Rollup nén chữ ký, địa chỉ và tham số (dùng bảng chỉ mục + nén brotli/zlib) xuống chỉ còn khoảng **$$15\text{ byte}$$ dữ liệu/giao dịch**!
+3. **Kỷ nguyên tiền-Dencun (đăng vào `calldata` L1 — 16 gas/byte):**
+   - Mỗi giao dịch L2 chỉ tốn khoảng $$15 \times 16 = \mathbf{240\text{ gas L1}}$$ (cộng thêm phần chia đều chi phí xác minh bằng chứng ~50–100 gas/giao dịch khi gộp lô 5.000 giao dịch).
+   - Mức giảm phí so với L1: $$\frac{21\,000}{300} \approx \mathbf{70\text{ lần}}$$ (phí từ $$1.26\text{ USD}$$ giảm còn khoảng **$$0.018\text{ USD}$$**)!
+4. **Kỷ nguyên hậu-Dencun (đăng vào EIP-4844 `blob`):**
+   - Mỗi **blob** có kích thước **$$131\,072\text{ byte}$$** (~128 KB), nhét vừa tới $$\frac{131\,072}{15} \approx \mathbf{8\,738\text{ giao dịch nén}}$$ trong đúng 1 blob!
+   - Vì blob có thị trường phí riêng tách khỏi cạnh tranh gas DeFi trên L1, khi phí 1 blob ở mức bình thường (ví dụ $$1\text{–}3\text{ USD/blob}$$), chi phí đăng dữ liệu L1 chia cho mỗi giao dịch L2 chỉ còn:
+     $$
+     \frac{2\text{ USD}}{8\,738\text{ giao dịch}} \approx \mathbf{0.00023\text{ USD/giao dịch}}
+     $$
+     — **rẻ hơn hàng nghìn lần** so với chạy trực tiếp trên L1, trong khi toàn bộ dữ liệu giao dịch vẫn được cam kết mật mã KZG trực tiếp trên Ethereum!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Rollups** đã trở thành **giải pháp mở rộng chủ đạo** của Ethereum trong lộ trình lấy rollup làm trung tâm (rollup-centric roadmap) do Vitalik Buterin đề xuất. Rollup thực thi giao dịch ngoài chuỗi (off-chain) nhưng đăng dữ liệu giao dịch lên Layer 1, qua đó kế thừa tính bảo mật của Ethereum trong khi tăng thông lượng lên khoảng 10–100 lần.

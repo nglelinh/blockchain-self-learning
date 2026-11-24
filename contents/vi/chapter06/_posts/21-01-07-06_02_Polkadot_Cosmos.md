@@ -11,6 +11,21 @@ categories:
 
 # Bài giảng 06.02: Polkadot và Cosmos — Các nền tảng thiết kế chuyên biệt cho tương tác xuyên chuỗi
 
+Thay vì xây những blockchain đơn lẻ khép kín rồi chắp vá thêm những chiếc cầu nối mong manh bên ngoài, hai hệ sinh thái tiên phong là **Polkadot** và **Cosmos** đã đặt ra một câu hỏi kiến trúc táo bạo hơn: *điều gì xảy ra nếu khả năng giao tiếp xuyên chuỗi được thiết kế ngay từ tầng móng Layer 0?*
+
+Thú vị thay, cùng xuất phát từ một tầm nhìn "Internet của các Blockchain", Polkadot và Cosmos lại chọn **hai triết lý hoàn toàn đối lập** về cách chia sẻ bảo mật và quyền tự chủ — tạo nên bài học so sánh kinh điển bậc nhất trong kỹ thuật hệ thống phân tán.
+
+---
+
+## Bản đồ kiến thức nền: Hai triết lý Đa chuỗi — Polkadot vs. Cosmos khác nhau ở bốn trụ cột nào?
+
+1. **Mô hình Bảo mật (Shared Security vs. Sovereign Security):** Polkadot gom toàn bộ validator vào một **Relay Chain** trung tâm để bảo vệ chung cho tất cả các Parachain; Cosmos để mỗi App-chain tự vận hành bộ validator và token riêng (tối đa hóa chủ quyền), chỉ chia sẻ bảo mật khi tự nguyện bật *Interchain Security*.
+2. **Giao thức truyền tin chuẩn hóa (XCM vs. IBC):** Polkadot dùng **XCM** truyền tin nhắn trực tiếp dưới chung một ô bảo mật; Cosmos dùng **IBC** (chuẩn giao tiếp dựa trên Light Client giữa hai chuỗi độc lập, tương tự TCP/IP cho blockchain).
+3. **Đồng thuận & Hoàn tất:** Polkadot tách sản xuất block (BABE) khỏi hoàn tất (GRANDPA); Cosmos dùng động cơ BFT **CometBFT (Tendermint)** hoàn tất tức thì trong 1 block.
+4. **Đánh đổi cốt lõi:** Bảo mật tức thì và đồng nhất cho chuỗi nhỏ (Polkadot) đối đầu với quyền tự do nâng cấp, thu phí và chủ quyền kinh tế tuyệt đối (Cosmos).
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Trong khi các cầu nối cố gắng liên kết những blockchain đã được xây dựng tách biệt từ trước, **Polkadot** và **Cosmos** tiếp cận bài toán bằng cách thiết kế lại kiến trúc blockchain để tích hợp khả năng tương tác ngay vào giao thức lõi. Hai nền tảng này đại diện cho hai triết lý khác nhau về "mạng internet của các blockchain": Polkadot hướng tới **bảo mật chia sẻ** và thực thi phối hợp, còn Cosmos ưu tiên **chủ quyền độc lập** kết hợp giao thức truyền tin chuẩn hóa.
@@ -230,6 +245,24 @@ Công thức này minh họa giới hạn phân bổ: khi số parachain tăng l
 Người xác minh trên chuỗi đích dùng tập \(V\) lưu trong khách nhẹ để kiểm tra từng chữ ký trong tập \(\{\sigma_1, \dots, \sigma_k\}\) và cộng tổng trọng số, với độ phức tạp \(O(k)\) phép xác minh chữ ký (thường \(k \approx 100\)).
 
 ---
+
+### Khung giải thích: tự tay so sánh chi phí tấn công giữa Bảo mật Chủ quyền (Cosmos) và Bảo mật Dùng chung (Polkadot) (nên đọc chậm)
+
+Giả sử có một hệ sinh thái gồm **10 chuỗi ứng dụng**: 1 chuỗi trung tâm lớn có lượng stake $$1{,}000\text{ triệu USD}$$, và 9 chuỗi ứng dụng nhỏ mới ra mắt mỗi chuỗi chỉ có stake $$30\text{ triệu USD}$$ (tổng stake toàn hệ sinh thái $$= 1{,}000 + 9\times 30 = 1{,}270\text{ triệu USD}$$). Trong cơ chế đồng thuận BFT, cần $$> 1/3$$ stake để làm dừng mạng (liveness) và $$> 2/3$$ stake để giả mạo trạng thái (safety).
+
+1. **Mô hình Chủ quyền độc lập (kiểu Cosmos cơ bản):**
+   Kẻ tấn công nhắm vào **Chuỗi nhỏ #2** (stake $$30\text{ triệu USD}$$):
+   - Chi phí làm tê liệt Chuỗi #2: $$\frac{1}{3} \times 30 = \mathbf{10\text{ triệu USD}}$$.
+   - Chi phí giả mạo giao dịch xuyên chuỗi trên Chuỗi #2: $$\frac{2}{3} \times 30 = \mathbf{20\text{ triệu USD}}$$.
+   Dù Chuỗi trung tâm mạnh tới 1 tỷ USD, Chuỗi #2 vẫn rất dễ bị tấn công nếu TVL của nó vượt quá 20 triệu USD!
+
+2. **Mô hình Bảo mật dùng chung (kiểu Polkadot Relay Chain):**
+   Toàn bộ $$1{,}270\text{ triệu USD}$$ stake tập trung bảo vệ chung cho cả 10 chuỗi:
+   - Chi phí giả mạo chính **Chuỗi nhỏ #2** lúc này vọt lên:
+     $$
+     \frac{2}{3} \times 1{,}270 \approx \mathbf{847\text{ triệu USD}}!
+     $$
+   **Sức đề kháng của chuỗi nhỏ tăng hơn 42 lần** ngay từ ngày đầu ra mắt — nhưng cái giá phải trả là chuỗi nhỏ phải chi phí thuê không gian khối (coretime) và tuân theo khung kỹ thuật của Relay Chain!
 
 ## 5. Góc nhìn triển khai
 

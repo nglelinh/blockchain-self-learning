@@ -11,6 +11,50 @@ categories:
 
 # Lecture: Bitcoin Economics, Game Theory, và Monetary Policy
 
+Xuyên suốt hàng nghìn năm lịch sử, mọi hệ thống tiền tệ đều xoay quanh hai cực: vàng khan hiếm nhờ địa chất nhưng nặng nề khó vận chuyển, còn tiền pháp định tiện lợi nhưng cung tiền có thể được ngân hàng trung ương in thêm bất cứ lúc nào. Khi thiết kế Bitcoin, Satoshi Nakamoto đã nhúng thẳng **một chính sách tiền tệ bất biến bằng toán học** vào mã nguồn giao thức: lịch trình phát hành giảm một nửa sau mỗi 210.000 khối (khoảng 4 năm) và hội tụ chặt chẽ về trần **21 triệu BTC**.
+
+Nhưng Bitcoin không chỉ là một công thức cung tiền. An ninh của cả mạng lưới trị giá hàng trăm tỷ đô la được bảo vệ bởi **lý thuyết trò chơi**: khi phần thưởng khối giảm dần về 0 trong tương lai, liệu phí giao dịch có đủ duy trì ngân sách bảo mật hay không? Và tại sao một thợ đào nắm 30% sức mạnh mạng lại có thể bị cám dỗ bởi chiến lược **khai thác ích kỷ (selfish mining)**? Bài học này mở khóa lớp kinh tế học và lý thuyết trò chơi đằng sau Bitcoin.
+
+---
+
+## Bản đồ kiến thức nền: Kinh tế học Bitcoin đứng trên ba trụ cột toán học – kinh tế nào?
+
+Với nền tảng giải tích chuỗi số, xác suất và kinh tế vi mô đại học, bạn có thể nắm trọn cấu trúc kinh tế của Bitcoin qua ba trụ cột:
+
+### 1. Chính sách tiền tệ thuật toán và Chuỗi cấp số nhân hội tụ
+Khác với ngân hàng trung ương điều chỉnh lãi suất theo chu kỳ kinh tế, cung tiền Bitcoin là một **hàm tất định theo độ cao khối**. Nhờ tổng cấp số nhân có công bội $$r = 1/2$$, nguồn cung mới giảm dần theo hàm mũ và không bao giờ vượt quá 21 triệu BTC — tạo ra khái niệm **khan hiếm kỹ thuật số có thể kiểm chứng**.
+
+### 2. Ngân sách bảo mật (Security Budget) và Thị trường phí giao dịch
+Doanh thu của thợ đào mỗi khối gồm hai phần: **phần thưởng khối mới đúc (block subsidy)** và **phí giao dịch (transaction fees)**. Ở trạng thái cân bằng cạnh tranh, tổng chi phí điện năng và phần cứng mà thợ đào sẵn sàng chi ra mỗi ngày xấp xỉ đúng doanh thu khối — chính chi phí ấy tạo thành "bức tường thành" bảo vệ chuỗi khỏi tấn công 51%. Khi phần thưởng khối tiến về 0 qua nhiều chu kỳ Halving, thị trường đấu giá không gian khối (phí giao dịch) phải gánh vai trò nuôi sống ngân sách bảo mật.
+
+### 3. Lý thuyết trò chơi khai thác (Mining Game Theory)
+Phân tích của Satoshi giả định thợ đào chỉ chọn giữa "trung thực" hoặc "tấn công phá hoại 51%". Nhưng công trình đột phá của Ittay Eyal và Emin Gün Sirer (2014) chỉ ra một chiến lược trung gian tinh vi hơn — **Selfish Mining**: giữ bí mật khối vừa đào được để tạo nhánh riêng làm lãng phí công sức của thợ đào trung thực. Nhờ lý thuyết trò chơi (chuỗi Markov), ta tính được ngưỡng hashrate chính xác nơi hành vi trung thực không còn là cân bằng Nash!
+
+---
+
+### Khung giải thích: tự tay chứng minh trần 21 triệu BTC và tính lạm phát sau Halving (nên đọc chậm)
+
+Hãy kiểm chứng các con số cốt lõi của chính sách tiền tệ Bitcoin chỉ bằng công thức cấp số nhân phổ thông:
+
+1. **Vì sao tổng cung Bitcoin hội tụ đúng về 21 triệu BTC?**
+   - Mỗi kỷ nguyên (halving era) kéo dài đúng $$210\,000$$ khối ($$210\,000 \times 10\text{ phút} \approx 4\text{ năm}$$).
+   - Kỷ nguyên 0 (2009–2012) thưởng $$50\text{ BTC/khối}$$; kỷ nguyên 1 thưởng $$25$$; kỷ nguyên 2 thưởng $$12.5$$; kỷ nguyên $$k$$ thưởng $$\frac{50}{2^k}\text{ BTC}$$.
+   - Lấy tổng cấp số nhân vô hạn với công bội $$r = \frac{1}{2}$$:
+     $$
+     S_{\max} = 210\,000 \times \sum_{k=0}^{\infty} \frac{50}{2^k} = 210\,000 \times 50 \times \frac{1}{1 - 1/2} = 210\,000 \times 100 = \mathbf{21\,000\,000\text{ BTC}}!
+     $$
+   - (Chi tiết triển khai thực tế: vì Bitcoin chỉ chia nhỏ tới $$1\text{ satoshi} = 10^{-8}\text{ BTC}$$ và làm tròn xuống theo phép dịch bit số nguyên, sau 33 lần halving phần thưởng giảm hẳn về $$0$$ vào khoảng năm 2140, nên tổng cung thực tế xấp xỉ $$20\,999\,999.9769\text{ BTC}$$.)
+2. **Tính tay tỉ lệ lạm phát nguồn cung sau Halving lần 4 (tháng 4/2024):**
+   - Phần thưởng hiện tại: $$\frac{50}{2^4} = \mathbf{3.125\text{ BTC/khối}}$$.
+   - Với trung bình $$144$$ khối/ngày ($$24 \times 6$$), lượng BTC đúc mới mỗi ngày là $$144 \times 3.125 = 450\text{ BTC}$$, tức khoảng $$450 \times 365 = 164\,250\text{ BTC/năm}$$.
+   - Chia cho lượng cung đang lưu hành khoảng $$19.7\text{ triệu BTC}$$, tỉ lệ lạm phát nguồn cung hằng năm chỉ còn:
+     $$
+     \frac{164\,250}{19\,700\,000} \approx \mathbf{0.83\%/\text{năm}}
+     $$
+     — lần đầu tiên thấp hơn cả tốc độ tăng nguồn cung vàng khai thác hằng năm (khoảng $$1.5\text{–}2\%$$)!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Bitcoin không chỉ là một thiết kế kỹ thuật phân tán mà còn là một **thử nghiệm tiền tệ** đặc biệt: một hệ thống tiền kỹ thuật số có chính sách phát hành được lập trình cứng trong giao thức và không chịu sự điều chỉnh đơn phương của bất kỳ cơ quan trung ương nào.

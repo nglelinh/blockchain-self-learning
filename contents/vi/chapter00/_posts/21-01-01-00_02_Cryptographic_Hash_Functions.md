@@ -11,6 +11,50 @@ categories:
 
 # Lecture: Cryptographic Hash Functions - Nền tảng của Blockchain
 
+Bạn tải về một tập tin hệ điều hành nặng 4 GB từ internet. Làm thế nào chỉ bằng một chuỗi 64 ký tự thập lục phân (như `e3b0c442...`) bạn có thể biết chắc 100% tập tin ấy chưa bị tin tặc sửa dù chỉ **một bit duy nhất** trong hàng chục tỷ bit? Phép màu đằng sau dấu vân tay số ấy chính là **hàm băm mật mã (cryptographic hash function)** — linh hồn của cả an ninh mạng hiện đại lẫn mọi kiến trúc blockchain.
+
+Trên blockchain, hàm băm không chỉ làm nhiệm vụ kiểm tra toàn vẹn dữ liệu. Nó vừa đóng vai trò "xi măng" gắn kết các khối thành chuỗi bất biến, vừa dựng nên **cây Merkle** giúp điện thoại di động xác minh một giao dịch trong tích tắc mà không cần tải cả trăm gigabyte lịch sử, lại vừa tạo ra "câu đố xổ số" cho cơ chế đào Proof-of-Work của Bitcoin.
+
+---
+
+## Bản đồ kiến thức nền: Hàm băm mật mã, Xác suất va chạm và Cây Merkle nghiên cứu những gì?
+
+Với kiến thức toán rời rạc, xác suất và cấu trúc dữ liệu cây nhị phân ở bậc đại học, bạn có thể nắm trọn ba trụ cột của bài học này:
+
+### 1. Mật mã học đối xứng và Ba tính chất an ninh của Hàm băm
+Một hàm băm $$H: \{0,1\}^* \to \{0,1\}^n$$ ánh xạ không gian đầu vào vô hạn về tập đầu ra hữu hạn $$2^n$$ phần tử (với SHA-256 là $$2^{256} \approx 1.15 \times 10^{77}$$, gần bằng số nguyên tử trong vũ trụ quan sát được). Theo nguyên lý chuồng bồ câu, va chạm *chắc chắn tồn tại*, nhưng hàm băm mật mã đòi hỏi ba bài toán sau phải bất khả thi về mặt tính toán: **kháng tiền ảnh** ($$O(2^n)$$), **kháng tiền ảnh bậc hai** ($$O(2^n)$$), và **kháng va chạm** ($$O(2^{n/2})$$), kèm **hiệu ứng tuyết lở (avalanche effect)** — đổi 1 bit đầu vào làm lật ngẫu nhiên khoảng 50% số bit đầu ra.
+
+### 2. Xác suất tổ hợp và Nghịch lý ngày sinh (Birthday Paradox)
+Tại sao độ dài đầu ra phải là **256 bit** thay vì 128 bit? Nếu kẻ tấn công chỉ muốn tìm *một cặp bất kỳ* $$x \neq y$$ có cùng mã băm $$H(x) = H(y)$$ (tấn công va chạm), họ không cần thử $$2^n$$ lần mà chỉ cần khoảng $$\sqrt{2^n} = 2^{n/2}$$ lần! Do đó hàm băm 128-bit như MD5 chỉ có độ an toàn va chạm $$2^{64}$$ (và đã bị bẻ gãy hoàn toàn), trong khi SHA-256 đạt chuẩn an toàn $$2^{128}$$.
+
+### 3. Cấu trúc dữ liệu xác thực: Cây Merkle (Merkle Tree)
+Thay vì băm gộp tất cả $$N$$ giao dịch thành một chuỗi phẳng (muốn kiểm tra 1 giao dịch phải tải cả $$N$$ giao dịch), **cây Merkle** băm từng cặp giao dịch theo cấu trúc cây nhị phân lên tới một **Merkle Root** duy nhất 32 byte đặt trong tiêu đề khối. Nhờ đó, kích thước bằng chứng thành viên giảm từ tuyến tính $$O(N)$$ xuống logarit $$O(\log_2 N)$$!
+
+---
+
+### Khung giải thích: tự tay tính nghịch lý ngày sinh và bằng chứng cây Merkle (nên đọc chậm)
+
+Hãy kiểm chứng hai con số quan trọng nhất của bài học chỉ bằng phép nhân cơ bản:
+
+1. **Tại sao tìm va chạm tốn $$\sim 2^{n/2}$$ thay vì $$2^n$$?** Giả sử hàm băm trả về $$M = 2^n$$ giá trị đều nhau. Nếu bạn băm $$k$$ thông điệp khác nhau, số **cặp** có thể đối chiếu với nhau là $$\binom{k}{2} = \frac{k(k-1)}{2} \approx \frac{k^2}{2}$$. Xác suất không có cặp nào trùng nhau xấp xỉ:
+   $$
+   P(\text{không trùng}) \approx \Bigl(1 - \frac{1}{M}\Bigr)^{k^2/2} \approx e^{-k^2/(2M)}.
+   $$
+   Muốn xác suất trùng đạt $$50\%$$ ($$e^{-k^2/(2M)} = 0.5$$), ta giải $$\frac{k^2}{2M} = \ln 2 \approx 0.693 \implies k \approx 1.177\sqrt{M}$$.
+   - Kiểm tra với $$M = 365$$ ngày trong năm: $$k \approx 1.177 \times \sqrt{365} \approx 22.5$$ → chỉ cần **23 người** trong một căn phòng là xác suất có hai người trùng sinh nhật đã vượt $$50\%$$!
+   - Kiểm tra với SHA-256 ($$M = 2^{256}$$): $$k \approx 2^{128} \approx 3.4 \times 10^{38}$$ phép băm — ngay cả toàn mạng Bitcoin cộng lại cũng mất hàng nghìn tỷ tỷ năm!
+2. **Tự tay kiểm tra bằng chứng cây Merkle cho 4 giao dịch $$T_1, T_2, T_3, T_4$$:**
+   - Tầng lá: $$H_1 = H(T_1),\ H_2 = H(T_2),\ H_3 = H(T_3),\ H_4 = H(T_4)$$.
+   - Tầng giữa: $$H_{12} = H(H_1 \| H_2)$$, $$H_{34} = H(H_3 \| H_4)$$.
+   - Gốc Merkle: $$R = H(H_{12} \| H_{34})$$ (lưu công khai trong Block Header).
+   - **Bài toán xác minh nhẹ (SPV):** Bob chỉ giữ $$R$$ và muốn kiểm tra xem $$T_2$$ có thật sự nằm trong khối không. Nút đầy đủ chỉ cần gửi cho Bob đúng **2 mã băm anh em**: $$\text{Proof}(T_2) = (H_1,\ H_{34})$$. Bob tự tính 3 phép băm:
+     $$
+     H_2 = H(T_2) \;\longrightarrow\; H_{12}' = H(H_1 \| H_2) \;\longrightarrow\; R' = H(H_{12}' \| H_{34}),
+     $$
+     rồi so khớp $$R' \stackrel{?}{=} R$$! Nếu một khối chứa tới $$N = 1\,048\,576 = 2^{20}$$ giao dịch, Bob cũng chỉ cần tải đúng **20 mã băm** ($$20 \times 32 = 640\text{ byte}$$) thay vì tải hàng trăm megabyte dữ liệu!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Nếu xem blockchain như một công trình xây dựng, thì **hàm băm mật mã (cryptographic hash functions)** chính là những viên gạch cơ bản tạo nên phần móng. Mọi cơ chế cốt lõi của blockchain — từ liên kết các block với nhau, xác minh giao dịch cho đến quá trình đào block mới — đều dựa trên hàm băm.

@@ -11,6 +11,49 @@ categories:
 
 # Bài giảng: Các giao thức DeFi — Cơ chế tài chính phi tập trung
 
+Trên một sàn chứng khoán truyền thống như NYSE hay Nasdaq, muốn giao dịch khớp lệnh bạn cần một cuốn **sổ lệnh (order book)** khổng lồ với các nhà tạo lập thị trường chuyên nghiệp liên tục cập nhật hàng nghìn lệnh mua–bán mỗi giây. Khi các lập trình viên đầu tiên thử mang sổ lệnh đó lên Ethereum, họ lập tức đụng tường: mỗi lần đặt hay hủy lệnh đều tốn gas và chờ 12 giây!
+
+Đột phá làm bùng nổ cả kỷ nguyên **Tài chính Phi tập trung (DeFi)** năm 2018–2020 đến từ một phương trình đại số vỏn vẹn ba ký tự của Uniswap: **$$x \cdot y = k$$**. Thay vì ghép cặp từng người mua với người bán, bất kỳ ai cũng có thể gửi hai loại tài sản vào một **bể thanh khoản (liquidity pool)** và để một công thức toán học tự động báo giá 24/7 không cần trung gian. Từ viên gạch nền AMM đó, cả một hệ sinh thái tài chính lắp ghép (**Money Legos**) gồm cho vay thế chấp vượt mức (Aave/Compound), stablecoin thuật toán/thế chấp (MakerDAO/DAI) và khoản vay không cần tài sản đảm bảo trong 1 giao dịch (**Flash Loans**) đã hình thành.
+
+---
+
+## Bản đồ kiến thức nền: Toán học và Kinh tế học của DeFi đứng trên ba trụ cột nào?
+
+### 1. Nhà tạo lập thị trường tự động (AMM) và Đường cong bất biến $$x \cdot y = k$$
+Với hai tài sản có lượng dự trữ $$x$$ và $$y$$ trong bể, quy tắc **tích hằng số** yêu cầu sau mọi giao dịch (chưa tính phí), điểm $$(x', y')$$ mới vẫn phải nằm trên đường hyperbol $$x' \cdot y' = k$$. Giá tức thời là độ dốc $$P = y/x$$; lệnh giao dịch càng lớn so với độ sâu bể thì điểm $$(x', y')$$ trượt càng xa trên đường cong — sinh ra **độ trượt giá (slippage)** và **tổn thất tạm thời (Impermanent Loss)** cho người cung cấp thanh khoản khi giá thị trường biến động.
+
+### 2. Thị trường tiền tệ thế chấp vượt mức và Cơ chế Thanh lý (Health Factor)
+Vì người vay trên blockchain ẩn danh nên không có điểm tín dụng hay tòa án đòi nợ. Các giao thức cho vay (Aave, Compound) đòi hỏi **thế chấp vượt mức (over-collateralization)** (ví dụ thế chấp 150 USD ETH để vay tối đa 100 USD USDC). Một chỉ số sức khỏe (**Health Factor**) được cập nhật liên tục theo nguồn giá **Oracle (Chainlink)**; hễ $$\text{HF} < 1$$, bất kỳ bot thanh lý nào cũng có quyền trả hộ nợ và mua lại tài sản thế chấp với mức chiết khấu thưởng (ví dụ 5–10%) để bảo toàn khả năng thanh toán của giao thức.
+
+### 3. Tính nguyên tử (Atomicity) và Vay nhanh (Flash Loans)
+Trong EVM, một giao dịch gồm hàng chục bước gọi hợp đồng khác nhau hoặc **thành công toàn bộ**, hoặc **hoàn tác như chưa từng xảy ra**. Tính nguyên tử này sinh ra một sản phẩm tài chính chưa từng tồn tại ở thế giới truyền thống: **Flash Loan** — bạn có thể vay 100 triệu USD với **0 USD thế chấp**, miễn là bạn trả đủ vốn cộng phí (0.05–0.09%) ngay trước khi giao dịch đó kết thúc; nếu không trả đủ, toàn bộ giao dịch bị hủy ngược và bể thanh khoản không mất một xu!
+
+---
+
+### Khung giải thích: tự tay tính trượt giá AMM $$x \cdot y = k$$ và Tổn thất tạm thời (nên đọc chậm)
+
+Hãy tự tay tính hai phép tính sống còn mà mọi nhà đầu tư và kỹ sư DeFi đều phải nắm vững:
+
+1. **Tính giá thực khớp và độ trượt giá trên bể Uniswap v2:**
+   - Giả sử bể ETH/USDC đang có $$x = 100\text{ ETH}$$ và $$y = 300\,000\text{ USDC}$$.
+   - Giá tức thời ban đầu: $$P_0 = \frac{300\,000}{100} = \mathbf{3\,000\text{ USDC/ETH}}$$; hằng số bể: $$k = 100 \times 300\,000 = 30\,000\,000$$.
+   - Alice bán **10 ETH** vào bể (bỏ qua phí 0.3% để nhẩm sạch): lượng ETH mới là $$x' = 100 + 10 = 110\text{ ETH}$$. Để giữ $$x' \cdot y' = k$$:
+     $$
+     y' = \frac{30\,000\,000}{110} \approx 272\,727.27\text{ USDC}.
+     $$
+   - Lượng USDC Alice thực nhận: $$\Delta y = 300\,000 - 272\,727.27 = \mathbf{27\,272.73\text{ USDC}}$$.
+   - Giá thực khớp trung bình chỉ là $$2\,727.27\text{ USDC/ETH}$$ — Alice chịu **độ trượt giá $$\frac{3\,000 - 2\,727.27}{3\,000} \approx 9.09\%$$** vì lệnh bán chiếm tới 10% độ sâu bể! (Và giá mới trong bể lập tức tụt xuống $$P_1 = \frac{272\,727.27}{110} \approx 2\,479.34\text{ USDC/ETH}$$.)
+2. **Tính Tổn thất tạm thời (Impermanent Loss) khi giá ETH tăng gấp 4 lần ($$r = 4$$):**
+   - Ban đầu Bob nạp 1 ETH + 3.000 USDC (tổng 6.000 USD). Khi giá ETH bên ngoài tăng gấp 4 lên 12.000 USDC, các bot chênh lệch giá (arbitrage) mua ETH giá rẻ từ bể cho đến khi tỉ lệ mới thỏa $$y/x = 12\,000$$ và $$xy = 3\,000 \implies x_{\text{mới}} = 0.5\text{ ETH},\ y_{\text{mới}} = 6\,000\text{ USDC}$$.
+   - Giá trị phần góp của Bob trong bể lúc này: $$0.5 \times 12\,000 + 6\,000 = \mathbf{12\,000\text{ USD}}$$.
+   - Nếu Bob chỉ ngồi yên giữ (HODL) 1 ETH + 3.000 USDC ban đầu: $$1 \times 12\,000 + 3\,000 = \mathbf{15\,000\text{ USD}}$$.
+   - Bob bị hụt mất $$\frac{12\,000 - 15\,000}{15\,000} = \mathbf{-20\%}$$ — khớp chính xác công thức tổng quát:
+     $$
+     \mathrm{IL}(r) = \frac{2\sqrt{r}}{1 + r} - 1 = \frac{2\sqrt{4}}{1 + 4} - 1 = \frac{4}{5} - 1 = -20\%!
+     $$
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Tài chính phi tập trung (Decentralized Finance — DeFi)** là một trong những ứng dụng nổi bật nhất của hợp đồng thông minh, xây dựng hệ thống dịch vụ tài chính vận hành tự động trên blockchain mà không phụ thuộc vào ngân hàng, công ty môi giới hay trung gian truyền thống. Trong năm 2020, tổng giá trị tài sản khóa (Total Value Locked — TVL) trong DeFi tăng từ dưới 1 tỷ USD lên hơn 100 tỷ USD chỉ trong một năm.

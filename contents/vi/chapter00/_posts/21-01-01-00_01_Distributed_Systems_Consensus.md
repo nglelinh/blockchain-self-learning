@@ -11,6 +11,51 @@ categories:
 
 # Lecture: Distributed Systems và Consensus Theory
 
+Hãy tưởng tượng bốn đạo quân đóng quanh một thành trì kiên cố, chỉ liên lạc với nhau qua người đưa tin chạy ngựa. Nếu cả bốn cùng tấn công lúc bình minh, họ sẽ thắng; nếu chỉ một nửa tấn công còn nửa kia rút lui, họ sẽ thảm bại. Nhưng trớ trêu thay: có thể có một vị tướng là **kẻ phản bội**, cố tình gửi thư "Tấn công!" cho người này và "Rút lui!" cho người kia. Làm thế nào các vị tướng trung thành vẫn đi đến cùng một quyết định?
+
+Câu chuyện ngụ ngôn năm 1982 của Leslie Lamport, Robert Shostak và Marshall Pease — **Bài toán các vị tướng Byzantine** — không chỉ là câu đố trí tuệ, mà chính là trái tim toán học của mọi hệ thống phân tán và blockchain hiện đại. Trước khi nói về Bitcoin, Ethereum hay Tendermint, ta cần hiểu hai ranh giới thép của khoa học máy tính phân tán: **định lý bất khả FLP (1985)** và **ngưỡng chịu lỗi Byzantine $$n \ge 3f + 1$$**.
+
+---
+
+## Bản đồ kiến thức nền: Lý thuyết Hệ phân tán và Đồng thuận nghiên cứu những gì?
+
+Với hành trang khoa học máy tính đại học (mạng máy tính, xác suất, tổ hợp cơ bản), lý thuyết đồng thuận đứng trên ba trụ cột rõ ràng:
+
+### 1. Mô hình mạng: Đồng bộ, Bán đồng bộ và Bất đồng bộ
+Mọi giao thức phân tán đều phụ thuộc vào giả thiết về thời gian truyền tin:
+- **Đồng bộ (Synchronous):** Mọi gói tin đều đến nơi trong một giới hạn thời gian $$\Delta$$ biết trước.
+- **Bất đồng bộ (Asynchronous):** Độ trễ có thể dài tùy ý (nhưng gói tin không mất vĩnh viễn) — trong mô hình này, ta không thể phân biệt một nút đã *sập nguồn* với một nút chỉ đang *chậm mạng*, dẫn tới **Định lý bất khả FLP (1985)**: không có giao thức tất định nào vừa an toàn vừa chắc chắn dừng khi có dù chỉ 1 nút lỗi dừng!
+- **Bán đồng bộ (Partially Synchronous):** Mạng có thể tắc nghẽn tạm thời, nhưng sau một mốc thời gian ổn định toàn cục (GST), gói tin lại đến trong giới hạn $$\Delta$$ — đây là mô hình chuẩn của PBFT, Tendermint và Ethereum PoS.
+
+### 2. Mô hình lỗi: Lỗi dừng (Crash) vs. Lỗi Byzantine
+- **Crash Fault (CFT — như Raft, Paxos):** Nút có thể ngừng chạy đột ngột nhưng không bao giờ nói dối; chỉ cần quá bán $$n \ge 2f + 1$$ nút để chịu được $$f$$ nút lỗi.
+- **Byzantine Fault (BFT):** Nút ác ý có thể gửi hai thông điệp trái ngược cho hai nút khác nhau, giả mạo thời gian hoặc câu kết phá hoại; khi mạng bán đồng bộ/bất đồng bộ, ta bắt buộc phải có **$$n \ge 3f + 1$$** nút!
+
+### 3. Hai bất biến cốt lõi: Safety (An toàn) và Liveness (Sống động)
+- **Safety:** Không bao giờ có hai nút trung thực chốt hai khối mâu thuẫn nhau ở cùng một độ cao (không bị phân nhánh đôi).
+- **Liveness:** Mọi giao dịch hợp lệ cuối cùng đều sẽ được đưa vào chuỗi (hệ thống không bị treo chết mãi mãi).
+Định lý CAP và FLP cho thấy khi mạng bị phân mảnh, mọi blockchain đều phải chọn rõ: ưu tiên giữ **Safety** (tạm dừng chốt khối như Tendermint) hay ưu tiên giữ **Liveness** (vẫn tiếp tục tạo khối rồi chọn chuỗi dài nhất như Bitcoin).
+
+---
+
+### Khung giải thích: tự tay chứng minh ngưỡng $$n \ge 3f + 1$$ bằng nguyên lý chuồng bồ câu (nên đọc chậm)
+
+Tại sao hệ thống chịu lỗi Byzantine lại cần đúng $$3f + 1$$ nút (ví dụ 4 nút để chịu 1 kẻ phản bội, 7 nút để chịu 2 kẻ phản bội) mà không thể là $$3f$$? Hãy kiểm tra tận tay trong 3 bước ngắn:
+
+1. **Vì sao $$n = 3,\ f = 1$$ thất bại (3 vị tướng với 1 kẻ phản bội)?** Giả sử có 3 nút $$A, B, C$$. Vì mạng có thể có 1 nút sập nguồn, giao thức bắt buộc phải cho phép $$A$$ chốt quyết định khi chỉ nghe được 2 phiếu ($$A$$ và 1 nút nữa).
+   - *Kịch bản 1:* $$C$$ là kẻ phản bội. $$C$$ nói với $$A$$ là "Tấn công" (cùng với $$A$$ được 2 phiếu → $$A$$ chốt **Tấn công**), đồng thời $$C$$ nói với $$B$$ là "Rút lui" (cùng với $$B$$ được 2 phiếu → $$B$$ chốt **Rút lui**)!
+   - Hai nút trung thực $$A$$ và $$B$$ chốt hai kết quả trái ngược nhau — **Safety bị phá vỡ hoàn toàn!**
+2. **Nguyên lý giao nhau của tập đại biểu (Quorum Intersection) với $$n = 3f + 1$$:** Giả sử ta có $$n = 3f + 1$$ nút và quy định một quyết định chỉ được chốt khi gom đủ tập đại biểu (quorum) cỡ $$Q = 2f + 1$$ phiếu.
+   - *Liveness:* Ngay cả khi toàn bộ $$f$$ nút lỗi im lặng hoàn toàn, vẫn còn $$n - f = 2f + 1 = Q$$ nút trung thực đủ để chốt khối!
+   - *Safety:* Xét hai tập đại biểu bất kỳ $$Q_1, Q_2$$ (mỗi tập cỡ $$2f + 1$$). Theo nguyên lý chuồng bồ câu:
+     $$
+     |Q_1 \cap Q_2| = |Q_1| + |Q_2| - |Q_1 \cup Q_2| \ge (2f + 1) + (2f + 1) - (3f + 1) = f + 1.
+     $$
+   - Vì cả mạng chỉ có tối đa $$f$$ kẻ phản bội, giao của $$Q_1$$ và $$Q_2$$ **bắt buộc chứa ít nhất $$(f + 1) - f = 1$$ nút trung thực**! Nút trung thực này không bao giờ ký hai khối mâu thuẫn ở cùng một vòng, nên hai quyết định trái ngược không thể cùng gom đủ $$2f+1$$ phiếu!
+3. **Thử ngay với số cụ thể $$f = 1 \implies n = 4,\ Q = 3$$:** Hai nhóm bất kỳ cỡ 3 lấy từ 4 nút luôn trùng nhau ít nhất $$3 + 3 - 4 = 2$$ nút. Trong 2 nút trùng nhau đó, có tối đa 1 kẻ gian, nên **chắc chắn có ít nhất 1 nút trung thực đứng làm nhân chứng chung** khóa chặt an toàn cho cả mạng!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 Để hiểu sâu cơ chế vận hành của blockchain, trước hết cần nắm vững **hệ thống phân tán (distributed systems)** — nền tảng lý thuyết mà blockchain được xây dựng trên đó. Một hệ thống phân tán là tập hợp các máy tính độc lập kết nối với nhau qua mạng, phối hợp để thực hiện một mục tiêu chung sao cho từ góc nhìn của người dùng cuối, toàn bộ hệ thống hoạt động như một thực thể thống nhất.

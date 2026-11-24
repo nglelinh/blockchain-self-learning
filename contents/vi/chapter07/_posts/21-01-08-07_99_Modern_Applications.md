@@ -14,6 +14,21 @@ lesson_type: optional
 
 > Bài giảng này mang tính **tùy chọn**. Nội dung **không** lặp lại hợp đồng Governor/DAO, chuẩn ERC-721, IPFS, định nghĩa MEV hay toán học mạng lưới, mà điểm qua các *ứng dụng và đề xuất EIP* nổi bật đã định hình các chủ đề nâng cao sau năm 2022.
 
+Chỉ trong giai đoạn **2022–2026**, một tầng sản phẩm hoàn toàn mới đã mọc lên trực tiếp trên nền móng quản trị, NFT, hạ tầng và MEV của Chương 7: **Restaking** (EigenLayer, Symbiotic) cho phép dùng chính ETH đã stake để bảo vệ hàng chục dịch vụ mạng lưới bên ngoài; **Account Abstraction (ERC-4337 & EIP-7702)** thay thế cụm 12 từ khóa rườm rà bằng ví thông minh có Passkey và khôi phục xã hội; còn **Token hóa Tài sản Thực (RWA)** đã đưa hàng tỷ đô la trái phiếu chính phủ Mỹ lên chuỗi với thanh khoản 24/7!
+
+Bài cập nhật cuối cùng của khóa học giúp bạn nhìn xuyên qua lớp tiếp thị để nắm rõ cơ chế kỹ thuật, lợi ích hiệu quả vốn và những rủi ro hệ thống mới của thế hệ ứng dụng Web3 2022–2026.
+
+---
+
+## Bản đồ kiến thức nền: Lớp Sản phẩm Web3 2022–2026 đứng trên bốn trụ cột nào?
+
+1. **Restaking & Dịch vụ Xác thực Chủ động (AVS — EigenLayer):** Tái sử dụng bảo mật kinh tế của ETH đã stake cho các Oracle, cầu nối và lớp DA mới — tăng hiệu quả sử dụng vốn nhưng làm tăng rủi ro phạt cắt (slashing) dây chuyền.
+2. **Trừu tượng hóa Tài khoản (ERC-4337 & EIP-7702):** Tách biệt khái niệm "người ký" và "tài khoản giữ tiền", mở khóa giao dịch gộp nhiều bước, trả gas bằng stablecoin qua Paymaster và nâng cấp trực tiếp ví EOA truyền thống.
+3. **Tài sản Thế giới Thực (RWA — Tokenized Treasuries & Credit):** Đưa tài sản tài chính truyền thống lên chuỗi bằng tiêu chuẩn tuân thủ (ERC-3643 / whitelist KYC) để kết hợp độ an toàn pháp lý với tốc độ thanh toán tức thì của DeFi.
+4. **Thanh toán cho AI Agents & Hạ tầng DePIN:** Cung cấp ví tự trị và kênh thanh toán vi mô không cần cấp phép cho các tác tử phần mềm tự mua dữ liệu, năng lực tính toán GPU và gọi API theo từng truy vấn.
+
+---
+
 ## 1. Lớp sản phẩm mới trên nền tảng các bài 07.00–07.05
 
 Chương 07 bao phủ DAO, NFT, hạ tầng Web3, MEV, kháng lượng tử và định hướng tương lai. Trong giai đoạn 2022–2026, hệ sinh thái bổ sung bốn hướng phát triển nổi bật: **restaking** (EigenLayer và các giao thức tương tự) biến tài sản ETH đặt cọc thành lớp bảo mật cho các dịch vụ AVS; **tài khoản gắn với token** ([ERC-6551](https://eips.ethereum.org/EIPS/eip-6551)) biến mỗi NFT thành một ví hợp đồng thông minh; các nghiên cứu **xử lý MEV ngay trong giao thức** (inclusion lists, ePBS) nối tiếp MEV-Boost; và **chuẩn hóa mật mã hậu lượng tử** (FIPS 203) làm mốc tham chiếu cho lộ trình chuyển đổi. Song song đó, các mô hình như Superchain hay Orbit đưa bài toán quản trị từ "một L2 đơn lẻ" sang *quản trị cả đội chuỗi (fleet governance)* — nơi DAO (07.00) giao thoa trực tiếp với hạ tầng (07.02).
@@ -47,6 +62,27 @@ Bản nâng cấp Pectra không "xóa bỏ MEV", nhưng thay đổi kinh tế tr
 Việc NIST ban hành [FIPS 203 (ML-KEM)](https://csrc.nist.gov/pubs/fips/203/final), FIPS 204 (ML-DSA) và FIPS 205 (SLH-DSA) vào ngày 13/8/2024 mang lại cột mốc chuẩn hóa cụ thể cho bài 07.04. Tuy vậy, Ethereum và Bitcoin hiện vẫn đang dùng ECDSA/BLS; các đề xuất về chữ ký kép, địa chỉ băm chống chiến thuật "thu thập trước, giải mã sau" (harvest-now-decrypt-later) và tối ưu kích thước nhân chứng vẫn đang trong giai đoạn thảo luận — không nên đánh đồng việc ban hành chuẩn FIPS với việc mạng chính đã hoàn tất chuyển đổi.
 
 Ở mảng hạ tầng Web3, các giải pháp sẵn sàng dữ liệu (DA) như EIP-4844, PeerDAS, EigenDA và Celestia phục vụ riêng cho thị trường rollup (bài 04.99), tách biệt với vai trò lưu trữ nội dung của IPFS/Filecoin trong bài 07.02.
+
+### Khung giải thích: tự tay tính đòn bẩy lợi suất và rủi ro Slashing dây chuyền trong Restaking (nên đọc chậm)
+
+Restaking thường được quảng bá như "bữa trưa miễn phí" giúp nhận nhiều lớp lãi suất từ cùng một số ETH. Hãy tự kiểm tra bằng một phép tính xác suất cơ bản để thấy mặt trái của đòn bẩy bảo mật này:
+
+Giả sử một Validator đang stake **$$100\text{ ETH}$$** trên Ethereum L1 (lãi suất gốc $$r_0 = 3.5\%/\text{năm}$$) và đem **Restake** chính $$100\text{ ETH}$$ đó vào bảo vệ đồng thời **3 dịch vụ AVS độc lập** (một Oracle, một Cầu nối, một lớp DA), mỗi AVS trả thêm phần thưởng $$r_i = 1.5\%/\text{năm}$$.
+
+1. **Lợi suất danh nghĩa nếu mọi thứ suôn sẻ:**
+   $$
+   R_{\text{tổng}} = 3.5\% + 3 \times 1.5\% = \mathbf{8.0\%/\text{năm}}
+   $$
+   (thu về $$+8\text{ ETH/năm}$$ thay vì $$+3.5\text{ ETH/năm}$$).
+
+2. **Tính xác suất rủi ro Slashing dây chuyền:**
+   Giả sử mỗi AVS mới ra mắt có xác suất xảy ra lỗi phần mềm nghiêm trọng hoặc tấn công dẫn tới phạt cắt nặng stake độc lập là $$p = 2\%/\text{năm}$$. Khi Validator cam kết bảo vệ cùng lúc cả 3 AVS bằng **chung một khoản cọc 100 ETH**, xác suất bị phạt ít nhất 1 lần trong năm là:
+   $$
+   P(\text{bị slash}) = 1 - (1 - 0.02)^3 = 1 - 0.9412 = \mathbf{5.88\%!}
+   $$
+   Nếu mức phạt mỗi sự cố là cắt $$50\%$$ lượng cọc ($$-50\text{ ETH}$$), tổn thất kỳ vọng riêng từ rủi ro slashing đã là $$5.88\% \times 50 = 2.94\text{ ETH/năm}$$ — **ăn gần sạch phần lãi suất cộng thêm ($$+4.5\text{ ETH}$$) và biến Restaking thành bài toán quản trị rủi ro cực kỳ chặt chẽ!**
+
+**Bài học hệ thống:** Trong kinh tế học mật mã không bao giờ có lợi suất miễn phí — Restaking mở rộng *bảo mật dùng chung*, đồng thời ghép thêm *rủi ro tương quan* mà mỗi operator phải định giá cẩn thận trước khi tham gia.
 
 ## 3. Góc nhìn triển khai
 

@@ -11,6 +11,45 @@ categories:
 
 # Bài giảng: Đồng thuận chịu lỗi Byzantine — PBFT, Tendermint, HotStuff
 
+Nếu Bitcoin chấp nhận đợi 60 phút (6 khối) để giao dịch "gần như chắc chắn không bị đảo ngược", thì một sàn giao dịch tài chính hay một chuỗi liên kết như Cosmos lại đòi hỏi điều hoàn toàn khác: **khi khối đã được chốt là chốt vĩnh viễn ngay trong 1–3 giây**, không có khái niệm "chuỗi dài hơn quay lại viết đè quá khứ". Đó chính là thế giới của **đồng thuận chịu lỗi Byzantine cổ điển (BFT)** — dòng họ thuật toán nối dài từ **PBFT (1999)** của Castro–Liskov, qua **Tendermint / CometBFT (2014)**, tới **HotStuff (2019)** (nền tảng của Aptos, Sui và nhiều mạng hiệu năng cao ngày nay).
+
+Sức hấp dẫn của BFT nằm ở **tính chốt khối tất định (deterministic finality)**, nhưng cái giá phải trả lại ẩn trong một bài toán tổ hợp rất thực tế: khi số lượng validator tăng từ 10 lên 1.000, lưu lượng tin nhắn bỏ phiếu chéo giữa các nút phình to theo bình phương $$O(n^2)$$. Cuộc tiến hóa từ PBFT sang HotStuff chính là câu chuyện kỹ thuật tuyệt đẹp về cách kéo độ phức tạp truyền tin từ $$O(n^2)$$ xuống tuyến tính $$O(n)$$.
+
+---
+
+## Bản đồ kiến thức nền: Giao thức đồng thuận BFT đứng trên ba trụ cột nào?
+
+### 1. Tập đại biểu (Quorum) $$2f + 1$$ và Khóa an toàn hai vòng (Two-Phase Locking)
+Tại sao các giao thức BFT như PBFT và Tendermint không chỉ bỏ phiếu 1 vòng mà bắt buộc phải bỏ phiếu **2 vòng liên tiếp** (Prepare/Prevote rồi Commit/Precommit)? Vòng 1 bảo đảm mọi nút biết rằng một khối cụ thể đã đạt quá $$2/3$$ ủng hộ ở vòng hiện tại; vòng 2 bảo đảm rằng **đa số các nút trung thực đều biết rằng các nút khác cũng đã biết điều đó** — tạo thành "khóa" (lock) ngăn không cho vòng sau (View Change) vô tình đề xuất một khối mâu thuẫn!
+
+### 2. Chuyển đổi Lãnh đạo (View Change) và Đảm bảo Liveness
+Trong mọi giao thức BFT có Leader đề xuất khối, điều gì xảy ra nếu Leader hiện tại bị sập nguồn hoặc cố tình im lặng? Đồng hồ đếm ngược (timeout) sẽ kích hoạt pha **View Change** để bầu Leader kế tiếp. Điểm khó nhất của PBFT là pha View Change có độ phức tạp truyền tin lên tới $$O(n^3)$$ — và chính **HotStuff** đã bổ sung thêm một pha bỏ phiếu gọn nhẹ (3 pha nối tiếp) để biến cả quy trình bình thường lẫn View Change về cùng độ phức tạp tuyến tính $$O(n)$$!
+
+### 3. Chữ ký ngưỡng (Threshold Signatures) và Đường ống (Pipelining)
+Thay vì để từng nút phát tán chữ ký của mình tới toàn bộ $$n - 1$$ nút còn lại (tạo ra $$n(n-1)$$ gói tin), các giao thức BFT hiện đại gom $$2f + 1$$ phiếu tại Leader thành một **Chứng chỉ Đại biểu (Quorum Certificate — QC)** có kích thước hằng số $$O(1)$$ bằng chữ ký gộp BLS/ngưỡng, đồng thời chạy gối đầu các khối theo kiểu đường ống (pipeline) giống CPU hiện đại!
+
+---
+
+### Khung giải thích: tự tay so sánh lưu lượng thông điệp giữa PBFT ($$O(n^2)$$) và HotStuff ($$O(n)$$) (nên đọc chậm)
+
+Hãy tính trực tiếp số gói tin cần truyền đi để chốt **đúng 1 khối** khi mạng có $$n = 100$$ và $$n = 1\,000$$ validator:
+
+1. **Trường hợp PBFT (kiến trúc phát tán toàn mạng — all-to-all):**
+   - Pha *Pre-Prepare*: Leader gửi khối tới $$n - 1$$ nút → tốn $$n - 1$$ tin.
+   - Pha *Prepare*: Mỗi nút trong $$n$$ nút phát tán phiếu `PREPARE` tới $$n - 1$$ nút kia → tốn $$n(n - 1)$$ tin.
+   - Pha *Commit*: Mỗi nút trong $$n$$ nút phát tán phiếu `COMMIT` tới $$n - 1$$ nút kia → tốn $$n(n - 1)$$ tin.
+   - **Tổng số thông điệp/khối:** $$M_{\text{PBFT}}(n) = (n - 1) + 2n(n - 1) = (2n + 1)(n - 1)$$.
+     - Với $$n = 100$$: $$M_{\text{PBFT}}(100) = 201 \times 99 = \mathbf{19\,899\text{ tin}}$$.
+     - Với $$n = 1\,000$$: $$M_{\text{PBFT}}(1\,000) = 2\,001 \times 999 = \mathbf{1\,998\,999\text{ tin}}$$ (gần 2 triệu gói tin chỉ để chốt 1 khối!).
+2. **Trường hợp HotStuff (kiến trúc hình sao với Chứng chỉ Đại biểu QC):**
+   - Ở mỗi pha (Prepare, Pre-Commit, Commit): Leader gửi 1 gói QC tới $$n - 1$$ nút, rồi $$n - 1$$ nút gửi phiếu ký ngược về Leader → mỗi pha tốn đúng $$2(n - 1)$$ tin!
+   - **Tổng số thông điệp/khối (3 pha):** $$M_{\text{HotStuff}}(n) = 6(n - 1)$$.
+     - Với $$n = 100$$: $$M_{\text{HotStuff}}(100) = 6 \times 99 = \mathbf{594\text{ tin}}$$ (nhẹ hơn PBFT **33 lần**!).
+     - Với $$n = 1\,000$$: $$M_{\text{HotStuff}}(1\,000) = 6 \times 999 = \mathbf{5\,994\text{ tin}}$$ (nhẹ hơn PBFT **hơn 333 lần**!).
+3. **Đánh đổi cần nhớ:** HotStuff tiết kiệm băng thông ngoạn mục nhưng đổi lại tăng thêm 1 chặng khứ hồi mạng (độ trễ thêm 1 vòng) và đặt tải tổng hợp lên Leader — đó là lý do các hệ thống thực tế chạy HotStuff theo kiểu *pipelining* (khối $$k+1$$ đồng thời mang chứng chỉ xác nhận cho khối $$k$$) để vừa đạt băng thông tuyến tính vừa giữ thông lượng cao!
+
+---
+
 ## 1. Tổng quan về khái niệm
 
 **Đồng thuận chịu lỗi Byzantine (Byzantine Fault Tolerant — BFT)** là một nhóm giao thức cho phép hệ thống phân tán đạt được sự thống nhất ngay cả khi một số nút gặp lỗi tùy ý hoặc hành động gian lận. Đây là nền tảng cho nhiều cơ chế đồng thuận blockchain hiện đại, đặc biệt trong các mạng có cấp phép (permissioned) và các mạng hiệu năng cao.
