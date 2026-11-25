@@ -17,7 +17,7 @@ Nhưng đằng sau bước nhảy ngoạn mục ấy là hàng loạt câu hỏi
 
 ---
 
-## Bản đồ kiến thức nền: Proof-of-Stake đứng trên ba trụ cột toán học – kinh tế nào?
+## Kiến thức cần nhớ: Proof-of-Stake đứng trên ba trụ cột toán học – kinh tế nào?
 
 ### 1. Chọn validator có trọng số cổ phần và Ngẫu nhiên phân tán (RANDAO / VRF)
 Trong PoS, xác suất được chọn đề xuất khối tỉ lệ trực tiếp với lượng tài sản khóa đặt cọc $$s_i / S$$. Thách thức mật mã học là phải tạo ra **nguồn ngẫu nhiên công bằng không thể thao túng** (như cơ chế trộn băm **RANDAO** của Ethereum hay hàm ngẫu nhiên kiểm chứng được **VRF** của Algorand/Cardano) để không ai biết trước quá xa hoặc cố tình bỏ lượt nhằm lái kết quả xổ số về phía mình.
@@ -30,7 +30,7 @@ Trong các giao thức PoS lai BFT (như Casper FFG của Ethereum), khi một c
 
 ---
 
-### Khung giải thích: tự tay tính xác suất đề xuất khối và chi phí đốt cọc (Slashing) trong Ethereum PoS (nên đọc chậm)
+### Giải thích: tự tay tính xác suất đề xuất khối và chi phí đốt cọc (Slashing) trong Ethereum PoS
 
 Hãy kiểm tra cơ chế kinh tế của Ethereum PoS bằng những con số sát thực tế:
 

@@ -17,7 +17,7 @@ Blockchain đang đứng trước đúng bước ngoặt chuyển mình ấy. T�
 
 ---
 
-## Bản đồ kiến thức nền: Bốn xu hướng định hình Tương lai Blockchain (2025–2035)
+## Kiến thức cần nhớ: Bốn xu hướng định hình Tương lai Blockchain (2025–2035)
 
 1. **Mở rộng quy mô Mô-đun & DAS (100,000+ TPS):** Kết hợp Rollup, lớp Khả dụng Dữ liệu (Danksharding / Celestia) và Lấy mẫu khả dụng dữ liệu (DAS) để mở rộng băng thông toàn cầu mà điện thoại cá nhân vẫn tự kiểm chứng được.
 2. **Trừu tượng hóa Tài khoản & Chuỗi (Account & Chain Abstraction):** Đăng nhập bằng Passkey/FaceID, tài trợ phí gas ngầm và gom thanh khoản xuyên chuỗi để người dùng tương tác mượt như ứng dụng Web2.
@@ -65,7 +65,7 @@ Mức thông lượng lý thuyết này tiệm cận quy mô xử lý của các
 
 ---
 
-### Khung giải thích: tự tay tính bài toán 100,000 TPS và xác suất bảo mật của Lấy mẫu Dữ liệu (DAS) (nên đọc chậm)
+### Giải thích: tự tay tính bài toán 100,000 TPS và xác suất bảo mật của Lấy mẫu Dữ liệu (DAS)
 
 Làm thế nào một mạng blockchain tương lai có thể đạt **$$100{,}000\text{ TPS}$$** (vượt đỉnh mạng Visa) mà không buộc mọi nút mạng cá nhân phải sở hữu đường truyền trung tâm dữ liệu? Hãy kiểm tra hai phép tính gọn:
 

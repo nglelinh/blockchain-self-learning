@@ -20,7 +20,7 @@ Bài cập nhật hiện đại này giúp bạn đặt bốn trụ cột thực
 
 ---
 
-## Bản đồ kiến thức nền: Hạ tầng Xuyên chuỗi 2022–2026 gồm bốn kiến trúc chủ đạo nào?
+## Kiến thức cần nhớ: Hạ tầng Xuyên chuỗi 2022–2026 gồm bốn kiến trúc chủ đạo nào?
 
 1. **Light Client chuẩn hóa & ZK-IBC:** Xác minh trực tiếp tiêu đề block bằng mật mã (không cần tin bên thứ ba), dùng bằng chứng ZK để nén chi phí kiểm chứng chữ ký của chuỗi nguồn trên EVM.
 2. **Xác minh Mô-đun (LayerZero v2 — DVN):** Cho phép từng ứng dụng tự chọn tổ hợp nhiều mạng xác minh độc lập (ví dụ yêu cầu đồng thời 2/3 DVN gồm Google Cloud + Polyhedra ZK + Axelar ký duyệt).
@@ -71,7 +71,7 @@ Cách tiếp cận này đánh dấu bước chuyển từ kiến trúc cầu n�
 
 Ngoài ra, cầu nối BitVM2 (nêu ở bài 01.99) là một hướng giải quyết ở phía Bitcoin dựa trên giả định tối thiểu 1-trong-n nút trung thực.
 
-### Khung giải thích: tự tay tính dòng tiền và tốc độ của Cầu nối Ý định (Intent-Based Bridge) (nên đọc chậm)
+### Giải thích: tự tay tính dòng tiền và tốc độ của Cầu nối Ý định (Intent-Based Bridge)
 
 Tại sao chuyển $$1{,}000\text{ USDC}$$ từ Arbitrum sang Optimism qua cầu nối gốc L1 phải đợi tới **7 ngày** (cửa sổ thách thức của Optimistic Rollup), nhưng qua một cầu nối Intent như Across chỉ mất **2 giây**? Hãy theo dõi từng đồng USDC:
 

@@ -17,7 +17,7 @@ Lời giải thiên tài của mật mã học hiện đại (Diffie–Hellman 1
 
 ---
 
-## Bản đồ kiến thức nền: Mật mã khóa công khai và Chữ ký số đứng trên ba trụ cột toán học nào?
+## Kiến thức cần nhớ: Mật mã khóa công khai và Chữ ký số đứng trên ba trụ cột toán học nào?
 
 Với nền tảng số học đồng dư và đại số trừu tượng bậc đại học, bạn có thể nhìn thấu cơ chế của chữ ký số qua ba trụ cột:
 
@@ -32,7 +32,7 @@ Trong ECDSA và Schnorr, mỗi chữ ký phải trộn thêm một số ngẫu n
 
 ---
 
-### Khung giải thích: tự tay ký và xác minh RSA mini, rồi phá khóa ECDSA khi tái sử dụng nonce (nên đọc chậm)
+### Giải thích: tự tay ký và xác minh RSA mini, rồi phá khóa ECDSA khi tái sử dụng nonce
 
 Hãy tự tay thực hiện hai phép tính kinh điển để hiểu sâu bản chất toán học của chữ ký số:
 

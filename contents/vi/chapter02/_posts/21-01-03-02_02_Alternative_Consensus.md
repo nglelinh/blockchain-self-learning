@@ -15,7 +15,7 @@ Sau khi chứng kiến ba "gã khổng lồ" PoW, PoS và BFT, một câu hỏi 
 
 ---
 
-## Bản đồ kiến thức nền: Các cơ chế đồng thuận thay thế đổi mới ở ba trục nào?
+## Kiến thức cần nhớ: Các cơ chế đồng thuận thay thế đổi mới ở ba trục nào?
 
 ### 1. Đồng thuận xác suất kiểu Lấy mẫu lặp (Metastable / Avalanche)
 Khác với BFT cổ điển cần biết chính xác danh sách toàn bộ $$n$$ validator và thu gom đủ $$2/3$$ chữ ký toàn mạng, họ giao thức **Snow/Avalanche** khai thác **tính không ổn định kép (metastability)** của các hệ xác suất: mỗi nút chỉ cần hỏi ngẫu nhiên $$k$$ nút (ví dụ $$k = 20$$) bất kể toàn mạng có 1.000 hay 100.000 nút! Nếu mạng đang cân bằng 50–50, chỉ một dao động ngẫu nhiên nhỏ cũng đủ kích hoạt phản hồi dương khiến toàn mạng đổ dồn về một lựa chọn duy nhất trong thời gian $$O(\log n)$$.
@@ -28,7 +28,7 @@ Trong blockchain cổ điển, việc *truyền dữ liệu giao dịch* và *s�
 
 ---
 
-### Khung giải thích: tự tay tính hiệu ứng "quả cầu tuyết" trong lấy mẫu Avalanche (nên đọc chậm)
+### Giải thích: tự tay tính hiệu ứng "quả cầu tuyết" trong lấy mẫu Avalanche
 
 Tại sao chỉ hỏi đúng $$k = 20$$ hàng xóm ngẫu nhiên trong một mạng lưới $$n = 10\,000$$ nút lại đủ để cả mạng thống nhất gần như tuyệt đối? Hãy tự kiểm tra bằng phân phối nhị thức cơ bản:
 

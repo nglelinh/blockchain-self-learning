@@ -17,7 +17,7 @@ Nhưng chính ở đây cũng ẩn giấu một cạm bẫy kỹ thuật chết 
 
 ---
 
-## Bản đồ kiến thức nền: NFT và Quyền sở hữu số đứng trên bốn trụ cột nào?
+## Kiến thức cần nhớ: NFT và Quyền sở hữu số đứng trên bốn trụ cột nào?
 
 1. **Chuẩn mã hóa tài sản không thể thay thế (ERC-721 & ERC-1155):** Mỗi token được định danh duy nhất bởi cặp `(contractAddress, tokenId)` kèm bảng ánh xạ `ownerOf[tokenId] -> address` bất khả xâm phạm.
 2. **Định địa chỉ theo nội dung (Content Addressing — IPFS/Arweave):** Dùng mã băm mật mã (CID) làm chính địa chỉ của tệp dữ liệu, bảo đảm không ai có thể lén tráo đổi hình ảnh hay thuộc tính sau khi đúc (mint).
@@ -132,7 +132,7 @@ Thuộc tính càng hiếm (tần suất \(f_i\) càng nhỏ) thì đóng góp v
 
 ---
 
-### Khung giải thích: tự tay tính chi phí lưu ảnh trực tiếp On-chain vs. Lưu mã băm CID (IPFS) (nên đọc chậm)
+### Giải thích: tự tay tính chi phí lưu ảnh trực tiếp On-chain vs. Lưu mã băm CID (IPFS)
 
 Tại sao hầu hết NFT không lưu trực tiếp tệp ảnh lên Ethereum mà chỉ lưu một đường dẫn mã băm `ipfs://...`? Hãy tự kiểm chứng bằng chi phí lưu trữ thực của máy ảo Ethereum (EVM):
 

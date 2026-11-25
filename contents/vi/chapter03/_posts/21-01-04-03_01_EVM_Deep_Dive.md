@@ -17,7 +17,7 @@ Câu trả lời nằm ở **Máy ảo Ethereum (EVM)** — một chiếc máy t
 
 ---
 
-## Bản đồ kiến thức nền: Máy ảo Ethereum (EVM) đứng trên ba trụ cột khoa học máy tính nào?
+## Kiến thức cần nhớ: Máy ảo Ethereum (EVM) đứng trên ba trụ cột khoa học máy tính nào?
 
 ### 1. Kiến trúc Máy ảo Ngăn xếp 256-bit (Stack-based VM)
 Khác với CPU x86/ARM dùng thanh ghi (registers), EVM là máy ảo dùng **ngăn xếp (stack)** với kích thước mỗi từ (word) đúng **256 bit (32 byte)** — kích thước được chọn có chủ đích để khớp hoàn hảo với mã băm Keccak-256 và tọa độ chữ ký đường cong elliptic `secp256k1`! Ngăn xếp có độ sâu tối đa 1.024 phần tử, và các lệnh chỉ thao tác trên tối đa 16 phần tử trên cùng (`DUP1`–`DUP16`, `SWAP1`–`SWAP16` — nguồn gốc của lỗi biên dịch nổi tiếng *"Stack too deep"*).
@@ -33,7 +33,7 @@ EVM tách dữ liệu thành ba khu vực có chi phí cách biệt hàng nghìn
 
 ---
 
-### Khung giải thích: tự tay chạy chuỗi bytecode EVM `6003600501600055` và tính hóa đơn Gas (nên đọc chậm)
+### Giải thích: tự tay chạy chuỗi bytecode EVM `6003600501600055` và tính hóa đơn Gas
 
 Hãy tự tay làm CPU của EVM giải mã và thực thi chuỗi bytecode vỏn vẹn 8 byte `60 03 60 05 01 60 00 55` (tính `3 + 5` rồi lưu vào ô nhớ `storage[0]`):
 

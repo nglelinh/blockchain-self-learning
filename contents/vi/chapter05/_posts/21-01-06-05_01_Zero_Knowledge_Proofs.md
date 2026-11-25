@@ -17,7 +17,7 @@ Ngày nay, ZKP không còn nằm trong các hội nghị mật mã thuần túy:
 
 ---
 
-## Bản đồ kiến thức nền: Chứng minh Không Tiết lộ (ZKP) dựa trên những trụ cột nào?
+## Kiến thức cần nhớ: Chứng minh Không Tiết lộ (ZKP) dựa trên những trụ cột nào?
 
 1. **Bộ ba tiên đề vàng:** Mọi hệ ZKP phải thỏa đồng thời **Tính đầy đủ** (người trung thực luôn thuyết phục được), **Tính vững chắc / Soundness** (kẻ gian không thể giả mạo bằng chứng trừ xác suất không đáng kể), và **Không tiết lộ / Zero-Knowledge** (người kiểm chứng không học thêm được 1 bit nào ngoài việc phát biểu là đúng).
 2. **Số học hóa (Arithmetization — R1CS, QAP, AIR):** Biến một chương trình máy tính bất kỳ thành hệ phương trình đa thức trên trường hữu hạn $$\mathbb{F}_p$$ để có thể kiểm tra toàn bộ phép tính chỉ tại một điểm ngẫu nhiên (nhờ bổ đề Schwartz–Zippel).
@@ -723,7 +723,7 @@ Compare to re-execution:
 
 ---
 
-### Khung giải thích: tự tay chạy giao thức Schnorr Zero-Knowledge modulo $$p = 23$$ (nên đọc chậm)
+### Giải thích: tự tay chạy giao thức Schnorr Zero-Knowledge modulo $$p = 23$$
 
 Trước khi đụng tới các mạch SNARK hàng triệu cổng, hãy tự tay chạy trọn vẹn **giao thức Schnorr** — giao thức ZKP kinh điển, đẹp và trong suốt nhất — để chứng minh bạn biết khóa bí mật $$x$$ sao cho $$y = g^x \bmod p$$ mà không bao giờ gửi $$x$$ đi!
 

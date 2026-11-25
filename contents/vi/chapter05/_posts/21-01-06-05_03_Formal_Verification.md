@@ -17,7 +17,7 @@ Nhà khoa học máy tính huyền thoại Edsger Dijkstra từng nói một câ
 
 ---
 
-## Bản đồ kiến thức nền: Xác minh Hình thức dựa trên những nhánh toán học nào?
+## Kiến thức cần nhớ: Xác minh Hình thức dựa trên những nhánh toán học nào?
 
 1. **Logic Hoare ($$\{P\}\, C\, \{Q\}$$) & Bất biến hệ thống:** Đặc tả toán học nói rằng nếu tiền điều kiện $$P$$ đúng trước khi chạy lệnh $$C$$, thì hậu điều kiện $$Q$$ chắc chắn đúng sau khi $$C$$ kết thúc. Trong DeFi, bất biến cốt lõi thường là *"tổng số dư mọi tài khoản luôn bằng tổng cung token"*.
 2. **Thực thi tượng trưng & Bộ giải SMT (Symbolic Execution — Z3):** Thay biến đầu vào bằng ký hiệu đại số $$x, y$$ rồi đưa mọi nhánh điều kiện vào bộ giải thỏa mãn công thức (SMT Solver). Nếu tồn tại dù chỉ 1 đầu vào phá vỡ bất biến, bộ giải sẽ tự động in ra đúng **phản ví dụ tấn công**!
@@ -28,7 +28,7 @@ Nhà khoa học máy tính huyền thoại Edsger Dijkstra từng nói một câ
 
 ## 1. Tổng quan về khái niệm
 
-**Xác minh hình thức (formal verification)** là phương pháp tiếp cận toán học chặt chẽ nhằm đảm bảo tính đúng đắn của phần mềm, đặc biệt quan trọng đối với hợp đồng thông minh nơi một lỗi nhỏ có thể gây thiệt hại tài chính không thể đảo ngược. Khác với kiểm thử truyền thống vốn chỉ xác nhận chương trình hoạt động đúng trên các đầu vào cụ thể, xác minh hình thức chứng minh bằng toán học rằng chương trình hành xử đúng với **mọi đầu vào có thể xảy ra**. Sự khác biệt này mang ý nghĩa sống còn trong bối cảnh blockchain, bởi hợp đồng thông minh quản lý lượng tài sản hàng tỷ USD, được triển khai bất biến và luôn đối mặt với những kẻ tấn công có động cơ kinh tế rất lớn.
+**Xác minh hình thức (formal verification)** là phương pháp tiếp cận toán học chặt chẽ nhằm đảm bảo tính đúng đắn của phần mềm, đặc biệt quan trọng đối với hợp đồng thông minh nơi một lỗi nhỏ có thể gây thiệt hại tài chính không thể đảo ngược. Khác với kiểm thử truyền thống vốn chỉ xác nhận chương trình hoạt động đúng trên các đầu vào cụ thể, xác minh hình thức chứng minh bằng toán học rằng chương trình hành xử đúng với **mọi đầu vào có thể xảy ra**. Sự khác biệt này mang ý nghĩa quan trọng trong bối cảnh blockchain, bởi hợp đồng thông minh quản lý lượng tài sản hàng tỷ USD, được triển khai bất biến và luôn đối mặt với những kẻ tấn công có động cơ kinh tế rất lớn.
 
 Phát triển phần mềm truyền thống chủ yếu dựa vào kiểm thử — chạy chương trình với nhiều đầu vào khác nhau và đối chiếu kết quả. Kiểm thử giúp phát hiện lỗi nhưng không thể chứng minh sự vắng mặt của lỗi. Nhà khoa học máy tính **Edsger Dijkstra** từng nhận định rằng kiểm thử chương trình chỉ có thể chứng minh sự tồn tại của lỗi, chứ không bao giờ chứng minh được rằng chương trình không có lỗi. Với ứng dụng thông thường, điều này có thể chấp nhận được vì lỗi có thể vá và thiệt hại thường có giới hạn. Ngược lại, hợp đồng thông minh không thể sửa trực tiếp sau khi triển khai, khiến lỗ hổng tồn tại vĩnh viễn cùng rủi ro tài chính rất cao.
 
@@ -203,7 +203,7 @@ Chứng minh hình thức cho thấy phiên bản thứ hai cho phép nhiều l�
 
 ---
 
-### Khung giải thích: tự tay chứng minh bất biến bằng Logic Hoare — và bắt một lỗ hổng "in tiền vô hạn" (nên đọc chậm)
+### Giải thích: tự tay chứng minh bất biến bằng Logic Hoare — và bắt một lỗ hổng "in tiền vô hạn"
 
 Xét một hàm chuyển token trông cực kỳ vô hại:
 

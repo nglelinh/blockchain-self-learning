@@ -17,7 +17,7 @@ Câu trả lời đó là **Ethereum**. Để biến blockchain từ "sổ cái 
 
 ---
 
-## Bản đồ kiến thức nền: Kiến trúc Ethereum đứng trên ba trụ cột khoa học máy tính nào?
+## Kiến thức cần nhớ: Kiến trúc Ethereum đứng trên ba trụ cột khoa học máy tính nào?
 
 ### 1. Máy chuyển trạng thái tất định (Deterministic State Machine)
 Về mặt toán học, toàn bộ mạng Ethereum chỉ là một hàm chuyển trạng thái thuần túy:
@@ -36,7 +36,7 @@ Mỗi tiêu đề khối Ethereum không chỉ chứa 1 gốc Merkle như Bitcoi
 
 ---
 
-### Khung giải thích: tự tay chạy hàm chuyển trạng thái $$\Upsilon(\sigma_t, T)$$ kèm cơ chế phí EIP-1559 (nên đọc chậm)
+### Giải thích: tự tay chạy hàm chuyển trạng thái $$\Upsilon(\sigma_t, T)$$ kèm cơ chế phí EIP-1559
 
 Hãy đóng vai một nút Ethereum cập nhật trạng thái thế giới cho một giao dịch chuyển ETH chuẩn sau nâng cấp EIP-1559:
 

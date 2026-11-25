@@ -20,7 +20,7 @@ Bài cập nhật hiện đại này nối trực tiếp kiến thức mở rộ
 
 ---
 
-## Bản đồ kiến thức nền: Lộ trình mở rộng 2022–2026 đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Lộ trình mở rộng 2022–2026 đứng trên ba trụ cột nào?
 
 1. **Dữ liệu Blob & Cam kết đa thức KZG (EIP-4844 / Proto-Danksharding):** Tách dữ liệu tạm của Rollup khỏi calldata vĩnh viễn của EVM thành các gói **Blob 128 KB** tự xóa sau ~18 ngày, kèm cam kết mật mã KZG giúp L1 xác minh mà không cần lưu mãi mãi.
 2. **Bằng chứng lỗi tương tác (Permissionless Fault Proofs / Bisection Game):** Cơ chế cho phép bất kỳ ai thách thức một gốc trạng thái sai của Optimistic Rollup và phân xử công bằng trên L1 chỉ trong vài chục bước.
@@ -67,7 +67,7 @@ Giai đoạn 2023–2025, nhiều nhóm phát triển đã đạt mức tương 
 
 Các hướng phát triển giai đoạn 2025–2026 như based rollup (giao quyền sắp xếp giao dịch cho proposer trên L1) và native rollup (tích hợp precompile xác thực thực thi) nhằm giảm mức độ tin cậy đặt vào sequencer, đồng thời gắn kết chặt hơn với cơ chế PBS ở Chương 02.
 
-### Khung giải thích: tự tay kiểm tra Trò chơi Chia đôi (Bisection Game) của Fault Proof (nên đọc chậm)
+### Giải thích: tự tay kiểm tra Trò chơi Chia đôi (Bisection Game) của Fault Proof
 
 Một câu hỏi rất tự nhiên về Optimistic Rollup: *nếu một lô giao dịch L2 có tới $$N = 1{,}048{,}576 = 2^{20}$$ bước lệnh máy ảo, làm sao hợp đồng thông minh trên L1 có thể phân xử ai đúng ai sai mà không phải chạy lại toàn bộ 1 triệu bước đó (vốn vượt xa giới hạn gas của L1)?*
 

@@ -17,7 +17,7 @@ Sức hấp dẫn của BFT nằm ở **tính chốt khối tất định (deter
 
 ---
 
-## Bản đồ kiến thức nền: Giao thức đồng thuận BFT đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Giao thức đồng thuận BFT đứng trên ba trụ cột nào?
 
 ### 1. Tập đại biểu (Quorum) $$2f + 1$$ và Khóa an toàn hai vòng (Two-Phase Locking)
 Tại sao các giao thức BFT như PBFT và Tendermint không chỉ bỏ phiếu 1 vòng mà bắt buộc phải bỏ phiếu **2 vòng liên tiếp** (Prepare/Prevote rồi Commit/Precommit)? Vòng 1 bảo đảm mọi nút biết rằng một khối cụ thể đã đạt quá $$2/3$$ ủng hộ ở vòng hiện tại; vòng 2 bảo đảm rằng **đa số các nút trung thực đều biết rằng các nút khác cũng đã biết điều đó** — tạo thành "khóa" (lock) ngăn không cho vòng sau (View Change) vô tình đề xuất một khối mâu thuẫn!
@@ -30,7 +30,7 @@ Thay vì để từng nút phát tán chữ ký của mình tới toàn bộ $$n
 
 ---
 
-### Khung giải thích: tự tay so sánh lưu lượng thông điệp giữa PBFT ($$O(n^2)$$) và HotStuff ($$O(n)$$) (nên đọc chậm)
+### Giải thích: tự tay so sánh lưu lượng thông điệp giữa PBFT ($$O(n^2)$$) và HotStuff ($$O(n)$$)
 
 Hãy tính trực tiếp số gói tin cần truyền đi để chốt **đúng 1 khối** khi mạng có $$n = 100$$ và $$n = 1\,000$$ validator:
 

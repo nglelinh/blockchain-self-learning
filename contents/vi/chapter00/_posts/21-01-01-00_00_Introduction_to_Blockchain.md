@@ -17,7 +17,7 @@ Trước năm 2008, mọi hệ thống thanh toán số đều xoay quanh một 
 
 ---
 
-## Bản đồ kiến thức nền: Blockchain đứng trên ba trụ cột khoa học nào?
+## Kiến thức cần nhớ: Blockchain đứng trên ba trụ cột khoa học nào?
 
 Với nền tảng toán học và tin học đại học (cấu trúc dữ liệu, xác suất, lý thuyết đồ thị), bạn có thể tách blockchain thành ba trụ cột rõ ràng:
 
@@ -32,7 +32,7 @@ Thuật toán thuần túy chưa đủ trong một mạng mở mà ai cũng có 
 
 ---
 
-### Khung giải thích: tự tay kiểm tra chuỗi băm chống giả mạo 3 khối (nên đọc chậm)
+### Giải thích: tự tay kiểm tra chuỗi băm chống giả mạo 3 khối
 
 Để thấy vì sao chỉ sửa một con số trong quá khứ lại làm sụp đổ toàn bộ chuỗi khối, hãy tự tay tính một **chuỗi băm mini 3 khối** bằng hàm băm đồ chơi $$h(x) = (7x + 13) \bmod 97$$ (trong thực tế Bitcoin dùng SHA-256 trên không gian $$2^{256}$$):
 

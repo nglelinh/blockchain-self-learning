@@ -17,7 +17,7 @@ Làm thế nào để Chuỗi B tin tưởng một sự kiện vừa diễn ra t
 
 ---
 
-## Bản đồ kiến thức nền: Giao tiếp Xuyên chuỗi giải quyết bốn bài toán nền tảng nào?
+## Kiến thức cần nhớ: Giao tiếp Xuyên chuỗi giải quyết bốn bài toán nền tảng nào?
 
 1. **Xác minh trạng thái từ xa (Light Clients & Merkle Proofs):** Làm sao Chuỗi B chỉ cần lưu tiêu đề block (block header) nhỏ gọn của Chuỗi A và dùng bằng chứng cây Merkle (hoặc bằng chứng ZK) để kiểm chứng bất kỳ giao dịch nào của Chuỗi A.
 2. **Phổ mô hình tin cậy (Trust Models):** Phân loại rõ các cơ chế từ yếu đến mạnh: tin vào 1 máy chủ tập trung → tin vào ủy ban Multisig/MPC → cơ chế lạc quan (Optimistic) → xác minh đồng thuận trực tiếp (Light Client / ZK Bridge).
@@ -207,7 +207,7 @@ Chuỗi đích kiểm tra ba điều kiện: cam kết tồn tại trong trạng
 
 ---
 
-### Khung giải thích: tự tay kiểm chứng một bằng chứng Merkle Inclusion 4 giao dịch xuyên chuỗi (nên đọc chậm)
+### Giải thích: tự tay kiểm chứng một bằng chứng Merkle Inclusion 4 giao dịch xuyên chuỗi
 
 Giả sử Chuỗi A đóng gói 4 giao dịch $$T_1, T_2, T_3, T_4$$ vào một block, và Chuỗi B chỉ lưu duy nhất **Merkle Root** $$R$$ nằm trong tiêu đề block đó (tốn 32 byte). Làm sao Relayer chứng minh cho Chuỗi B rằng giao dịch $$T_2$$ thực sự nằm trong block của Chuỗi A?
 

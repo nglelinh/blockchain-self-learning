@@ -17,7 +17,7 @@ Một ứng dụng DeFi có thể chạy hợp đồng thông minh hoàn toàn p
 
 ---
 
-## Bản đồ kiến thức nền: Chồng Hạ tầng Web3 Phi tập trung gồm bốn tầng cốt lõi nào?
+## Kiến thức cần nhớ: Chồng Hạ tầng Web3 Phi tập trung gồm bốn tầng cốt lõi nào?
 
 1. **Lưu trữ phi tập trung & Định địa chỉ theo nội dung (IPFS, Filecoin, Arweave):** Thay địa chỉ theo *vị trí máy chủ* (`https://server.com/file`) bằng địa chỉ theo *mã băm nội dung* (CID), kết hợp bằng chứng lưu trữ (Proof-of-Spacetime / Proof-of-Access) để thưởng cho các nút giữ dữ liệu lâu dài.
 2. **Định danh & Tên miền phi tập trung (ENS, DID):** Ánh xạ tên dễ đọc như `alice.eth` thành địa chỉ ví và bản ghi nội dung IPFS, do chính khóa riêng của người dùng kiểm soát thay vì tổ chức DNS tập trung.
@@ -226,7 +226,7 @@ Với mạng 1 triệu nút:
 
 ---
 
-### Khung giải thích: tự tay kiểm tra định tuyến Kademlia DHT (khoảng cách XOR) của IPFS (nên đọc chậm)
+### Giải thích: tự tay kiểm tra định tuyến Kademlia DHT (khoảng cách XOR) của IPFS
 
 Không có máy chủ Google hay danh bạ trung tâm, làm sao một nút IPFS trong mạng gồm **1 triệu máy tính** có thể tìm ra đúng máy nào đang giữ tệp có mã băm $$K$$ chỉ trong chưa đầy 1 giây? Câu trả lời là thuật toán bảng băm phân tán **Kademlia DHT** dùng **khoảng cách XOR từng bit**:
 

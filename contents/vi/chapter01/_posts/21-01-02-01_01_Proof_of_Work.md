@@ -17,7 +17,7 @@ Câu trả lời táo bạo của Satoshi Nakamoto là biến **điện năng v�
 
 ---
 
-## Bản đồ kiến thức nền: Toán học và Kinh tế học của Proof-of-Work đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Toán học và Kinh tế học của Proof-of-Work đứng trên ba trụ cột nào?
 
 Nếu bạn đã học xác suất thống kê ở đại học (phân phối hình học, phân phối mũ, quá trình Poisson và bước đi ngẫu nhiên), bạn đã nắm gần như trọn bộ công cụ phân tích PoW:
 
@@ -32,7 +32,7 @@ Trong Chương 11 của whitepaper Bitcoin, Satoshi mô hình hóa cuộc đua g
 
 ---
 
-### Khung giải thích: tự tay tính độ khó PoW và xác suất tấn công chi tiêu gấp đôi (nên đọc chậm)
+### Giải thích: tự tay tính độ khó PoW và xác suất tấn công chi tiêu gấp đôi
 
 Hãy kiểm tra trực tiếp hai phép tính kinh điển của Bitcoin bằng máy tính bỏ túi:
 

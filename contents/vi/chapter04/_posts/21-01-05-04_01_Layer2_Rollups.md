@@ -17,7 +17,7 @@ Sau khi thấy bài toán 315 TB/năm ở bài trước, một ý tưởng thiê
 
 ---
 
-## Bản đồ kiến thức nền: Công nghệ Layer 2 Rollups đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Công nghệ Layer 2 Rollups đứng trên ba trụ cột nào?
 
 ### 1. Kiến trúc Mô-đun: Tách rời Thực thi khỏi Tính sẵn có Dữ liệu (DA)
 Mọi blockchain làm 3 việc: *Thực thi (Execution)*, *Đồng thuận/Thanh toán (Settlement)*, và *Tính sẵn có Dữ liệu (Data Availability — DA)*. Rollup chỉ giữ phần **Thực thi** ở ngoài chuỗi (off-chain), còn thuê nguyên lớp **Settlement + DA** của Ethereum L1 — biến Ethereum từ "máy tính xử lý từng giao dịch lẻ" thành "tòa án tối cao và kho lưu trữ dữ liệu bảo mật" cho hàng chục mạng L2!
@@ -30,7 +30,7 @@ Thay vì đợi 7 ngày xem có ai kiện không, **ZK-Rollup** đính kèm ngay
 
 ---
 
-### Khung giải thích: tự tay tính mức giảm phí giao dịch của Rollup trước và sau nâng cấp Dencun (EIP-4844) (nên đọc chậm)
+### Giải thích: tự tay tính mức giảm phí giao dịch của Rollup trước và sau nâng cấp Dencun (EIP-4844)
 
 Tại sao cùng kế thừa bảo mật của Ethereum mà giao dịch trên Layer 2 lại rẻ hơn Tầng 1 từ hàng chục đến hàng nghìn lần? Hãy tính trực tiếp trên một giao dịch chuyển ETH cơ bản:
 

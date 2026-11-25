@@ -17,7 +17,7 @@ Trên blockchain, hàm băm không chỉ làm nhiệm vụ kiểm tra toàn vẹ
 
 ---
 
-## Bản đồ kiến thức nền: Hàm băm mật mã, Xác suất va chạm và Cây Merkle nghiên cứu những gì?
+## Kiến thức cần nhớ: Hàm băm mật mã, Xác suất va chạm và Cây Merkle nghiên cứu những gì?
 
 Với kiến thức toán rời rạc, xác suất và cấu trúc dữ liệu cây nhị phân ở bậc đại học, bạn có thể nắm trọn ba trụ cột của bài học này:
 
@@ -32,7 +32,7 @@ Thay vì băm gộp tất cả $$N$$ giao dịch thành một chuỗi phẳng (m
 
 ---
 
-### Khung giải thích: tự tay tính nghịch lý ngày sinh và bằng chứng cây Merkle (nên đọc chậm)
+### Giải thích: tự tay tính nghịch lý ngày sinh và bằng chứng cây Merkle
 
 Hãy kiểm chứng hai con số quan trọng nhất của bài học chỉ bằng phép nhân cơ bản:
 

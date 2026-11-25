@@ -17,7 +17,7 @@ Trên một sàn chứng khoán truyền thống như NYSE hay Nasdaq, muốn gi
 
 ---
 
-## Bản đồ kiến thức nền: Toán học và Kinh tế học của DeFi đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Toán học và Kinh tế học của DeFi đứng trên ba trụ cột nào?
 
 ### 1. Nhà tạo lập thị trường tự động (AMM) và Đường cong bất biến $$x \cdot y = k$$
 Với hai tài sản có lượng dự trữ $$x$$ và $$y$$ trong bể, quy tắc **tích hằng số** yêu cầu sau mọi giao dịch (chưa tính phí), điểm $$(x', y')$$ mới vẫn phải nằm trên đường hyperbol $$x' \cdot y' = k$$. Giá tức thời là độ dốc $$P = y/x$$; lệnh giao dịch càng lớn so với độ sâu bể thì điểm $$(x', y')$$ trượt càng xa trên đường cong — sinh ra **độ trượt giá (slippage)** và **tổn thất tạm thời (Impermanent Loss)** cho người cung cấp thanh khoản khi giá thị trường biến động.
@@ -30,9 +30,9 @@ Trong EVM, một giao dịch gồm hàng chục bước gọi hợp đồng khá
 
 ---
 
-### Khung giải thích: tự tay tính trượt giá AMM $$x \cdot y = k$$ và Tổn thất tạm thời (nên đọc chậm)
+### Giải thích: tự tay tính trượt giá AMM $$x \cdot y = k$$ và Tổn thất tạm thời
 
-Hãy tự tay tính hai phép tính sống còn mà mọi nhà đầu tư và kỹ sư DeFi đều phải nắm vững:
+Hãy tự tay tính hai phép tính quan trọng mà mọi nhà đầu tư và kỹ sư DeFi đều phải nắm vững:
 
 1. **Tính giá thực khớp và độ trượt giá trên bể Uniswap v2:**
    - Giả sử bể ETH/USDC đang có $$x = 100\text{ ETH}$$ và $$y = 300\,000\text{ USDC}$$.

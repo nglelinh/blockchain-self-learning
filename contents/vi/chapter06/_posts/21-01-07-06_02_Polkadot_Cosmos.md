@@ -17,7 +17,7 @@ Thú vị thay, cùng xuất phát từ một tầm nhìn "Internet của các B
 
 ---
 
-## Bản đồ kiến thức nền: Hai triết lý Đa chuỗi — Polkadot vs. Cosmos khác nhau ở bốn trụ cột nào?
+## Kiến thức cần nhớ: Hai triết lý Đa chuỗi — Polkadot vs. Cosmos khác nhau ở bốn trụ cột nào?
 
 1. **Mô hình Bảo mật (Shared Security vs. Sovereign Security):** Polkadot gom toàn bộ validator vào một **Relay Chain** trung tâm để bảo vệ chung cho tất cả các Parachain; Cosmos để mỗi App-chain tự vận hành bộ validator và token riêng (tối đa hóa chủ quyền), chỉ chia sẻ bảo mật khi tự nguyện bật *Interchain Security*.
 2. **Giao thức truyền tin chuẩn hóa (XCM vs. IBC):** Polkadot dùng **XCM** truyền tin nhắn trực tiếp dưới chung một ô bảo mật; Cosmos dùng **IBC** (chuẩn giao tiếp dựa trên Light Client giữa hai chuỗi độc lập, tương tự TCP/IP cho blockchain).
@@ -246,7 +246,7 @@ Người xác minh trên chuỗi đích dùng tập \(V\) lưu trong khách nh�
 
 ---
 
-### Khung giải thích: tự tay so sánh chi phí tấn công giữa Bảo mật Chủ quyền (Cosmos) và Bảo mật Dùng chung (Polkadot) (nên đọc chậm)
+### Giải thích: tự tay so sánh chi phí tấn công giữa Bảo mật Chủ quyền (Cosmos) và Bảo mật Dùng chung (Polkadot)
 
 Giả sử có một hệ sinh thái gồm **10 chuỗi ứng dụng**: 1 chuỗi trung tâm lớn có lượng stake $$1{,}000\text{ triệu USD}$$, và 9 chuỗi ứng dụng nhỏ mới ra mắt mỗi chuỗi chỉ có stake $$30\text{ triệu USD}$$ (tổng stake toàn hệ sinh thái $$= 1{,}000 + 9\times 30 = 1{,}270\text{ triệu USD}$$). Trong cơ chế đồng thuận BFT, cần $$> 1/3$$ stake để làm dừng mạng (liveness) và $$> 2/3$$ stake để giả mạo trạng thái (safety).
 

@@ -20,7 +20,7 @@ Bài cập nhật hiện đại này tổng hợp bước nhảy vọt lớn nh�
 
 ---
 
-## Bản đồ kiến thức nền: Làn sóng ZK 2022–2026 đột phá trên bốn trụ cột nào?
+## Kiến thức cần nhớ: Làn sóng ZK 2022–2026 đột phá trên bốn trụ cột nào?
 
 1. **Lược đồ Gấp (Folding Schemes — Nova, Sangria, HyperNova):** Thay vì tạo và xác minh đệ quy hàng triệu bằng chứng SNARK nặng nề, ta "gấp" từng bước tính toán thành một thể hiện duy nhất bằng tổ hợp tuyến tính ngẫu nhiên — giảm chi phí Prover xuống hàng chục lần.
 2. **zkVM đa dụng (RISC Zero, SP1):** Chứng minh trực tiếp việc thực thi của bộ lệnh chuẩn RISC-V; lập trình viên viết Rust/C++ thông thường, không cần thiết kế mạch thủ công.
@@ -65,7 +65,7 @@ Ngày 13/8/2024, NIST chính thức ban hành ba tiêu chuẩn hậu lượng t�
 
 Ở mảng quyền riêng tư ứng dụng, xu hướng dịch chuyển sang zk coprocessor (lấy dữ liệu lưu trữ từ L1 để chứng minh ngoài chuỗi) và DeFi riêng tư có kiểm soát tuân thủ sau sự kiện Tornado Cash (2022) — phản ánh rõ bài toán cân bằng giữa quyền riêng tư và tuân thủ pháp lý đã nêu ở bài 05.00.
 
-### Khung giải thích: tự tay kiểm tra cơ chế Gấp (Folding) hai bài toán thành một trong Nova (nên đọc chậm)
+### Giải thích: tự tay kiểm tra cơ chế Gấp (Folding) hai bài toán thành một trong Nova
 
 Tại sao **Folding** lại cách mạng hóa tính toán kiểm chứng tăng dần (IVC — *Incrementally Verifiable Computation*)? Hãy thử trực tiếp trên hai hệ phương trình tuyến tính siêu nhỏ (mô hình thu gọn của R1CS):
 

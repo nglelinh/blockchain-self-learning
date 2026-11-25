@@ -15,20 +15,20 @@ Trong lập trình web truyền thống, nếu bạn viết nhầm một dòng c
 
 ---
 
-## Bản đồ kiến thức nền: Lập trình Solidity an toàn và tối ưu đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Lập trình Solidity an toàn và tối ưu đứng trên ba trụ cột nào?
 
 ### 1. Hệ kiểu tĩnh, Giao diện ABI và Bố cục Ô nhớ (Storage Layout)
 Solidity biên dịch thành bytecode EVM và giao tiếp với thế giới bên ngoài qua chuẩn **ABI (Application Binary Interface)**: mỗi hàm được nhận diện bằng **4 byte đầu của mã băm Keccak-256** của chữ ký hàm (ví dụ `transfer(address,uint256)` có selector `0xa9059cbb`). Bên trong hợp đồng, các biến trạng thái được xếp tuần tự vào các **ô nhớ 32 byte (storage slots)** — cách bạn sắp xếp thứ tự khai báo biến quyết định trực tiếp chi phí gas!
 
 ### 2. Tư duy bảo mật đối kháng và Mẫu Checks–Effects–Interactions (CEI)
-Khác với phần mềm thông thường, khi hợp đồng của bạn gọi sang một địa chỉ bên ngoài (như gửi ETH), địa chỉ đó có thể là một hợp đồng ác ý lập tức **gọi ngược lại (re-enter)** vào chính hàm đang chạy dở! Quy tắc sống còn **Checks–Effects–Interactions** yêu cầu luôn: (1) Kiểm tra điều kiện (`require`), (2) Cập nhật trạng thái số dư trước, rồi mới (3) Gửi tiền ra ngoài sau cùng (kết hợp `ReentrancyGuard`).
+Khác với phần mềm thông thường, khi hợp đồng của bạn gọi sang một địa chỉ bên ngoài (như gửi ETH), địa chỉ đó có thể là một hợp đồng ác ý lập tức **gọi ngược lại (re-enter)** vào chính hàm đang chạy dở! Quy tắc quan trọng **Checks–Effects–Interactions** yêu cầu luôn: (1) Kiểm tra điều kiện (`require`), (2) Cập nhật trạng thái số dư trước, rồi mới (3) Gửi tiền ra ngoài sau cùng (kết hợp `ReentrancyGuard`).
 
 ### 3. Tiêu chuẩn giao diện (ERC) và Mẫu thiết kế nâng cấp
 Toàn bộ hệ sinh thái Ethereum lắp ghép được với nhau như gạch Lego nhờ các giao diện chuẩn: **ERC-20** (token thay thế được), **ERC-721 / ERC-1155** (NFT), và **Proxy Pattern (`delegatecall`)** cho phép tách riêng hợp đồng lưu dữ liệu với hợp đồng chứa logic khi cần nâng cấp bảo mật có kiểm soát.
 
 ---
 
-### Khung giải thích: tự tay tính tiết kiệm 33% Gas nhờ kỹ thuật đóng gói ô nhớ (Storage Slot Packing) (nên đọc chậm)
+### Giải thích: tự tay tính tiết kiệm 33% Gas nhờ kỹ thuật đóng gói ô nhớ (Storage Slot Packing)
 
 Mỗi ô nhớ `storage` của EVM rộng đúng **32 byte (256 bit)**, và ghi một ô mới từ `0` sang khác `0` tốn khoảng **20.000 gas**. Hãy so sánh hai cách viết cùng một cấu trúc `struct` gồm 3 biến (`uint128` = 16 byte, `uint256` = 32 byte):
 

@@ -17,7 +17,7 @@ Khác với phần mềm web truyền thống nơi lập trình viên có thể 
 
 ---
 
-## Bản đồ kiến thức nền: Bảo mật Hợp đồng Thông minh nghiên cứu những bề mặt tấn công nào?
+## Kiến thức cần nhớ: Bảo mật Hợp đồng Thông minh nghiên cứu những bề mặt tấn công nào?
 
 1. **Lỗ hổng dòng điều khiển & trạng thái (Reentrancy):** Khi hợp đồng gọi ra địa chỉ bên ngoài *trước khi* cập nhật số dư nội bộ, kẻ tấn công tái nhập vào hàm rút tiền lặp đi lặp lại. Khắc phục chuẩn bằng mẫu **Checks–Effects–Interactions (CEI)** và `ReentrancyGuard`.
 2. **Lỗi số học & độ chính xác (Overflow, Underflow, Rounding):** Tràn số nguyên (đã được bảo vệ mặc định từ Solidity 0.8+, trừ khối `unchecked`) và lỗi làm tròn chia nguyên trong các giao thức DeFi / Vault (tấn công lạm phát cổ phần — *inflation attack*).
@@ -623,7 +623,7 @@ Trên các mạng như Ethereum, giá trị MEV tích lũy hàng năm có thể 
 
 ---
 
-### Khung giải thích: tự tay lần vết ngăn xếp gọi hàm (Call Stack) của vụ tấn công Reentrancy (nên đọc chậm)
+### Giải thích: tự tay lần vết ngăn xếp gọi hàm (Call Stack) của vụ tấn công Reentrancy
 
 Để thấy vì sao chỉ **đảo thứ tự hai dòng code** lại quyết định sinh tử của hàng triệu đô la, hãy theo dõi từng dòng trạng thái của hợp đồng `Vault` bị lỗi:
 

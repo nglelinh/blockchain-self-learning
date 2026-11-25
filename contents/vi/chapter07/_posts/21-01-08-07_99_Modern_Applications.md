@@ -20,7 +20,7 @@ Bài cập nhật cuối cùng của khóa học giúp bạn nhìn xuyên qua l�
 
 ---
 
-## Bản đồ kiến thức nền: Lớp Sản phẩm Web3 2022–2026 đứng trên bốn trụ cột nào?
+## Kiến thức cần nhớ: Lớp Sản phẩm Web3 2022–2026 đứng trên bốn trụ cột nào?
 
 1. **Restaking & Dịch vụ Xác thực Chủ động (AVS — EigenLayer):** Tái sử dụng bảo mật kinh tế của ETH đã stake cho các Oracle, cầu nối và lớp DA mới — tăng hiệu quả sử dụng vốn nhưng làm tăng rủi ro phạt cắt (slashing) dây chuyền.
 2. **Trừu tượng hóa Tài khoản (ERC-4337 & EIP-7702):** Tách biệt khái niệm "người ký" và "tài khoản giữ tiền", mở khóa giao dịch gộp nhiều bước, trả gas bằng stablecoin qua Paymaster và nâng cấp trực tiếp ví EOA truyền thống.
@@ -63,7 +63,7 @@ Việc NIST ban hành [FIPS 203 (ML-KEM)](https://csrc.nist.gov/pubs/fips/203/fi
 
 Ở mảng hạ tầng Web3, các giải pháp sẵn sàng dữ liệu (DA) như EIP-4844, PeerDAS, EigenDA và Celestia phục vụ riêng cho thị trường rollup (bài 04.99), tách biệt với vai trò lưu trữ nội dung của IPFS/Filecoin trong bài 07.02.
 
-### Khung giải thích: tự tay tính đòn bẩy lợi suất và rủi ro Slashing dây chuyền trong Restaking (nên đọc chậm)
+### Giải thích: tự tay tính đòn bẩy lợi suất và rủi ro Slashing dây chuyền trong Restaking
 
 Restaking thường được quảng bá như "bữa trưa miễn phí" giúp nhận nhiều lớp lãi suất từ cùng một số ETH. Hãy tự kiểm tra bằng một phép tính xác suất cơ bản để thấy mặt trái của đòn bẩy bảo mật này:
 

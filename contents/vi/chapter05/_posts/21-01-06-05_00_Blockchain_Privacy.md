@@ -17,7 +17,7 @@ Bài học mở đầu Chương 5 bóc tách ranh giới giữa **ẩn danh gi�
 
 ---
 
-## Bản đồ kiến thức nền: Quyền riêng tư trên Blockchain nghiên cứu những bài toán nào?
+## Kiến thức cần nhớ: Quyền riêng tư trên Blockchain nghiên cứu những bài toán nào?
 
 1. **Ẩn danh giả vs. Ẩn danh mạnh (Pseudonymity vs. Unlinkability):** Thay tên thật bằng địa chỉ `0x...` chỉ là ẩn danh giả; quyền riêng tư thật đòi hỏi phá vỡ cả *tính liên kết* (linkability) giữa các giao dịch lẫn *tính công khai số tiền*.
 2. **Phân tích đồ thị & Heuristic truy vết (Chain Analytics):** Các quy tắc như *Common-Input-Ownership* (nhiều đầu vào UTXO cùng ký trong một giao dịch thường thuộc cùng một chủ ví) và nhận diện *địa chỉ tiền thối (change address)*.
@@ -811,7 +811,7 @@ Như vậy, kích thước bằng chứng Groth16 thậm chí nhỏ hơn cả m�
 
 ---
 
-### Khung giải thích: tự tay tính Entropy của Tập ẩn danh trong một phiên CoinJoin (nên đọc chậm)
+### Giải thích: tự tay tính Entropy của Tập ẩn danh trong một phiên CoinJoin
 
 Tại sao trong một giao dịch trộn **CoinJoin**, mọi người tham gia lại bắt buộc phải chọn **cùng một mệnh giá chuẩn** (ví dụ đúng $$1.0\text{ BTC}$$)? Hãy dùng công thức **Entropy Shannon** $$H = -\sum_{i} p_i \log_2 p_i$$ (đo số bit bất định của kẻ quan sát) để tự kiểm chứng:
 

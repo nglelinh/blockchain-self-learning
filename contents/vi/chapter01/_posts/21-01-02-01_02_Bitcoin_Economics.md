@@ -17,7 +17,7 @@ Nhưng Bitcoin không chỉ là một công thức cung tiền. An ninh của c�
 
 ---
 
-## Bản đồ kiến thức nền: Kinh tế học Bitcoin đứng trên ba trụ cột toán học – kinh tế nào?
+## Kiến thức cần nhớ: Kinh tế học Bitcoin đứng trên ba trụ cột toán học – kinh tế nào?
 
 Với nền tảng giải tích chuỗi số, xác suất và kinh tế vi mô đại học, bạn có thể nắm trọn cấu trúc kinh tế của Bitcoin qua ba trụ cột:
 
@@ -32,7 +32,7 @@ Phân tích của Satoshi giả định thợ đào chỉ chọn giữa "trung t
 
 ---
 
-### Khung giải thích: tự tay chứng minh trần 21 triệu BTC và tính lạm phát sau Halving (nên đọc chậm)
+### Giải thích: tự tay chứng minh trần 21 triệu BTC và tính lạm phát sau Halving
 
 Hãy kiểm chứng các con số cốt lõi của chính sách tiền tệ Bitcoin chỉ bằng công thức cấp số nhân phổ thông:
 

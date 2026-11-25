@@ -17,7 +17,7 @@ Câu trả lời nằm ở bản chất hoàn toàn khác biệt của **xác mi
 
 ---
 
-## Bản đồ kiến thức nền: Bài toán Mở rộng Blockchain đứng trên ba trụ cột phân tích nào?
+## Kiến thức cần nhớ: Bài toán Mở rộng Blockchain đứng trên ba trụ cột phân tích nào?
 
 ### 1. Bộ ba bất khả thi (Blockchain Trilemma)
 Do Vitalik Buterin khái quát hóa, Bộ ba bất khả thi chỉ ra sự căng thẳng cố hữu giữa **Phi tập trung** (máy tính phổ thông tại nhà vẫn chạy được full node), **Bảo mật** (chi phí tấn công cực lớn, mọi nút tự xác minh toàn bộ luật chơi), và **Khả năng mở rộng** (thông lượng TPS cao, độ trễ thấp). Nếu tăng thẳng kích thước khối lên 1 GB/giây để đạt 100.000 TPS, chỉ các trung tâm dữ liệu siêu đắt đỏ mới đủ sức chạy nút — hy sinh tính phi tập trung!
@@ -35,7 +35,7 @@ Một nút blockchain luôn bị chặn bởi 4 giới hạn phần cứng thự
 
 ---
 
-### Khung giải thích: tự tay tính giới hạn TPS từ kích thước khối và tính phí băng thông khi "tăng khối thô" (nên đọc chậm)
+### Giải thích: tự tay tính giới hạn TPS từ kích thước khối và tính phí băng thông khi "tăng khối thô"
 
 Đừng tin vào những con số TPS quảng cáo mơ hồ — bạn có thể tự tính ngay giới hạn vật lý của bất kỳ blockchain nào chỉ bằng 3 phép chia:
 

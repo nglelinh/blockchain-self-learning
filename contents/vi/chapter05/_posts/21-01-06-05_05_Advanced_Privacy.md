@@ -17,7 +17,7 @@ Kỳ tích mật mã đó chính là **Giao dịch Bảo mật (Confidential Tra
 
 ---
 
-## Bản đồ kiến thức nền: Kỹ thuật Bảo vệ Quyền riêng tư Nâng cao dựa trên bốn trụ cột nào?
+## Kiến thức cần nhớ: Kỹ thuật Bảo vệ Quyền riêng tư Nâng cao dựa trên bốn trụ cột nào?
 
 1. **Cam kết Pedersen đồng cấu cộng ($$C(v, r) = vG + rH$$):** Niêm phong số tiền $$v$$ bằng yếu tố làm mù ngẫu nhiên $$r$$ sao cho không ai đọc được $$v$$, nhưng cộng hai cam kết lại vẫn ra cam kết của tổng hai số tiền!
 2. **Bằng chứng khoảng (Range Proofs — Bulletproofs):** Chứng minh ngắn gọn (kích thước chỉ tăng theo $$\log_2(\text{số bit})$$) rằng số tiền bị che giấu thực sự nằm trong khoảng $$[0,\, 2^{64}-1]$$, chặn đứng trò gian lận dùng số âm để in tiền.
@@ -88,7 +88,7 @@ Phương trình này chứng minh tổng đầu vào bằng tổng đầu ra (kh
 
 ---
 
-### Khung giải thích: tự tay kiểm tra Cam kết Pedersen xác minh $$10 = 7 + 3$$ mà không lộ số tiền (nên đọc chậm)
+### Giải thích: tự tay kiểm tra Cam kết Pedersen xác minh $$10 = 7 + 3$$ mà không lộ số tiền
 
 Trong nhóm điểm đường cong elliptic (ký hiệu cộng), chọn hai điểm sinh công khai $$G, H$$ sao cho không ai biết logarit rời rạc giữa chúng. Cam kết Pedersen của số tiền $$v$$ với số che bí mật $$r$$ là:
 

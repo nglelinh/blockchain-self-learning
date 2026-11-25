@@ -18,7 +18,7 @@ Nếu bạn đọc sách giáo khoa blockchain viết năm 2017, mọi thứ d�
 
 ---
 
-## Bản đồ kiến thức nền: Ba nâng cấp mật mã – cấu trúc dữ liệu 2022–2026 dựa trên toán học nào?
+## Kiến thức cần nhớ: Ba nâng cấp mật mã – cấu trúc dữ liệu 2022–2026 dựa trên toán học nào?
 
 Để không bị ngợp trước rừng mã hiệu EIP, hãy gắn ba nâng cấp lớn này vào đúng ba nhánh toán học đại học quen thuộc:
 
@@ -33,7 +33,7 @@ Thay vì ép mọi nút lưu vĩnh viễn dữ liệu giao dịch Layer 2 trong 
 
 ---
 
-### Khung giải thích: tự tay so sánh chi phí băng thông của BLS và Verkle bằng con số thực tế (nên đọc chậm)
+### Giải thích: tự tay so sánh chi phí băng thông của BLS và Verkle bằng con số thực tế
 
 Hãy tính nhanh hai phép nhân để thấy vì sao Ethereum *bắt buộc* phải nâng cấp từ công cụ đời 2015 sang bộ công cụ 2022–2026:
 

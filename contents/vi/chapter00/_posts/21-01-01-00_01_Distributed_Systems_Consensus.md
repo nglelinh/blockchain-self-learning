@@ -17,7 +17,7 @@ Câu chuyện ngụ ngôn năm 1982 của Leslie Lamport, Robert Shostak và Mar
 
 ---
 
-## Bản đồ kiến thức nền: Lý thuyết Hệ phân tán và Đồng thuận nghiên cứu những gì?
+## Kiến thức cần nhớ: Lý thuyết Hệ phân tán và Đồng thuận nghiên cứu những gì?
 
 Với hành trang khoa học máy tính đại học (mạng máy tính, xác suất, tổ hợp cơ bản), lý thuyết đồng thuận đứng trên ba trụ cột rõ ràng:
 
@@ -38,7 +38,7 @@ Mọi giao thức phân tán đều phụ thuộc vào giả thiết về thời
 
 ---
 
-### Khung giải thích: tự tay chứng minh ngưỡng $$n \ge 3f + 1$$ bằng nguyên lý chuồng bồ câu (nên đọc chậm)
+### Giải thích: tự tay chứng minh ngưỡng $$n \ge 3f + 1$$ bằng nguyên lý chuồng bồ câu
 
 Tại sao hệ thống chịu lỗi Byzantine lại cần đúng $$3f + 1$$ nút (ví dụ 4 nút để chịu 1 kẻ phản bội, 7 nút để chịu 2 kẻ phản bội) mà không thể là $$3f$$? Hãy kiểm tra tận tay trong 3 bước ngắn:
 

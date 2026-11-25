@@ -17,7 +17,7 @@ Ngày 3 tháng 1 năm 2009, khối đầu tiên của mạng Bitcoin (Genesis Bl
 
 ---
 
-## Bản đồ kiến thức nền: Kiến trúc Bitcoin đứng trên ba trụ cột nào?
+## Kiến thức cần nhớ: Kiến trúc Bitcoin đứng trên ba trụ cột nào?
 
 Để đọc hiểu Bitcoin như một kỹ sư hệ thống tốt nghiệp đại học, hãy nắm rõ ba trụ cột kỹ thuật cốt lõi:
 
@@ -32,7 +32,7 @@ Các giao dịch hợp lệ lan truyền qua mạng ngang hàng (gossip protocol
 
 ---
 
-### Khung giải thích: tự tay theo dõi một giao dịch UTXO và chạy máy ảo ngăn xếp P2PKH (nên đọc chậm)
+### Giải thích: tự tay theo dõi một giao dịch UTXO và chạy máy ảo ngăn xếp P2PKH
 
 Hãy tự tay đóng vai một nút đầy đủ (full node) Bitcoin xác minh một giao dịch từ đầu đến cuối:
 

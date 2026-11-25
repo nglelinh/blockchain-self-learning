@@ -17,7 +17,7 @@ Mật mã hậu lượng tử (PQC) không phải khoa học viễn tưởng xa 
 
 ---
 
-## Bản đồ kiến thức nền: Mật mã Hậu lượng tử cho Blockchain đứng trên bốn trụ cột nào?
+## Kiến thức cần nhớ: Mật mã Hậu lượng tử cho Blockchain đứng trên bốn trụ cột nào?
 
 1. **Bản đồ đe dọa lượng tử (Shor vs. Grover):** Thuật toán **Shor** phá hoàn toàn chữ ký khóa công khai (ECDSA, Ed25519, RSA, BLS) trong thời gian đa thức; ngược lại, thuật toán **Grover** chỉ tăng tốc bậc hai với hàm băm SHA-256 (kéo mức an toàn 256-bit xuống 128-bit — vẫn rất an toàn, không cần bỏ SHA-256!).
 2. **Các họ chữ ký PQC chính:** Mật mã dựa trên **Lưới** (ML-DSA / Dilithium, Falcon — cân bằng tốt giữa tốc độ và kích thước) và mật mã dựa trên **Hàm băm** (SLH-DSA / SPHINCS+, XMSS — bảo thủ nhất về giả định an toàn nhưng chữ ký lớn).
@@ -172,7 +172,7 @@ Mức này vẫn còn đáng kể nhưng biên độ an toàn đã thu hẹp; do
 
 ---
 
-### Khung giải thích: tự tay tính "cái giá băng thông" khi chuyển blockchain sang chữ ký hậu lượng tử (nên đọc chậm)
+### Giải thích: tự tay tính "cái giá băng thông" khi chuyển blockchain sang chữ ký hậu lượng tử
 
 Tại sao Bitcoin và Ethereum không thể đơn giản "đổi hàm `ecdsa_verify` thành `ml_dsa_verify` trong một bản cập nhật cuối tuần"? Hãy làm một phép chia đơn giản trên một block kích thước **1 MB** ($$1{,}000{,}000\text{ byte}$$):
 

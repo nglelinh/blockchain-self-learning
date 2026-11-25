@@ -17,7 +17,7 @@ Nếu bài 05.04 giới thiệu các họ thuật toán hậu lượng tử (PQC
 
 ---
 
-## Bản đồ kiến thức nền: Chiến lược Kháng lượng tử cho Blockchain gồm bốn lớp phòng thủ nào?
+## Kiến thức cần nhớ: Chiến lược Kháng lượng tử cho Blockchain gồm bốn lớp phòng thủ nào?
 
 1. **Phân loại mức độ phơi nhiễm địa chỉ:** Phân biệt rạch ròi tài sản *rất dễ tổn thương* (địa chỉ P2PK cũ hoặc địa chỉ tái sử dụng đã lộ khóa công khai trên chuỗi) với tài sản *an toàn tạm thời* (địa chỉ P2PKH/Bech32 chưa từng chi tiêu, khóa công khai vẫn ẩn sau hàm băm SHA-256).
 2. **Giao thức di cư hai pha Commit–Reveal:** Chống kịch bản máy lượng tử cướp giao dịch ngay khi người dùng phát lệnh chuyển tiền sang ví hậu lượng tử mới trên mempool.
@@ -84,7 +84,7 @@ Hệ thống vẫn an toàn chừng nào ít nhất một trong hai lược đ�
 
 ---
 
-### Khung giải thích: tự tay kiểm tra cơ chế Commit–Reveal hai pha chống máy lượng tử cướp giao dịch (nên đọc chậm)
+### Giải thích: tự tay kiểm tra cơ chế Commit–Reveal hai pha chống máy lượng tử cướp giao dịch
 
 Giả sử năm 2035 xuất hiện máy tính lượng tử chạy được thuật toán Shor đủ nhanh để bẻ khóa ECDSA trong vài phút. Bob đang giữ 10 BTC trong một địa chỉ cũ chưa từng chi tiêu `Addr = SHA256(PK)` (nên `PK` vẫn bí mật!). Làm sao Bob chuyển an toàn 10 BTC sang ví hậu lượng tử mới `Addr_PQ`?
 

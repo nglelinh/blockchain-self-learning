@@ -14,11 +14,11 @@ lesson_type: optional
 
 > Bài học này là phần **tùy chọn**, **không** trình bày lại mô hình tài khoản, tập lệnh EVM, Solidity hay AMM hằng số tích. Nội dung tập trung vào các nâng cấp giao thức và bộ công cụ phát triển đã trở thành tiêu chuẩn trong giai đoạn 2022–2026.
 
-Nếu bộ bài 03.00–03.03 cho bạn nền móng vững chắc về Ethereum, EVM, Solidity và DeFi thế hệ đầu, thì giai đoạn **2022–2026** chứng kiến toàn bộ ngăn xếp (stack) ứng dụng Ethereum trưởng thành vượt bậc. Máy trạng thái EVM bên dưới gần như giữ nguyên kỷ luật cũ, nhưng cách người dùng và lập trình viên tương tác với nó đã lột xác: **Dencun (EIP-4844 + EIP-1153)** mở ra blob giá rẻ và bộ nhớ tạm thời `transient storage`; **ERC-4337 và EIP-7702** đưa trải nghiệm ví thông minh (không cần quản lý gas thủ công, khôi phục xã hội) tới hàng triệu người dùng; **Uniswap v4** gom mọi bể thanh khoản vào một hợp đồng **Singleton** duy nhất gắn **Hooks**; còn bộ công cụ **Foundry** viết bằng Rust thay thế hoàn toàn Truffle cũ.
+Nếu bộ bài 03.00–03.03 cho bạn nền tảng về Ethereum, EVM, Solidity và DeFi thế hệ đầu, thì giai đoạn **2022–2026** chứng kiến toàn bộ ngăn xếp (stack) ứng dụng Ethereum trưởng thành vượt bậc. Máy trạng thái EVM bên dưới gần như giữ nguyên kỷ luật cũ, nhưng cách người dùng và lập trình viên tương tác với nó đã lột xác: **Dencun (EIP-4844 + EIP-1153)** mở ra blob giá rẻ và bộ nhớ tạm thời `transient storage`; **ERC-4337 và EIP-7702** đưa trải nghiệm ví thông minh (không cần quản lý gas thủ công, khôi phục xã hội) tới hàng triệu người dùng; **Uniswap v4** gom mọi bể thanh khoản vào một hợp đồng **Singleton** duy nhất gắn **Hooks**; còn bộ công cụ **Foundry** viết bằng Rust thay thế hoàn toàn Truffle cũ.
 
 ---
 
-## Bản đồ kiến thức nền: Ba cuộc cách mạng tầng ứng dụng Ethereum 2022–2026 là gì?
+## Kiến thức cần nhớ: Ba cuộc cách mạng tầng ứng dụng Ethereum 2022–2026 là gì?
 
 ### 1. Bộ nhớ tạm thời (EIP-1153 `TSTORE`/`TLOAD`) và Kiến trúc Singleton (Uniswap v4)
 Trước Dencun, muốn lưu một cờ khóa chống reentrancy hay sổ nợ tạm giữa các lệnh gọi trong cùng 1 giao dịch, lập trình viên vẫn phải ghi vào `storage` (hàng nghìn gas) rồi xóa đi! **EIP-1153** bổ sung vùng nhớ **Transient Storage** sống trọn trong 1 giao dịch rồi tự xóa sạch, chỉ tốn **100 gas** — làm bệ phóng cho kiến trúc **Singleton + Flash Accounting** của Uniswap v4.
@@ -31,7 +31,7 @@ Thay vì viết kiểm thử hợp đồng bằng JavaScript chậm chạp, **Fo
 
 ---
 
-### Khung giải thích: tự tay tính khoản tiết kiệm Gas của Uniswap v4 Singleton + Flash Accounting (nên đọc chậm)
+### Giải thích: tự tay tính khoản tiết kiệm Gas của Uniswap v4 Singleton + Flash Accounting
 
 Hãy so sánh một giao dịch hoán đổi 3 chặng quen thuộc **`ETH → USDC → WBTC → ARB`** giữa Uniswap v2/v3 và Uniswap v4:
 

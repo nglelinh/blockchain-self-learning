@@ -18,7 +18,7 @@ Nếu năm 2020 câu hỏi lớn nhất của cả ngành là *"Liệu một blo
 
 ---
 
-## Bản đồ kiến thức nền: Ba mặt trận đồng thuận thực chiến 2022–2026 là gì?
+## Kiến thức cần nhớ: Ba mặt trận đồng thuận thực chiến 2022–2026 là gì?
 
 ### 1. Đồng thuận Gasper (LMD-GHOST + Casper FFG) trong thực tế
 Ethereum PoS không dùng một thuật toán đơn lẻ mà ghép đôi hai cơ chế bổ trợ nhau: **LMD-GHOST** (quy tắc chọn nhánh nhanh từng slot 12 giây, ưu tiên *Liveness*) và **Casper FFG** (tiện ích chốt khối BFT sau mỗi 2 epoch $$\approx 12.8\text{ phút}$$, bảo đảm *Safety* kinh tế tuyệt đối).
@@ -31,9 +31,9 @@ Giới hạn cứng 32 ETH/validator ban đầu khiến số lượng validator 
 
 ---
 
-### Khung giải thích: tự tay tính hiệu quả nén mạng P2P của EIP-7251 (MaxEB) trong nâng cấp Pectra (nên đọc chậm)
+### Giải thích: tự tay tính hiệu quả nén mạng P2P của EIP-7251 (MaxEB) trong nâng cấp Pectra
 
-Hãy tính nhanh một phép chia đơn giản để thấy vì sao EIP-7251 là nâng cấp hạ tầng sống còn của Ethereum 2025–2026:
+Hãy tính nhanh một phép chia đơn giản để thấy vì sao EIP-7251 là nâng cấp hạ tầng quan trọng của Ethereum 2025–2026:
 
 1. **Trước Pectra (trần cứng 32 ETH/validator):** Giả sử một giao thức liquid staking hoặc tổ chức nắm giữ $$204\,800\text{ ETH}$$ tham gia đặt cọc. Họ buộc phải chia tách số tiền ấy thành:
    $$

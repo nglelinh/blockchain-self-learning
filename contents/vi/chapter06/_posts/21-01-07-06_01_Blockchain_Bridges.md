@@ -13,11 +13,11 @@ categories:
 
 Trong giai đoạn 2021–2023, hơn **2,5 tỷ USD** đã bị đánh cắp chỉ từ các vụ tấn công cầu nối blockchain — từ vụ Ronin Bridge (625 triệu USD), Wormhole (325 triệu USD) cho đến Nomad (190 triệu USD). Tại sao các chuỗi L1 như Bitcoin và Ethereum đứng vững suốt hơn một thập kỷ, còn những chiếc cầu nối giữa chúng lại liên tục sụp đổ?
 
-Lý do rất sắc gọn: một chiếc cầu nối tập trung hàng trăm triệu đô la tài sản khóa (TVL) vào một hợp đồng duy nhất giống như một "hũ mật khổng lồ", nhưng lớp bảo vệ của nhiều cầu nối lại chỉ mỏng bằng vài chiếc khóa Multisig! Bài học này mổ xẻ toàn bộ kiến trúc, cơ chế kinh tế và những đánh đổi sống còn của **Cầu nối Blockchain**.
+Lý do rất sắc gọn: một chiếc cầu nối tập trung hàng trăm triệu đô la tài sản khóa (TVL) vào một hợp đồng duy nhất giống như một "hũ mật khổng lồ", nhưng lớp bảo vệ của nhiều cầu nối lại chỉ mỏng bằng vài chiếc khóa Multisig! Bài học này mổ xẻ toàn bộ kiến trúc, cơ chế kinh tế và những đánh đổi quan trọng của **Cầu nối Blockchain**.
 
 ---
 
-## Bản đồ kiến thức nền: Kiến trúc Cầu nối Blockchain và Phổ Bảo mật gồm những trụ cột nào?
+## Kiến thức cần nhớ: Kiến trúc Cầu nối Blockchain và Phổ Bảo mật gồm những trụ cột nào?
 
 1. **Ba cơ chế luân chuyển tài sản:** *Lock-and-Mint* (khóa tài sản gốc ở Chuỗi A, đúc tài sản bọc Wrapped ở Chuỗi B), *Burn-and-Mint* (đốt trực tiếp và đúc mới cho stablecoin chuẩn như USDC CCTP), và *Liquidity Networks* (đổi ngang qua các bể thanh khoản sẵn có hai đầu).
 2. **Ba mô hình xác minh (Verification):** *Externally Verified* (tin vào ủy ban Multisig/MPC bên ngoài), *Optimistically Verified* (giả định đúng, có cửa sổ tranh chấp để Watcher hủy gian lận), và *Natively / ZK Verified* (chạy Light Client hoặc xác minh bằng chứng ZK trực tiếp trên chuỗi đích).
@@ -334,7 +334,7 @@ Vì các trình xác thực không có tài sản đặt cọc tương xứng ch
 
 ---
 
-### Khung giải thích: tự tay tính bài toán "TVL vượt chi phí tấn công" trên cầu nối Multisig $$5/9$$ (nên đọc chậm)
+### Giải thích: tự tay tính bài toán "TVL vượt chi phí tấn công" trên cầu nối Multisig $$5/9$$
 
 Để hiểu ngay bản chất kinh tế đằng sau các vụ sập cầu nối hàng trăm triệu đô la, hãy kiểm tra một phép tính lý thuyết trò chơi đơn giản trên một cầu nối **Lock-and-Mint** được bảo vệ bởi ủy ban Multisig **5/9** (chỉ cần 5 trên 9 chữ ký là mở khóa toàn bộ kho tiền):
 

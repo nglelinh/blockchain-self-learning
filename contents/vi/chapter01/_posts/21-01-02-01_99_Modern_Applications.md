@@ -18,7 +18,7 @@ Nhiều người từng nghĩ Bitcoin là một "hóa thạch số" đóng băng
 
 ---
 
-## Bản đồ kiến thức nền: Bốn bước tiến Bitcoin 2022–2026 dựa trên những nguyên lý kỹ thuật nào?
+## Kiến thức cần nhớ: Bốn bước tiến Bitcoin 2022–2026 dựa trên những nguyên lý kỹ thuật nào?
 
 ### 1. Mật mã đường truyền (BIP-324) và Bảo vệ tầng mạng P2P
 Trước đây, mọi nút Bitcoin nói chuyện với nhau bằng văn bản thuần (plaintext), cho phép nhà mạng (ISP) dễ dàng nghe lén hoặc chặn lọc giao dịch. **BIP-324** bổ sung trao đổi khóa ElligatorSwift (trên đường cong `secp256k1`) và mã hóa đối xứng ChaCha20-Poly1305 để ngụy trang lưu lượng Bitcoin như luồng byte ngẫu nhiên thuần túy.
@@ -31,7 +31,7 @@ Quy tắc **SegWit** gán trọng số 1 đơn vị cho mỗi byte dữ liệu `
 
 ---
 
-### Khung giải thích: tự tay tính chiết khấu SegWit cho Inscriptions và số vòng tranh chấp BitVM (nên đọc chậm)
+### Giải thích: tự tay tính chiết khấu SegWit cho Inscriptions và số vòng tranh chấp BitVM
 
 1. **Chi phí không gian khối của một Inscription 100 KB nhờ chiết khấu SegWit:**
    - Một khối Bitcoin có giới hạn cứng là $$4\,000\,000\text{ WU}$$ (weight units), tương đương $$1\,000\,000\text{ vByte}$$ (vì $$1\text{ vByte} = 4\text{ WU}$$).
